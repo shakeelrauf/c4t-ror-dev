@@ -10,13 +10,13 @@
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
 #
 default: &default
-  adapter: ENV["DB_DIAL"]
-  host: ENV['DB_HOST']
+  adapter: <%= ENV["DB_DIAL"] %>
+  host: <%= ENV['DB_HOST'] %>
   encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: ENV['DB_USER']
-  password: ENV['DB_PASS']
-  database: ENV['DB_NAME']
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASS'] %>
+  database: <%= ENV['DB_NAME'] %>
   # socket: /var/run/mysqld/mysqld.sock
 
 development:
