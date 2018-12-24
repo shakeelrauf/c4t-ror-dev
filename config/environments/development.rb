@@ -1,6 +1,8 @@
+require 'dotenv' 
 Rails.application.configure do
-  
-  Dotenv::Railtie.load
+
+  Dotenv.load ".env.local", ".env.#{Rails.env}", ".env"
+
   
   # Settings specified here will take precedence over those in config/application.rb.
 
