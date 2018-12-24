@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<title>C4T</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta name="description" content="Cash for trash - Nous achetons vos autos usagés!">
+		<meta name="author" content="PropulsionWeb">
+		<!-- Favicon icon -->
+		<link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+		<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+		<!-- Font Awesome -->
+		<link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<!-- Required Fremwork -->
+		<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+
+		<!-- Style.css -->
+		<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<!-- Responsive.css-->
+		<link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
+	</head>
+	<body>
+		<div class="loading hidden">
+			<img src="images/preloader.svg" alt>
+		</div>
+		<%= yield %>
+		<script type="text/javascript" src="vendor/jquery/js/jquery.min.js"></script>
+		<script type="text/javascript" src="vendor/jquery-ui/js/jquery-ui.min.js"></script>
+		<!-- tether.js -->
+		<script type="text/javascript" src="vendor/popper.js/js/popper.min.js"></script>
+		<!-- Required Framework -->
+		<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="assets/plugins/notification/js/bootstrap-growl.min.js"></script>
+		<script type="text/javascript">
+
+		function verifyLogin() {
+			$(".loading.hidden").removeClass("hidden");
+			$.ajax({
+			  url: "/login",
+			  type: "POST",
+			  data: {
+				  username: $("#txtUsername").val(),
+				  password: $("#txtPassword").val()
+			  }
+		  	}).done(function(logInfo) {
+				logInfo = JSON.parse(logInfo);
+			  	if(logInfo.error) {
+					$("#txtPassword").val("");
+					$(".loading").addClass("hidden");
+					$.growl({
+			            message: "Wrong username or password."
+			        },{
+			            type: "danger",
+			            allow_dismiss: true,
+			            label: 'Cancel',
+			            className: 'btn-xs btn-inverse',
+			            placement: {
+			                from: 'top',
+			                align: 'center'
+			            },
+			            delay: 0,
+			            animate: { enter: 'animated fadeInDown' }
+			        });
+				} else {
+					document.location = "/dashboard";
+				}
+			});
+		}
+		</script>
+	</body>
+</html>
