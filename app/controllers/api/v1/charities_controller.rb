@@ -50,6 +50,6 @@ class Api::V1::CharitiesController < ApiController
 
 	protected
 	def charitie_params
-		params.require(:charity).permit(:name, :email, :address, :phone, :info)
+		params.permit(:name, :email, :address, :phone, :info)
 	end
 end
