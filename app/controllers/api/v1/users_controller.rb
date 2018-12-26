@@ -10,8 +10,10 @@ class Api::V1::UsersController < ApiController
     	return render_json_response({:error => "Please send all require attributes."}, :ok)
     else
         # Verify username not exist.
-       @user = User.find_or_initialize_by(user_params)
-      if @user.save
+       @user = User.find_or_initialize_by(username: params[:username])
+      if @user.new_record
+        @user.attributes = params
+        @user.save!
   			return render_json_response(@user, :ok)
       else
   			return render_json_response({:error => "Username already exist."}, :ok)
@@ -44,9 +46,7 @@ class Api::V1::UsersController < ApiController
   def index
     @users = User.all
     @users.each do|user| 
-      if (user.phone == nil)
-        user.phone = ""
-      end
+      user.phone = "" if (user.phone == nil)
     end
     return render_json_response(@users, :ok)
   end
