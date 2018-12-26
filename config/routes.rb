@@ -5,8 +5,6 @@ Rails.application.routes.draw do
 				patch :block_user
 				patch :avatar
 			end
-			get "booking" => "booking#create"
-
 			scope controller: :contact do
 				post "clients/:no/contact"	, action: :contact
 			end
@@ -16,6 +14,8 @@ Rails.application.routes.draw do
 				get :token, action: :get_token
 				delete 'token/:id', action: :destroy_session
 			end
+			post :booking, controller: :booking, action: :update
+			resources :charities, :param => :no, :only => [:index,:create,:show,:update]
 
 			scope controller: :distance do 
 				get "/distance/:postal", action: :distance

@@ -1,6 +1,5 @@
 class ApiController < ApplicationController
 	include Api::V1::MsgsConst
-  skip_before_action :verify_authenticity_token 
   
   helper_method :current_user
   helper_method :authenticate_user
@@ -34,5 +33,6 @@ class ApiController < ApplicationController
     else
       return nil
     end
-  end 
+  end
+
 end
