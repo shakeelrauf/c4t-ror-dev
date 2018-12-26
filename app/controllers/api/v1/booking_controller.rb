@@ -52,6 +52,6 @@ class Api::V1::BookingController < ApiController
 
 	protected
 	def booking_params
-		params[:booking]
+		params
 	end
 end
