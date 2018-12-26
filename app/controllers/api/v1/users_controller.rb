@@ -90,7 +90,7 @@ class Api::V1::UsersController < ApiController
     # Update avatar of specific user.
   def update_avatar
     @user = User.find(params[:user_no])
-    if (current_user.roles != "admin" && current_user.idUser != params[:no])
+    if (current_user.roles != "admin" && current_user.idUser != params[:user_no])
       return render_json_response({:error => "You are not authorize to update this user."}, :ok)
     else
       if (@user.avatar == nil)
