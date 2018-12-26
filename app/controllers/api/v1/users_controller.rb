@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApiController  
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:show, :update, :destroy, :block_user]
 
   def create
 	# Validate if user asked this is a super admin.
@@ -68,13 +68,12 @@ class Api::V1::UsersController < ApiController
 			return render_json_response({:error => "You are not a super admin!"}, :ok)
 	  else
 	    @user.destroy
-			return render_json_response({:success => "User Deleted!"}, :ok)
+			return render_json_response({:message => "User Deleted!"}, :ok)
 	  end
   end
 
   # Blacklist user
   def block_user
-    @user = User.find(params[:user_no])
     if (current_user.roles != "admin")
 			return render_json_response({:error => "You are not allowed to change state of this user."}, :ok)
     else 
@@ -97,9 +96,9 @@ class Api::V1::UsersController < ApiController
         return render_json_response({:error => "Please send all require attributes."}, :ok)
       else
         if @user.update(avatar: params[:avatar])
-          return render_json_response({:success => "User state has changed."}, :ok)
+          return render_json_response({:message => "User state has changed."}, :ok)
         else
-          return render_json_response({:success => "User not found."}, :ok)
+          return render_json_response({:message => "User not found."}, :ok)
         end
       end
     end
