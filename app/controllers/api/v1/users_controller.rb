@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApiController
     else
         # Verify username not exist.
        @user = User.find_or_initialize_by(username: params[:username])
-      if @user.new_record
+      if @user.new_record?
         @user.attributes = params
         @user.save!
   			return render_json_response(@user, :ok)
