@@ -21,6 +21,11 @@ class ApiController < ApplicationController
   def test
   end
 
+
+  def authenticate_admin
+    return render_json_response({:error => NOT_ADMIN_MSG, :success => false}, :unauthorized) if current_user.roles != "admin"
+  end
+
   def current_user
     user = User.where("dtLastLogin >= (NOW() - INTERVAL 1 HOUR) AND isActive = 1 AND accessToken = ?", request.authorization).first
     if user.present?

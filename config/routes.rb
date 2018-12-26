@@ -20,6 +20,12 @@ Rails.application.routes.draw do
 				get "/distance/:postal", action: :distance
 				post :distancediff, action: :distancediff
 			end
+			scope controller: :heardofus do 
+				post :heardsofus, action: :heardsofus
+				get :heardsofus, action: :get_heardsofus
+				get "/heardsofus/:no", action: :show
+				put "/heardsofus/:no", action:  :update
+			end
 		end
 	end
 	post :test, controller: :api, action: :test

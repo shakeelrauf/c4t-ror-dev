@@ -7,5 +7,9 @@ module Api::V1::MsgsConst
 	CLIENT_NOT_FOUND_MSG = "Client not found or not a business."
 	INVALID_CREDENTIALS_MSG = "Invalid Authentication"
 	CONTACT_CANNOT_DELETED_MSG  = "Contact Can not be deleted"
-	CONTACTS_PARAMS_MSG = "Please send all require attributes."}
+	CONTACTS_PARAMS_MSG = "Please send all require attributes."
+	NOT_ADMIN_MSG = "You are not an admin."
+	TYPE_ERROR_MSG  = "Please send type attributes."
+	HEARDOFUS_NOT_FOUND_MSG = "HeardOfUs not found."
+	TYPE_ALREADY_ERROR_MSG = "Type already exist."
 end
