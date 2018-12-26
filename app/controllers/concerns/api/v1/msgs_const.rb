@@ -4,5 +4,8 @@ module Api::V1::MsgsConst
 	GOOD_TOKEN_MSG = "token is good"
 	NO_MORE_TOKEN_MSG  = "No more token!"
 	MISSING_PARAMS_MSG = "Missing parameters"
-	INVALID_CREDENTIALS = "Invalid Authentication"
+	CLIENT_NOT_FOUND_MSG = "Client not found or not a business."
+	INVALID_CREDENTIALS_MSG = "Invalid Authentication"
+	CONTACT_CANNOT_DELETED_MSG  = "Contact Can not be deleted"
+	CONTACTS_PARAMS_MSG = "Please send all require attributes."}
 end

@@ -5,10 +5,20 @@ Rails.application.routes.draw do
 				patch :avatar
 			end
 			get "booking" => "booking#create"
+
+			scope controller: :contact do
+				post "clients/:no/contact"	, action: :contact
+			end
+
 			scope controller: :login do
 				post :token, action: :token
 				get :token, action: :get_token
 				delete 'token/:id', action: :destroy_session
+			end
+
+			scope controller: :distance do 
+				get "/distance/:postal", action: :distance
+				post :distancediff, action: :distancediff
 			end
 		end
 	end
