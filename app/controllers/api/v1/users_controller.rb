@@ -82,7 +82,7 @@ class Api::V1::UsersController < ApiController
 				return render_json_response({:error => "You can not change state of a super admin."}, :ok)
       else
         @user.update(isActive: params[:isActive])
-				return render_json_response({:success => "User state has changed."}, :ok)
+				return render_json_response(@user, :ok)
       end
     end
   end
@@ -93,7 +93,7 @@ class Api::V1::UsersController < ApiController
     if (current_user.roles != "admin" && current_user.idUser != params[:user_no])
       return render_json_response({:error => "You are not authorize to update this user."}, :ok)
     else
-      if (@user.avatar == nil)
+      if (params[:avatar] == nil)
         return render_json_response({:error => "Please send all require attributes."}, :ok)
       else
         if @user.update(avatar: params[:avatar])
