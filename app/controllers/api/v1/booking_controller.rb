@@ -19,7 +19,7 @@ class Api::V1::BookingController < ApiController
       twowd = booking_params["canDo2wd-#{id}"] == nil ? nil : (booking_params["canDo2wd-#{id}"] == '1')
       neut  = booking_params["canGoNeutral-#{id}"] == nil ? nil : (booking_params["canGoNeutral-#{id}"] == '1')
 
-      cars = QuoteCar.where(idQuoteCars: id)
+      cars = QuoteCar.where(idQuoteCars: id).first
       if cars.update({
           gotKeys: keys,
           drivetrain: booking_params["drivetrain-#{id}"],
