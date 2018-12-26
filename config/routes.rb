@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 		namespace :v1 do
 			resources :users, :param => :no, :only => [:index,:create,:show,:update, :destroy] do 
 				patch :avatar
-			end			
+			end
+			get "booking" => "booking#create"
 		end
 	end
 
