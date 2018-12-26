@@ -1,4 +1,5 @@
 class Api::V1::LoginController < ApiController
+	before_action :authenticate_user, :except => [:token ,:destroy_session]
 
 	def get_token
 		return render_json_response({:message => GOOD_TOKEN_MSG, :success => true}, :ok)
