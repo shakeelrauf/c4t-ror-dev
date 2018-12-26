@@ -1,4 +1,4 @@
-class Api::V1::HeardofusController < ApinController
+class Api::V1::HeardofusController < ApiController
 	before_action :authenticate_user
 	before_action :authenticate_admin, only: [:heardofus, :update]
 	before_action :check_type, only: [:heardofus, :update]
