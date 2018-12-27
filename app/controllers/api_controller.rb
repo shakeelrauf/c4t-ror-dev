@@ -1,6 +1,6 @@
 class ApiController < ApplicationController
 	include Api::V1::MsgsConst
-  
+  include Api::V1::Request  
   helper_method :current_user
   helper_method :authenticate_user
 

@@ -20,13 +20,13 @@ class Api::V1::HeardofusController < ApiController
 	end
 
 	def show
-		hou =  Heardofu.find_by_id params[:no]
+		hou =  Heardofu.find params[:no]
 		return render_json_response({:error => HEARDOFUS_NOT_FOUND_MSG, :success => false}, :not_found) if !hou.present?
 		return render_json_response(hou, :ok)
 	end
 
 	def update
-		hou = Heardofu.find_by_id(params[:no])
+		hou = Heardofu.find(params[:no])
 		return render_json_response({:error => HEARDOFUS_NOT_FOUND_MSG, :success => false}, :not_found) if !hou.present?
 		hou.update(type: params[:type])
 		return render_json_response(hou, :ok)
