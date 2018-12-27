@@ -49,6 +49,11 @@ Rails.application.routes.draw do
 				get "/clients/statistics/heardofus", action:  :heardofus
 				get '/clients/:customerId/postal', action: :postal
 			end
+			scope controller: :setting do
+				get :settings
+				put :settings,                       action: :update
+				get 'settings/all', 								 action: :all
+			end
 		end
 	end
 	post :test, controller: :api, action: :test
