@@ -12,7 +12,7 @@ class Api::V1::QoutecarsController < ApiController
  	end
 
  	def list
- 		cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:quoteNo]).first.to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
+ 		cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:quoteNo]).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
 		render json: cars, status: :ok, adapter: :json_api
  	end
 end
