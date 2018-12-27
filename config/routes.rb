@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 			end
 
 			scope controller: :qoutecars do
-				get :quotescars,
+				get :quotescars
 				get '/quotescar/:carNo',             action: :show
 				get '/quotes/:quoteNo/cars',         action: :list  
 			end
