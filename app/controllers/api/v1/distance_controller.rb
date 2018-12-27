@@ -16,7 +16,7 @@ class Api::V1::DistanceController < ApiController
   private 
   def get_distanc(origin, destination)
   	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&key=#{ENV["GOOGLE_MAP_TOKEN"]}&origins=#{origin}&destinations=#{destination}" 
-		response = HTTParty.get(url)
-  	response.body
+		response = get_request(url)
+    response
   end
 end

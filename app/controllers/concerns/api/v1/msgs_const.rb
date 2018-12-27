@@ -24,4 +24,9 @@ module Api::V1::MsgsConst
 	HEARDOFUS_NOT_FOUND_MSG = "HeardOfUs not found."
 	TYPE_ALREADY_ERROR_MSG = "Type already exist."
 	CLIENT_NOT_FOUND='Client not found!'
+	ADDRESS_NOT_EXIST_MSG = "Address not exist."
+	ADDRESS_DELETE_MSG = "Address deleted"
+	NO_CAR_MSG = "There are quotes associated with this address, it cannot be deleted"
+	ADDRESS_NOT_FOUND = "Address not found."
+	ADDRESS_INVALID_MSG = "Address is invalid."
 end
