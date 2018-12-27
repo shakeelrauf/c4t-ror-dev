@@ -27,6 +27,13 @@ Rails.application.routes.draw do
 				get "/heardsofus/:no", action: :show
 				put "/heardsofus/:no", action:  :update
 			end
+			scope controller: :customer do 
+				resources :clients, :param => :no, :only => [:index, :create, :show, :update]
+				get 'client/phones', action: :phones
+				get 'client/phones/:phone', action: :client_phones
+				get "/clients/statistics/heardofus", action:  :heardofus
+				get '/clients/:customerId/postal', action: :postal
+			end
 		end
 	end
 	post :test, controller: :api, action: :test

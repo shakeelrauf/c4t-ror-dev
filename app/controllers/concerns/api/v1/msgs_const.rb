@@ -23,4 +23,5 @@ module Api::V1::MsgsConst
 	TYPE_ERROR_MSG  = "Please send type attributes."
 	HEARDOFUS_NOT_FOUND_MSG = "HeardOfUs not found."
 	TYPE_ALREADY_ERROR_MSG = "Type already exist."
+	CLIENT_NOT_FOUND='Client not found!'
 end
