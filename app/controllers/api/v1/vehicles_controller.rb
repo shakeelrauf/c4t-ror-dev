@@ -3,7 +3,7 @@ class Api::V1::VehiclesController < ApiController
 	include API::V1::Validations
 	def create
 		if current_user.roles.eql?('admin')
-  		return render_json_response({:error => NOT_AN_ADMIN, :success => false}, :not_found)
+  		return render_json_response({:error => NOT_AN_ADMIN, :success => false}, :unauthorized)
   	else
       if invalid_params
         return render_json_response({:error => INVALID_PARAMS, :success => false}, :unprocessable_entity)
