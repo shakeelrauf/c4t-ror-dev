@@ -97,6 +97,7 @@ class Api::V1::UsersController < ApiController
         end
       end
     end
+  end
 
   # get all users
   def index
