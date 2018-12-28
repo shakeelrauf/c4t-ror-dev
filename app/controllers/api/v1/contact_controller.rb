@@ -2,11 +2,11 @@ class Api::V1::ContactController < ApiController
 	before_action :authenticate_user
 
 	def contact
-		business = Business.includes([:contacts]).find(params[:no])
+		business = Business.includes([:contacts]).find_by_idClient(params[:no])
 		return render_json_response({:error => CLIENT_NOT_FOUND_MSG, :success => false}, :not_found) if business.nil?
-		return render_json_response({:error => CONTACT_CANNOT_DELETED_MSG, :success => false}, :bad_request) if !params[:contacts].present??
+		return render_json_response({:error => CONTACTS_PARAMS_MSG, :success => false}, :bad_request) if !params[:contacts].present?
 		check_format
-	  create_contacts                 
+	  create_contacts
 	  return render_json_response(business, :ok) 
 	end
 
@@ -18,7 +18,7 @@ class Api::V1::ContactController < ApiController
 	  			!contact["lastName"] ||
 	  			!contact["paymentMethod"]))
 		  	hasError = true
-		  	return render_json_response({:error => CONTACTS_PARAMS_MSG, :success => false}, ::bad_request)
+		  	return render_json_response({:error => CONTACTS_PARAMS_MSG, :success => false}, :bad_request)
 	  	end
 	  end     
 	end

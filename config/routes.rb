@@ -2,8 +2,10 @@ Rails.application.routes.draw do
 	namespace :api do
 		namespace :v1 do
 			resources :users, :param => :no, :only => [:index,:create,:show,:update, :destroy] do 
-				patch :block_user
 				patch :avatar
+				collection do
+					patch ':no', action: :block_user
+				end
 			end
 			scope controller: :contact do
 				post "clients/:no/contact"	,        action: :contact

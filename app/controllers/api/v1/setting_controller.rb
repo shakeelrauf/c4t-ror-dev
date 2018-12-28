@@ -1,6 +1,7 @@
 class Api::V1::SettingController < ApiController
 	before_action :authenticate_user
 	before_action :authenticate_admin, only: [:all, :update]
+	
 	def settings
 		last_settings = Setting.where("dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
 		return render_json_response(last_settings, :ok)

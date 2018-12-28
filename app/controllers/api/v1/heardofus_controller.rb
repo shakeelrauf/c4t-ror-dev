@@ -1,9 +1,9 @@
 class Api::V1::HeardofusController < ApiController
 	before_action :authenticate_user
 	before_action :authenticate_admin, only: [:heardofus, :update]
-	before_action :check_type, only: [:heardofus, :update]
+	before_action :check_type, only: [:heardsofus, :update]
 
-	def heardofus
+	def heardsofus
 		hou = Heardofu.find_by_type(params[:type]) 
 		if hou.nil?
 			hou = Heardofu.new(type: params[:type])
@@ -14,7 +14,7 @@ class Api::V1::HeardofusController < ApiController
 		end
 	end
 
-	def get_heardofus
+	def get_heardsofus
  		hous = Heardofu.all
  		return render_json_response(hous, :ok)
 	end

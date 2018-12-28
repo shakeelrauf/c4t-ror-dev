@@ -1,8 +1,8 @@
 class Api::V1::DistanceController < ApiController
-	before_action :authenticate_user
+	# before_action :authenticate_user
 
   def distancediff
-  	response =  get_distanc(params[:origin], params[:destination])
+  	response =  JSON.parse(get_distanc(params[:origin], params[:destination]))
 		return render_json_response(response, :ok)
   end
 
