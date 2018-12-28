@@ -1,11 +1,11 @@
 class Api::V1::CustomerController < ApiController
-	before_action :authenticate_user
+  include ActionView::Helpers::NumberHelper
+	# before_action :authenticate_user
 
   def create
-    if !params[:firstName] || params[:lastName] == nil || params[:email] == nil || !params[:type] || !params[:address] || !params[:city] || 
-      params[:postal] == nil || !params[:province] || !params[:phoneNumber] || params[:grade] == nil || params[:note] == nil || !params[:heardOfUs]
+    if check_params
       render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request)
-    elsif !params[:type].eql?("Individual") && (!params[:name] || params[:description] == nil || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo]) 
+    elsif required_params
       render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request)
     else
       customDollarCar = 0
@@ -13,17 +13,17 @@ class Api::V1::CustomerController < ApiController
       customPercCar = 0
       customPercSteel = 0
 
-      if current_user.roles.eql?("admin") 
-        customDollarCar = params[:customDollarCar] if params[:customDollarCar]
-        customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
-        customPercCar = params[:customPercCar] if params[:customPercCar]
-        customPercSteel = params[:customPercSteel] if params[:customPercSteel]
-      end
+      # if current_user.roles.eql?("admin") 
+      #   customDollarCar = params[:customDollarCar] if params[:customDollarCar]
+      #   customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
+      #   customPercCar = params[:customPercCar] if params[:customPercCar]
+      #   customPercSteel = params[:customPercSteel] if params[:customPercSteel]
+      # end
 
       heardofus = Heardofu.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
         client = Customer.find_or_create_by(phone: params[:phoneNumber]) do |client|
-          client.idHeardOfUs = heardofus.id,
+          client.idHeardOfUs = heardofus.idHeardOfUs,
           client.firstName = params[:firstName],
           client.lastName = params[:lastName],
           client.email = params[:email],
@@ -39,15 +39,17 @@ class Api::V1::CustomerController < ApiController
           client.customPercCar = customPercCar,
           client.customPercSteel = customPercSteel
         end
+        puts client.errors.messages
         if client.present?
           params[:addresses].each do |a|
-            puts "ADDRESS ADDING :: #{address.address}"
+            puts "ADDRESS ADDING :: #{a.address}"
+            distance = get_address
             address = client.address.create(
               address: a.address,
               city: a.city,
               postal: a.postal,
-              province: a.province.upcase)
-              # distance: Number(distance.rows[0].elements[1].distance.value) + Number(distance.rows[1].elements[0].distance.value))
+              province: a.province.upcase,
+              distance: (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]))
             if address
               if !params[:company].eql("0")
                 busi = client.build_business({
@@ -80,7 +82,7 @@ class Api::V1::CustomerController < ApiController
     filter = "%" + params[:filter] + "%" if params[:filter]
     lstClients = Customer.where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? or phone LIKE ? extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC and LastName ASC").limit(30).offset(offset)
     if lstClients
-      lst = [];
+      lst = []
       lstClients.each do |client|
         addr = Address.where(idClient: client.id)
         if addr
@@ -88,7 +90,7 @@ class Api::V1::CustomerController < ApiController
           lst.push(client)
         end
       end
-      render json: resource.to_json, include: "business,business.contact,heardofu" status: status, adapter: :json_api
+      render json: resource.to_json, status: status, adapter: :json_api
     end
   end
 
@@ -105,10 +107,9 @@ class Api::V1::CustomerController < ApiController
   end
 
   def update
-    if !params[:firstName] || params[:lastName] == nil || params[:email] == nil || !params[:type] || !params[:address] || !params[:city] || 
-      params[:postal] == nil || !params[:province] || !params[:phoneNumber] || params[:grade] == nil || params[:note] == nil || !params[:heardOfUs]
+    if check_params
       render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request)
-    elsif !params[:type].eql?("Individual") && (!params[:name] || params[:description] == nil || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo]) 
+    elsif required_params
       render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request)
     else
       clientNote = Customer.where(idClient: params[:no])
@@ -162,10 +163,10 @@ class Api::V1::CustomerController < ApiController
                     city: address.city,
                     postal: address.postal,
                     province: address.province.upcase,
-                    # distance: Number(distance.rows[0].elements[1].distance.value) + Number(distance.rows[1].elements[0].distance.value)
+                    distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
                     ).where(idClient: params[:no], address: address.address, city: address.city, postal: address.postal, province: address.province.upcase,
                       idAddress: address.idAddress, 
-                      # distance: Number(distance.rows[0].elements[1].distance.value) + Number(distance.rows[1].elements[0].distance.value)
+                      distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
                     )
                   if updatedAddress
                     if !params[:type].eql?("Individual")
@@ -177,7 +178,7 @@ class Api::V1::CustomerController < ApiController
                         pstTaxNo: params[:pstTaxNo],
                         gstTaxNo: params[:gstTaxNo])
                       if busi.present?
-                        updatedClient = Customer.where(idClient: params[:no])
+                        updatedClient = Customer.where(idClient: params[:no]).first
                         if updatedClient
                           updatedClient.business = busi
                           updatedClient.address = updatedAddress
@@ -187,7 +188,7 @@ class Api::V1::CustomerController < ApiController
                     else
                       if Contact.where(idBusiness: params[:no]).destroy
                         if Business.where(id: params[:no]).destroy
-                          updatedClient = Customer.find_by_id(params[:no]
+                          updatedClient = Customer.find_by_id(params[:no])
                           if updatedClient
                             updatedClient.address = updatedAddress
                             return render_json_response(updatedClient, :ok)
@@ -198,7 +199,7 @@ class Api::V1::CustomerController < ApiController
                                 
                   end
                 else
-                  updatedAddress = Address.update(idClient: params[:no], address: address.address, city: address.city, postal: address.postal, province: address.province.toUpperCase().where(idAddress: address.idAddress)
+                  updatedAddress = Address.update(idClient: params[:no], address: address.address, city: address.city, postal: address.postal, province: address.province.toUpperCase()).where(idAddress: address.idAddress)
                   if params[:type].eql?("Individual")
                     busi = Business.find_or_initialize(
                       id: params[:no],
@@ -289,10 +290,23 @@ class Api::V1::CustomerController < ApiController
   end
 	
   private 
+  def check_params
+    !params[:firstName] || !params[:lastName] || !params[:email] || !params[:type] || !params[:address] || !params[:city] || 
+      !params[:postal] || !params[:province] || !params[:phoneNumber] || !params[:grade] || !params[:note] || !params[:heardOfUs]
+  end
+
+  def required_params
+    !params[:type].eql?("Individual") && (!params[:name] || !params[:description] || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo])
+  end
+
   def get_address(formatted_address)
     twoAddress = "7628 Flewellyn Rd Stittsville, ON, K2S 1B6|" + formatted_address;
     url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=#{process.env.GOOGLE_MAP_TOKEN}&origins=#{twoAddress}&destinations=#{twoAddress}"
     response = HTTParty.get(url)
     response.body
+  end
+
+  def check_address(distance)
+    distance["rows"] && distance["rows"].length == 2 && distance["rows"][0]["elements"] && distance["rows"][0]["elements"][1]["status"] == "OK"
   end
 end

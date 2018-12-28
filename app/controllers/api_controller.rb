@@ -1,8 +1,8 @@
 class ApiController < ApplicationController
 	include Api::V1::MsgsConst
   include Api::V1::Request  
-  helper_method :current_user
-  helper_method :authenticate_user
+  # helper_method :current_user
+  # helper_method :authenticate_user
 
   def render_json_response(resource, status)
     render json: resource.to_json, status: status, adapter: :json_api

@@ -43,9 +43,12 @@ Rails.application.routes.draw do
 				get '/quotes/:quoteNo/cars',         action: :list  
 			end
 			scope controller: :customer do 
-				resources :clients, :param => :no, :only => [:index, :create, :show, :update]
-				get 'client/phones', action: :phones
-				get 'client/phones/:phone', action: :client_phones
+				get '/clients', action: :index
+				post '/clients', action: :create
+				get '/clients/:no', action: :show
+				patch '/clients/:no', action: :update
+				get '/client/phones', action: :phones
+				get '/client/phones/:phone', action: :client_phones
 				get "/clients/statistics/heardofus", action:  :heardofus
 				get '/clients/:customerId/postal', action: :postal
 			end
