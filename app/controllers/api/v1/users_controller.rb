@@ -38,7 +38,7 @@ class Api::V1::UsersController < ApiController
     else
       phoneNumber = IsValid.phone(params[:phoneNumber])
         if (params[:phoneNumber] != "" && phoneNumber == false)
-          res.status(400);
+          render :nothing => true, :status => :bad_request
           return render_json_response({:error => "phoneNumber must contain a valid phone number."}, :ok)
         else
         if(params[:phoneNumber] == "")
@@ -61,40 +61,40 @@ class Api::V1::UsersController < ApiController
         if (params[:roles] == "admin") {
           @c_user.update(roles: params[:roles])
         # Update password if it's there too.
-        if (params[:pwd] != nil) {
-          @c_user.update(password: params[:pwd])
-          @d_user = User.find(params[:no])
-          if(!@d_user)
-            return render_json_response({:error => "User not found."}, :ok)
-          else
-            return render_json_response(@d_user, :ok)
-          end
-          else
-            @e_user = User.find(params[:no])
-          if(!@e_user)
-            return render_json_response({:error => "User not found."}, :ok)
-          else
-            return render_json_response(@e_user, :ok)
-          end
-        else
-        # Update password if it's there too.
-          if (params[:pwd] != nil)
+          if (params[:pwd] != nil) {
             @c_user.update(password: params[:pwd])
-            @f_user = User.find(params[:no])
-            if(!f_user)
+            @d_user = User.find(params[:no])
+            if(!@d_user)
               return render_json_response({:error => "User not found."}, :ok)
             else
-              return render_json_response(@f_user, :ok)
+              return render_json_response(@d_user, :ok)
+            end
+            else
+              @e_user = User.find(params[:no])
+            if(!@e_user)
+              return render_json_response({:error => "User not found."}, :ok)
+            else
+              return render_json_response(@e_user, :ok)
             end
           else
-          @g_user = User.find(params[:no])
-            if (!f_user)
-              return render_json_response({:error => "User not found."}, :ok)
+          # Update password if it's there too.
+            if (params[:pwd] != nil)
+              @c_user.update(password: params[:pwd])
+              @f_user = User.find(params[:no])
+              if(!f_user)
+                return render_json_response({:error => "User not found."}, :ok)
+              else
+                return render_json_response(@f_user, :ok)
+              end
             else
-              return render_json_response(@g_user, :ok)
+            @g_user = User.find(params[:no])
+              if (!f_user)
+                return render_json_response({:error => "User not found."}, :ok)
+              else
+                return render_json_response(@g_user, :ok)
+              end
             end
           end
-        end
       end
     end
   end
