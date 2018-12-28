@@ -70,6 +70,11 @@ Rails.application.routes.draw do
 				get 'vehicles/count', 								 action: :vehicle_count
 				get "vehicles/:no",                    action: :show
 			end
+
+			scope controller: :sms do
+				get :sms
+				post 'sms/appreciations', 							action: :appreciations
+			end
 		end
 	end
 	post :test, controller: :api, action: :test
