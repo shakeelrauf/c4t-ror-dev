@@ -29,4 +29,7 @@ module Api::V1::MsgsConst
 	NO_CAR_MSG = "There are quotes associated with this address, it cannot be deleted"
 	ADDRESS_NOT_FOUND = "Address not found."
 	ADDRESS_INVALID_MSG = "Address is invalid."
+	CAR_NOT_FOUND= "Car not found!"
+	SCHEDULE_DELETED="Schedules deleted!"
+	PROBLEM_OCCURRED="Some problem occurred"
 end

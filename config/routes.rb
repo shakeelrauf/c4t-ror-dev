@@ -59,6 +59,10 @@ Rails.application.routes.draw do
 				put :settings,                       action: :update
 				get 'settings/all', 								 action: :all
 			end
+
+			scope controller: :schedules do
+				resources :schedules, :param => :no, :only => [:index,:create,:show,:destroy] 
+			end
 		end
 	end
 	post :test, controller: :api, action: :test
