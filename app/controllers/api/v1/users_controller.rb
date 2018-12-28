@@ -62,7 +62,7 @@ class Api::V1::UsersController < ApiController
           @y_user = User.find(params[:id])
           @y_user.update(roles: params[:roles])
         # Update password if it's there too.
-          if (params[:pwd] != nil) {
+          if (params[:pwd] != nil)
             @d_user = User.find(params[:no])
             @d_user.update(password: params[:pwd])
             if(!@d_user)
@@ -76,7 +76,7 @@ class Api::V1::UsersController < ApiController
               return render_json_response({:error => "User not found."}, :ok)
             else
               return render_json_response(@e_user, :ok)
-            end
+            end 
           end
         else
         # Update password if it's there too.
@@ -99,6 +99,7 @@ class Api::V1::UsersController < ApiController
         end
       end
     end
+  end
 
   # get all users
   def index
