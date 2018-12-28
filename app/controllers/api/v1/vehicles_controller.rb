@@ -12,7 +12,7 @@ class Api::V1::VehiclesController < ApiController
         return render_json_response(r_vehicle, :ok) if r_vehicle
         return render_json_response({:error => PROBLEM_OCCURRED, :success => false}, :unprocessable_entity)
       end
-    # end
+    end
 	end
 
 	def show
