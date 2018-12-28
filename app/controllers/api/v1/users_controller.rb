@@ -36,14 +36,64 @@ class Api::V1::UsersController < ApiController
     elsif (params[:firstName] == nil || params[:lastName == nil] || !params[:email] || !params[:username] || params[:roles] == nil)
       return render_json_response({:error => "Please send all require attributes."}, :ok)
     else
-      if (@user && @user.id != params[:no])
+      phoneNumber = IsValid.phone(params[:phoneNumber])
+        if (params[:phoneNumber] != "" && phoneNumber == false)
+          res.status(400);
+          return render_json_response({:error => "phoneNumber must contain a valid phone number."}, :ok)
+        else
+        if(params[:phoneNumber] == "")
+          phoneNumber = nil;
+        end
+      # Verify username not exist.
+      @c_user = User.find_by_username(params[:username])
+      users.findOne({ where: { username: req.body.username } }).then((userToValidate) => {
+      if(@c_user && @c_user.id != params[:no])
         return render_json_response({:error => "Username already exist."}, :ok)
       else
-        if @user.update(user_params)
-          return render_json_response({:sucess => "User updated."}, :ok)
-          # Update roles if user is an admin.
+        @c_user.update(
+        firstName: params[:firstName],
+        lastName: params[:lastName],
+        email: params[:email],
+        username: params[:username],
+        phone: params[:phoneNumber],
+        roles: [params[:roles])
+        # Update roles if user is an admin.
+        if (params[:roles] == "admin") {
+          @c_user.update(roles: params[:roles])
+        # Update password if it's there too.
+        if (params[:pwd] != nil) {
+          @c_user.update(password: params[:pwd])
+          @d_user = User.find(params[:no])
+          if(!@d_user)
+            return render_json_response({:error => "User not found."}, :ok)
+          else
+            return render_json_response(@d_user, :ok)
+          end
+          else
+            @e_user = User.find(params[:no])
+          if(!@e_user)
+            return render_json_response({:error => "User not found."}, :ok)
+          else
+            return render_json_response(@e_user, :ok)
+          end
         else
-          return render_json_response({:error => "Something went wrong."}, :ok)
+        # Update password if it's there too.
+          if (params[:pwd] != nil)
+            @c_user.update(password: params[:pwd])
+            @f_user = User.find(params[:no])
+            if(!f_user)
+              return render_json_response({:error => "User not found."}, :ok)
+            else
+              return render_json_response(@f_user, :ok)
+            end
+          else
+          @g_user = User.find(params[:no])
+            if (!f_user)
+              return render_json_response({:error => "User not found."}, :ok)
+            else
+              return render_json_response(@g_user, :ok)
+            end
+          end
         end
       end
     end
