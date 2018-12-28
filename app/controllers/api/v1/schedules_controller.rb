@@ -1,5 +1,5 @@
 class Api::V1::SchedulesController < ApiController
-  # before_action :authenticate_user
+  before_action :authenticate_user
   def index
     selected = Schedule.includes([:car => [ :address, :information, :quote => [:customer, :dispatcher, :status ]] ]).to_json(include: 
                               [car: 
