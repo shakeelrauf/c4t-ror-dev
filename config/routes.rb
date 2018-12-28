@@ -2,8 +2,10 @@ Rails.application.routes.draw do
 	namespace :api do
 		namespace :v1 do
 			resources :users, :param => :no, :only => [:index,:create,:show,:update, :destroy] do 
-				patch :block_user
 				patch :avatar
+				collection do
+					patch ':no', action: :block_user
+				end
 			end
 			scope controller: :contact do
 				post "clients/:no/contact"	,        action: :contact
@@ -43,9 +45,12 @@ Rails.application.routes.draw do
 				get '/quotes/:quoteNo/cars',         action: :list  
 			end
 			scope controller: :customer do 
-				resources :clients, :param => :no, :only => [:index, :create, :show, :update]
-				get 'client/phones', action: :phones
-				get 'client/phones/:phone', action: :client_phones
+				get '/clients', action: :index
+				post '/clients', action: :create
+				get '/clients/:no', action: :show
+				patch '/clients/:no', action: :update
+				get '/client/phones', action: :phones
+				get '/client/phones/:phone', action: :client_phones
 				get "/clients/statistics/heardofus", action:  :heardofus
 				get '/clients/:customerId/postal', action: :postal
 			end

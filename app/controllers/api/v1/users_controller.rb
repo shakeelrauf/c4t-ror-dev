@@ -12,7 +12,14 @@ class Api::V1::UsersController < ApiController
         # Verify username not exist.
        @user = User.find_or_initialize_by(username: params[:username])
       if @user.new_record?
-        @user.attributes = params
+        @user.firstName = params[:firstName]
+        @user.lastName = params[:lastName]
+        @user.password = params[:pwd]
+        @user.email = params[:email]
+        @user.roles = params[:roles]
+        @user.avatar = params[:avatar]
+        @user.phoneNumber = params[:phoneNumber]
+        @user.isSuperadmin = params[:isSuperadmin]
         @user.save!
   			return render_json_response(@user, :ok)
       else
@@ -55,9 +62,9 @@ class Api::V1::UsersController < ApiController
     if(!@user)
     	return render_json_response({:error => "User not found!"}, :ok)
     else
-        if(@user.phone == nil) 
-          @user.phone = ""
-        end
+      if(@user.phone == nil) 
+        @user.phone = ""
+      end
     	return render_json_response(@user, :ok)
     end
   end
