@@ -47,7 +47,7 @@ class Api::V1::SchedulesController < ApiController
               dtStart: params[:dtStart],
               dtEnd: params[:dtEnd])
           return render_json_response(newOne, :ok) if newOne.save
-          return render_json_response({:error => PROBLEM_OCCURRED, :success => false}, :not_found)
+          return render_json_response({:error => PROBLEM_OCCURRED, :success => false}, :unprocessable_entity)
         else
           #Update
 

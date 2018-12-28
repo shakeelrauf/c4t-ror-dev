@@ -63,6 +63,13 @@ Rails.application.routes.draw do
 			scope controller: :schedules do
 				resources :schedules, :param => :no, :only => [:index,:create,:show,:destroy] 
 			end
+
+			scope controller: :vehicles do
+				get :vehicles,							           action: :index
+				post :vehicles,												 action: :create
+				get 'vehicles/count', 								 action: :vehicle_count
+				get "vehicles/:no",                    action: :show
+			end
 		end
 	end
 	post :test, controller: :api, action: :test

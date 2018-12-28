@@ -32,4 +32,6 @@ module Api::V1::MsgsConst
 	CAR_NOT_FOUND= "Car not found!"
 	SCHEDULE_DELETED="Schedules deleted!"
 	PROBLEM_OCCURRED="Some problem occurred"
+	INVALID_PARAMS="Parameters are invalid"
+	VEHICLE_NOT_FOUND="Vehicle not found!"
 end
