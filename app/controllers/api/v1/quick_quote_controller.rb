@@ -44,18 +44,7 @@ class Api::V1::QuickQuoteController < ApiController
 
   def index
   	quickquotes = QuickQuote.all.includes(:User, :HeardOfUs)
-			return render_json_response(quickquotes, :ok)
-  #   QuickQuote.findAll({
-  #     include: [{
-  #       model: User,
-  #       as: "dispatcher"
-  #     }, {
-  #       model: HeardOfUs,
-  #       as: "heardofus"
-  #     }]
-  #   }).then(quickquotes => {
-  #     res.json(quickquotes);
-  #   });
+	  return render_json_response(quickquotes, :ok)
   end
 
 

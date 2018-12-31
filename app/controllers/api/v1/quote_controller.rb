@@ -40,7 +40,7 @@ class Api::V1::QuoteController < ApiController
   end
 
   # get one quote
-  def method_name
+  def get_one_quote
   	
   end
 
