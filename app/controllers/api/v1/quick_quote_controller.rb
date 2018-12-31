@@ -1,52 +1,9 @@
 class Api::V1::QuickQuoteController < ApiController
-	
-	def updateCarForAddress(car, client, next) {
-     # If the addressId is an int, it's an addressId, else it's a postal
-    addressId = car.carAddressId.to_i
-
-    if addressId.kind_of? Integer
-      # It's a number
-      updateQuoteCar(car, addressId.to_i, next);
-
-    elsif (!car.carPostal)
-       # No address at this time
-      updateQuoteCar(car, nil, next);
-
-    elsif (car.carPostal && car.carPostal != "")
-       # We can create a new address
-      @address = Address.create(
-          idClient: client.id,
-          address:  car.carStreet,
-          city:     car.carCity,
-          postal:   car.carPostal,
-          province: car.carProvince,
-          distance: car.distance
-      )
-        updateQuoteCar(car, @address.id, next);
-    end
-  end
-
-   # The update of a quote car
-  def updateQuoteCar(car, addressId, next)
-    console.log("==================> QuoteCar.update    : " + JSON.stringify(car));
-    console.log("==================> QuoteCar.update    : " + parseInt(car.car));
-    QuoteCar.update(
-        idAddress: addressId,
-        missingWheels: car.missingWheels.present? ? car.missingWheels.to_i : 0,
-        missingBattery: (car.missingBattery && car.missingBattery == 1),
-        missingCat: (car.missingCat && car.missingCat == 1),
-        gettingMethod: car.gettingMethod,
-        distance: (car.distance.present? ? car.distance.to_f : nil),
-        price: (car.price.present? ? car.price.to_f : nil)
-    )
-    next();
-  end
 
   def index
-  	quickquotes = QuickQuote.all.includes(:User, :HeardOfUs)
+  	quickquotes = QuickQuote.includes(:User, :HeardOfUs).all
 	  return render_json_response(quickquotes, :ok)
   end
-
 
    # The save a of a quote
   def save_quotes
@@ -88,7 +45,7 @@ class Api::V1::QuickQuoteController < ApiController
 
             quote = Quote.customUpsert({reference: moment().format("YYMM") + (Number(counter) + 1).toString().padStart(4, "0"),note: "",idUser: req.user.idUser,idClient: @client.id},{id: params[:quote]})
                    # Save each car                  
-        	carList.each do |car, next|
+        	carList.each do |car|
 
             if (car.car == "")
 							return render_json_response({:error => "The type of vehicle was not selected"}, :bad_request)
@@ -100,9 +57,9 @@ class Api::V1::QuickQuoteController < ApiController
 							return render_json_response({:error => "The address was not selected properly"}, :bad_request)
           	end
 
-            updateCarForAddress(car, client, next);
+            updateCarForAddress(car, client);
           end
-    		r_quote = Quote.find(quote.id).includes(:QuoteCar, :Client)
+    		r_quote = Quote.includes(:QuoteCar, :Client).find(quote.id)
 				return render_json_response(r_quote, :ok)
 			end
 		end
@@ -110,4 +67,46 @@ class Api::V1::QuickQuoteController < ApiController
   def respond400Message(res, msg) {
 		return render_json_response(msg, :bad_request)
   end
+
+  def updateCarForAddress(car, client)
+     # If the addressId is an int, it's an addressId, else it's a postal
+    addressId = car.carAddressId.to_i
+
+    if addressId.kind_of? Integer
+      # It's a number
+      updateQuoteCar(car, addressId.to_i);
+
+    elsif (!car.carPostal)
+       # No address at this time
+      updateQuoteCar(car, nil);
+
+    elsif (car.carPostal && car.carPostal != "")
+       # We can create a new address
+      @address = Address.create(
+          idClient: client.id,
+          address:  car.carStreet,
+          city:     car.carCity,
+          postal:   car.carPostal,
+          province: car.carProvince,
+          distance: car.distance
+      )
+        updateQuoteCar(car, @address.id);
+    end
+  end
+
+   # The update of a quote car
+  def updateQuoteCar(car, addressId)
+    console.log("==================> QuoteCar.update    : " + JSON.stringify(car));
+    console.log("==================> QuoteCar.update    : " + parseInt(car.car));
+    QuoteCar.update(
+        idAddress: addressId,
+        missingWheels: car.missingWheels.present? ? car.missingWheels.to_i : 0,
+        missingBattery: (car.missingBattery && car.missingBattery == 1),
+        missingCat: (car.missingCat && car.missingCat == 1),
+        gettingMethod: car.gettingMethod,
+        distance: (car.distance.present? ? car.distance.to_f : nil),
+        price: (car.price.present? ? car.price.to_f : nil)
+    )
+  end
+
 end
