@@ -23,7 +23,7 @@ class Api::V1::QuickQuoteController < ApiController
           distance: car.distance
       )
         updateQuoteCar(car, @address.id, next);
-      end
+    end
   end
 
    # The update of a quote car
