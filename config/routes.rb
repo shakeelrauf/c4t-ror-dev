@@ -73,7 +73,11 @@ Rails.application.routes.draw do
 
 			scope controller: :sms do
 				get :sms
-				post 'sms/appreciations', 							action: :appreciations
+				post 'sms/appreciations', 			   action: :appreciations
+			end
+
+			scope controller: :voice do
+				post '/voice/commingsoon',             action: :voice
 			end
 		end
 	end
