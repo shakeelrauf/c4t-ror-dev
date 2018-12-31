@@ -30,7 +30,7 @@ class Api::V1::UsersController < ApiController
 
   # Update one user.
   def update
-    if (current_user.roles != "admin" && current_user.idUser != params[:no])
+    if (current_user && current_user.roles != "admin" && current_user.idUser != params[:no])
       return render_json_response({:error => "You are not authorize to update this user."}, :ok)
     # Validate body data before update.
     elsif (params[:firstName] == nil || params[:lastName == nil] || !params[:email] || !params[:username] || params[:roles] == nil)
@@ -99,7 +99,7 @@ class Api::V1::UsersController < ApiController
         end
       end
     end
-
+end
   # get all users
   def index
     @users = User.all
