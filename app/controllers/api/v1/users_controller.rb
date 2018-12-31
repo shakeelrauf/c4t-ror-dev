@@ -85,7 +85,7 @@ class Api::V1::UsersController < ApiController
               if(!@t_user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                return render_json_response(@f_user, :ok)
+                return render_json_response(@t_user, :ok)
               end
             else
               @g_user = User.find_by_id(params[:no])
