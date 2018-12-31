@@ -30,7 +30,7 @@ class Api::V1::QuickQuoteController < ApiController
         carList = nil
         begin  # "try" block
           carList = JSON.parse(params[:cars])
-        rescue(e) # optionally: `rescue Exception => ex`
+        rescue # optionally: `rescue Exception => ex`
         	return render_json_response({:error => "The cars cannot be parsed"}, :bad_request)
         end
         
@@ -96,7 +96,8 @@ class Api::V1::QuickQuoteController < ApiController
 
    # The update of a quote car
   def updateQuoteCar(car, addressId)
-    QuoteCar.update(
+    @quote_car = QuoteCar.find_by_id(id: car.car])
+    @quote_car.update(
         idAddress: addressId,
         missingWheels: car.missingWheels.present? ? car.missingWheels.to_i : 0,
         missingBattery: (car.missingBattery && car.missingBattery == 1),
