@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 			resources :users, :param => :no, :only => [:index,:create,:show,:update, :destroy] do 
 				patch :avatar
 				collection do
-					patch ':no', action: :block_user
+					put ':no', action: :block_user
 				end
 			end
 			scope controller: :contact do
