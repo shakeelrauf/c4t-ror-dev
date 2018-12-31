@@ -1,7 +1,7 @@
 class Api::V1::QuickQuoteController < ApiController
 
   def index
-  	quickquotes = QuickQuote.includes(:User, :HeardOfUs).all
+  	quickquotes = QuickQuote.includes(:user, :heardofus).all
 	  return render_json_response(quickquotes, :ok)
   end
 
@@ -59,7 +59,7 @@ class Api::V1::QuickQuoteController < ApiController
 
             updateCarForAddress(car, client);
           end
-    		r_quote = Quote.includes(:QuoteCar, :Client).find_by_id(quote.id)
+    		r_quote = Quote.includes(:quote_cars, :client).find_by_id(quote.id)
 				return render_json_response(r_quote, :ok)
 			end
 		end
@@ -96,8 +96,6 @@ class Api::V1::QuickQuoteController < ApiController
 
    # The update of a quote car
   def updateQuoteCar(car, addressId)
-    console.log("==================> QuoteCar.update    : " + JSON.stringify(car));
-    console.log("==================> QuoteCar.update    : " + parseInt(car.car));
     QuoteCar.update(
         idAddress: addressId,
         missingWheels: car.missingWheels.present? ? car.missingWheels.to_i : 0,
