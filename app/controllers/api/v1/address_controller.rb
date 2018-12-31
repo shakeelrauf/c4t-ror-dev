@@ -14,7 +14,7 @@ class Api::V1::AddressController < ApplicationController
     distance = get_request(url)
     going, returning  =  0,0
     going , returning = distance["rows"][0]["elements"][1]["distance"]["value"],distance["rows"][1]["elements"][0]["distance"]["value"] if check_address(distance)
-    client = Customer.includes([:address]).find(params[:no])
+    client = Customer.includes([:address]).find_by_id(params[:no])
     return render_json_response({:error => CLIENT_NOT_FOUND_MSG, :success => false}, :not_found) if client.nil? 
     params[:addresses].each do |addresses|
     	Address.create(idClient: client.id,
@@ -57,7 +57,7 @@ class Api::V1::AddressController < ApplicationController
 	end
 
 	def show
-		address = Address.find(params[:no])
+		address = Address.find_by_id(params[:no])
 		return render_json_response(address, :ok)
 	end
 

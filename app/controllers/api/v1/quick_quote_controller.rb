@@ -113,7 +113,7 @@ class Api::V1::QuickQuoteController < ApiController
 
             updateCarForAddress(car, client, next);
           end
-    		r_quote = Quote.find(quote.id).includes(:QuoteCar, :Client)
+    		r_quote = Quote.find_by_id(quote.id).includes(:QuoteCar, :Client)
 				return render_json_response(r_quote, :ok)
 			end
 		end
