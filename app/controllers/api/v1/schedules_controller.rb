@@ -67,7 +67,7 @@ class Api::V1::SchedulesController < ApiController
   end
 
   def destroy
-    results = Schedule.where(idCar: params[:no]).destroy
+    results = Schedule.where(idCar: params[:no]).destroy_all
     return render_json_response({:message => SCHEDULE_DELETED, :success => true}, :ok)
   end
 
