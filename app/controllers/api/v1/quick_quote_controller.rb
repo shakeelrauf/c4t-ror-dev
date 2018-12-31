@@ -107,9 +107,9 @@ class Api::V1::QuickQuoteController < ApiController
 							return render_json_response({:error => "The missing battery was not selected: [" + car.missingBattery + "]"}, :bad_request)
             elsif (car.addressId == "" && car.carPostal == "")
 							return render_json_response({:error => "The address was not selected properly"}, :bad_request)
+          	end
 
             updateCarForAddress(car, client, next);
-          	end
           end
     		r_quote = Quote.find(quote.id).includes(:QuoteCar, :Client)
 				return render_json_response(r_quote, :ok)
