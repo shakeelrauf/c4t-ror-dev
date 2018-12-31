@@ -44,6 +44,13 @@ Rails.application.routes.draw do
 				get '/quotescar/:carNo',             action: :show
 				get '/quotes/:quoteNo/cars',         action: :list  
 			end
+
+			scope controller: :quick_quote do
+				get :quick_cards
+				post '/quickquotes',             		 action: :save_quotes
+				get '/quickquotes',         				 action: :index  
+			end
+
 			scope controller: :customer do 
 				get '/clients', action: :index
 				post '/clients', action: :create

@@ -38,8 +38,7 @@ class Api::V1::UsersController < ApiController
     else
       phoneNumber = IsValid.phone(params[:phoneNumber])
       if (params[:phoneNumber] != "" && phoneNumber == false)
-        render :nothing => true, :status => :bad_request
-        return render_json_response({:error => "phoneNumber must contain a valid phone number."}, :ok)
+        return render_json_response({:error => "phoneNumber must contain a valid phone number."}, :bad_request)
       else
         if(params[:phoneNumber] == "")
           phoneNumber = nil;

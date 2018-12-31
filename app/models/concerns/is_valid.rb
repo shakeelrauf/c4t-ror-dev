@@ -102,6 +102,18 @@ class IsValid
   	return false
   end
 
+  def self.postal expression
+    if expression.match("^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}(\-| |){1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}$")
+      return ""
+    else
+      expression =  expression.upcase
+      if expression.length == 7
+        expression =  expression[0,3] +  expression[4,6]
+      end
+      return expression
+    end
+  end
+
   def self.role expression
   	return true if (expression === "admin" || expression === "user")
     return false
