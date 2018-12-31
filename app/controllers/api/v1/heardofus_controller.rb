@@ -4,9 +4,9 @@ class Api::V1::HeardofusController < ApiController
 	before_action :check_type, only: [:heardsofus, :update]
 
 	def heardsofus
-		hou = Heardofu.find_by_type(params[:type]) 
+		hou = Heardofus.find_by_type(params[:type])
 		if hou.nil?
-			hou = Heardofu.new(type: params[:type])
+			hou = Heardofus.new(type: params[:type])
 			hou.save!
 			return render_json_response(hou, :ok)
 		else
@@ -15,18 +15,18 @@ class Api::V1::HeardofusController < ApiController
 	end
 
 	def get_heardsofus
- 		hous = Heardofu.all
+ 		hous = Heardofus.all
  		return render_json_response(hous, :ok)
 	end
 
 	def show
-		hou =  Heardofu.find_by_id params[:no]
+		hou =  Heardofus.find_by_id params[:no]
 		return render_json_response({:error => HEARDOFUS_NOT_FOUND_MSG, :success => false}, :not_found) if !hou.present?
 		return render_json_response(hou, :ok)
 	end
 
 	def update
-		hou = Heardofu.find_by_id(params[:no])
+		hou = Heardofus.find_by_id(params[:no])
 		return render_json_response({:error => HEARDOFUS_NOT_FOUND_MSG, :success => false}, :not_found) if !hou.present?
 		hou.update(type: params[:type])
 		return render_json_response(hou, :ok)
