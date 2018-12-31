@@ -80,9 +80,9 @@ class Api::V1::UsersController < ApiController
           else
           # Update password if it's there too.
             if (params[:pwd] != nil)
-              @c_user.update(password: User.encrypt(params[:pwd]))
-              @f_user = User.find_by_id(params[:no])
-              if(!f_user)
+              @t_user = User.find_by_id(params[:no])
+              @t_user.update(password: User.encrypt(params[:pwd]))
+              if(!@t_user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
                 return render_json_response(@f_user, :ok)
