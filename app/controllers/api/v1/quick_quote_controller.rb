@@ -64,7 +64,7 @@ class Api::V1::QuickQuoteController < ApiController
 			end
 		end
 
-  def respond400Message(res, msg) {
+  def respond400Message(res, msg)
 		return render_json_response(msg, :bad_request)
   end
 
