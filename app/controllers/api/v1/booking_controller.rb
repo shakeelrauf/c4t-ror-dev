@@ -4,7 +4,7 @@ class Api::V1::BookingController < ApiController
 	def update
 		car_id  = booking_params.keys.select { |key| key.to_s.match(/^vin+/) }
 		if car_id
-			# We have found a car id!
+			# rWe have found a car id!
 			id = car_id.split('-')[1]
 			puts("=======> Saving booking for carId: #{id}")
 
