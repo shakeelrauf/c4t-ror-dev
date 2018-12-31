@@ -8,61 +8,61 @@ class Api::V1::QuickQuoteController < ApiController
    # The save a of a quote
   def save_quotes
 
-      # Validate body data before insert.
-      if (params[:firstName] == nil || params[:lastName] == nil || params[:postal] == nil || !params[:heardofus] || params[:phone] == nil) 
-        return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
-			else
-        params[:postal] = IsValid.postal(params[:postal])
-        if (params[:postal].length < 6 || params[:postal] > 7)
-        	return render_json_response({:error => "The postal code seems invalid."}, :bad_request)
-        end
-         # Parse validate the phone number
-        phone = ""
-        params[:phone].each_with_index do |phone, index|
-          if ((phone[index].to_i).kind_of? Integer)
-            phone += phone[i]
+    # Validate body data before insert.
+    if (params[:firstName] == nil || params[:lastName] == nil || params[:postal] == nil || !params[:heardofus] || params[:phone] == nil) 
+      return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
+		else
+      params[:postal] = IsValid.postal(params[:postal])
+      if (params[:postal].length < 6 || params[:postal] > 7)
+      	return render_json_response({:error => "The postal code seems invalid."}, :bad_request)
+      end
+       # Parse validate the phone number
+      phone = ""
+      params[:phone].each_with_index do |phone, index|
+        if ((phone[index].to_i).kind_of? Integer)
+          phone += phone[i]
+      	end
+      end
+      if (phone.length < 10)
+      	return render_json_response({:error => "phone number length must be at least 10 digits."}, :bad_request)
+      end
+       # Parse the cars
+      carList = nil
+      begin  # "try" block
+        carList = JSON.parse(params[:cars])
+      rescue # optionally: `rescue Exception => ex`
+      	return render_json_response({:error => "The cars cannot be parsed"}, :bad_request)
+      end
+      
+      @heard_of_us = HeardOfUs.find_or_initialize_by(type: params[:heardofus])
+	      if @heard_of_us.new_record?
+	      	HeardOfUs.create(type: params[:heardofus])
+	      end
+
+          @client = Client.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
+          @quote = Quote.where(dtCreated: {[Op.gte]: moment().format("YYYY-MM-DD") + " 00:00:00"})
+          counter = @quote.count
+
+          quote = Quote.customUpsert({reference: moment().format("YYMM") + (Number(counter) + 1).toString().padStart(4, "0"),note: "",idUser: req.user.idUser,idClient: @client.id},{id: params[:quote]})
+                 # Save each car                  
+      	carList.each do |car|
+
+          if (car.car == "")
+						return render_json_response({:error => "The type of vehicle was not selected"}, :bad_request)
+          elsif (car.missingWheels == "")
+						return render_json_response({:error => "The missing wheels was not selected"}, :bad_request)
+          elsif (car.missingBattery == "")
+						return render_json_response({:error => "The missing battery was not selected: [" + car.missingBattery + "]"}, :bad_request)
+          elsif (car.addressId == "" && car.carPostal == "")
+						return render_json_response({:error => "The address was not selected properly"}, :bad_request)
         	end
+
+          updateCarForAddress(car, client)
         end
-        if (phone.length < 10)
-        	return render_json_response({:error => "phone number length must be at least 10 digits."}, :bad_request)
-        end
-         # Parse the cars
-        carList = nil
-        begin  # "try" block
-          carList = JSON.parse(params[:cars])
-        rescue # optionally: `rescue Exception => ex`
-        	return render_json_response({:error => "The cars cannot be parsed"}, :bad_request)
-        end
-        
-        @heard_of_us = HeardOfUs.find_or_initialize_by(type: params[:heardofus])
-		      if @heard_of_us.new_record?
-		      	HeardOfUs.create(type: params[:heardofus])
-		      end
-
-            @client = Client.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
-            @quote = Quote.where(dtCreated: {[Op.gte]: moment().format("YYYY-MM-DD") + " 00:00:00"})
-            counter = @quote.count
-
-            quote = Quote.customUpsert({reference: moment().format("YYMM") + (Number(counter) + 1).toString().padStart(4, "0"),note: "",idUser: req.user.idUser,idClient: @client.id},{id: params[:quote]})
-                   # Save each car                  
-        	carList.each do |car|
-
-            if (car.car == "")
-							return render_json_response({:error => "The type of vehicle was not selected"}, :bad_request)
-            elsif (car.missingWheels == "")
-							return render_json_response({:error => "The missing wheels was not selected"}, :bad_request)
-            elsif (car.missingBattery == "")
-							return render_json_response({:error => "The missing battery was not selected: [" + car.missingBattery + "]"}, :bad_request)
-            elsif (car.addressId == "" && car.carPostal == "")
-							return render_json_response({:error => "The address was not selected properly"}, :bad_request)
-          	end
-
-            updateCarForAddress(car, client)
-          end
-    		r_quote = Quote.includes(:quote_cars, :client).find_by_id(quote.id)
-				return render_json_response(r_quote, :ok)
-			end
+  		r_quote = Quote.includes(:quote_cars, :client).find_by_id(quote.id)
+			return render_json_response(r_quote, :ok)
 		end
+	end
 
   def respond400Message(res, msg)
 		return render_json_response(msg, :bad_request)
@@ -96,7 +96,7 @@ class Api::V1::QuickQuoteController < ApiController
 
    # The update of a quote car
   def updateQuoteCar(car, addressId)
-    @quote_car = QuoteCar.find_by_id(id: car.car])
+    @quote_car = QuoteCar.find_by_id(id: car.car)
     @quote_car.update(
         idAddress: addressId,
         missingWheels: car.missingWheels.present? ? car.missingWheels.to_i : 0,
