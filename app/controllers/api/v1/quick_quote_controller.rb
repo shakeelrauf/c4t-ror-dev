@@ -2,7 +2,7 @@ class Api::V1::QuickQuoteController < ApiController
 	
 	def updateCarForAddress(car, client, next) {
      # If the addressId is an int, it's an addressId, else it's a postal
-    addressId = car.carAddressId
+    addressId = car.carAddressId.to_i
 
     if addressId.kind_of? Integer
       # It's a number
@@ -14,7 +14,7 @@ class Api::V1::QuickQuoteController < ApiController
 
     elsif (car.carPostal && car.carPostal != "")
        # We can create a new address
-      Address.create(
+      @address = Address.create(
           idClient: client.id,
           address:  car.carStreet,
           city:     car.carCity,
@@ -22,7 +22,7 @@ class Api::V1::QuickQuoteController < ApiController
           province: car.carProvince,
           distance: car.distance
       )
-        updateQuoteCar(car, Address.last.id, next);
+        updateQuoteCar(car, @address.id, next);
       end
   end
 
@@ -113,7 +113,6 @@ class Api::V1::QuickQuoteController < ApiController
           end
     		r_quote = Quote.find(quote.id).includes(:QuoteCar, :Client)
 				return render_json_response(r_quote, :ok)
-
 			end
 		end
 
