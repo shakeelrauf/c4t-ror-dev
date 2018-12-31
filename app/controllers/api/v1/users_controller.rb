@@ -41,7 +41,7 @@ class Api::V1::UsersController < ApiController
         return render_json_response({:error => "phoneNumber must contain a valid phone number."}, :bad_request)
       else
         if(params[:phoneNumber] == "")
-          phoneNumber = nil;
+          phoneNumber = nil
         end
         # Verify username not exist.
         @c_user = User.find_by_username(params[:username])

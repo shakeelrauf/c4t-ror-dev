@@ -12,24 +12,24 @@ class Api::V1::QuickQuoteController < ApiController
       if (params[:firstName] == nil || params[:lastName] == nil || params[:postal] == nil || !params[:heardofus] || params[:phone] == nil) 
         return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
 			else
-        params[:postal] = IsValid.postal(params[:postal]);
+        params[:postal] = IsValid.postal(params[:postal])
         if (params[:postal].length < 6 || params[:postal] > 7)
         	return render_json_response({:error => "The postal code seems invalid."}, :bad_request)
         end
          # Parse validate the phone number
-        phone = "";
+        phone = ""
         params[:phone].each_with_index do |phone, index|
           if ((phone[index].to_i).kind_of? Integer)
-            phone += phone[i];
+            phone += phone[i]
         	end
         end
         if (phone.length < 10)
         	return render_json_response({:error => "phone number length must be at least 10 digits."}, :bad_request)
         end
          # Parse the cars
-        carList = nil;
+        carList = nil
         begin  # "try" block
-          carList = JSON.parse(params[:cars]);
+          carList = JSON.parse(params[:cars])
         rescue(e) # optionally: `rescue Exception => ex`
         	return render_json_response({:error => "The cars cannot be parsed"}, :bad_request)
         end
@@ -57,7 +57,7 @@ class Api::V1::QuickQuoteController < ApiController
 							return render_json_response({:error => "The address was not selected properly"}, :bad_request)
           	end
 
-            updateCarForAddress(car, client);
+            updateCarForAddress(car, client)
           end
     		r_quote = Quote.includes(:quote_cars, :client).find_by_id(quote.id)
 				return render_json_response(r_quote, :ok)
@@ -74,11 +74,11 @@ class Api::V1::QuickQuoteController < ApiController
 
     if addressId.kind_of? Integer
       # It's a number
-      updateQuoteCar(car, addressId.to_i);
+      updateQuoteCar(car, addressId.to_i)
 
     elsif (!car.carPostal)
        # No address at this time
-      updateQuoteCar(car, nil);
+      updateQuoteCar(car, nil)
 
     elsif (car.carPostal && car.carPostal != "")
        # We can create a new address
@@ -90,7 +90,7 @@ class Api::V1::QuickQuoteController < ApiController
           province: car.carProvince,
           distance: car.distance
       )
-        updateQuoteCar(car, @address.id);
+        updateQuoteCar(car, @address.id)
     end
   end
 

@@ -24,13 +24,13 @@ class Api::V1::QuoteController < ApiController
     }).then(settings => {
 
     # The settings hash
-    s = {};
+    s = {}
     settings.each do |setting|
-      s[setting.name] = setting.value;
+      s[setting.name] = setting.value
     end
 
     count = Quote.where(dtCreated: moment().format("YYYY-MM-01 00:00:00")
-      reference = moment().format("YYMM") + ("0000" + (count + 1)).slice(-4);
+      reference = moment().format("YYMM") + ("0000" + (count + 1)).slice(-4)
       quote = Quote.create(
         idUser: current_user.idUser,
         reference: reference,
@@ -46,7 +46,7 @@ class Api::V1::QuoteController < ApiController
         pickup: s.pickup
       )
  		 return render_json_response(quote, :ok)
-    });
+    })
   end
 
   # Creates a blank quote ca
@@ -70,8 +70,8 @@ class Api::V1::QuoteController < ApiController
       }).then((results) => {
         res.json({
           "message": "Quote deleted!"
-        });
-      });
+        })
+      })
     })
 
 	def destroy
