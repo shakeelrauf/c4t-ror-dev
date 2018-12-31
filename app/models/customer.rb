@@ -26,14 +26,15 @@ class Customer < ApplicationRecord
  #    });
 	# end
 
-	def self.customUpsert(options,row)
-		@custom = find_or_initialize_by(options)
-		if @custom.new_record?
-		  @custom.save!
+	def self.customUpsert(options={},where={})
+		@custom = where(where).first
+		if @custom.present?
+			@custom.update(options)
+			@cutom = @cutom
 		else
-			where(options.where).update_all(options.defaults)
-			@cutom = find_by_id(row.id)
+			@custom =  create(options.merge(where))
 		end
+		@custom
 	end
 
 end
