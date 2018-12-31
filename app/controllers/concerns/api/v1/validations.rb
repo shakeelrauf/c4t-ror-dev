@@ -11,5 +11,6 @@ module API::V1::Validations
 
   def to_number(number)
   	number.to_i if is_number(number)
+    false
   end
 end

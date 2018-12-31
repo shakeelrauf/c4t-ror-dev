@@ -1,6 +1,6 @@
 class Api::V1::CustomerController < ApiController
   include ActionView::Helpers::NumberHelper
-	# before_action :authenticate_user
+	before_action :authenticate_user
 
   def create
     if check_params
@@ -22,53 +22,56 @@ class Api::V1::CustomerController < ApiController
 
       heardofus = Heardofu.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
-        client = Customer.find_or_create_by(phone: params[:phoneNumber]) do |client|
-          client.idHeardOfUs = heardofus.idHeardOfUs,
-          client.firstName = params[:firstName],
-          client.lastName = params[:lastName],
-          client.email = params[:email],
-          client.type = params[:type],
-          client.phone = params[:phoneNumber],
-          client.extension = params[:extension],
-          client.cellPhone = params[:phoneNumber2],
-          client.secondaryPhone = params[:phoneNumber3],
-          client.note = params[:note],
-          client.grade = params[:grade],
-          client.customDollarCar = customDollarCar,
-          client.customDollarSteel = customDollarSteel,
-          client.customPercCar = customPercCar,
-          client.customPercSteel = customPercSteel
-        end
-        puts client.errors.messages
-        if client.present?
-          params[:addresses].each do |a|
-            puts "ADDRESS ADDING :: #{a.address}"
-            distance = get_address
-            address = client.address.create(
-              address: a.address,
-              city: a.city,
-              postal: a.postal,
-              province: a.province.upcase,
-              distance: (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]))
-            if address
-              if !params[:company].eql("0")
-                busi = client.build_business({
-                  name: params[:name],
-                  description: params[:description],
-                  contactPosition: params[:contactPosition],
-                  pstTaxNo: params[:pstTaxNo],
-                  gstTaxNo: params[:gstTaxNo]})
-                if busi.save
-                  client.business = {};
-                  comp = Business.where(params[:id]).first
-                  if comp.present?
-                    client.business = comp
-                    return render_json_response(client, :ok)
+        client = Customer.where(phone: params[:phoneNumber]).first
+        if !client
+          client = Customer.create(phone: params[:phoneNumber], 
+            idHeardOfUs: heardofus.idHeardOfUs,
+            firstName: params[:firstName],
+            lastName: params[:lastName],
+            email: params[:email],
+            type: params[:type],
+            phone: params[:phoneNumber],
+            extension: params[:extension],
+            cellPhone: params[:phoneNumber2],
+            secondaryPhone: params[:phoneNumber3],
+            note: params[:note],
+            grade: params[:grade],
+            customDollarCar: customDollarCar,
+            customDollarSteel: customDollarSteel,
+            customPercCar: customPercCar,
+            customPercSteel: customPercSteel)
+          if client.present?
+            params[:addresses].each do |a|
+              puts "ADDRESS ADDING :: #{a.address}"
+              distance = get_distance
+              newAddress = client.address.create(
+                address: a.address,
+                city: a.city,
+                postal: a.postal,
+                province: a.province.upcase,
+                distance: (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]))
+              if newAddress
+                if !params[:company].eql("0")
+                  busi = client.build_business({
+                    name: params[:name],
+                    description: params[:description],
+                    contactPosition: params[:contactPosition],
+                    pstTaxNo: params[:pstTaxNo],
+                    gstTaxNo: params[:gstTaxNo]})
+                  if busi.save
+                    client.business = {};
+                    comp = Business.where(params[:id]).first
+                    if comp.present?
+                      client.business = comp
+                      return render_json_response(client, :ok)
+                    end
                   end
                 end
               end
             end
           end
+        else
+          render_json_response({:error => ALREADY_EXISTS, :success => false}, :unprocessable_entity)
         end
       end
     end
@@ -78,9 +81,9 @@ class Api::V1::CustomerController < ApiController
     puts "LIST OF Clients"
     offset = 0
     filter = "%"
-    offset = params[:offset].to_i if params[:offset] && params[:offset].to_i
+    offset = params[:offset].to_i if params[:offset] && to_number(params[:offset])
     filter = "%" + params[:filter] + "%" if params[:filter]
-    lstClients = Customer.where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? or phone LIKE ? extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC and LastName ASC").limit(30).offset(offset)
+    lstClients = Customer.where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? or phone LIKE ? extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC, LastName ASC").limit(30).offset(offset)
     if lstClients
       lst = []
       lstClients.each do |client|
@@ -96,7 +99,7 @@ class Api::V1::CustomerController < ApiController
 
   def show
     puts 'Edit Screen API'
-    client = Customer.where(idClient: req.params.no)
+    client = Customer.where(idClient: params[:no]).first
     if client
       adresse = Address.where(idClient: client.id)
       client.address = adresse
@@ -112,15 +115,14 @@ class Api::V1::CustomerController < ApiController
     elsif required_params
       render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request)
     else
-      clientNote = Customer.where(idClient: params[:no])
+      clientNote = Customer.where(idClient: params[:no]).first
       if !clientNote
         render_json_response({:error => CLIENT_NOT_FOUND, :success => false}, :not_found)
       else
         puts "Role:---------#{current_user.roles}"
         #Not admin can't edit previous notes. He can only add after.
-
+        nparams = params 
         nparams = params[:type].merge(clientNote.type + "<br>" + params[:type].gsub(clientNote.type, "")) if !current_user.roles.eql?("admin")
-        nparams = params if current_user.roles.eql?("admin")
 
         formatted_address = params[:address] + " " + params[:city] + ", " + params[:province].upcase + ", " + params[:postal]
         puts "formatted_address:---------#{formatted_address}"
@@ -158,19 +160,19 @@ class Api::V1::CustomerController < ApiController
 
               params[:addresses].each do |a|
                 if address.idAddress.eql?('')
-                  updatedAddress = Address.find_or_initialize(idClient: params[:no],
-                    address: address.address,
-                    city: address.city,
-                    postal: address.postal,
-                    province: address.province.upcase,
+                  updatedAddress = Address.update_or_create(idClient: params[:no],
+                    address: a.address,
+                    city: a.city,
+                    postal: a.postal,
+                    province: a.province.upcase,
                     distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
-                    ).where(idClient: params[:no], address: address.address, city: address.city, postal: address.postal, province: address.province.upcase,
+                    ).where(idClient: params[:no], address: a.address, city: a.city, postal: a.postal, province: a.province.upcase,
                       idAddress: address.idAddress, 
                       distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
                     )
                   if updatedAddress
                     if !params[:type].eql?("Individual")
-                      busi = Business.find_or_initialize(
+                      busi = Business.update_or_create(
                         id: params[:no],
                         name: params[:name],
                         description: params[:description],
@@ -237,8 +239,7 @@ class Api::V1::CustomerController < ApiController
   end
 
   def phones
-    phones = Customer.select('idClient AS id, phone, cellPhone, secondaryPhone').where('phone LIKE ? OR cellPhone LIKE ?
-        OR secondaryPhone LIKE ?', params['search'] + "%", params['search'] + "%", params['search'] + "%").limit(params['limit'].to_i).offset(params['offset'].to_i * params['limit'].to_i)
+    phones = Customer.select('idClient AS id, phone, cellPhone, secondaryPhone').where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params['search'] + "%", params['search'] + "%", params['search'] + "%").limit(params['limit'].to_i).offset(params['offset'].to_i * params['limit'].to_i)
     if phones
       return render_json_response(phones, :ok)
     end
@@ -279,13 +280,14 @@ class Api::V1::CustomerController < ApiController
     #         });
     #         res.json(lstData);
     #     });
+
+    count = Customer.joins(:heardofus).select("heardsofus.type").group("idHeardOfUs")
   end
 
   def postal
-    query = request.query_parameters
-    addresses = Address.select('idAddress AS id, idClient, address, city, province, distance, postal').where('postal LIKE ? and idClient = ?', query['search'], params[:customer_id])
+    addresses = Address.select('idAddress AS id, idClient, address, city, province, distance, postal').where('postal LIKE ? and idClient = ?', params[:search], params[:customer_id])
     if addresses
-      return render_json_response(add, :ok)
+      return render_json_response(addresses, :ok)
     end
   end
 	

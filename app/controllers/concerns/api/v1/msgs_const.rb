@@ -34,4 +34,5 @@ module Api::V1::MsgsConst
 	PROBLEM_OCCURRED="Some problem occurred"
 	INVALID_PARAMS="Parameters are invalid"
 	VEHICLE_NOT_FOUND="Vehicle not found!"
+	ALREADY_EXISTS="Phone Number already exist."
 end
