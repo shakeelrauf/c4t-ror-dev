@@ -13,12 +13,12 @@ class Api::V1::CustomerController < ApiController
       customPercCar = 0
       customPercSteel = 0
 
-      # if current_user.roles.eql?("admin") 
-      #   customDollarCar = params[:customDollarCar] if params[:customDollarCar]
-      #   customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
-      #   customPercCar = params[:customPercCar] if params[:customPercCar]
-      #   customPercSteel = params[:customPercSteel] if params[:customPercSteel]
-      # end
+      if current_user.roles.eql?("admin") 
+        customDollarCar = params[:customDollarCar] if params[:customDollarCar]
+        customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
+        customPercCar = params[:customPercCar] if params[:customPercCar]
+        customPercSteel = params[:customPercSteel] if params[:customPercSteel]
+      end
 
       heardofus = Heardofu.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
