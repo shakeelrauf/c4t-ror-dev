@@ -48,13 +48,13 @@ class Api::V1::QuickQuoteController < ApiController
       	carList.each do |car|
 
           if (car.car == "")
-						return render_json_response({:error => "The type of vehicle was not selected"}, :bad_request)
+						return respond400Message({:error => "The type of vehicle was not selected"}, :bad_request)
           elsif (car.missingWheels == "")
-						return render_json_response({:error => "The missing wheels was not selected"}, :bad_request)
+						return respond400Message({:error => "The missing wheels was not selected"}, :bad_request)
           elsif (car.missingBattery == "")
-						return render_json_response({:error => "The missing battery was not selected: [" + car.missingBattery + "]"}, :bad_request)
+						return respond400Message({:error => "The missing battery was not selected: [" + car.missingBattery + "]"}, :bad_request)
           elsif (car.addressId == "" && car.carPostal == "")
-						return render_json_response({:error => "The address was not selected properly"}, :bad_request)
+						return respond400Message({:error => "The address was not selected properly"}, :bad_request)
         	end
 
           updateCarForAddress(car, client)
@@ -63,10 +63,6 @@ class Api::V1::QuickQuoteController < ApiController
 			return render_json_response(r_quote, :ok)
 		end
 	end
-
-  def respond400Message(res, msg)
-		return render_json_response(msg, :bad_request)
-  end
 
   def updateCarForAddress(car, client)
      # If the addressId is an int, it's an addressId, else it's a postal
@@ -106,6 +102,10 @@ class Api::V1::QuickQuoteController < ApiController
         distance: (car.distance.present? ? car.distance.to_f : nil),
         price: (car.price.present? ? car.price.to_f : nil)
     )
+  end
+
+  def respond400Message(res, msg)
+    render json: res.to_json, msg: msg, adapter: :json_api
   end
 
 end

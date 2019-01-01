@@ -88,15 +88,15 @@ class Api::V1::QuoteController < ApiController
 	end
 
   def update_quote
-    if (!params[:cars] || typeof params[:note] == 'undefined')
+    if (!params[:cars] || params[:note].class.to_s != "NilClass" )
       return render_json_response({:error => "please send all require attributes."}, :ok)
     else
       @quote = Quote.find_by_id(id: params[:no])
       quote = @quote.update(note: params[:note])
         # Update all cars of quote.
       params[:car].each do |car|
-        gettingMethod = (typeof car.dropoff == 'undefined' ? "pickup" : "dropoff");
-        if (typeof car.missingParts == 'undefined')
+        gettingMethod = (car.dropoff.class.to_s != "NilClass" ? "pickup" : "dropoff");
+        if (car.missingParts.class.to_s != "NilClass" )
           car.missingParts = "[]";
         end
         cars = QuoteCar.where(idCar: car.id, idQuote: params[:no])
@@ -106,7 +106,7 @@ class Api::V1::QuoteController < ApiController
           gettingMethod: gettingMethod,
           flatBedTruckRequired: car.flatBedTruckRequired)
       end
-    updatedQuote = Quote.find_by_id(id: params[:no])
+      updatedQuote = Quote.find_by_id(id: params[:no])
       if (!updatedQuote)
         return render_json_response({:error => "Quote not found!"}, :ok)
       else
