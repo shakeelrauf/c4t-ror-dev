@@ -51,9 +51,8 @@ class Api::V1::UsersController < ApiController
         if (@c_user && @c_user.id != params[:no])
           return render_json_response({:error => "Username already exist."}, :ok)
         else
-          @z_user = User.find_by_id(params[:no])
-          if (@z_user)
-            @z_user.update(
+          if (@user)
+            @user.update(
             firstName: params[:firstName],
             lastName: params[:lastName],
             email: params[:email],
@@ -67,12 +66,11 @@ class Api::V1::UsersController < ApiController
             @y_user.update(roles: params[:roles])
             # Update password if it's there too.
             if (params[:pwd] != nil)
-            @d_user = User.find_by_id(params[:no])
-              if(!@d_user)
+              if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                @d_user.update(password: params[:pwd])
-                return render_json_response(@d_user, :ok)
+                @user.update(password: params[:pwd])
+                return render_json_response(@user, :ok)
               end
             else
               @e_user = User.find_by_id(params[:no])
@@ -85,19 +83,17 @@ class Api::V1::UsersController < ApiController
           else
           # Update password if it's there too.
             if (params[:pwd] != nil)
-              @t_user = User.find_by_id(params[:no])
-              if(!@t_user)
+              if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                @t_user.update(password: User.encrypt(params[:pwd]))
-                return render_json_response(@t_user, :ok)
+                @user.update(password: User.encrypt(params[:pwd]))
+                return render_json_response(@user, :ok)
               end
             else
-              @g_user = User.find_by_id(params[:no])
-              if (!@g_user)
+              if (!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                return render_json_response(@g_user, :ok)
+                return render_json_response(@user, :ok)
               end
             end
           end
