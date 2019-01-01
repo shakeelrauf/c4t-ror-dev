@@ -2,25 +2,24 @@ class Api::V1::ContactController < ApiController
 	before_action :authenticate_user
 
 	def contact
-		business = Business.includes([:contacts]).find_by_idClient(params[:no])
+		business = Business.includes(:contacts).find_by_idClient(params[:no]).to_json(:contacts)
 		return render_json_response({:error => CLIENT_NOT_FOUND_MSG, :success => false}, :not_found) if business.nil?
 		return render_json_response({:error => CONTACTS_PARAMS_MSG, :success => false}, :bad_request) if !params[:contacts].present?
-		check_format
+		return render_json_response({:error => CONTACTS_PARAMS_MSG, :success => false}, :bad_request) if check_format
 	  create_contacts
-	  return render_json_response(business, :ok) 
+		return render json: business, status: :ok, adapter: :json_api
 	end
 
 	private
 	def check_format
 		params[:contacts].each do |contact|
-	  	if (!hasError && 
-	  		(!contact["firstName"] || 
+	  	if (!contact["firstName"] ||
 	  			!contact["lastName"] ||
-	  			!contact["paymentMethod"]))
-		  	hasError = true
-		  	return render_json_response({:error => CONTACTS_PARAMS_MSG, :success => false}, :bad_request)
+	  			!contact["paymentMethod"])
+				return false
 	  	end
-	  end     
+		end
+		return true
 	end
 	
 	def create_contacts

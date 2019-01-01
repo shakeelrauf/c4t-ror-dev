@@ -1,7 +1,9 @@
 class ApiController < ApplicationController
 	include Api::V1::MsgsConst
-  include Api::V1::Request  
-  # helper_method :current_user
+  include Api::V1::Request
+  include API::V1::Validations
+
+  helper_method :current_user
   # helper_method :authenticate_user
 
   def render_json_response(resource, status)
@@ -23,6 +25,14 @@ class ApiController < ApplicationController
 
   def authenticate_admin
     return render_json_response({:error => NOT_ADMIN_MSG, :success => false}, :unauthorized) if current_user.roles != "admin"
+  end
+
+
+  def params_present? given_params, check_params
+    check_params.each do |p|
+     return false if !given_params["#{p}"].present?
+    end
+    return true
   end
 
   def current_user

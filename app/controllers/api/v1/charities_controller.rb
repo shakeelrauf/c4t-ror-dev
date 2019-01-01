@@ -1,5 +1,4 @@
 class Api::V1::CharitiesController < ApiController
-	include API::V1::Validations
 	before_action :authenticate_user
 	before_action :authenticate_admin, only: [:create, :update]
 
@@ -17,10 +16,8 @@ class Api::V1::CharitiesController < ApiController
 		end
 	end
 
-	def create   
-  	if !charitie_params[:name] or !charitie_params[:email] or !charitie_params[:phone] or !charitie_params[:info] or !charitie_params[:address]
-  		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request)
-  	end
+	def create
+		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request) if !params_present?(charitie_params, ["name", "email", "phone", "info", "address"])
   	charitie = Charitie.new(charitie_params)
   	charitie.save
   	if !charitie.errors[:email].blank?
@@ -33,9 +30,7 @@ class Api::V1::CharitiesController < ApiController
 	end
 
 	def update    
-  	if !charitie_params[:name] or !charitie_params[:email] or !charitie_params[:phone] or !charitie_params[:info] or !charitie_params[:address]
-  		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request)
-  	end
+		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request) if !params_present?(charitie_params, ["name", "email", "phone", "info", "address"])
   	charitie = Charitie.where(idCharitie: params[:no]).first
   	if charitie.present?
   		if charitie.update(charitie_params)

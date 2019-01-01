@@ -1,6 +1,6 @@
 require 'action_view'
 
-class Api::V1::AddressController < ApplicationController
+class Api::V1::AddressController < ApiController
 	before_action :authenticate_user
 	include ActionView::Helpers::NumberHelper
 
@@ -9,12 +9,10 @@ class Api::V1::AddressController < ApplicationController
 		r_address = IsValid.address(params[:address] + " " + params[:city] + ", " + params[:province])
 		return render_json_response({:error => ADDRESS_NOT_EXIST_MSG, :success => false}, :not_found) if r_address == false
 		address_components = IsValid.format_address_components(r_address["address_components"])
-    two_address = "7628 Flewellyn Rd Stittsville, ON, K2S 1B6|" + r_address
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=#{ENV['GOOGLE_MAP_TOKEN']}&origins=#{two_address}&destinations=#{two_address}"
-    distance = get_request(url)
+		distance = get_distance(r_address)
     going, returning  =  0,0
     going , returning = distance["rows"][0]["elements"][1]["distance"]["value"],distance["rows"][1]["elements"][0]["distance"]["value"] if check_address(distance)
-    client = Customer.includes([:address]).find_by_id(params[:no])
+    client = Customer.includes(:address).find_by_id(params[:no]).to_json(:address)
     return render_json_response({:error => CLIENT_NOT_FOUND_MSG, :success => false}, :not_found) if client.nil? 
     params[:addresses].each do |addresses|
 			Address.create(idClient: client.id,
@@ -30,12 +28,14 @@ class Api::V1::AddressController < ApplicationController
 
 	def address
 		limit, offset = 10, 0
-		where = "idClient = #{params[:no]}"
     limit = params[:limit].to_i if (params[:limit] != nil && params[:limit].integer?)
     offset = params[:offset].to_i if (params[:offset] != nil && params[:offset].integer?)
-    query = query_builder(param[:filters]) if param[:filters]
-
-  	list = Address.run_sql_query(query,offset, limit)
+    query = query_builder(params[:filters]) if params[:filters]
+		if query.present?
+  		list = Address.run_sql_query(query,offset, limit)
+		else
+			list = Address.all
+		end
 		return render_json_response(list, :ok)   
 	end
 
@@ -59,17 +59,14 @@ class Api::V1::AddressController < ApplicationController
 	def distance
 		r_address =  Address.find_by_idAddress(params[:no])
 		return render_json_response({error: ADDRESS_NOT_FOUND, success: false}, :not_found)  if r_address.nil?
-    two_address = "7628 Flewellyn Rd Stittsville, ON, K2S 1B6|" + r_address.format_long
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=#{ENV['GOOGLE_MAP_TOKEN']}&origins=#{two_address}&destinations=#{two_address}"
-    distance = get_request(url)
-    r_setting  = setting.where('dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)')
-    freeDistance =  r_setting.find{|set| set.name=="freeDistance"}
-    excessPrice =  r_setting.find{|set| set.name=="excessPrice"}
-    return render_json_response({error: ADDRESS_INVALID_MSG, success: false}, :bad_request)  if check_address(distance)
+		distance = get_distance(r_address)
+    r_setting  = Setting.where('dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)')
+		freeDistance, excessPrice = get_distance_and_price(r_setting)
+    return render_json_response({error: ADDRESS_INVALID_MSG, success: false}, :bad_request)  if check_address(distance) || distance.nil?
     excessDistance = distance["rows"][0]["elements"][1]["distance"]["value"] / 1000 + distance["rows"][1]["elements"][0]["distance"]["value"] / 1000 - freeDistance
     additionnalPrice = number_with_precision((excessPrice * excessDistance), precision: 2)
-    render_json_response({
-        "origin": "7628 Flewellyn Rd Stittsville, ON, K2S1B6",
+    return render_json_response({
+        "origin": Api::V1::Request::ADDRESS,
         "destination": r_address.format_long,
         "goingDistance": distance["rows"][0]["elements"][1]["distance"]["value"] / 1000,
         "goingDuration":  distance["rows"][0]["elements"][1]["duration"]["value"],
@@ -83,7 +80,6 @@ class Api::V1::AddressController < ApplicationController
 	end
 
 	private
-
 	def check_params
 		!params[:address] ||
       !params[:city] ||
@@ -91,8 +87,8 @@ class Api::V1::AddressController < ApplicationController
       !params[:province]
 	end
 
-
 	def query_builder(param)
+		where = "idClient = #{params[:no]}"
 		param = "%" + param.gsub(/[\s]/, "% %") + "%"
 		filters = param.split(' ')
 		and_a = []
@@ -113,7 +109,13 @@ class Api::V1::AddressController < ApplicationController
 		return query
 	end
 
+	def get_distance_and_price(r_setting)
+		freeDistance =  r_setting.find{|set| set.name=="freeDistance"}
+		excessPrice =  r_setting.find{|set| set.name=="excessPrice"}
+		return [freeDistance, excessPrice]
+	end
+
 	def check_address(distance)
-		distance["rows"] && distance["rows"].length == 2 && distance["rows"][0]["elements"] && distance["rows"][0]["elements"][1]["status"] == "OK"
+		distance.present? && distance["rows"] && distance["rows"].length == 2 && distance["rows"][0]["elements"] && distance["rows"][0]["elements"][1]["status"] == "OK"
 	end
 end
