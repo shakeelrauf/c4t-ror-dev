@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApiController
 
   def create
 	# Validate if user asked this is a super admin.
-    if (current_user.roles != "admin")
+    if (current_user && current_user.roles != "admin")
     	return render_json_response({:error => "You are not a super admin."}, :ok)
     # Validate body data before insert.
     elsif (params[:firstName] == nil || params[:lastName] == nil || params[:email] == nil || !params[:pwd] || !params[:username] || params[:avatar] == nil || params[:roles] == nil || !params[:isSuperadmin])
@@ -122,7 +122,7 @@ end
 
   # Remove a user
   def destroy
-	  if (current_user.isSuperadmin != 1)
+	  if (current_user && current_user.isSuperadmin != 1)
 			return render_json_response({:error => "You are not a super admin!"}, :ok)
 	  else
 	    @user.destroy
@@ -132,7 +132,7 @@ end
 
   # Blacklist user
   def block_user
-    if (current_user.roles != "admin")
+    if (current_user && current_user.roles != "admin")
 			return render_json_response({:error => "You are not allowed to change state of this user."}, :ok)
     else 
       if (@user.isSuperadmin == 1)
@@ -147,7 +147,7 @@ end
     # Update avatar of specific user.
   def avatar
     @user = User.find_by_id(params[:user_no])
-    if (current_user.roles != "admin" && current_user.idUser != params[:user_no])
+    if (current_user && current_user.roles != "admin" && current_user.idUser != params[:user_no])
       return render_json_response({:error => "You are not authorize to update this user."}, :ok)
     else
       if (params[:avatar] == nil)

@@ -115,4 +115,27 @@ class Api::V1::QuoteController < ApiController
     end
   end
 
+  def update_quote_status
+    if (!params[:status])
+      return render_json_response({:error => "please send attribute status."}, :ok)
+    else
+      quotes = Quote.includes(:customer).find_by_id(id: params[:no])
+      results = quotes.update(
+        idStatus: params[:status],
+        dtStatusUpdated: db.fn("NOW")
+      )
+      r_quote = Quote.includes(:customer).find_by_id(id: params[:no])
+      # If status is «in Yard», send sms to customer for know his appreciation.
+      if (params[:status] == 6)
+        # Check if sms already sent.
+        if (!r_quote.isSatisfactionSMSQuoteSent && r_quote.customer.cellPhone)
+          sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
+          sms.call
+          quotes.update(isSatisfactionSMSQuoteSent: 1)
+        end
+      end
+      return render_json_response({:error => "Quote status updated!"}, :ok)
+    end
+  end
+
 end
