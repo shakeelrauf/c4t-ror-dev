@@ -9,6 +9,9 @@ class Api::V1::UsersController < ApiController
     elsif (params[:firstName] == nil || params[:lastName] == nil || params[:email] == nil || !params[:pwd] || !params[:username] || params[:avatar] == nil || params[:roles] == nil || !params[:isSuperadmin])
     	return render_json_response({:error => "Please send all require attributes."}, :ok)
     else
+      if params[:phoneNumber] == ""
+        params[:phoneNumber] = nil
+      end
         # Verify username not exist.
        @user = User.find_or_initialize_by(username: params[:username])
       if @user.new_record?
@@ -18,7 +21,7 @@ class Api::V1::UsersController < ApiController
         @user.email = params[:email]
         @user.roles = params[:roles]
         @user.avatar = params[:avatar]
-        @user.phoneNumber = params[:phoneNumber]
+        @user.phone = params[:phoneNumber]
         @user.isSuperadmin = params[:isSuperadmin]
         @user.save!
   			return render_json_response(@user, :ok)
@@ -48,14 +51,16 @@ class Api::V1::UsersController < ApiController
         if (@c_user && @c_user.id != params[:no])
           return render_json_response({:error => "Username already exist."}, :ok)
         else
-          @z_user = User.find_by_id(params[:id])
-          @z_user.update(
-          firstName: params[:firstName],
-          lastName: params[:lastName],
-          email: params[:email],
-          username: params[:username],
-          phone: params[:phoneNumber],
-          roles: params[:roles])
+          @z_user = User.find_by_id(params[:no])
+          if (@z_user)
+            @z_user.update(
+            firstName: params[:firstName],
+            lastName: params[:lastName],
+            email: params[:email],
+            username: params[:username],
+            phone: params[:phoneNumber],
+            roles: params[:roles])
+          end
           # Update roles if user is an admin.
           if (current_user == "admin")
             @y_user = User.find_by_id(params[:id])
@@ -139,7 +144,7 @@ end
 				return render_json_response({:error => "You can not change state of a super admin."}, :ok)
       else
         @user.update(isActive: params[:isActive])
-				return render_json_response(@user, :ok)
+        return render_json_response({:message => "User state has changed."}, :ok)
       end
     end
   end
