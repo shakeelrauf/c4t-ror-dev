@@ -39,7 +39,7 @@ class Api::V1::QuickQuoteController < ApiController
 	      	HeardOfUs.create(type: params[:heardofus])
 	      end
 
-          @client = Client.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
+          @client = Customer.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
           @quote = Quote.where(dtCreated: {[Op.gte]: moment().format("YYYY-MM-DD") + " 00:00:00"})
           counter = @quote.count
 
