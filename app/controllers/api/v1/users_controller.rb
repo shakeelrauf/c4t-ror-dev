@@ -62,8 +62,7 @@ class Api::V1::UsersController < ApiController
           end
           # Update roles if user is an admin.
           if (current_user == "admin")
-            @id_user = User.find_by_id(params[:id])
-            @id_user.update(roles: params[:roles])
+            @user.update(roles: params[:roles])
             # Update password if it's there too.
             if (params[:pwd] != nil)
               if(!@user)

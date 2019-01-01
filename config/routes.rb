@@ -46,10 +46,24 @@ Rails.application.routes.draw do
 			end
 
 			scope controller: :quick_quote do
-				get :quick_cards
 				post '/quickquotes',             		 action: :save_quotes
 				get '/quickquotes',         				 action: :index  
 			end
+
+      scope controller: :quote do
+        post 'quotes',                           action: :create
+        post '/create-car',                      action: :create_car
+        post '/remove-car',                      action: :remove_car
+        get '/quotecar/:carNo',                  action: :retrive_car
+        get '/quotes',                           action: :get_quotes_by_filters
+        get '/quotes/:no',                       action: :quote_with_filter
+        patch '/quotes/:no',                     action: :quote
+        patch '/quotes/:no/status',              action: :update_quote_status
+        delete '/quotecar/:carNo',               action: :destroy
+        get '/clients/:no/quotes',               action: :particular_customer_quotes
+        get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
+        get '/status',                           action: :all_status
+    	end
 
 			scope controller: :customer do 
 				get '/clients', action: :index

@@ -1,5 +1,6 @@
 class Api::V1::QuoteController < ApiController
 	before_action :authenticate_user
+  include ActionView::Helpers::NumberHelper
 
     # Creates a blank quote car
   def create_car
@@ -95,9 +96,9 @@ class Api::V1::QuoteController < ApiController
       quote = @quote.update(note: params[:note])
         # Update all cars of quote.
       params[:car].each do |car|
-        gettingMethod = (car.dropoff.class.to_s != "NilClass" ? "pickup" : "dropoff");
+        gettingMethod = (car.dropoff.class.to_s != "NilClass" ? "pickup" : "dropoff")
         if (car.missingParts.class.to_s != "NilClass" )
-          car.missingParts = "[]";
+          car.missingParts = "[]"
         end
         cars = QuoteCar.where(idCar: car.id, idQuote: params[:no])
         vehicle = cars.update(
@@ -138,4 +139,43 @@ class Api::V1::QuoteController < ApiController
     end
   end
 
+  def particular_customer_quotes
+    # Get all quotes of a particular customer.
+    offset = 0
+    filter = "%"
+    if (params[:offset].class.to_s != "NilClass"  && params[:offset].integer?)
+      offset = params[:offset].to_i
+    end
+    if (params[:filter].class.to_s != "NilClass")
+      filter = "%" + params[:filter] + "%"
+    end
+    lstQuotes = Quote.includes(:dispatcher, :customer, :status).where("(note LIKE ?  OR status.name LIKE ? OR dispatcher.firstName LIKE ? OR dispatcher.lastName LIKE ? OR reference  LIKE ? ) AND idClient = ?", filter, filter, filter, filter, filter, params[:no]).order('DESC').offset(offset).limit(30)
+
+    lstQuotes.each do |quote|
+      # TODO! Format each quote before send it.
+    end
+      return render_json_response(lstQuotes, :ok)
+  end
+
+
+  def particular_customer_quotes_by_filters
+    # Get all quotes made by particular user with filter.
+    offset = 0
+    filter = "%"
+    if (params[:offset].class.to_s != "NilClass"  && params[:offset].integer?)
+      offset = params[:offset].to_i
+    end
+    if (params[:filter].class.to_s != "NilClass")
+      filter = "%" + params[:filter] + "%"
+    end
+    lstQuotes = Quote.includes(:dispatcher, :customer, :status).where("(customer.firstName LIKE ?  OR customer.lastName LIKE ? OR customer.phone LIKE ? OR customer.extension LIKE ? OR customer.type  LIKE ?OR customer.email LIKE ? OR customer.cellPhone LIKE ? OR customer.secondaryPhone LIKE ? OR customer.note  LIKE ? OR customer.grade  LIKE ? OR note LIKE ? OR reference  LIKE ? OR status.name  LIKE ? ) AND idClient = ?", filter, filter, filter, filter, filter, filter, filter, filter, filter, filter, filter, filter, filter, params[:no]).order('DESC').offset(offset).limit(30)
+
+    lstQuotes.each do |quote|
+      # TODO! Format each quote before send it.
+    end
+      return render_json_response(lstQuotes, :ok)
+  end
+
+  def quote_with_filter
+  end
 end
