@@ -1,7 +1,6 @@
 class Api::V1::CharitiesController < ApiController
-
-	# before_action :authenticate_user
-	# before_action :authenticate_admin, only: [:create, :update]
+	before_action :authenticate_user
+	before_action :authenticate_admin, only: [:create, :update]
 
 	def index
 		charities = Charitie.all
