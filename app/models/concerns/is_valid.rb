@@ -1,9 +1,9 @@
 class IsValid
 	def self.address item, callback=nil
 		url = "https://maps.googleapis.com/maps/api/geocode/json?key=#{ENV['GOOGLE_MAP_TOKEN']}&address=#{item}"
-		r_address = HTTParty.get(url)    
-    return false if r_address.results.length == 0
-    return r_address.results[0]
+		r_address = HTTParty.get(url)
+    return false if r_address["results"].length == 0
+    return r_address["results"][0]
 	end
 
 	def self.format_address_components address_components, callback=nil
