@@ -47,8 +47,8 @@ class Api::V1::UsersController < ApiController
           phoneNumber = nil
         end
         # Verify username not exist.
-        @c_user = User.find_by_username(params[:username])
-        if (@c_user && @c_user.id != params[:no])
+        @user_user = User.find_by_username(params[:username])
+        if (@user_user && @user_user.id != params[:no])
           return render_json_response({:error => "Username already exist."}, :ok)
         else
           if (@user)
@@ -62,8 +62,8 @@ class Api::V1::UsersController < ApiController
           end
           # Update roles if user is an admin.
           if (current_user == "admin")
-            @y_user = User.find_by_id(params[:id])
-            @y_user.update(roles: params[:roles])
+            @id_user = User.find_by_id(params[:id])
+            @id_user.update(roles: params[:roles])
             # Update password if it's there too.
             if (params[:pwd] != nil)
               if(!@user)
@@ -73,11 +73,10 @@ class Api::V1::UsersController < ApiController
                 return render_json_response(@user, :ok)
               end
             else
-              @e_user = User.find_by_id(params[:no])
-              if(!@e_user)
+              if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                return render_json_response(@e_user, :ok)
+                return render_json_response(@user, :ok)
               end 
             end
           else
