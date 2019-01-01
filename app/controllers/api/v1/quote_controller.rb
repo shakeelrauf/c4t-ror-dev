@@ -61,19 +61,7 @@ class Api::V1::QuoteController < ApiController
     return render_json_response(@quote_car, :ok)
   end
 
-    # delete a quote
-    .delete('/quotes/:no', [oauth], (req, res) => {
-      quotes.destroy({
-        where: {
-          id: req.params.no
-        }
-      }).then((results) => {
-        res.json({
-          "message": "Quote deleted!"
-        })
-      })
-    })
-
+  # delete a quote
 	def destroy
     # delete a quote
   	@quote = Quote.where(id: params[:no])
@@ -98,5 +86,56 @@ class Api::V1::QuoteController < ApiController
 			return render_json_response(@quote, :ok)
 		end
 	end
+
+  def update_quote
+    if (!params[:cars] || params[:note].class.to_s != "NilClass" )
+      return render_json_response({:error => "please send all require attributes."}, :ok)
+    else
+      @quote = Quote.find_by_id(id: params[:no])
+      quote = @quote.update(note: params[:note])
+        # Update all cars of quote.
+      params[:car].each do |car|
+        gettingMethod = (car.dropoff.class.to_s != "NilClass" ? "pickup" : "dropoff");
+        if (car.missingParts.class.to_s != "NilClass" )
+          car.missingParts = "[]";
+        end
+        cars = QuoteCar.where(idCar: car.id, idQuote: params[:no])
+        vehicle = cars.update(
+          missingParts: car.missingParts.to_s,
+          donation: car.donation,
+          gettingMethod: gettingMethod,
+          flatBedTruckRequired: car.flatBedTruckRequired)
+      end
+      updatedQuote = Quote.find_by_id(id: params[:no])
+      if (!updatedQuote)
+        return render_json_response({:error => "Quote not found!"}, :ok)
+      else
+        return render_json_response(updatedQuote, :ok)
+      end
+    end
+  end
+
+  def update_quote_status
+    if (!params[:status])
+      return render_json_response({:error => "please send attribute status."}, :ok)
+    else
+      quotes = Quote.includes(:customer).find_by_id(id: params[:no])
+      results = quotes.update(
+        idStatus: params[:status],
+        dtStatusUpdated: db.fn("NOW")
+      )
+      r_quote = Quote.includes(:customer).find_by_id(id: params[:no])
+      # If status is «in Yard», send sms to customer for know his appreciation.
+      if (params[:status] == 6)
+        # Check if sms already sent.
+        if (!r_quote.isSatisfactionSMSQuoteSent && r_quote.customer.cellPhone)
+          sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
+          sms.call
+          quotes.update(isSatisfactionSMSQuoteSent: 1)
+        end
+      end
+      return render_json_response({:error => "Quote status updated!"}, :ok)
+    end
+  end
 
 end

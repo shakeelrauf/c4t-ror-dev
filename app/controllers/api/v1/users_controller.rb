@@ -3,12 +3,15 @@ class Api::V1::UsersController < ApiController
 
   def create
 	# Validate if user asked this is a super admin.
-    if (current_user.roles != "admin")
+    if (current_user && current_user.roles != "admin")
     	return render_json_response({:error => "You are not a super admin."}, :ok)
     # Validate body data before insert.
     elsif (params[:firstName] == nil || params[:lastName] == nil || params[:email] == nil || !params[:pwd] || !params[:username] || params[:avatar] == nil || params[:roles] == nil || !params[:isSuperadmin])
     	return render_json_response({:error => "Please send all require attributes."}, :ok)
     else
+      if params[:phoneNumber] == ""
+        params[:phoneNumber] = nil
+      end
         # Verify username not exist.
        @user = User.find_or_initialize_by(username: params[:username])
       if @user.new_record?
@@ -18,7 +21,7 @@ class Api::V1::UsersController < ApiController
         @user.email = params[:email]
         @user.roles = params[:roles]
         @user.avatar = params[:avatar]
-        @user.phoneNumber = params[:phoneNumber]
+        @user.phone = params[:phoneNumber]
         @user.isSuperadmin = params[:isSuperadmin]
         @user.save!
   			return render_json_response(@user, :ok)
@@ -44,55 +47,52 @@ class Api::V1::UsersController < ApiController
           phoneNumber = nil
         end
         # Verify username not exist.
-        @c_user = User.find_by_username(params[:username])
-        if (@c_user && @c_user.id != params[:no])
+        @user_user = User.find_by_username(params[:username])
+        if (@user_user && @user_user.id != params[:no])
           return render_json_response({:error => "Username already exist."}, :ok)
         else
-          @z_user = User.find_by_id(params[:id])
-          @z_user.update(
-          firstName: params[:firstName],
-          lastName: params[:lastName],
-          email: params[:email],
-          username: params[:username],
-          phone: params[:phoneNumber],
-          roles: params[:roles])
+          if (@user)
+            @user.update(
+            firstName: params[:firstName],
+            lastName: params[:lastName],
+            email: params[:email],
+            username: params[:username],
+            phone: params[:phoneNumber],
+            roles: params[:roles])
+          end
           # Update roles if user is an admin.
           if (current_user == "admin")
-            @y_user = User.find_by_id(params[:id])
-            @y_user.update(roles: params[:roles])
+            @id_user = User.find_by_id(params[:id])
+            @id_user.update(roles: params[:roles])
             # Update password if it's there too.
             if (params[:pwd] != nil)
-            @d_user = User.find_by_id(params[:no])
-              if(!@d_user)
+              if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                @d_user.update(password: params[:pwd])
-                return render_json_response(@d_user, :ok)
+                @user.update(password: params[:pwd])
+                return render_json_response(@user, :ok)
               end
             else
-              @e_user = User.find_by_id(params[:no])
-              if(!@e_user)
+              if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                return render_json_response(@e_user, :ok)
+                return render_json_response(@user, :ok)
               end 
             end
           else
           # Update password if it's there too.
             if (params[:pwd] != nil)
-              @t_user = User.find_by_id(params[:no])
-              if(!@t_user)
+              if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                @t_user.update(password: User.encrypt(params[:pwd]))
-                return render_json_response(@t_user, :ok)
+                @user.update(password: User.encrypt(params[:pwd]))
+                return render_json_response(@user, :ok)
               end
             else
-              @g_user = User.find_by_id(params[:no])
-              if (!@g_user)
+              if (!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                return render_json_response(@g_user, :ok)
+                return render_json_response(@user, :ok)
               end
             end
           end
@@ -122,7 +122,7 @@ end
 
   # Remove a user
   def destroy
-	  if (current_user.isSuperadmin != 1)
+	  if (current_user && current_user.isSuperadmin != 1)
 			return render_json_response({:error => "You are not a super admin!"}, :ok)
 	  else
 	    @user.destroy
@@ -132,14 +132,14 @@ end
 
   # Blacklist user
   def block_user
-    if (current_user.roles != "admin")
+    if (current_user && current_user.roles != "admin")
 			return render_json_response({:error => "You are not allowed to change state of this user."}, :ok)
     else 
       if (@user.isSuperadmin == 1)
 				return render_json_response({:error => "You can not change state of a super admin."}, :ok)
       else
         @user.update(isActive: params[:isActive])
-				return render_json_response(@user, :ok)
+        return render_json_response({:message => "User state has changed."}, :ok)
       end
     end
   end
@@ -147,7 +147,7 @@ end
     # Update avatar of specific user.
   def avatar
     @user = User.find_by_id(params[:user_no])
-    if (current_user.roles != "admin" && current_user.idUser != params[:user_no])
+    if (current_user && current_user.roles != "admin" && current_user.idUser != params[:user_no])
       return render_json_response({:error => "You are not authorize to update this user."}, :ok)
     else
       if (params[:avatar] == nil)
