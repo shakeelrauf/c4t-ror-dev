@@ -1,6 +1,7 @@
 class Api::V1::QuickQuoteController < ApiController
 
   def index
+    # QuickQuote class not found
   	quickquotes = QuickQuote.includes(:user, :heardofus).all
 	  return render_json_response(quickquotes, :ok)
   end
@@ -40,10 +41,10 @@ class Api::V1::QuickQuoteController < ApiController
 	      end
 
           @client = Customer.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
-          @quote = Quote.where(dtCreated: {[Op.gte]: moment().format("YYYY-MM-DD") + " 00:00:00"})
+          @quote = Quote.where("dtCreated <= ?" , DateTime.now.strftime("YYYY-MM-DD 00:00:00"))
           counter = @quote.count
 
-          quote = Quote.customUpsert({reference: moment().format("YYMM") + (Number(counter) + 1).toString().padStart(4, "0"),note: "",idUser: req.user.idUser,idClient: @client.id},{id: params[:quote]})
+          quote = Quote.customUpsert({reference: DateTime.now.strftime("YYMM") + (counter.to_i + 1).to_s.rjust(5, '0'),note: "",idUser: current_user.idUser,idClient: @client.id},{id: params[:quote]})
                  # Save each car                  
       	carList.each do |car|
 
