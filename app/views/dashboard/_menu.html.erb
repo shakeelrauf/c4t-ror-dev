@@ -1,0 +1,104 @@
+<!-- Side-Nav-->
+<aside class="main-sidebar hidden-print " >
+   <section class="sidebar" id="sidebar-scroll">
+      <div class="user-panel">
+         <div class="f-left image">
+            <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle") %>
+          </div>
+         <div class="f-left info">
+            <p>Admin User </p>
+            <p class="designation">Admin
+               <i class="icofont icofont-caret-down m-l-5"></i>
+            </p>
+         </div>
+      </div>
+      <!-- sidebar profile Menu-->
+      <ul class="nav sidebar-menu extra-profile-list">
+         <li>
+            <a class="waves-effect waves-dark" href="/profil">
+            <i class="icon-user"></i>
+            <span class="menu-text"> Profile</span>
+            <span class="selected"></span>
+            </a>
+         </li>
+         <li data-admin-only>
+            <a class="waves-effect waves-dark" href="/settings">
+            <i class="icon-settings"></i>
+            <span class="menu-text"> Settings</span>
+            <span class="selected"></span>
+            </a>
+         </li>
+         <li>
+            <a class="waves-effect waves-dark" href="/logout">
+            <i class="icon-logout"></i>
+            <span class="menu-text"> Logout </span>
+            <span class="selected"></span>
+            </a>
+         </li>
+      </ul>
+      <!-- Sidebar Menu-->
+      <ul class="sidebar-menu">
+         <li class="nav-level">Navigation</li>
+         <li>
+            <a class="waves-effect waves-dark" href="/dashboard">
+            <i class="icon-speedometer"></i><span>  Dashboard </span>
+            </a>
+         </li>
+         <li class="nav-level">Clients</li>
+         <li>
+            <a href="/customers">
+            <i class="icon-people"></i><span> Customers  </span>
+            </a>
+         </li>
+         <li>
+            <a href="/quotes">
+            <i class="icon-docs"></i><span> Quotes </span>
+            </a>
+         </li>
+         <li>
+            <a href="/create-quote">
+            <i class="icofont icofont-law-document"></i><span> Create Quote </span>
+            </a>
+         </li>
+         <!--<li>
+            <a href="/quick-quote">
+                <i class="icofont icofont-cur-dollar"></i><span> Quote Note </span>
+            </a>
+            </li>-->
+         <li>
+            <a href="/dispatch">
+            <i class="icofont icofont-ui-calendar"></i><span> Dispatching </span>
+            </a>
+         </li>
+
+         <li class="nav-level">Administration</li>
+         <li>
+            <a href="/users"> 
+            <i class="icon-people"></i><span>Users </span>
+            </a>
+         </li>
+         <li>
+            <a href="/settings">
+            <i class="icon-settings"></i><span> Settings  </span>
+            </a>
+         </li>
+         <li>
+            <a href="/heardofus">
+            <i class="icon-settings"></i><span> Heard of us </span>
+            </a>
+         </li>
+         <li>
+            <a href="/charities">
+            <i class="icon-settings"></i><span> Charities </span>
+            </a>
+         </li>
+         <li>
+            <a href="/cars">
+            <i class="icofont icofont-car"></i><span> Card </span>
+            </a>
+         </li>
+
+      </ul>
+   </section>
+</aside>
+</div>

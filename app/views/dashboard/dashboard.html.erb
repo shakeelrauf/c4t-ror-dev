@@ -1,0 +1,117 @@
+<%= render :partial => 'dashboard/header' %>
+<%= render :partial => 'dashboard/menu' %>
+<div class="content-wrapper">
+   <!-- Container-fluid starts -->
+   <!-- Main content starts -->
+   <div class="container-fluid">
+      <div class="row">
+         <div class="main-header">
+            <h4>  req.i18n.__DASHBOARD  </h4>
+         </div>
+      </div>
+      <!-- 4-blocks row start -->
+      <div class="row m-b-30 dashboard-header">
+         <div class="col-lg-3 col-sm-6">
+            <div class="dashboard-primary bg-primary">
+               <div class="sales-primary">
+                  <i class="icon-bubbles"></i>
+                  <div class="f-right">
+                     <h2 class="counter">4500</h2>
+                     <span class="text-uppercase">  TOTAL SALES  </span>
+                  </div>
+               </div>
+               <div class="bg-dark-primary">
+                  <p class="week-sales text-uppercase">  LAST WEEKS SALES  </p>
+                  <p class="total-sales">432</p>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-3 col-sm-6">
+            <div class="bg-success dashboard-success">
+               <div class="sales-success">
+                  <i class="icon-speedometer"></i>
+                  <div class="f-right">
+                     <h2 class="counter">3521</h2>
+                     <span class="text-uppercase">  TOTAL SALES  </span>
+                  </div>
+               </div>
+               <div class="bg-dark-success">
+                  <p class="week-sales text-uppercase"> LAST WEEKS SALES  </p>
+                  <p class="total-sales ">432</p>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-3 col-sm-6">
+            <div class="bg-warning dasboard-warning">
+               <div class="sales-warning">
+                  <i class="icofont icofont-car-alt-4"></i>
+                  <div class="f-right">
+                     <h2 class="counter">1085</h2>
+                     <span class="text-uppercase">  QUOTES  </span>
+                  </div>
+               </div>
+               <div class="bg-dark-warning">
+                  <p class="week-sales text-uppercase"> LAST WEEKS QUOTES  </p>
+                  <p class="total-sales">84</p>
+               </div>
+            </div>
+         </div>
+         <div class="col-lg-3 col-sm-6">
+            <div class="bg-facebook dashboard-facebook">
+               <div class="sales-facebook">
+                  <i class="icon-people"></i>
+               </div>
+               <div class="bg-dark-facebook">
+                  <p class="week-sales text-uppercase"> TOTAL CUSTOMERS  </p>
+                  <p class="total-sales"> 3  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 4-blocks row end -->
+      <!-- 1-3-block row start -->
+      <div class="row">
+         <div class="col-lg-6 col-md-12 card">
+            <div class="card-header">
+               <h5 class="card-header-text text-uppercase"> HOW PEOPLE HEAR ABOUT US?  </h5>
+            </div>
+            <div class="card-block" style="padding: 10px;">
+               <div id="heardOfUs" style="height: 400px;"></div>
+            </div>
+         </div>
+      </div>
+      <!-- 1-3-block row end -->
+   </div>
+   <!-- Main content ends -->
+   <!-- Container-fluid ends -->
+</div>
+</div>
+<script>
+  // var heardofus = <%#= JSON.parse(heardofus) %>
+  $(document).ready(function(){
+     $(window).resize(function() { donutChart(); });
+     donutChart();
+   
+     /*Donut Hole*/
+     function donutChart(){
+         $.plot('#heardOfUs', heardofus, {
+             series: {
+                 pie: {
+                     innerRadius: 0.4,
+                     radius: 0.6,
+                     show: true,
+                     label: {
+                         show: true
+                     }
+                 }
+             },
+             legend: {
+                 show: false
+             }
+         });
+     };
+   });
+
+</script>
+</body>
+</html>
