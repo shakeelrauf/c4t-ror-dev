@@ -34,7 +34,11 @@ class Quote < ApplicationRecord
 		if @qoute.present?
 			@quote.update(options)
 		else
-			@quote = create(options.merge(where))
+			@quote = new(options.merge(where))
+			@quote.attributes.each do |key, value|
+				@quote[key] = "" if value.nil?
+			end
+			@quote.save!
 		end
 		return @quote
 	end
