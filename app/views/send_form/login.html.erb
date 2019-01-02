@@ -1,6 +1,4 @@
-
 <section class="login p-fixed d-flex text-center bg-primary common-img-bg">
-  <!-- Container-fluid starts -->
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12">
@@ -22,20 +20,13 @@
             </div>
             <input type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" onclick="verifyLogin()">
           </form>
-          <!-- end of form -->
         </div>
-        <!-- end of login-card -->
       </div>
-      <!-- end of col-sm-12 -->
     </div>
-    <!-- end of row -->
   </div>
-  <!-- end of container-fluid -->
 </section>
-<!-- Required Jqurey -->
 <% content_for :js  do %>
   <script type="text/javascript">
-
       function verifyLogin() {
           $(".loading.hidden").removeClass("hidden");
           $.ajax({
