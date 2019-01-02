@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     post 	:login, 													action: :login_user
   end
 
+   scope  controller: :dashboard do
+    get 	:dashboard,													action: :dashboard
+  end
+
   namespace :api do
 		namespace :v1 do
 			scope controller: :address do
