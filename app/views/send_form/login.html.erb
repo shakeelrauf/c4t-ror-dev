@@ -1,0 +1,72 @@
+
+<section class="login p-fixed d-flex text-center bg-primary common-img-bg">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="login-card card-block">
+          <form class="md-static-material" onsubmit="return false">
+            <div class="text-center">
+              <%= image_tag 'logo-site-new.png' %>
+            </div>
+            <h3 class="text-center txt-primary">
+              <%=  %>
+            </h3>
+            <div class="md-input-wrapper">
+              <input type="text" class="md-form-control md-static" id="txtUsername" value="<%=  %>">
+              <label><%=  %></label>
+            </div>
+            <div class="md-input-wrapper">
+              <input type="password" class="md-form-control md-static" id="txtPassword" value="<%=  %>">
+              <label><%=  %></label>
+            </div>
+            <input type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" onclick="verifyLogin()">
+          </form>
+          <!-- end of form -->
+        </div>
+        <!-- end of login-card -->
+      </div>
+      <!-- end of col-sm-12 -->
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end of container-fluid -->
+</section>
+<!-- Required Jqurey -->
+<% content_for :js  do %>
+  <script type="text/javascript">
+
+      function verifyLogin() {
+          $(".loading.hidden").removeClass("hidden");
+          $.ajax({
+              url: "/login",
+              type: "POST",
+              data: {
+                  username: $("#txtUsername").val(),
+                  password: $("#txtPassword").val()
+              }
+          }).done(function(logInfo) {
+              if(logInfo["error"]) {
+                  $("#txtPassword").val("");
+                  $(".loading").addClass("hidden");
+                  $.growl({
+                      message: "<%= "Wrong" %>"
+                  },{
+                      type: "danger",
+                      allow_dismiss: true,
+                      label: 'Cancel',
+                      className: 'btn-xs btn-inverse',
+                      placement: {
+                          from: 'top',
+                          align: 'center'
+                      },
+                      delay: 0,
+                      animate: { enter: 'animated fadeInDown' }
+                  });
+              } else {
+                  document.location = "<%= "/dashboard" %>";
+              }
+          });
+      }
+  </script>
+<% end %>
