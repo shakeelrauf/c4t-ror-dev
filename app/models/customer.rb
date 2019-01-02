@@ -32,7 +32,11 @@ class Customer < ApplicationRecord
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom =  create(options.merge(where))
+			@custom =  new(options.merge(where))
+			@custom.attributes.each do |key, value|
+				@custom[key] = "" if value.nil?
+			end
+			@custom.save!
 		end
 		@custom
 	end
