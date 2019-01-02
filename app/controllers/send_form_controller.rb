@@ -12,7 +12,7 @@ class SendFormController < ApplicationController
         "client_secret": params[:password],
         "grant_type": "client_credentials"
     }
-    res = ApiCall.post("/api/v1/token", body, {"Content-Type": "application/x-www-form-urlencoded"})
+    res = ApiCall.post("/token", body, {"Content-Type": "application/x-www-form-urlencoded"})
     return render_json_response({error: "bad authentication"}, :ok) if res["error"]
     token = res["access_token"]
     res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": "Bearer "+token})

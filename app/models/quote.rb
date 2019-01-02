@@ -29,7 +29,13 @@ class Quote < ApplicationRecord
 # };
 
 
-	def self.customUpsert(options, row)
-		
+	def self.customUpsert(options, where)
+		@qoute = where(where).first
+		if @qoute.present?
+			@quote.update(options)
+		else
+			@quote = create(options.merge(where))
+		end
+		return @quote
 	end
 end
