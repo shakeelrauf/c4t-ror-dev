@@ -19,6 +19,7 @@ module Cashfortrash
         resource '*', :headers => :any, :methods => [:get, :post, :options, :delete, :put, :patch]
       end
     end
+    config.eager_load_paths << Rails.root.join('lib')
     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

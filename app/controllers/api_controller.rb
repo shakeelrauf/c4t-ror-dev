@@ -1,14 +1,12 @@
 class ApiController < ApplicationController
 	include Api::V1::MsgsConst
+  include Response
   include Api::V1::Request
   include API::V1::Validations
 
   helper_method :current_user
   # helper_method :authenticate_user
 
-  def render_json_response(resource, status)
-    render json: resource.to_json, status: status, adapter: :json_api
-  end
 
   #usage
   # return render_json_response({:error => "missing_params", :success => false}, :ok) if params[:content].nil?	
