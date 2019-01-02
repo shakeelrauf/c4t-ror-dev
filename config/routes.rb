@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-	namespace :api do
+
+  scope  controller: :send_form do
+    get 	:login
+    post 	:login, 													action: :login_user
+  end
+
+  namespace :api do
 		namespace :v1 do
 			scope controller: :address do
 				post 'clients/:no/address',          action: :client_address

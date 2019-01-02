@@ -10,8 +10,8 @@ class User < ApplicationRecord
 		name = self.firstName + ' ' + self.lastName;
 	end
 
-	def isValidPassword(password)
-		return self.encrypt(password) == password
+	def is_valid_password?(password)
+		return User.encrypt(password) == password
 	end
 
 	def self.encrypt text
