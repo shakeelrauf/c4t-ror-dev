@@ -1,5 +1,5 @@
 class Api::V1::QuoteController < ApiController
-	before_action :authenticate_user
+	# before_action :authenticate_user
   include ActionView::Helpers::NumberHelper
 
     # Creates a blank quote car
@@ -176,43 +176,43 @@ class Api::V1::QuoteController < ApiController
       return render_json_response(lstQuotes, :ok)
   end
 
-  def quote_with_filter
-    # get all quotes with filter.
-      limit = 1000
-      offset = 0
-      where = { [Op.and]: [] }
+  # def quote_with_filter
+  #   # get all quotes with filter.
+  #     limit = 1000
+  #     offset = 0
+  #     where = { [Op.and]: [] }
 
-      if (params[:limit].class.to_s != "NilClass" && params[:limit].integer?) && params[:limit].to_i > 0)
-        limit = params[:limit].to_i
-      end
-      if (params[:offset].class.to_s != "NilClass" && params[:offset].integer?) && params[:offset].to_i > 0)
-        offset = params[:offset].to_i * limit
-      end
-      if (params[:filter].class.to_s != "NilClass")
-        params[:filter] = "%" + params[:filter].replace(/[\s]/g, "% %") + "%"
-        filters = params[:filter].split(' ')
-        and = []
-        filters.each do |fil|
-          and << {"customer.firstName LIKE ?  OR customer.lastName LIKE ? OR customer.phone LIKE ? OR customer.cellPhone LIKE ? OR customer.secondaryPhone  LIKE ?OR note LIKE ? OR referNo LIKE ? OR customer.secondaryPhone LIKE ? OR customer.note  LIKE ? OR dispatcher.firstName  LIKE ? OR dispatcher.lastName LIKE ? OR status.name  LIKE ?", fil, fil, fil, fil, fil, fil, fil, fil, fil, fil}
-        end
-        where[Op.and] = and
-      end
-      if (params[:afterDate] && params[:afterDate].toString().length == 10 && moment(params[:afterDate], "YYYY-MM-DD").isValid())
-        where[Op.and].push({
-          dtCreated: {
-            [Op.gte]: params[:afterDate] + " 00:00:00"
-          }
-        })
-      end
-      if (params[:beforeDate] && params[:beforeDate].toString().length == 10 && moment(params[:beforeDate], "YYYY-MM-DD").isValid())
-        where[Op.and].push({
-          dtCreated: {
-            [Op.lte]: params[:beforeDate] + " 23:59:59"
-          }
-        })
-      end
+  #     if (params[:limit].class.to_s != "NilClass" && params[:limit].integer?) && params[:limit].to_i > 0)
+  #       limit = params[:limit].to_i
+  #     end
+  #     if (params[:offset].class.to_s != "NilClass" && params[:offset].integer?) && params[:offset].to_i > 0)
+  #       offset = params[:offset].to_i * limit
+  #     end
+  #     if (params[:filter].class.to_s != "NilClass")
+  #       params[:filter] = "%" + params[:filter].replace(/[\s]/g, "% %") + "%"
+  #       filters = params[:filter].split(' ')
+  #       and = []
+  #       filters.each do |fil|
+  #         and << {"customer.firstName LIKE ?  OR customer.lastName LIKE ? OR customer.phone LIKE ? OR customer.cellPhone LIKE ? OR customer.secondaryPhone  LIKE ?OR note LIKE ? OR referNo LIKE ? OR customer.secondaryPhone LIKE ? OR customer.note  LIKE ? OR dispatcher.firstName  LIKE ? OR dispatcher.lastName LIKE ? OR status.name  LIKE ?", fil, fil, fil, fil, fil, fil, fil, fil, fil, fil}
+  #       end
+  #       where[Op.and] = and
+  #     end
+  #     if (params[:afterDate] && params[:afterDate].toString().length == 10 && moment(params[:afterDate], "YYYY-MM-DD").isValid())
+  #       where[Op.and].push({
+  #         dtCreated: {
+  #           [Op.gte]: params[:afterDate] + " 00:00:00"
+  #         }
+  #       })
+  #     end
+  #     if (params[:beforeDate] && params[:beforeDate].toString().length == 10 && moment(params[:beforeDate], "YYYY-MM-DD").isValid())
+  #       where[Op.and].push({
+  #         dtCreated: {
+  #           [Op.lte]: params[:beforeDate] + " 23:59:59"
+  #         }
+  #       })
+  #     end
 
-      r_quotes = Quote.includes(:dispatcher, :customer, :status).where(where).order(dtCreated: :desc).offset(offset).limit(limit)
-      return render_json_response(r_quotes, :ok)
-  end
+  #     r_quotes = Quote.includes(:dispatcher, :customer, :status).where(where).order(dtCreated: :desc).offset(offset).limit(limit)
+  #     return render_json_response(r_quotes, :ok)
+  # end
 end
