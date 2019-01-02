@@ -24,7 +24,7 @@ class Api::V1::LoginController < ApiController
   		token["token_type"] = "Bearer"
   		token["access_token"] = User.encrypt(SecureRandom.random_bytes(128)).gsub('=','').gsub('+','') 
   		token["expires_in"] = 3600
-  		user.update(accessToken: token["token_type"] + " " + token["access_token"], dtLastLogin: Datetime.now)
+  		user.update(accessToken: token["token_type"] + " " + token["access_token"], dtLastLogin: DateTime.now)
   		return render_json_response(token, :ok)
   	end
   end
