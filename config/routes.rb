@@ -79,6 +79,7 @@ Rails.application.routes.draw do
         get '/clients/:no/quotes',               action: :particular_customer_quotes
         get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
         get '/status',                           action: :all_status
+        get '/all_quotes',                       action: :all_quotes
     	end
 
 			scope controller: :schedules do
