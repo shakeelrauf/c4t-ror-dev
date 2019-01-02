@@ -1,94 +1,84 @@
-<!DOCTYPE html>
-<html lang="fr">
-   <head>
-      <title>C4T</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-      <meta name="description" content="Cash for trash - Nous achetons vos autos usagés!">
-      <meta name="author" content="PropulsionWeb">
-   </head>
-   <body class="sidebar-mini fixed">
-      <div class="loading">
-         <img src="/images/preloader.svg" alt>
-      </div>
-      <div class="wrapper">
-      <header class="main-header-top">
-         <a href="/dashboard" class="logo">
-         <%= image_tag("logo-site-new.png", alt: "Theme-logo", class: "img-fluid able-logo") %>
-        </a>
-         <nav class="navbar navbar-static-top">
-            <!-- Sidebar toggle button--><a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
-            <!-- Navbar Right Menu-->
-            <div class="navbar-custom-menu m-t-25" style="position: absolute;right:0;">
-               <ul class="top-nav">
-                  <!--Notification Menu-->
-                  <li class="dropdown notification-menu">
-                     <a href="#!" data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
-                     <i class="icon-bell"></i>
-                     <span class="badge badge-danger header-badge">9</span>
-                     </a>
-                     <ul class="dropdown-menu">
-                        <li class="not-head">You have <b class="text-primary">4</b> new notifications.</li>
-                        <li class="bell-notification">
-                           <a href="javascript:;" class="media">
-                              <span class="mr-3 media-icon">
-                              <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle") %>
-                              </span>
-                              <div class="media-body"><span class="block">Lisa sent you a mail</span><span class="text-muted block-time">2min ago</span></div>
-                           </a>
-                        </li>
-                        <li class="bell-notification">
-                           <a href="javascript:;" class="media">
-                              <span class="mr-3 media-icon">
-                              <%= image_tag("avatar-2.png", alt: "User Image", class: "rounded-circle") %>
-                              </span>
-                              <div class="media-body"><span class="block">Server Not Working</span><span class="text-muted block-time">20min ago</span></div>
-                           </a>
-                        </li>
-                        <li class="bell-notification">
-                           <a href="javascript:;" class="media">
-                              <span class="mr-3 media-icon">
-                              <%= image_tag("avatar-3.png", alt: "User Image", class: "rounded-circle") %>
-                              </span>
-                              <div class="media-body"><span class="block">Transaction xyz complete</span><span class="text-muted block-time">3 hours ago</span></div>
-                           </a>
-                        </li>
-                        <li class="not-footer">
-                           <a href="#!">See all notifications.</a>
-                        </li>
-                     </ul>
-                  </li>
-                  <!-- chat dropdown -->
-                  <li class="pc-rheader-submenu ">
-                     <a class="drop icon-circle displayChatbox" role="button">
-                     <i class="icon-bubbles"></i>
-                     <span class="badge badge-danger header-badge blink">5</span>
-                     </a>
-                  </li>
-                  <!-- window screen -->
-                  <li class="pc-rheader-submenu">
-                     <a class="drop icon-circle" role="button" onclick="javascript:toggleFullScreen()">
-                     <i class="icon-size-fullscreen"></i>
-                     </a>
-                  </li>
-                  <!-- User Menu-->
-                  <li class="dropdown" style="margin-bottom: 45px;">
-                     <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
-                     <span>
-                        <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle", style: "width: 40px") %>
-                      </span>
-                     <span>Talha <b>Waseem</b> <i class=" icofont icofont-simple-down"></i></span>
-                     </a>
-                     <ul class="dropdown-menu settings-menu">
-                        <li><a href="/settings"><i class="icon-settings"></i>Settings</a></li>
-                        <li class="p-0">
-                           <div class="dropdown-divider m-0"></div>
-                        </li>
-                        <li><a href="/logout"><i class="icon-logout"></i>Logout</a></li>
-                     </ul>
-                  </li>
-               </ul>
-            </div>
-         </nav>
-      </header>
+ <body class="sidebar-mini fixed">
+    <div class="loading">
+       <img src="/images/preloader.svg" alt>
+    </div>
+    <div class="wrapper">
+    <header class="main-header-top">
+       <a href="/dashboard" class="logo">
+       <%= image_tag("logo-site-new.png", alt: "Theme-logo", class: "img-fluid able-logo") %>
+      </a>
+       <nav class="navbar navbar-static-top">
+          <!-- Sidebar toggle button--><a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
+          <!-- Navbar Right Menu-->
+          <div class="navbar-custom-menu m-t-25" style="position: absolute;right:0;">
+             <ul class="top-nav">
+                <!--Notification Menu-->
+                <li class="dropdown notification-menu">
+                   <a href="#!" data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
+                   <i class="icon-bell"></i>
+                   <span class="badge badge-danger header-badge">9</span>
+                   </a>
+                   <ul class="dropdown-menu">
+                      <li class="not-head">You have <b class="text-primary">4</b> new notifications.</li>
+                      <li class="bell-notification">
+                         <a href="javascript:;" class="media">
+                            <span class="mr-3 media-icon">
+                            <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle") %>
+                            </span>
+                            <div class="media-body"><span class="block">Lisa sent you a mail</span><span class="text-muted block-time">2min ago</span></div>
+                         </a>
+                      </li>
+                      <li class="bell-notification">
+                         <a href="javascript:;" class="media">
+                            <span class="mr-3 media-icon">
+                            <%= image_tag("avatar-2.png", alt: "User Image", class: "rounded-circle") %>
+                            </span>
+                            <div class="media-body"><span class="block">Server Not Working</span><span class="text-muted block-time">20min ago</span></div>
+                         </a>
+                      </li>
+                      <li class="bell-notification">
+                         <a href="javascript:;" class="media">
+                            <span class="mr-3 media-icon">
+                            <%= image_tag("avatar-3.png", alt: "User Image", class: "rounded-circle") %>
+                            </span>
+                            <div class="media-body"><span class="block">Transaction xyz complete</span><span class="text-muted block-time">3 hours ago</span></div>
+                         </a>
+                      </li>
+                      <li class="not-footer">
+                         <a href="#!">See all notifications.</a>
+                      </li>
+                   </ul>
+                </li>
+                <!-- chat dropdown -->
+                <li class="pc-rheader-submenu ">
+                   <a class="drop icon-circle displayChatbox" role="button">
+                   <i class="icon-bubbles"></i>
+                   <span class="badge badge-danger header-badge blink">5</span>
+                   </a>
+                </li>
+                <!-- window screen -->
+                <li class="pc-rheader-submenu">
+                   <a class="drop icon-circle" role="button" onclick="javascript:toggleFullScreen()">
+                   <i class="icon-size-fullscreen"></i>
+                   </a>
+                </li>
+                <!-- User Menu-->
+                <li class="dropdown" style="margin-bottom: 45px;">
+                   <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
+                   <span>
+                      <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle", style: "width: 40px") %>
+                    </span>
+                   <span>Talha <b>Waseem</b> <i class=" icofont icofont-simple-down"></i></span>
+                   </a>
+                   <ul class="dropdown-menu settings-menu">
+                      <li><a href="/settings"><i class="icon-settings"></i>Settings</a></li>
+                      <li class="p-0">
+                         <div class="dropdown-divider m-0"></div>
+                      </li>
+                      <li><a href="/logout"><i class="icon-logout"></i>Logout</a></li>
+                   </ul>
+                </li>
+             </ul>
+          </div>
+       </nav>
+    </header>
