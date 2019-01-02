@@ -11,7 +11,7 @@ class User < ApplicationRecord
 	end
 
 	def is_valid_password?(password)
-		return User.encrypt(password) == password
+		return decrypt_pw(self.password) == password
 	end
 
 	def self.encrypt text
