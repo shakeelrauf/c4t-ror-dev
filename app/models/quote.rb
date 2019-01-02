@@ -29,7 +29,17 @@ class Quote < ApplicationRecord
 # };
 
 
-	def self.customUpsert(options, row)
-		
+	def self.customUpsert(options, where)
+		@qoute = where(where).first
+		if @qoute.present?
+			@quote.update(options)
+		else
+			@quote = new(options.merge(where))
+			@quote.attributes.each do |key, value|
+				@quote[key] = "" if value.nil?
+			end
+			@quote.save!
+		end
+		return @quote
 	end
 end

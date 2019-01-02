@@ -1,28 +1,30 @@
 class Api::V1::QuickQuoteController < ApiController
 
-  def index
-    # QuickQuote class not found
-  	quickquotes = QuickQuote.includes(:user, :heardofus).all
-	  return render_json_response(quickquotes, :ok)
-  end
+  # def index
+  #   # QuickQuote class not found
+  # 	quickquotes = QuickQuote.includes(:user, :heardofus).all
+	#   return render_json_response(quickquotes, :ok)
+  # end
 
    # The save a of a quote
   def save_quotes
 
     # Validate body data before insert.
-    if (params[:firstName] == nil || params[:lastName] == nil || params[:postal] == nil || !params[:heardofus] || params[:phone] == nil) 
+    if (params[:firstName] == nil || params[:lastName] == nil || params[:postal] == nil || !params[:heardofus] || params[:phone] == nil)
       return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
 		else
       params[:postal] = IsValid.postal(params[:postal])
-      if (params[:postal].length < 6 || params[:postal] > 7)
+      if (params[:postal].length < 6 || params[:postal].to_i > 7)
       	return render_json_response({:error => "The postal code seems invalid."}, :bad_request)
       end
        # Parse validate the phone number
       phone = ""
-      params[:phone].each_with_index do |phone, index|
-        if ((phone[index].to_i).kind_of? Integer)
-          phone += phone[i]
-      	end
+      i = 0
+      while i < params[:phone].length
+        if ((params[:phone][i].to_i).kind_of? Integer)
+          phone += params[:phone][i]
+        end
+        i = i+1
       end
       if (phone.length < 10)
       	return render_json_response({:error => "phone number length must be at least 10 digits."}, :bad_request)
@@ -35,16 +37,15 @@ class Api::V1::QuickQuoteController < ApiController
       	return render_json_response({:error => "The cars cannot be parsed"}, :bad_request)
       end
       
-      @heard_of_us = HeardOfUs.find_or_initialize_by(type: params[:heardofus])
+      @heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
 	      if @heard_of_us.new_record?
-	      	HeardOfUs.create(type: params[:heardofus])
+	      	Heardofus.create(type: params[:heardofus])
 	      end
-
           @client = Customer.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
           @quote = Quote.where("dtCreated <= ?" , DateTime.now.strftime("YYYY-MM-DD 00:00:00"))
           counter = @quote.count
 
-          quote = Quote.customUpsert({reference: DateTime.now.strftime("YYMM") + (counter.to_i + 1).to_s.rjust(5, '0'),note: "",idUser: current_user.idUser,idClient: @client.id},{id: params[:quote]})
+          quote = Quote.customUpsert({reference: DateTime.now.strftime("YYMM") + (counter.to_i + 1).to_s.rjust(5, '0'),note: "",idUser: current_user.present? ? current_user.idUser : nil ,idClient: @client.id},{id: params[:quote]})
                  # Save each car                  
       	carList.each do |car|
 

@@ -17,3 +17,4 @@
 //= require jquery-ui/js/jquery-ui.min.js
 //= require popper.js/js/popper.min.js
 //= require bootstrap/js/bootstrap.min.js
+//= require notification/js/bootstrap-growl.min.js
