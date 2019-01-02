@@ -78,8 +78,15 @@ class Api::V1::QuoteController < ApiController
 
   # Get all possible quotes.
   def all_quotes
-    quote = Quote.all
-    return render_json_response(quote, :ok)  
+    quotes = Quote.includes(customer: [:address]).all.to_json(include: {:customer => {:include => :address}})
+    # data = [quotes]
+    quotez = {
+       "msg": "Success!!",
+       "success": true,
+       "data": JSON.parse(quotes)
+    }
+
+    return render json: quotez.to_json, status: :ok 
   end
 
   # get one quote
