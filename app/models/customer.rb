@@ -3,7 +3,7 @@ class Customer < ApplicationRecord
 	self.inheritance_column = :_type_disabled
 	has_many :address, class_name: 'Address', inverse_of: :client, foreign_key: 'idClient'
 	has_one :business, class_name: 'Business',inverse_of: :client ,foreign_key: 'idClient'
-	belongs_to :heardofus, class_name: 'Heardofu', foreign_key: 'idHeardOfUs'
+	belongs_to :heardofus, class_name: 'Heardofus', foreign_key: 'idHeardOfUs'
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
 
 	def name
@@ -32,7 +32,11 @@ class Customer < ApplicationRecord
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom =  create(options.merge(where))
+			@custom =  new(options.merge(where))
+			@custom.attributes.each do |key, value|
+				@custom[key] = "" if value.nil?
+			end
+			@custom.save!
 		end
 		@custom
 	end
