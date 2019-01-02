@@ -17,7 +17,7 @@ class Api::V1::UsersController < ApiController
       if @user.new_record?
         @user.firstName = params[:firstName]
         @user.lastName = params[:lastName]
-        @user.password = User.encrypt(params[:pwd])
+        @user.password = params[:pwd]
         @user.email = params[:email]
         @user.roles = params[:roles]
         @user.avatar = params[:avatar]
@@ -48,7 +48,7 @@ class Api::V1::UsersController < ApiController
         end
         # Verify username not exist.
         @user_user = User.find_by_username(params[:username])
-        if (@user_user.id != params[:no])
+        if (@user_user && @user_user.id != params[:no])
           return render_json_response({:error => "Username already exist."}, :ok)
         else
           if (@user)
@@ -68,7 +68,7 @@ class Api::V1::UsersController < ApiController
               if(!@user)
                 return render_json_response({:error => "User not found."}, :ok)
               else
-                @user.update(password: User.encrypt(params[:pwd]))
+                @user.update(password: params[:pwd])
                 return render_json_response(@user, :ok)
               end
             else
