@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApiController  
   before_action :set_user, only: [:show, :update, :destroy, :block_user]
+  before_filter :authenticate_admin
 
   def create
 	# Validate if user asked this is a super admin.
@@ -48,7 +49,7 @@ class Api::V1::UsersController < ApiController
         end
         # Verify username not exist.
         @user_user = User.find_by_username(params[:username])
-        if (@user_user && @user_user.id != params[:no])
+        if (@user_user && @user_user.id != params[:no].to_i)
           return render_json_response({:error => "Username already exist."}, :ok)
         else
           if (@user)

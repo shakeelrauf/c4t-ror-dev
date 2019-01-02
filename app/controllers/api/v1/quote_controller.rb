@@ -20,9 +20,9 @@ class Api::V1::QuoteController < ApiController
     # Find the last settings
     # Copy them in the quote for now
     	
-    db.query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)", {
+    settings = db.query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)", {
       type: db.QueryTypes.SELECT
-    }).then(settings => {
+    })
 
     # The settings hash
     s = {}
@@ -30,7 +30,7 @@ class Api::V1::QuoteController < ApiController
       s[setting.name] = setting.value
     end
 
-    count = Quote.where(dtCreated: moment().format("YYYY-MM-01 00:00:00")
+    count = Quote.where(dtCreated: moment().format("YYYY-MM-01 00:00:00"))
       reference = moment().format("YYMM") + ("0000" + (count + 1)).slice(-4)
       quote = Quote.create(
         idUser: current_user.idUser,
@@ -47,7 +47,7 @@ class Api::V1::QuoteController < ApiController
         pickup: s.pickup
       )
  		 return render_json_response(quote, :ok)
-    })
+
   end
 
   # Creates a blank quote ca
@@ -78,10 +78,10 @@ class Api::V1::QuoteController < ApiController
 
   # get one quote
   def quote
-  	@quote = Quote.includes(:user, :client => [:address, :heardofus], :status).find_by_id(id: params[:no]).to_json(include: [:dispatcher,:status, {customer: {:include => [:address, :heardofus]}}])
+  	@quote = Quote.includes(:user, :status, :client => [:address, :heardofus]).find_by_id(id: params[:no]).to_json(include: [:dispatcher,:status, {customer: {:include => [:address, :heardofus]}}])
 	  if (!@quote)
 			return render_json_response({:message => "Quote not found!"}, :ok)
-	  else {
+	  else
 	    @quote_car = QuoteCar.includes(:address).where(idQuote: params[:no]).to_json(include: [:address])
 	    @quote.dataValues.cars = @quote_car
 			return render_json_response(@quote, :ok)
