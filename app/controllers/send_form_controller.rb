@@ -17,10 +17,10 @@ class SendFormController < ApplicationController
     return render_json_response({error: "bad authentication"}, :ok) if res["error"]
     token = res["access_token"]
     res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": "Bearer "+token})
-    users = res.to_json
+    users = res
     user = {}
     for i in users
-      if i.username == params[:username]
+      if i["username"] == params[:username]
         user = i
         return
       end

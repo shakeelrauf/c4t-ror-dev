@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
 
 	def headers
-		{"Content-Type": "application/x-www-form-urlencoded","Authorization" => get_token}
+		{"Content-Type": "application/x-www-form-urlencoded","Authorization": get_token}
 	end
 
 	def login_required
