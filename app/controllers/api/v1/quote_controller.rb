@@ -78,15 +78,13 @@ class Api::V1::QuoteController < ApiController
 # .to_json(include: {:customer => {:include => :address}})
   # Get all possible quotes.
   def all_quotes  
-    quotes = Quote.includes(customer: [:address]).all
-    quotez = quotes.to_json(include: {:customer => {:include => :address}})
+    quotes = Quote.includes(customer: [:address]).all.to_json(include: {:customer => {:include => :address}})
     # data = [quotes]
     data = []
-    JSON.parse(quotez).each do |q|
+    JSON.parse(quotes).each do |q|
       json_quote = q
-      json_quote["customer"]["fullName"] = q["customer"]["firstName"] + q["customer"]["lastName"]  if json_quote["customer"].present?
-      json_quote["customer"]["address"] = q["customer"]["address"][0]["address"] if q["customer"].present? && q["customer"]["address"].present?
-      
+      json_quote["customer"]["fullName"] = q["customer"]["firstName"] + " " + q["customer"]["lastName"]  if json_quote["customer"].present?
+      json_quote["customer"]["address"] = q["customer"]["address"][0]["address"]+ ", "+q["customer"]["address"][0]["city"]+ ", "+q["customer"]["address"][0]["province"]  if q["customer"].present? && q["customer"]["address"].present?
       data.push(json_quote)
     end
 
