@@ -82,6 +82,7 @@ Rails.application.routes.draw do
         get '/quotes',                           action: :get_quotes_by_filters
         get '/quotes/:no',                       action: :quote_with_filter
         patch '/quotes/:no',                     action: :quote
+        patch '/change_status',                  action: :update_status
         patch '/quotes/:no/status',              action: :update_quote_status
         delete '/quotecar/:carNo',               action: :destroy
         get '/clients/:no/quotes',               action: :particular_customer_quotes
