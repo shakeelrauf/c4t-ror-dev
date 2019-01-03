@@ -162,8 +162,14 @@ class Api::V1::QuoteController < ApiController
             quotes.update(isSatisfactionSMSQuoteSent: 1)
           end
         end
+
+        quotez = {
+           "msg": "Success!!",
+           "success": true,
+           "data": result
+        }
         
-        return render_json_response(result, :ok)
+        return render_json_response(quotez, :ok)
       end
     end
   end
