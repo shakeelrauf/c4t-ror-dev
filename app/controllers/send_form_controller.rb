@@ -21,7 +21,7 @@ class SendFormController < ApplicationController
     for i in users
       if i["username"] == params[:username]
         user = i
-        return
+        break
       end
     end
     successful_login(user,token)
