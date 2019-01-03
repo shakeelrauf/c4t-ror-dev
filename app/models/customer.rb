@@ -7,7 +7,7 @@ class Customer < ApplicationRecord
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
 
 	def name
-		return this.firstName + ' ' + this.lastName
+		return self.firstName + ' ' + self.lastName
 	end
 
 	# def self.customUpsert(options, row)

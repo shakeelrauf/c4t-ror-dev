@@ -75,15 +75,25 @@ class Api::V1::QuoteController < ApiController
 	  status = Status.all
 	  return render_json_response(status, :ok)	
   end
-
+# .to_json(include: {:customer => {:include => :address}})
   # Get all possible quotes.
-  def all_quotes
-    quotes = Quote.includes(customer: [:address]).all.to_json(include: {:customer => {:include => :address}})
+  def all_quotes  
+    quotes = Quote.includes(customer: [:address]).all
+    quotez = quotes.to_json(include: {:customer => {:include => :address}})
     # data = [quotes]
+    data = []
+    JSON.parse(quotez).each do |q|
+      json_quote = q
+      json_quote["customer"]["fullName"] = q["customer"]["firstName"] + q["customer"]["lastName"]  if json_quote["customer"].present?
+      json_quote["customer"]["address"] = q["customer"]["address"][0]["address"] if q["customer"].present? && q["customer"]["address"].present?
+      
+      data.push(json_quote)
+    end
+
     quotez = {
        "msg": "Success!!",
        "success": true,
-       "data": JSON.parse(quotes)
+       "data": data
     }
 
     return render json: quotez.to_json, status: :ok 
