@@ -1,5 +1,6 @@
 <%= render :partial => 'shared/header' %>
 <%= render :partial => 'shared/menu' %>
+
 <div class="content-wrapper">
         <!-- Container-fluid starts -->
         <div class="container-fluid">
@@ -112,8 +113,8 @@ $(document).ready(function() {
       "order": [],
       "fixedHeader": true
   });
-  $("#crm-contact_filter").find("input").css({"visibility": "hidden"})
-  $("#crm-contact_length").css({"visibility": "hidden"})
+  $("#crm-contact_filter").css({"visibility": "hidden","height": "0px"})
+  $("#crm-contact_length").css({"visibility": "hidden","height": "0px"})
 });
 
   $("#customer-search-filter").keyup(function(){
@@ -124,5 +125,4 @@ $(document).ready(function() {
 // var customersList = <%#= JSON.stringify(@customers.to_json) %>
 // var userRole = "<%#= user.roles %>"
 </script>
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 

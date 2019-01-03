@@ -13,6 +13,7 @@ class CustomersController < ApplicationController
     id = params[:id]
     begin
       @customer = ApiCall.get("/clients/#{id}",{no: id})
+      byebug
     rescue Net::ReadTimeout
       @customer = []
     end  
