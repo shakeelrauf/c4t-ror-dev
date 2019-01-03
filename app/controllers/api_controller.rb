@@ -7,7 +7,7 @@ class ApiController < ApplicationController
   helper_method :current_user
   # helper_method :authenticate_user
 
-  def velidate_token
+  def validate_token
     if request.authorization.present?
       return true if User.find_by_accessToken(request.authorization).present?
       return false
