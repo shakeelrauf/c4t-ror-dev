@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     get 	:dashboard,													action: :dashboard
   end
 
+  resources :customers
+
   namespace :api do
 		namespace :v1 do
 			scope controller: :address do
