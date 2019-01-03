@@ -75,6 +75,7 @@ class Api::V1::QuoteController < ApiController
 	  status = Status.all
 	  return render_json_response(status, :ok)	
   end
+
 # .to_json(include: {:customer => {:include => :address}})
   # Get all possible quotes.
   def all_quotes  
@@ -142,10 +143,12 @@ class Api::V1::QuoteController < ApiController
       return render_json_response({:error => "please send attribute status."}, :ok)
     else
       quotes = Quote.includes(:customer).find_by_id(id: params[:no])
-      results = quotes.update(
-        idStatus: params[:status],
-        dtStatusUpdated: db.fn("NOW")
-      )
+      if quotes.present?
+        results = quotes.update(
+          idStatus: params[:status],
+          dtStatusUpdated: Time.now
+        )
+      end
       r_quote = Quote.includes(:customer).find_by_id(id: params[:no])
       # If status is «in Yard», send sms to customer for know his appreciation.
       if (params[:status] == 6)
