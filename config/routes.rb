@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope  controller: :send_form do
     get 	:login
     post 	:login, 													action: :login_user
+    get 	:logout,													action: :logout
   end
 
    scope  controller: :dashboard do
