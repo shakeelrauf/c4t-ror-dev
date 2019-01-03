@@ -53,11 +53,9 @@ class ApplicationController < ActionController::Base
 	def successful_login(p, token)
 		start_session p, token
 		if (session[:return_url].present?)
-			redirect_to session[:return_url]
 			session[:redirect_url] = nil
 			return
 		end
-		return redirect_to dashboard_path
 	end
 
 
