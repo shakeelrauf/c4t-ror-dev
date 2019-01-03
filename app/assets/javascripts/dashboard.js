@@ -10,7 +10,6 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
 //= require activestorage
 //= require turbolinks
 //= require jquery/js/jquery.min.js
@@ -35,6 +34,8 @@
 //= require charts/flot/js/jquery.flot.pie.js
 //= require main.min.js
 //= require menu.js
+//= require pages/calendar.js
+//= require pages/distance.js
 // require jquery/js/jquery.min.js
 // require jquery-ui/js/jquery-ui.min.js
 // require jquery.steps/js/jquery.steps.js

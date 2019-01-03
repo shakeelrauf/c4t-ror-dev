@@ -142,16 +142,21 @@ class Api::V1::QuoteController < ApiController
 
   def update_status
     if (!params[:status] && !params[:id])
-      return render_json_response({:error => "please send attribute status."}, :ok)
+      return render_json_response({"msg": "Failure!!", "success": false,:error => "please send attribute status."}, :ok)
     else
       @quote = Quote.includes(:status).where(idQuote: params[:id])
       if !@quote.present?
-        return render_json_response({:error => "Quote not found"}, :ok)
+        return render_json_response({"msg": "Failure!!", "success": false,:error => "Quote not found"}, :ok)
       else
-        result = @quote.update(
-          idStatus: params[:status],
-          dtStatusUpdated: Time.now
-        )
+        stats = Status.where(idStatus: params[:status])
+        if params[:status] && stats.present?
+          result = @quote.update(
+            idStatus: params[:status],
+            dtStatusUpdated: Time.now
+          )
+        else
+          return render_json_response({"msg": "Failure!!", "success": false,:error => "Status not found"}, :ok)
+        end
         r_quote = Quote.includes(:customer).find_by_id(id: params[:no])
         # If status is «in Yard», send sms to customer for know his appreciation.
         if (params[:status] == 6)
@@ -162,8 +167,13 @@ class Api::V1::QuoteController < ApiController
             quotes.update(isSatisfactionSMSQuoteSent: 1)
           end
         end
-        
-        return render_json_response(result, :ok)
+
+        quotez = {
+           "msg": "Success!!",
+           "success": true,
+           "data": result
+        }
+        return render_json_response(quotez, :ok)
       end
     end
   end
@@ -230,45 +240,4 @@ class Api::V1::QuoteController < ApiController
     end
       return render_json_response(lstQuotes, :ok)
   end
-
-#   def quote_with_filter
-#     # get all quotes with filter.
-#       limit = 1000
-#       offset = 0
-#       where = []
-
-#       if ((params[:limit].class.to_s != "NilClass" && params[:limit].integer?) && params[:limit].to_i > 0)
-#         limit = params[:limit].to_i
-#       end
-#       if ((params[:offset].class.to_s != "NilClass" && params[:offset].integer?) && params[:offset].to_i > 0)
-#         offset = params[:offset].to_i * limit
-#       end
-#       if (params[:filter].class.to_s != "NilClass")
-#         params[:filter] = "%" + params[:filter].replace(/[\s]/, "% %") + "%"
-#         filters = params[:filter].split(' ')
-#         h = []
-#         filters.each do |fil|
-#           h << "customer.firstName LIKE ?  OR customer.lastName LIKE ? OR customer.phone LIKE ? OR customer.cellPhone LIKE ? OR customer.secondaryPhone  LIKE ?OR note LIKE ? OR referNo LIKE ? OR customer.secondaryPhone LIKE ? OR customer.note  LIKE ? OR dispatcher.firstName  LIKE ? OR dispatcher.lastName LIKE ? OR status.name  LIKE ?", fil, fil, fil, fil, fil, fil, fil, fil, fil, fil}
-#         end
-#         where[Op.and] = h
-#       end
-#       if (params[:afterDate] && params[:afterDate].toString().length == 10 && moment(params[:afterDate], "YYYY-MM-DD").isValid())
-#         where[and].push({
-#           dtCreated: {
-#             [Op.gte]: params[:afterDate] + " 00:00:00"
-#           }
-#         })
-#       end
-#       if (params[:beforeDate] && params[:beforeDate].toString().length == 10 && moment(params[:beforeDate], "YYYY-MM-DD").isValid())
-#         where[Op.and].push({
-#           dtCreated: {
-#             [Op.lte]: params[:beforeDate] + " 23:59:59"
-#           }
-#         })
-#       end
-
-#       r_quotes = Quote.includes(:dispatcher, :customer, :status).where(where).orde      end
-# r(dtCreated: :desc).offset(offset).limit(limit)
-#       return render_json_response(r_quotes, :ok)
-#   end
 end
