@@ -148,10 +148,15 @@ class Api::V1::QuoteController < ApiController
       if !@quote.present?
         return render_json_response({"msg": "Failure!!", "success": false,:error => "Quote not found"}, :ok)
       else
-        result = @quote.update(
-          idStatus: params[:status],
-          dtStatusUpdated: Time.now
-        )
+        stats = Status.where(idStatus: params[:status])
+        if params[:status] && stats.present?
+          result = @quote.update(
+            idStatus: params[:status],
+            dtStatusUpdated: Time.now
+          )
+        else
+          return render_json_response({"msg": "Failure!!", "success": false,:error => "Status not found"}, :ok)
+        end
         r_quote = Quote.includes(:customer).find_by_id(id: params[:no])
         # If status is «in Yard», send sms to customer for know his appreciation.
         if (params[:status] == 6)

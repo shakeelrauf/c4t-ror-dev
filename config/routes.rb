@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     get '/status',                           action: :all_status
     get '/all_quotes',                       action: :all_quotes
 	end
-
+	
   resources :customers
   namespace :api do
 		namespace :v1 do
