@@ -22,7 +22,7 @@ class Api::V1::LoginController < ApiController
   		return render_json_response({:error => MISSING_PARAMS_MSG, :success => false}, :bad_request) if (!user || !user.is_valid_password?(params[:client_secret]))
   		token = {}
   		token["token_type"] = "Bearer"
-  		token["access_token"] = User.encrypt(SecureRandom.random_bytes(128)).gsub('=','').gsub('+','') 
+  		token["access_token"] = User.encrypt_token(SecureRandom.random_bytes(128)).gsub('=','').gsub('+','')
   		token["expires_in"] = 3600
   		user.update(accessToken: token["token_type"] + " " + token["access_token"], dtLastLogin: DateTime.now)
   		return render_json_response(token, :ok)

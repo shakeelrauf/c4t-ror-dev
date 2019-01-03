@@ -11,10 +11,10 @@ class User < ApplicationRecord
 	end
 
 	def is_valid_password?(password)
-		return decrypt_pw(self.password) == password
+		return encrypt_pw(password) == self.password
 	end
 
-	def self.encrypt text
+	def self.encrypt_token text
 	  text = text.to_s unless text.is_a? String
 
 	  len   = ActiveSupport::MessageEncryptor.key_len
@@ -25,8 +25,24 @@ class User < ApplicationRecord
 	  "#{salt}$$#{encrypted_data}"
 	end
 
+	def self.encrypt(pass)
+		Digest::SHA1.hexdigest(pass)
+	end
+
+	def encrypt_pw(pass)
+		Digest::SHA1.hexdigest(pass)
+	end
+
+	# Resets the password, return the plain text for emailing
+	def reset_pw
+		pass = SecureRandom.base64[0,6]
+		self.pw = encrypt_pw(pass)
+		puts pass
+		pass
+	end
+
 	private
-	def decrypt_pw text
+	def decrypt text
 	  salt, data = text.split "$$"
 
 	  len   = ActiveSupport::MessageEncryptor.key_len
