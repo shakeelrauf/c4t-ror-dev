@@ -61,8 +61,10 @@ class ApplicationController < ActionController::Base
 	end
 
 
-	def respond_ok(msg = nil)
-		(msg.nil?) ? (respond_res 'ok') : (respond_res_msg 'ok', msg)
+	def respond_ok(msg="ok")
+		respond_to do |format|
+			format.json { render json: {:message=>msg}.to_json }
+		end
 		true
 	end
 
