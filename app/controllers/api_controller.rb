@@ -3,11 +3,17 @@ class ApiController < ApplicationController
   include Response
   include Api::V1::Request
   include API::V1::Validations
-
+  before_action :validate_token
   helper_method :current_user
   # helper_method :authenticate_user
 
-
+  def validate_token
+    if request.authorization.present?
+      return true if User.find_by_accessToken(request.authorization).present?
+      return false
+    end
+    return true
+  end
   #usage
   # return render_json_response({:error => "missing_params", :success => false}, :ok) if params[:content].nil?	
 
@@ -42,5 +48,4 @@ class ApiController < ApplicationController
       return nil
     end
   end
-
 end
