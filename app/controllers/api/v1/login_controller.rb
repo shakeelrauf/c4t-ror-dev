@@ -18,7 +18,7 @@ class Api::V1::LoginController < ApiController
          params["grant_type"] != "client_credentials")
   		return render_json_response({:error => MISSING_PARAMS_MSG, :success => false}, :bad_request)
 		else
-			user =  User.where(isActive: true, username: params[:client_id]).first
+			user =  User.where(username: params[:client_id]).first
   		return render_json_response({:error => MISSING_PARAMS_MSG, :success => false}, :bad_request) if (!user || !user.is_valid_password?(params[:client_secret]))
   		token = {}
   		token["token_type"] = "Bearer"

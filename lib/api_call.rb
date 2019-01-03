@@ -12,7 +12,7 @@ class ApiCall
 	end
 
 	def self.post url , params = {},headers={"Content-Type" => 'application/json'}
-		res = HTTParty.post(DEFAULT_API_URL+url, body: params,:headers => headers)
+		res = HTTParty.post(DEFAULT_API_URL+url, body: params,:headers => headers,timeout: 1000000)
 		return res
 	end
 end
