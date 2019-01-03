@@ -32,7 +32,6 @@ class SendFormController < ApplicationController
 
   def redirect_to_path
     if current_user.present?
-      debugger
       redirect_to dashboard_path
     end
   end
