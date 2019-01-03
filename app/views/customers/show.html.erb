@@ -1,0 +1,369 @@
+<%= render :partial => 'shared/header' %>
+<%= render :partial => 'shared/menu' %>
+<div class="content-wrapper">
+
+	<!-- Container-fluid starts -->
+	<!-- Main content starts -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="main-header">
+				<h4>Customer Profile</h4>
+				<ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+					<li class="breadcrumb-item">
+						<a href="/dashboard">
+							<i class="icofont icofont-home"></i>
+						</a>
+					</li>
+					<li class="breadcrumb-item">Clients</li>
+					<li class="breadcrumb-item"><a href="/customers">Customers</a></li>
+					<li class="breadcrumb-item"><a href="/customers/<%= customer.id %>">Customer Profile</a></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<!-- Row end -->
+	<div class="row">
+		<div class="col-xl-3 col-lg-4">
+			<div class="card faq-left">
+				<div class="card-block">
+					<h4 class="f-18 f-normal m-b-10 txt-primary"><%= @customer.firstName + " " + @customer.lastName %></h4>
+					<% if(2customer.type != "Individual") { %>
+					<p class="m-b-15"><%= @customer.business.contactPosition %></p>
+					<p class="m-b-15"><%= @customer.type %></p>
+					<h5 class="f-14"><%= @customer.business.name %></h5>
+					<p class="m-b-15"><%= @customer.business.description %></p>
+					<% } %>
+						<ul>
+							<li class="faq-contact-card">
+								<i class="icofont icofont-phone"></i>
+								<a href="tel:+<%= customer.phone %>">
+									+<%= @customer.phone[0..3] + " " + customer.phone[3..6] + "-" + customer.phone[6] %>
+								</a>
+								<% if @customer.extension != "" %>
+									#<%= @customer.extension %>
+								<% end %>
+							</li>
+							<li class="faq-contact-card">
+								<i class="icofont icofont-ui-email"></i>
+								<a href="mailto:<%= customer.email %>"><%= @customer.email %></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- end of card-block -->
+				<% if @customer.note != "" %>
+				<div class="card">
+					<div class="card-block">
+						<div class="panel panel-warning">
+							<div class="panel-heading bg-warning">
+								Information
+							</div>
+							<div class="panel-body">
+								<p id="customerWarningInfo"><%= @customer.note %></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<% end %>
+			</div>
+			<!-- end of col-lg-3 -->
+
+			<!-- start col-lg-9 -->
+			<div class="col-xl-8 col-lg-7">
+				<!-- Nav tabs -->
+				<div class="tab-header">
+					<a href="/customers" class="btn btn-primary waves-effect waves-light f-right md-trigger" data-modal="modal-13">
+						<i class="icon-people"></i>  Return
+					</a>
+					<ul class="nav nav-tabs md-tabs tab-timeline" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" data-toggle="tab" href="#personal" role="tab">Personal Info</a>
+							<div class="slide"></div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#quotes" role="tab">Quotes</a>
+							<div class="slide"></div>
+						</li>
+					</ul>
+				</div>
+				<!-- end of tab-header -->
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="personal" role="tabpanel">
+						<div class="card">
+							<div class="card-header"><h5 class="card-header-text">About Me</h5>
+								<a href="/customers/<%= customer.id %>/edit" class="btn btn-primary waves-effect waves-light f-right crm-action-edit">
+									<i  class="icofont icofont-edit"></i>
+								</a>
+							</div>
+							<div class="card-block">
+								<div class="view-info">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="general-info">
+												<div class="row">
+													<div class="col-lg-12 col-xl-6">
+														<table class="table m-0">
+															<tbody>
+																<tr>
+																	<th scope="row">First Name</th>
+																	<td><%= @customer.firstName %></td>
+																</tr>
+																<tr>
+																	<th scope="row">Address</th>
+																	<td><%= @customer.address.address %></td>
+																</tr>
+																<tr>
+																	<th scope="row">City</th>
+																	<td><%= @customer.address.city %></td>
+																</tr>
+																<tr>
+																	<th scope="row">Province</th>
+																	<td><%- include("partials/getProvinceByAbbreviation") %></td>
+																</tr>
+																<tr>
+																	<th scope="row">Postal</th>
+																	<td><%= @customer.address.postal %></td>
+																</tr>
+																<tr>
+																	<th scope="row">Distance</th>
+																	<td><%= Math.round(@customer.address.distance/1000) %> Km</td>
+																</tr>
+																<% if(customer.type != "Individual") { %>
+																<tr>
+																	<th scope="row">PST Tax Reference Number</th>
+																	<td><%= @customer.business.pstTaxNo %></td>
+																</tr>
+																<% } %>
+															</tbody>
+														</table>
+													</div>
+													<!-- end of table col-lg-6 -->
+
+													<div class="col-lg-12 col-xl-6">
+														<table class="table">
+															<tbody>
+																<tr>
+																	<th scope="row">Last Name</th>
+																	<td><%= @customer.lastName %></td>
+																</tr>
+																<tr>
+																	<th scope="row">Mobile Number</th>
+																	<td>
+																		<% if customer.cellPhone != "" %>
+																		<a href="tel:+<%= @customer.cellPhone %>">
+																			+<%= @customer.cellPhone[0..3] + " " + @customer.cellPhone[3..6] + "-" + @customer.cellPhone[6] %>
+																		</a>
+																		<% } %>
+																	</td>
+																</tr>
+																<tr>
+																	<th scope="row">Other Phone</th>
+																	<td>
+																		<% if customer.secondaryPhone != "" %>
+																		<a href="tel:+<%= customer.secondaryPhone %>">
+																			+<%= customer.secondaryPhone[0..3] + " " + @customer.secondaryPhone[3..6] + "-" + @customer.secondaryPhone[6] %>
+																		</a>
+																		<% } %>
+																	</td>
+																</tr>
+																<tr>
+																	<th scope="row">Email</th>
+																	<td><a href="mailto:<%= @customer.email %>"><%= @customer.email %></a></td>
+																</tr>
+																<tr>
+																	<th scope="row">Heard of Us</th>
+																	<td><%= @customer.heardofus.type %></td>
+																</tr>
+																<tr>
+																	<th scope="row">Grade</th>
+																	<td><%= @customer.grade %></td>
+																</tr>
+																<% if @customer.type != "Individual" %>
+																<tr>
+																	<th scope="row">GST Tax Reference Number</th>
+																	<td><%= @customer.business.gstTaxNo %></td>
+																</tr>
+																<% end %>
+															</tbody>
+														</table>
+													</div>
+													<!-- end of table col-lg-6 -->
+												</div>
+												<!-- end of row -->
+											</div>
+											<!-- end of general info -->
+										</div>
+										<!-- end of col-lg-12 -->
+									</div>
+									<!-- end of row -->
+								</div>
+								<!-- end of view-info -->
+							</div>
+							<!-- end of card-block -->
+						</div>
+						<!-- end of card-->
+						<% if @customer.type != "Individual" %>
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-header-text">List of contacts</h5>
+							</div>
+							<div class="card-block">
+								<div class="row">
+									<table class="col-lg-12">
+										<thead>
+											<tr>
+												<th>First Name</th>
+												<th>Last Name</th>
+												<th>Payment Preference</th>
+											</tr>
+										</thead>
+										<tbody>
+										<% @customer.business.contacts.each do |contact| %>
+											<tr>
+												<td><%= @contact.firstName %></td>
+												<td><%= @contact.lastName %></td>
+												<td><%= @contact.paymentMethod %></td>
+											</tr>
+										<% end %>
+										</tbody>
+									</table>
+									<!-- end of col-lg-12 -->
+								</div>
+								<!-- end of row -->
+							</div>
+							<!-- end of card-block -->
+						</div>
+						<!-- end of card-->
+						<% end %>
+					</div>
+					<!-- end of tab-pane -->
+					<!-- end of about us tab-pane -->
+
+					<!-- start tab-pane of quotes tab -->
+					<div class="tab-pane" id="quotes" role="tabpanel">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-header-text">Quotes for this customer</h5>
+								<a href="/create-quote?no=<%= customer.id %>" class="btn btn-primary waves-effect waves-light f-right">+ ADD Quote</a>
+								</div>
+								<!-- end of card-header  -->
+								<div class="row">
+									<div class="md-group-add-on col-lg-12">
+										<span class="md-add-on">
+											<i class="icofont icofont-ui-search"></i>
+										</span>
+										<div class="md-input-wrapper">
+											<input type="text" class="md-form-control search-bar-quote">
+											<label>Search</label>
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="project-table">
+											<div class="table-responsive">
+												<table class="table table-hover">
+													<thead>
+		                                                <tr>
+															<th>Reference number</th>
+		                                                    <th>Note</th>
+		                                                    <th>Date Added</th>
+		                                                    <th>Dispatcher</th>
+		                                                    <th>Status</th>
+		                                                    <th>Action</th>
+		                                                </tr>
+	                                                </thead>
+	                                                <tbody class="table-quotes client-profile">
+	                                                <% @quotes.each do |quote| %>
+	                                                    <tr>
+															<td><%= quote.reference %></td>
+	                                                        <td><%= quote.note %></td>
+	                                                        <td><%= new Date(Date.parse(@quote.dtCreated)).toLocaleString("fr-CA") %></td>
+	                                                        <td><%= quote.dispatcher.firstName %> <%= quote.dispatcher.lastName %></td>
+	                                                        <td>
+																<%
+	                                                                backgroundType = "muted";
+	                                                                if quote.status.color == "yellow" 
+	                                                                    backgroundType = "warning"
+	                                                                 elsif quote.status.color == "blue" 
+	                                                                    backgroundType = "info"
+	                                                                 elsif quote.status.color == "green" 
+	                                                                    backgroundType = "success"
+	                                                                elsif quote.status.color == "red"
+	                                                                    backgroundType = "danger"
+	                                                                elsif quote.status.color == "orange"
+	                                                                    backgroundType = "primary"
+	                                                                end
+	                                                            %>
+																<select class="quote-status-list selectcash form-control badge badge-<%= backgroundType %>" data-quote-no="<%= quote.id %>">
+	                                                            <% status.forEach(function(stat) { %>
+																	<option value="<%= stat.id %>"<% if(stat.id == quote.status.id) { %> selected<% }%>>
+	                                                                    <%= stat.name %>
+	                                                                </option>
+	                                                            <% }); %>
+	                                                            </select>
+															</td>
+	                                                        <td class="faq-table-btn">
+																<a href="/quotes/<%= quote.id %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+																	<i class="icofont icofont-ui-edit"></i>
+																</a>
+																<!--
+																<a href="/quotes/<%= quote.id %>/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+																	<i class="icofont icofont-eye-alt"></i>
+																</a>
+															  -->
+															</td>
+	                                                    </tr>
+	                                                <% }); %>
+	                                                </tbody>
+												</table>
+												<!-- end of table -->
+											</div>
+											<!-- end of table responsive -->
+										</div>
+										<!-- end of project table -->
+									</div>
+									<!-- end of col-lg-12 -->
+								</div>
+								<!-- end of row -->
+							</div>
+							<!-- end of card-main -->
+						</div>
+						<!-- end of project pane -->
+					</div>
+					<!-- end of main tab content -->
+				</div>
+			</div>
+
+		</div>
+		<!-- Container-fluid ends -->
+	</div>
+	<script>
+	function growlOfSuccess(message) {
+	    $.growl({
+	        message: message
+	    },{
+	        type: "success",
+	        allow_dismiss: true,
+	        label: 'Cancel',
+	        className: 'btn-xs btn-inverse',
+	        delay: 0,
+	        placement: {
+	            from: 'top',
+	            align: 'center'
+	        },
+	        animate: { enter: 'animated fadeInDown' }
+	    });
+	}
+
+	$(document).ready(function() {
+
+	<% if(isEdited) { %>
+	    growlOfSuccess("Customer is now edited!");
+	<% } %>
+	});
+	var customersList = [<%- JSON.stringify(customer) %>];
+	var userRole = "<%= user.roles %>";
+	</script>
+	<script type="text/javascript" src="/js/customers-script.js"></script>
+	<script type="text/javascript" src="/js/quote-list.js"></script>
+<%- include("partials/footer") %>

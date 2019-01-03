@@ -83,10 +83,8 @@ class Api::V1::CustomerController < ApiController
 
   def show
     puts 'Edit Screen API'
-    client = Customer.where(idClient: params[:no]).first
+    client = Customer.includes(:address,:heardofus,business: [:contact]).where(idClient: params[:no]).to_json(include: [:address,:heardofus,business: {include: :contact}])
     if client
-      adresse = Address.where(idClient: client.id)
-      client.address = adresse
       return render_json_response(client, :ok)
     else
       render_json_response({:error => CLIENT_NOT_FOUND, :success => false}, :not_found)
