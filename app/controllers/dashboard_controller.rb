@@ -19,7 +19,7 @@ class DashboardController < ApplicationController
       cars.each do |car|
         found = false
         schedules.each do |schedule|
-          if car["id"] == schedule["idCar"]
+          if car && car["idQuoteCars"] == schedule["idCar"]
             found =  true
           end
         end
