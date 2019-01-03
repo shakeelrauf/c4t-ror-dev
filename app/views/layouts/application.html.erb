@@ -23,4 +23,17 @@
     </div>
     <%= yield %>
   </body>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#crm-contact").DataTable({
+          "paging": false,
+          "searching": false,
+          "info":     false,
+          "order": [],
+          "fixedHeader": true
+      });
+      $("#crm-contact_filter").css({"visibility": "hidden","height": "0px"})
+      $("#crm-contact_length").css({"visibility": "hidden","height": "0px"})
+    });
+  </script>
 </html>
