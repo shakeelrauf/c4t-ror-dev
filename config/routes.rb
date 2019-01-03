@@ -11,8 +11,23 @@ Rails.application.routes.draw do
     get   :dispatch, 												action: :dispatched
   end
 
-  resources :customers
+  scope controller: :quote do
+    post 'quotes',                           action: :create
+    post '/create-car',                      action: :create_car
+    post '/remove-car',                      action: :remove_car
+    get '/quotecar/:carNo',                  action: :retrive_car
+    get '/quotes',                           action: :get_quotes_by_filters
+    get '/quotes/:no',                       action: :quote_with_filter
+    patch '/quotes/:no',                     action: :quote
+    patch '/quotes/:no/status',              action: :update_quote_status
+    delete '/quotecar/:carNo',               action: :destroy
+    get '/clients/:no/quotes',               action: :particular_customer_quotes
+    get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
+    get '/status',                           action: :all_status
+    get '/all_quotes',                       action: :all_quotes
+	end
 
+  resources :customers
   namespace :api do
 		namespace :v1 do
 			scope controller: :address do
