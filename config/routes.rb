@@ -6,8 +6,9 @@ Rails.application.routes.draw do
     get 	:logout,													action: :logout
   end
 
-   scope  controller: :dashboard do
-    get 	:dashboard,													action: :dashboard
+  scope  controller: :dashboard do
+    get 	:dashboard,												action: :dashboard
+    get   :dispatch, 												action: :dispatched
   end
 
   resources :customers

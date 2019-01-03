@@ -1,0 +1,74 @@
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <%= render partial: 'shared/bread_crums', locals: {title: "Dispatching", back: 'Clients'} %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-sm-12">
+          <!-- Shopping cart start -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                Dispatching
+              </h5>
+              <% if params[:quoteNo] %>
+              <a href="/quotes/<%= params[:quoteNo] %>/edit" class="btn btn-primary waves-effect waves-light f-right md-trigger">
+                <i class="icofont icofont-law-document"></i>  View Quote
+              </a>
+              <% end %>
+            </div>
+            <div class="card-block">
+              <div class="row">
+                <div style="padding: 0px;" class="col-xl-3 col-md-12 lst-not-assigned">
+                  <div class="f-right">
+                  </div>
+                  <h6 class="m-b-30 m-t-20">Last Scheduled Address</h6>
+                  <label id="last-address">-</label>
+                  <h6 class="m-b-30 m-t-20">Unscheduled Cars</h6>
+                  <div id="external-events" >
+                    <% @unscheduledCars.each do |key, val| %>
+                      <% car =  @unscheduledCars[key]
+                        is_car_can_roll =  false
+                        is_car_can_roll =  true if car["flatBedTruckRequired"]
+                      %>
+                      <%= render partial: 'dashboard/unsched_car',locals: {car: car} %>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="col-xl-9 col-md-12 lst-assigned">
+                  <div id='calendar'></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :js do %>
+  <script>
+      function growling(message, type) {
+          $.growl({
+              message: message
+          },{
+              type: type,
+              allow_dismiss: true,
+              label: 'Cancel',
+              className: 'btn-xs btn-inverse',
+              delay: 0,
+              placement: {
+                  from: 'bottom',
+                  align: 'right'
+              },
+              animate: { enter: 'animated fadeInUp' }
+          });
+      }
+      var events = <%= JSON.stringify(@schedules) %>;
+      var nonEvents = <%= JSON.stringify(@unscheduledCars) %>;
+      // Keep the address of the last scheduled car
+      var lastAddress = null;
+  </script>
+  <script src="/js/calendar.js"></script>
+  <script src="/js/distance.js"></script>
+<% end %>
+
