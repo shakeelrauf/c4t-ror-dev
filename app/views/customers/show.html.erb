@@ -1,5 +1,6 @@
 <%= render :partial => 'shared/header' %>
 <%= render :partial => 'shared/menu' %>
+<% byebug %>
 <div class="content-wrapper">
 
 	<!-- Container-fluid starts -->
@@ -16,7 +17,7 @@
 					</li>
 					<li class="breadcrumb-item">Clients</li>
 					<li class="breadcrumb-item"><a href="/customers">Customers</a></li>
-					<li class="breadcrumb-item"><a href="/customers/<%= customer.id %>">Customer Profile</a></li>
+					<li class="breadcrumb-item"><a href="/customers/<%= @customer["id"] %>">Customer Profile</a></li>
 				</ol>
 			</div>
 		</div>
@@ -26,21 +27,21 @@
 		<div class="col-xl-3 col-lg-4">
 			<div class="card faq-left">
 				<div class="card-block">
-					<h4 class="f-18 f-normal m-b-10 txt-primary"><%= @customer.firstName + " " + @customer.lastName %></h4>
-					<% if(2customer.type != "Individual") { %>
-					<p class="m-b-15"><%= @customer.business.contactPosition %></p>
-					<p class="m-b-15"><%= @customer.type %></p>
-					<h5 class="f-14"><%= @customer.business.name %></h5>
-					<p class="m-b-15"><%= @customer.business.description %></p>
-					<% } %>
+					<h4 class="f-18 f-normal m-b-10 txt-primary"><%= @customer["firstName"] + " " + @customer["lastName"] %></h4>
+					<% if @customer["type"] != "Individual" %>
+					<p class="m-b-15"><%= @customer["business"]["contactPosition"] %></p>
+					<p class="m-b-15"><%= @customer["type"] %></p>
+					<h5 class="f-14"><%= @customer["business"]["name"] %></h5>
+					<p class="m-b-15"><%= @customer["business"]["description"] %></p>
+					<% end %>
 						<ul>
 							<li class="faq-contact-card">
 								<i class="icofont icofont-phone"></i>
-								<a href="tel:+<%= customer.phone %>">
-									+<%= @customer.phone[0..3] + " " + customer.phone[3..6] + "-" + customer.phone[6] %>
+								<a href="tel:+<%= @customer["phone"] %>">
+									+<%= @customer["phone"][0..3] + " " + customer["phone"][3..6] + "-" + customer["phone"][6] %>
 								</a>
-								<% if @customer.extension != "" %>
-									#<%= @customer.extension %>
+								<% if @customer["extension"] != "" %>
+									#<%= @customer["extension"] %>
 								<% end %>
 							</li>
 							<li class="faq-contact-card">
@@ -129,12 +130,12 @@
 																	<th scope="row">Distance</th>
 																	<td><%= Math.round(@customer.address.distance/1000) %> Km</td>
 																</tr>
-																<% if(customer.type != "Individual") { %>
+																<% if@customer.type != "Individual" %>
 																<tr>
 																	<th scope="row">PST Tax Reference Number</th>
 																	<td><%= @customer.business.pstTaxNo %></td>
 																</tr>
-																<% } %>
+																<% end %>
 															</tbody>
 														</table>
 													</div>
@@ -154,7 +155,7 @@
 																		<a href="tel:+<%= @customer.cellPhone %>">
 																			+<%= @customer.cellPhone[0..3] + " " + @customer.cellPhone[3..6] + "-" + @customer.cellPhone[6] %>
 																		</a>
-																		<% } %>
+																		<% end %>
 																	</td>
 																</tr>
 																<tr>
@@ -164,7 +165,7 @@
 																		<a href="tel:+<%= customer.secondaryPhone %>">
 																			+<%= customer.secondaryPhone[0..3] + " " + @customer.secondaryPhone[3..6] + "-" + @customer.secondaryPhone[6] %>
 																		</a>
-																		<% } %>
+																		<% end %>
 																	</td>
 																</tr>
 																<tr>
@@ -295,11 +296,11 @@
 	                                                                end
 	                                                            %>
 																<select class="quote-status-list selectcash form-control badge badge-<%= backgroundType %>" data-quote-no="<%= quote.id %>">
-	                                                            <% status.forEach(function(stat) { %>
-																	<option value="<%= stat.id %>"<% if(stat.id == quote.status.id) { %> selected<% }%>>
+	                                                            <% status.each do |stat| %>
+																	<option value="<%= stat.id %>">
 	                                                                    <%= stat.name %>
 	                                                                </option>
-	                                                            <% }); %>
+	                                                            <% end %>
 	                                                            </select>
 															</td>
 	                                                        <td class="faq-table-btn">
@@ -313,7 +314,7 @@
 															  -->
 															</td>
 	                                                    </tr>
-	                                                <% }); %>
+	                                                <% end %>
 	                                                </tbody>
 												</table>
 												<!-- end of table -->
@@ -357,9 +358,9 @@
 
 	$(document).ready(function() {
 
-	<% if(isEdited) { %>
+	<% if isEdited %>
 	    growlOfSuccess("Customer is now edited!");
-	<% } %>
+	<% end %>
 	});
 	var customersList = [<%- JSON.stringify(customer) %>];
 	var userRole = "<%= user.roles %>";
