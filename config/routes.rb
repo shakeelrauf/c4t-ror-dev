@@ -11,7 +11,6 @@ Rails.application.routes.draw do
     get   :dispatch, 												action: :dispatched
   end
 
-
   scope controller: :quote do
     post 'quotes',                           action: :create
     post '/create-car',                      action: :create_car
