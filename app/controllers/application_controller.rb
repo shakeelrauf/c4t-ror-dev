@@ -60,6 +60,46 @@ class ApplicationController < ActionController::Base
 		return redirect_to dashboard_path
 	end
 
+
+	def respond_ok(msg = nil)
+		(msg.nil?) ? (respond_res 'ok') : (respond_res_msg 'ok', msg)
+		true
+	end
+
+	def respond_res_msg res, msg
+		respond_to do |format|
+			format.json { render json: {:res=>res, :msg=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_error(msg="Error")
+		respond_to do |format|
+			format.json { render json: {:error=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_msg msg
+		respond_to do |format|
+			format.json { render json: {:message=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_res res
+		respond_to do |format|
+			format.json { render json: {:res=>res}.to_json }
+		end
+		true
+	end
+
+	def respond_json res
+		respond_to do |format|
+		  format.json {render json: res}
+		end
+	end
+
 	def get_token
 		if has_session? && is_session_expired?
 			session[:token]["access_type"]+" "+session[:token]["access_token"]

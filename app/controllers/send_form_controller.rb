@@ -7,7 +7,7 @@ class SendFormController < ApplicationController
   end
 
   def login_user
-    return render_json_response({error: "bad authentication"}, :ok) if !params[:username].present? || !params[:password].present?
+    return respond_error("Authentication failed!") if !params[:username].present? || !params[:password].present?
     body = {
         "client_id": params[:username],
         "client_secret": params[:password],
@@ -26,7 +26,7 @@ class SendFormController < ApplicationController
       end
     end
     successful_login(user,token)
-    return render_json_response({message:"authenticated"}, :ok)
+    return respond_ok
   end
 
   private
