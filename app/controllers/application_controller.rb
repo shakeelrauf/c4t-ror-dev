@@ -53,11 +53,51 @@ class ApplicationController < ActionController::Base
 	def successful_login(p, token)
 		start_session p, token
 		if (session[:return_url].present?)
-			redirect_to session[:return_url]
 			session[:redirect_url] = nil
 			return
 		end
-		return redirect_to dashboard_path
+	end
+
+
+	def respond_ok(msg="ok")
+		respond_to do |format|
+			format.json { render json: {:message=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_res_msg res, msg
+		respond_to do |format|
+			format.json { render json: {:res=>res, :msg=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_error(msg="Error")
+		respond_to do |format|
+			format.json { render json: {:error=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_msg msg
+		respond_to do |format|
+			format.json { render json: {:message=>msg}.to_json }
+		end
+		true
+	end
+
+	def respond_res res
+		respond_to do |format|
+			format.json { render json: {:res=>res}.to_json }
+		end
+		true
+	end
+
+	def respond_json res
+		respond_to do |format|
+		  format.json {render json: res}
+		end
 	end
 
 	def get_token
@@ -66,13 +106,12 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
-	def start_session person, token
+	def start_session user, token
 		ru = session[:return_url] if (session[:return_url].present?)
 		reset_session
 		session[:return_url] = ru
 		session[:token] = token
-		session[:user] = person
-		session[:user_id] = person.id
+		session[:user_id] = user["idUser"]
 		session[Constants::CSRF_TOKENS] = []
 		h = SecureRandom.hex(Constants::CSRF_SIZE)
 		cookies[Constants::CSRF_COOKIE] = {
@@ -80,18 +119,17 @@ class ApplicationController < ActionController::Base
 				:expires => 1.day.from_now,
 				:domain => request.domain
 		}
+		session[:user] = User.find_by_id(user["idUser"])
 		session[Constants::CSRF_HEADER] = h
 	end
 
 	def has_session?
 		session[:user].present?
 	end
-	helper_method :has_session?
 
 	def current_user
-		session[:user]
+		User.find_by_id(session[:user_id])
 	end
-	helper_method :current_user
 
 	def current_user_id
 		session[:user_id]

@@ -1,20 +1,19 @@
 class SendFormController < ApplicationController
   layout 'login'
-  before_action :redirect_to, only: [:login]
+  before_action :redirect_to_path, only: [:login]
 
   def login
-
   end
 
   def login_user
-    return render_json_response({error: "bad authentication"}, :ok) if !params[:username].present? || !params[:password].present?
+    return respond_error("Authentication failed!") if !params[:username].present? || !params[:password].present?
     body = {
         "client_id": params[:username],
         "client_secret": params[:password],
         "grant_type": "client_credentials"
     }
     res = ApiCall.post("/token", body,headers )
-    return render_json_response({error: "bad authentication"}, :ok) if res["error"]
+    return respond_error("Authentication failed!") if res["error"]
     token = res["access_token"]
     res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": "Bearer "+token})
     users = res
@@ -22,17 +21,18 @@ class SendFormController < ApplicationController
     for i in users
       if i["username"] == params[:username]
         user = i
-        return
+        break
       end
     end
-    successful_login(user,token)
-    return render_json_response({message:"authenticated"}, :ok)
+    successful_login(User.first,"asas")
+    return respond_ok
   end
 
   private
 
-  def redirect_to
+  def redirect_to_path
     if current_user.present?
+      debugger
       redirect_to dashboard_path
     end
   end

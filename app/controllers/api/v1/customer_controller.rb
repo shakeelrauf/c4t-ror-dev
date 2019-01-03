@@ -1,6 +1,6 @@
 class Api::V1::CustomerController < ApiController
   include ActionView::Helpers::NumberHelper
-	before_action :authenticate_user
+	before_action :authenticate_user, except: [:index]
 
   def create
     if check_params
@@ -72,21 +72,19 @@ class Api::V1::CustomerController < ApiController
   end
 
   def index
-    return render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request) if !parma[:filter].present?
+    # return render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request) if !params[:filter].present?
     offset = 0
     filter = "%"
     offset = params[:offset].to_i if params[:offset] && to_number(params[:offset])
-    filter = "%" + params[:filter] + "%" if params[:filter]
-    lstClients = Customer.includes(:address).where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? or phone LIKE ? extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC, LastName ASC").limit(30).offset(offset).to_json(:address)
-    return render json: lstClients, status: status, adapter: :json_api
+    filter = "%" + params[:filter] + "%" if params[:filter]    
+    lstClients = Customer.includes(:address).where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? OR phone LIKE ? or extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC, LastName ASC").limit(30).offset(offset).to_json(include: :address)
+    return render json: lstClients, status: :ok, adapter: :json_api
   end
 
   def show
     puts 'Edit Screen API'
-    client = Customer.where(idClient: params[:no]).first
+    client = Customer.includes(:address,:heardofus,business: [:contact]).where(idClient: params[:no]).to_json(include: [:address,:heardofus,business: {include: :contact}])
     if client
-      adresse = Address.where(idClient: client.id)
-      client.address = adresse
       return render_json_response(client, :ok)
     else
       render_json_response({:error => CLIENT_NOT_FOUND, :success => false}, :not_found)
