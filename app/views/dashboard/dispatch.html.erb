@@ -25,8 +25,8 @@
                   <label id="last-address">-</label>
                   <h6 class="m-b-30 m-t-20">Unscheduled Cars</h6>
                   <div id="external-events" >
-                    <% @unscheduledCars.each do |key, val| %>
-                      <% car =  @unscheduledCars[key]
+                    <% unscheduledCars.each do |key, val| %>
+                      <% car =  unscheduledCars[key]
                         is_car_can_roll =  false
                         is_car_can_roll =  true if car["flatBedTruckRequired"]
                       %>
@@ -63,12 +63,10 @@
               animate: { enter: 'animated fadeInUp' }
           });
       }
-      var events = <%= JSON.stringify(@schedules) %>;
-      var nonEvents = <%= JSON.stringify(@unscheduledCars) %>;
+      var events = <%= @schedules.to_json.to_s.html_safe %>;
+      var nonEvents = JSON.stringify(<%= (unscheduledCars) %>);
       // Keep the address of the last scheduled car
       var lastAddress = null;
   </script>
-  <script src="<%= asset_url 'pages/calender.js' %>"></script>
-  <script src="<%= asset_url 'pages/distance.js' %>"></script>
 <% end %>
 
