@@ -142,11 +142,11 @@ class Api::V1::QuoteController < ApiController
 
   def update_status
     if (!params[:status] && !params[:id])
-      return render_json_response({:error => "please send attribute status."}, :ok)
+      return render_json_response({"msg": "Failure!!", "success": false,:error => "please send attribute status."}, :ok)
     else
       @quote = Quote.includes(:status).where(idQuote: params[:id])
       if !@quote.present?
-        return render_json_response({:error => "Quote not found"}, :ok)
+        return render_json_response({"msg": "Failure!!", "success": false,:error => "Quote not found"}, :ok)
       else
         result = @quote.update(
           idStatus: params[:status],
@@ -168,7 +168,6 @@ class Api::V1::QuoteController < ApiController
            "success": true,
            "data": result
         }
-        
         return render_json_response(quotez, :ok)
       end
     end
