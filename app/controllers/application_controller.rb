@@ -111,6 +111,7 @@ class ApplicationController < ActionController::Base
 	def start_session person, token
 		ru = session[:return_url] if (session[:return_url].present?)
 		reset_session
+		person  = User.find_by_id(person["idUser"])
 		session[:return_url] = ru
 		session[:token] = token
 		session[:user] = person
