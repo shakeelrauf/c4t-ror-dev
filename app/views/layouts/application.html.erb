@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
   </head>
 
   <body class="sidebar-mini fixed">
@@ -23,17 +23,4 @@
     </div>
     <%= yield %>
   </body>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $("#crm-contact").DataTable({
-          "paging": false,
-          "searching": false,
-          "info":     false,
-          "order": [],
-          "fixedHeader": true
-      });
-      $("#crm-contact_filter").css({"visibility": "hidden","height": "0px"})
-      $("#crm-contact_length").css({"visibility": "hidden","height": "0px"})
-    });
-  </script>
 </html>

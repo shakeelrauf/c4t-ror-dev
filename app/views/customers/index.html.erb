@@ -105,10 +105,23 @@ function growlOfSuccess(message) {
     });
 }
 
+$(document).ready(function() {
+  $("#crm-contact").DataTable({
+      "paging": false,
+      "searching": false,
+      "info":     false,
+      "order": [],
+      "fixedHeader": true
+  });
+  $("#crm-contact_filter").css({"visibility": "hidden","height": "0px"})
+  $("#crm-contact_length").css({"visibility": "hidden","height": "0px"})
+});
+
 
   $("#customer-search-filter").keyup(function(){
     $("#crm-contact_filter").find("input").val($(this).val());
     $("#crm-contact_filter").find("input").trigger("keyup");
+
   });
 // var customersList = <%#= JSON.stringify(@customers.to_json) %>
 // var userRole = "<%#= user.roles %>"
