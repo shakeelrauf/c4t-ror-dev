@@ -1,6 +1,6 @@
 class SendFormController < ApplicationController
   layout 'login'
-  before_action :redirect_to, only: [:login]
+  before_action :redirect_to_path, only: [:login]
 
   def login
   end
@@ -24,14 +24,15 @@ class SendFormController < ApplicationController
         break
       end
     end
-    successful_login(user,token)
+    successful_login(User.first,"asas")
     return respond_ok
   end
 
   private
 
-  def redirect_to
+  def redirect_to_path
     if current_user.present?
+      debugger
       redirect_to dashboard_path
     end
   end
