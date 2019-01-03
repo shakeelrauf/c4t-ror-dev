@@ -3,7 +3,6 @@ class SendFormController < ApplicationController
   before_action :redirect_to, only: [:login]
 
   def login
-
   end
 
   def login_user
@@ -14,7 +13,7 @@ class SendFormController < ApplicationController
         "grant_type": "client_credentials"
     }
     res = ApiCall.post("/token", body,headers )
-    return render_json_response({error: "bad authentication"}, :ok) if res["error"]
+    return respond_error("Authentication failed!") if res["error"]
     token = res["access_token"]
     res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": "Bearer "+token})
     users = res
