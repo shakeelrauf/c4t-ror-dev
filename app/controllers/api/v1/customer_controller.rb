@@ -1,6 +1,6 @@
 class Api::V1::CustomerController < ApiController
   include ActionView::Helpers::NumberHelper
-	before_action :authenticate_user, except: [:index]
+	before_action :authenticate_user, except: [:index,:show]
 
   def create
     if check_params
@@ -83,7 +83,7 @@ class Api::V1::CustomerController < ApiController
 
   def show
     puts 'Edit Screen API'
-    client = Customer.includes(:address,:heardofus,business: [:contact]).where(idClient: params[:no]).to_json(include: [:address,:heardofus,business: {include: :contact}])
+    client = Customer.includes(:address,:heardofus,business: [:contacts]).where(idClient: params[:no]).to_json(include: [:address,:heardofus,business: {include: :contacts}])
     if client
       return render_json_response(client, :ok)
     else
