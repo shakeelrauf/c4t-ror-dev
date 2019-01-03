@@ -6,8 +6,8 @@ class DashboardController < ApplicationController
   end
 
   def dispatched
-    cars =  JSON.parse ApiCall.get("/quotescars",{}, headers)
-    @schedules = JSON.parse ApiCall.get("/schedules", {}, headers)
+    cars =  ApiCall.get("/quotescars",{}, headers)
+    @schedules = ApiCall.get("/schedules", {}, headers)
     un_schedule_cars = list_unscheduled_cars(@schedules, cars)
     render :dispatch , locals: {cars:  cars,unscheduledCars: un_schedule_cars}
   end
@@ -15,6 +15,8 @@ class DashboardController < ApplicationController
 
   def list_unscheduled_cars(schedules, cars)
     un_scheduled_cars = {}
+    return un_scheduled_cars if cars["error"]
+    return un_scheduled_cars if schedules["error"]
     if cars && cars.length
       cars.each do |car|
         found = false
