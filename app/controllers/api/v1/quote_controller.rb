@@ -78,7 +78,7 @@ class Api::V1::QuoteController < ApiController
 # .to_json(include: {:customer => {:include => :address}})
   # Get all possible quotes.
   def all_quotes  
-    quotes = Quote.includes(customer: [:address]).all.to_json(include: {:customer => {:include => :address}})
+    quotes = Quote.includes(:status, customer: [:address]).all.to_json(include: [:status, :customer => {:include => :address}])
     # data = [quotes]
     data = []
     JSON.parse(quotes).each do |q|
