@@ -80,6 +80,7 @@ class Api::V1::QuoteController < ApiController
   # Get all possible quotes.
   def all_quotes  
     quotes = Quote.includes(:status, customer: [:address]).all.to_json(include: [:status, :customer => {:include => :address}])
+    status = Status.all
     # data = [quotes]
     data = []
     JSON.parse(quotes).each do |q|
@@ -92,7 +93,8 @@ class Api::V1::QuoteController < ApiController
     quotez = {
        "msg": "Success!!",
        "success": true,
-       "data": data
+       "data": data,
+       "status": status
     }
 
     return render json: quotez.to_json, status: :ok 
@@ -159,7 +161,8 @@ class Api::V1::QuoteController < ApiController
           quotes.update(isSatisfactionSMSQuoteSent: 1)
         end
       end
-      return render_json_response({:error => "Quote status updated!"}, :ok)
+      
+      return render_json_response({:message => "Quote status updated!"}, :ok)
     end
   end
 
