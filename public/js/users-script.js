@@ -1,0 +1,145 @@
+/////////////////////////////////////////////////////////////////
+//Blacklist user
+/////////////////////////////////////////////////////////////////
+
+$(".blacklistContactDialog").dialog({
+    autoOpen: false,
+    draggable: false,
+    modal: true,
+    resizable: false
+});
+
+$(".crm-action-delete").click(function() {
+    $(".loading").removeClass("hidden");
+    var noUserToGet = $(this).data('contact-no');
+    var userData = $("#usernameOf"+noUserToGet);
+    var active = ($(userData).hasClass("notActive") ? "0" : "1");
+    $(".userToBlacklist").text($(userData).text());
+    $(".blacklistDialogYes").data('contact-no', noUserToGet);
+    $(".blacklistDialogYes").data('contact-isactive', active);
+    $(".blacklistContactDialog").dialog("open");
+});
+
+$(".blacklistDialogYes").click(function() {
+    var userNo = $(this).data('contact-no');
+    var isActive = $(this).data('contact-isactive');
+    if(isActive == "1") {
+        isActive = "0";
+    } else {
+        isActive = "1";
+    }
+    $(".blacklistContactDialog").dialog("close");
+    $.ajax({
+      url: "/users/blacklist/" + userNo,
+      type: "POST",
+      data: {
+          isActive: isActive
+      }
+    }).done(function(data) {
+        if(data.error) {
+            $(".loading").addClass("hidden");
+            $.growl({
+                message: data.error
+            },{
+                type: "danger",
+                allow_dismiss: true,
+                label: 'Cancel',
+                className: 'btn-xs btn-inverse',
+                delay: 0,
+                animate: { enter: 'animated fadeInDown' }
+            });
+        } else {
+            document.location = "/users?statechange=true";
+        }
+    });
+});
+
+$(".blacklistDialogNo").click(function() {
+    $(".loading").addClass("hidden");
+    $(".blacklistContactDialog").dialog("close");
+});
+
+/////////////////////////////////////////////////////////////////
+//Edit user
+/////////////////////////////////////////////////////////////////
+
+function deleteAvatar() {
+	if (confirm('Are you sure you want to delete this Avatar?')) {
+		$.ajax({
+	      url: "/avatar-upload/" + userId,
+	      type: "POST"
+	    }).done(function(data) {
+	        if(data.error) {
+	            alert(data.error);
+	        } else {
+	            location.reload();
+	        }
+	    });
+	}
+}
+
+function growling(message) {
+    $.growl({
+        message: message
+    },{
+        type: "danger",
+        allow_dismiss: true,
+        label: 'Cancel',
+        className: 'btn-xs btn-inverse',
+        placement: {
+            from: 'top',
+            align: 'center'
+        },
+        delay: 0,
+        animate: { enter: 'animated fadeInDown' }
+    });
+    $("#txtPwd").val("");
+    $("#txtPwdValidation").val("");
+}
+
+$("#btnSaveUser").click(function() {
+    if( $("#txtUsername").val() == "" ||
+        $("#txtEmail").val() == "") {
+            growling("Please fill field Username and email.");
+    } else if($("#txtPwd").val() != $("#txtPwdValidation").val()) {
+        growling("Password is different of validation.");
+    } else {
+        var noUserToGet = $(this).data('id-user');
+        var url = "";
+        $(".loading").removeClass("hidden");
+        if(noUserToGet == "new") {
+            url="/users";
+        } else {
+            url="/users/edit/"+noUserToGet;
+        }
+
+        $.ajax({
+          url: url,
+          type: "POST",
+          data: {
+              username: $("#txtUsername").val(),
+              firstName: $("#txtFirstName").val(),
+              lastName: $("#txtLastName").val(),
+              roles: $("#txtRole").val(),
+              email: $("#txtEmail").val(),
+              phoneNumber: $("#txtPhone").val(),
+              pwd: $("#txtPwd").val()
+          }
+        }).done(function(data) {
+            if(data.error) {
+                $(".loading").addClass("hidden");
+                growling(data.error);
+            } else {
+                var nextURL = "/users";
+                if(noUserToGet == "new") {
+                    document.location = nextURL+"?added=true";
+                } else {
+                    if($("#txtRole").val() != "admin") {
+                        nextURL = "/profil";
+                    }
+                    document.location = nextURL+"?edited=true";
+                }
+            }
+        });
+    }
+});

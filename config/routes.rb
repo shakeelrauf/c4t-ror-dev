@@ -11,7 +11,11 @@ Rails.application.routes.draw do
     get   :dispatch, 												action: :dispatched
   end
 
-  scope controller: :quote do
+	scope controller: :users do
+		get :users, 												 action: :index
+	end
+
+	scope controller: :quote do
     post 'quotes',                           action: :create
     post '/create-car',                      action: :create_car
     post '/remove-car',                      action: :remove_car
@@ -37,7 +41,7 @@ Rails.application.routes.draw do
 				get  'address/:no',                  action: :show
 				post 'address-remove',               action: :destroy
 				post 'address-create',               action: :create
-			end
+      end
 
 			scope :booking , controller: :booking do
 				post :booking, 											 action: :update
