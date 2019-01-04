@@ -28,7 +28,7 @@ class ApiController < ApplicationController
 
 
   def authenticate_admin
-    return render_json_response({:error => NOT_ADMIN_MSG, :success => false}, :unauthorized) if current_user.roles != "admin"
+    return render_json_response({:error => NOT_ADMIN_MSG, :success => false}, :unauthorized) if current_user && current_user.roles != "admin"
   end
 
 

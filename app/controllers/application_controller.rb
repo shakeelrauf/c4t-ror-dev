@@ -1,8 +1,7 @@
 class ApplicationController < ActionController::Base
 	skip_before_action :verify_authenticity_token
+	include ApplicationHelper
 	include Response
-
-
 
 	def headers
 		{"Content-Type": "application/x-www-form-urlencoded","Authorization": get_token}
