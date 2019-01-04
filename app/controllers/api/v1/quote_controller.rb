@@ -1,5 +1,5 @@
 class Api::V1::QuoteController < ApiController
-	before_action :authenticate_user
+	before_action :authenticate_user, except: [:particular_customer_quotes,:all_status]
   include ActionView::Helpers::NumberHelper
 
     # Creates a blank quote car
