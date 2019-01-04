@@ -36,7 +36,7 @@
 							<li class="faq-contact-card">
 								<i class="icofont icofont-phone"></i>
 								<a href="tel:+<%= @customer["phone"] %>">
-									+<%= @customer["phone"][0..3] + " " + @customer["phone"][3..6] + "-" + @customer["phone"][6] %>
+									+<%= @customer["phone"][0..2] + " " + @customer["phone"][3..5] + "-" + @customer["phone"][6..10] %>
 								</a>
 								<% if @customer["extension"] != "" %>
 									#<%= @customer["extension"] %>
@@ -152,7 +152,7 @@
 																	<td>
 																		<% if @customer["cellPhone"] != "" %>
 																		<a href="tel:+<%= @customer["cellPhone"] %>">
-																			+<%= @customer["cellPhone"][0..3] + " " + @customer["cellPhone"][3..6] + "-" + @customer["cellPhone"][6] %>
+																			+<%= @customer["cellPhone"][0..2] + " " + @customer["cellPhone"][3..5] + "-" + @customer["cellPhone"][6..10] %>
 																		</a>
 																		<% end %>
 																	</td>
@@ -162,7 +162,7 @@
 																	<td>
 																		<% if @customer["secondaryPhone"] != "" %>
 																		<a href="tel:+<%= @customer["secondaryPhone"] %>">
-																			+<%= @customer["secondaryPhone"][0..3] + " " + @customer["secondaryPhone"][3..6] + "-" + @customer["secondaryPhone"][6] %>
+																			+<%= @customer["secondaryPhone"][0..2] + " " + @customer["secondaryPhone"][3..5] + "-" + @customer["secondaryPhone"][6..10] %>
 																		</a>
 																		<% end %>
 																	</td>
@@ -275,10 +275,10 @@
 	                                                <tbody class="table-quotes client-profile">
 	                                                <% @quotes.each do |quote| %>
 	                                                    <tr>
-															<td><%= quote["reference"] %></td>
+															<td><%= quote["referNo"] %></td>
 	                                                        <td><%= quote["note"] %></td>
 	                                                        <td><%#= new Date(Date.parse(quote["dtCreated"])).toLocaleString("fr-CA") %>
-	                                                        <%=  Date.parse(@quotes.first["dtCreated"] + "fr-CA") %>	
+	                                                        <%=  DateTime.parse(@quotes.first["dtCreated"] ,"%d/%m/%y") %>	
 	                                                        </td>
 	                                                        <td><%= quote["dispatcher"]["firstName"] %> <%= quote["dispatcher"]["lastName"] %></td>
 	                                                        <td>
@@ -355,9 +355,9 @@
 
 	$(document).ready(function() {
 
-	<%# if isEdited %>
-	    growlOfSuccess("Customer is now edited!");
-	<%# end %>
+		<% if params[:action] == "edit" %>
+		    growlOfSuccess("Customer is now edited!");
+		<% end %>
 	});
 	// var customersList = [<%# JSON.stringify(customer) %>];
 	// var userRole = "<%#= user.roles %>";

@@ -10,16 +10,9 @@ class CustomersController < ApplicationController
   end
 
   def show
-    id = params[:id]
-    begin
-      customer_data = ApiCall.get("/clients/#{id}",{no: id})
-      quote_data = ApiCall.get("/clients/#{id}/quotes",{})
-      @status = ApiCall.get("/status",{})
-      @customer = JSON.parse(customer_data).first
-      @quotes = JSON.parse(quote_data)
-    rescue Net::ReadTimeout
-      @customer = []
-    end  
+    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}",{no: params[:id]})).first
+    @quotes = JSON.parse ApiCall.get("/clients/#{params[:id]}/quotes",{})
+    @status = ApiCall.get("/status",{})
   end
 
 end
