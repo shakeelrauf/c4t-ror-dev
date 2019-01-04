@@ -15,4 +15,14 @@ class ApiCall
 		res = HTTParty.post(DEFAULT_API_URL+url, body: params,:headers => headers,timeout: 1000000)
 		return res.parsed_response
 	end
+
+	def self.put url , params = {},headers={"Content-Type" => 'application/json'}
+		res = HTTParty.put(DEFAULT_API_URL+url, body: params,:headers => headers,timeout: 1000000)
+		return res.parsed_response
+	end
+
+	def self.patch url , params = {},headers={"Content-Type" => 'application/json'}
+		res = HTTParty.patch(DEFAULT_API_URL+url, body: params,:headers => headers,timeout: 1000000)
+		return res.parsed_response
+	end
 end

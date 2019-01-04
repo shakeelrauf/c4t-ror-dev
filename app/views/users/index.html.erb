@@ -15,7 +15,7 @@
               <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
                 Users
               </h5>
-              <a href="/users/add" class="btn btn-primary waves-effect waves-light f-right md-trigger">
+              <a href="<%= new_user_path %>" class="btn btn-primary waves-effect waves-light f-right md-trigger">
                 <i class="icofont icofont-plus m-r-5"></i>  Add new user
               </a>
             </div>
@@ -65,10 +65,10 @@
                               <td><%= (contact["dtLastLogin"]) %></td>
                               <td><%= (contact["isActive"] == 1 ? "No":"Yes" ) %></td>
                               <td class="faq-table-btn">
-                                <a data-contact-no="<%= contact["id"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Blacklist user">
+                                <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Blacklist user">
                                   <i class="icofont icofont-not-allowed"></i>
                                 </a>
-                                <a href="/users/<%= contact["id"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+                                <a href="/users/<%= contact["idUser"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
                                   <i class="icofont icofont-ui-edit"></i>
                                 </a>
                               </td>

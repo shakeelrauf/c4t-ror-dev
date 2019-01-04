@@ -24,8 +24,11 @@ class Api::V1::UsersController < ApiController
         @user.avatar = params[:avatar]
         @user.phone = params[:phoneNumber]
         @user.isSuperadmin = params[:isSuperadmin]
-        @user.save!
-  			return render_json_response(@user, :ok)
+        if @user.save
+  			  return render_json_response(@user, :ok)
+        else @user.errors.any?
+          return render_json_response({:error => @user.errors.messages}, :ok)
+        end
       else
   			return render_json_response({:error => "Username already exist."}, :ok)
       end

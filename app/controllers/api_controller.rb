@@ -26,11 +26,9 @@ class ApiController < ApplicationController
   def test
   end
 
-
   def authenticate_admin
     return render_json_response({:error => NOT_ADMIN_MSG, :success => false}, :unauthorized) if current_user && current_user.roles != "admin"
   end
-
 
   def params_present? given_params, check_params
     check_params.each do |p|

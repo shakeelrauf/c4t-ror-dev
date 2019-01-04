@@ -10,9 +10,11 @@ Rails.application.routes.draw do
     get 	:dashboard,												action: :dashboard
     get   :dispatch, 												action: :dispatched
   end
-
-	scope controller: :users do
-		get :users, 												 action: :index
+  
+	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
+	  collection do
+	    post '/blacklist/:no', 								action: :blacklist
+	  end
 	end
 
 	scope controller: :quote do

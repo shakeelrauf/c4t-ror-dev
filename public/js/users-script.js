@@ -96,6 +96,9 @@ function growling(message) {
     $("#txtPwd").val("");
     $("#txtPwdValidation").val("");
 }
+var stringConstructor = "test".constructor;
+var arrayConstructor = [].constructor;
+var objectConstructor = {}.constructor;
 
 $("#btnSaveUser").click(function() {
     if( $("#txtUsername").val() == "" ||
@@ -110,12 +113,12 @@ $("#btnSaveUser").click(function() {
         if(noUserToGet == "new") {
             url="/users";
         } else {
-            url="/users/edit/"+noUserToGet;
+            url="/users/"+noUserToGet;
         }
 
         $.ajax({
           url: url,
-          type: "POST",
+          type: url=="/users" ? "POST" : "PUT",
           data: {
               username: $("#txtUsername").val(),
               firstName: $("#txtFirstName").val(),
@@ -126,16 +129,30 @@ $("#btnSaveUser").click(function() {
               pwd: $("#txtPwd").val()
           }
         }).done(function(data) {
-            if(data.error) {
+            if(data["error"]) {
+                if (data.error === null) {
+                    growling("Something went wrong")
+                }
+                else if (data.error === undefined) {
+                    growling("Something went wrong")
+                }
+                else if (data.error.constructor === stringConstructor) {
+                    growling(data.error)
+                }
+                else if (data.error.constructor === objectConstructor) {
+                    for(var i in data.error){
+                        growling(data.error[i])
+                    }
+                }
                 $(".loading").addClass("hidden");
-                growling(data.error);
+
             } else {
                 var nextURL = "/users";
                 if(noUserToGet == "new") {
                     document.location = nextURL+"?added=true";
                 } else {
                     if($("#txtRole").val() != "admin") {
-                        nextURL = "/profil";
+                        nextURL = "/users";
                     }
                     document.location = nextURL+"?edited=true";
                 }
