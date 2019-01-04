@@ -1,6 +1,11 @@
 class CustomersController < ApplicationController
   # before_action :authenticate_user
 
+
+  def new
+    @customer = Customer.new
+  end
+
   def index
     begin
       @customers = ApiCall.get("/clients",{})
@@ -10,12 +15,9 @@ class CustomersController < ApplicationController
   end
 
   def show
-    id = params[:id]
-    begin
-      @customer = ApiCall.get("/clients/#{id}",{no: id})
-    rescue Net::ReadTimeout
-      @customer = []
-    end  
+    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}",{no: params[:id]})).first
+    @quotes = JSON.parse(ApiCall.get("/clients/#{params[:id]}/quotes",{}))
+    @status = ApiCall.get("/status",{})
   end
 
 end
