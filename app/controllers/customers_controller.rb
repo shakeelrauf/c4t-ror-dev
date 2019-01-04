@@ -11,7 +11,7 @@ class CustomersController < ApplicationController
 
   def show
     @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}",{no: params[:id]})).first
-    @quotes = JSON.parse ApiCall.get("/clients/#{params[:id]}/quotes",{})
+    @quotes = JSON.parse(ApiCall.get("/clients/#{params[:id]}/quotes",{}))
     @status = ApiCall.get("/status",{})
   end
 
