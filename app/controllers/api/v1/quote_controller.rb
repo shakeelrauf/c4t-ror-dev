@@ -150,10 +150,10 @@ class Api::V1::QuoteController < ApiController
       else
         stats = Status.where(idStatus: params[:status])
         if params[:status] && stats.present?
-          result = @quote.update(
-            idStatus: params[:status],
-            dtStatusUpdated: Time.now
-          )
+          @quote.first.idStatus = params[:status]
+          @quote.first.dtStatusUpdated = Time.now
+          @quote.first.save(:validate => false)
+          result = @quote
         else
           return render_json_response({"msg": "Failure!!", "success": false,:error => "Status not found"}, :ok)
         end
