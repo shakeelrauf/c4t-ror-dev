@@ -12,6 +12,14 @@ Rails.application.routes.draw do
   end
 
   root "dashboard#dashboard"
+
+  scope  controller: :charity do
+    get '/charities',                           action: :get_charities
+    get '/charities/add',              	 				action: :new
+    get '/charities/:no',              	 				action: :edit
+    post '/charities',                          action: :create
+    get '/update',                     				action: :update
+  end
   
   scope  controller: :heardofus do
     get '/heardofus',                           action: :get_heardsofus
