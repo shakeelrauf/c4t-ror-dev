@@ -27,8 +27,8 @@ Rails.application.routes.draw do
     # get '/quotes',                           action: :get_quotes_by_filters
     get '/quotes/:no',                       action: :quote_with_filter
     patch '/quotes/:no',                     action: :quote
-    patch '/quotes/:no/status',              action: :update_quote_status
-    get '/quotes/:id/edit',             	 action: :edit_quotes
+    post '/quote/:no/status',              	 action: :update_quote_status
+    get '/quotes/:id/edit',             	 	 action: :edit_quotes
     delete '/quotecar/:carNo',               action: :destroy
     get '/clients/:no/quotes',               action: :particular_customer_quotes
     get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
