@@ -3,7 +3,6 @@ class CharityController < ApplicationController
 	# before_action :authenticate_admin, only: [:heardofus, :update]
 
 	def create
-		debugger
 		hou = Charitie.new(name: params[:name], phone: params[:phone], email: params[:email], address: params[:address], info: params[:info])
 		hou.save!
 		redirect_to '/charities'
