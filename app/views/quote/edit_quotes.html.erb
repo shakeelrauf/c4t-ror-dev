@@ -1,0 +1,296 @@
+<%= render :partial => 'shared/header' %>
+<%= render :partial => 'shared/menu' %>
+
+
+<link rel="stylesheet" type="text/css" href="/assets/css/pages/quote.css">
+
+<div class="content-wrapper">
+    <!-- Container-fluid starts -->
+    <div class="container-fluid">
+        <!-- Row Starts -->
+        <div class="row">
+            <div class="col-sm-12 p-0">
+                <div class="main-header">
+                    <h4>QUICK QUOTE</h4>
+                    <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+                        <li class="breadcrumb-item">
+                            <a href="/dashboard">
+                                <i class="icofont icofont-home"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">Clients</li>
+                        <% quote = @quote %>
+                    <% if (quote.id != nil) %>
+                        <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
+                        <li class="breadcrumb-item"><a href="/quotes/<%= quote.id %>/edit">Edit Quotes</a></li>
+                    <% else %>
+                        <li class="breadcrumb-item"><a href="/create-quote">Create Quote</a></li>
+                    <% end %>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- Row end -->
+        <div class="row">
+            <div class="col-lg-12">
+            <% if (quote.id != nil) %>
+                <h2>Edit Quote</h2>
+            <% else %>
+                <h2>Create Quote</h2>
+            <% end %>
+            </div>
+            <div class="col-lg-6">
+                <div class="card col-lg-12">
+                    <div class="card-header">
+                        <button class="btn btn-primary waves-effect d-inline-block f-right btn-edit-customer">Edit Customer</button>
+                        <h5>Customer</h5>
+                    </div>
+                    <div class="card-block row">
+                        <div class="col-lg-12 md-group-add-on">
+                            <span class="md-add-on">
+                                <i class="icofont icofont-phone"></i>
+                            </span>
+                            <div class="md-input-wrapper">
+                                <select class="md-form-control md-static" name="phone"><%
+                                if (quote.id != nil && quote.customer != nil) %>
+                                    <option value="<%= quote.customer.id %>" selected><%=
+                                        quote.customer.phone[0,3] + " " + quote.customer.phone[3,3] + "-" + quote.customer.phone[6] +
+                                        " " + quote.customer.firstName + " " + quote.customer.lastName
+                                    %></option>
+                                <% end %>
+                                </select>
+                                <label style="top: -15px;">Phone Number<span class="required">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 md-group-add-on">
+                            <span class="md-add-on">
+                                <i class="icofont icofont-ui-user"></i>
+                            </span>
+                            <div class="md-input-wrapper">
+                                <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote.id && quote.customer ? quote.customer.firstName : "" %>">
+                                <label style="top: -15px;">First Name <span class="required">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 md-group-add-on">
+                            <span class="md-add-on">
+                                <i class="icofont icofont-ui-user"></i>
+                            </span>
+                            <div class="md-input-wrapper">
+                                <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.id && quote.customer ? quote.customer.lastName : "" %>">
+                                <label style="top: -15px;">Last Name<span class="required">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 md-group-add-on">
+                            <span class="md-add-on">
+                                <i class="icofont icofont-ui-user"></i>
+                            </span>
+                            <div class="md-input-wrapper">
+                                <input type="text" class="md-form-control md-static" name="postal" value="<%= quote.id && quote.customer && quote.customer.address[0] ? quote.customer.address[0].postal : "" %>">
+                                <label style="top: -15px;">Postal Code<span class="required">*</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 md-group-add-on">
+                            <span class="md-add-on">
+                                <i class="icofont icofont-ui-user"></i>
+                            </span>
+                            <div class="md-input-wrapper">
+                                <select class="md-form-control md-static" name="heardOfUs">
+                                  <option value="">Select an option</option>
+                                    <%  heardOfUsFound = false %>
+                                    <% @heardsofus.each do |heardofus| %>
+                                    <% if (quote.id != nil && quote.customer) %>
+                                    <option<%= heardofus.id == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
+                                    <%  if(heardofus.id == quote.customer.idHeardOfUs) %>
+                                            heardOfUsFound = true;
+                                    <% else %>
+                                    <option><%= heardofus.type %></option>
+                                    <% end %>
+                                    <% if(quote.id != nil && !heardOfUsFound && quote.customer) %>
+                                    <option selected><%= quote.customer.heardofus.type %></option>
+                                    <% end %>
+                                <% end %>
+                                <% end %>
+                                </select>
+                                <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer end -->
+                <div class="card col-lg-12">
+                    <div class="card-header">
+                        <h5>Price</h5>
+                    </div>
+                    <div class="card-block">
+                        <div class="cars-total-list">
+                            <!--
+                            <div class="row">
+                                <div class="md-group-add-on">
+                                    <h6><%#= req.i18n.__SET_ALL_CARS_TO_PICKUP_DROPOFF %></h6>
+                                    <table class="col-lg-12">
+                                        <tr>
+                                        <%#
+                                            var allCarsPicked = false;
+                                            var allCarsDropped = false;
+                                            if(quote.id != nil) {
+                                                allCarsPicked = true;
+                                                allCarsDropped = true;
+                                                cars.forEach(car => {
+                                                    try {
+                                                        car.missingParts = JSON.parse(car.missingParts);
+                                                    } catch(e) {
+                                                                                    if(typeof car.missingParts != "object") {
+                                                          car.missingParts = [];
+                                                        }
+                                                    }
+                                                    if(car.gettingMethod == "dropoff") {
+                                                        allCarsPicked = false;
+                                                    } else {
+                                                        allCarsDropped = false;
+                                                    }
+                                                });
+                                            }
+                                        %>
+                                            <td>
+                                                <div class="md-input-wrapper cashradio">
+                                                    <input type="radio" name="allPickup" value="pickup"<%#
+                                                        if(quote.id != nil && allCarsPicked) {
+                                                            %> checked="checked"<%#
+                                                        }
+                                                     %>>
+                                                    <label>Pickup</label><br>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="md-input-wrapper cashradio">
+                                                    <input type="radio" name="allPickup" value="dropoff"<%#
+                                                        if(quote.id != nil && allCarsDropped) {
+                                                            %> checked="checked"<%#
+                                                        }
+                                                     %>>
+                                                    <label>Drop Off</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <hr>
+                            -->
+                            <div class="row font-weight-bold" style="">
+                                <div class="col-lg-6"></div>
+                                <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Pickup</div>
+                                <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Drop Off</div>
+                            </div>
+                            <% if (quote.id != nil) %>
+
+                                 <% @cars.each do |car, index| %>
+    <!--                                     /*
+                                        var bonusCarsBasePrice = 0;
+                                        if(Number(car.weight) <= 1500)
+                                            bonusCarsBasePrice += Number(quote.smallCarPrice);
+                                        elsif(Number(car.weight) > 3000)
+                                            bonusCarsBasePrice += Number(quote.midCarPrice);
+                                        else
+                                            bonusCarsBasePrice += Number(quote.largeCarPrice);
+                                        end
+                                        carPrice = ((Number(car.weight)/1000) * Number(quote.steelPrice)) - (iMissingWheels * Number(quote.wheelPrice));
+                                        */ -->
+
+                                <div class="row car<%= car.id %> index<%= index %>" id="car-price<%= car.id %>">
+                                    <div class="col-lg-6">
+                                    <%# if car.first.vehicle.present? %>
+                                        <%#= car.vehicle.first.make + " " + car.vehicle.first.model + " " + car.vehicle.first.year %>
+                                    <%# end %>
+                                    </div>
+                                    <div id="car-price-pickup-<%= car.id %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
+                                    </div>
+                                    <div id="car-price-dropoff-<%= car.id %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
+                                    </div>
+                                </div>
+                                <% end %>
+
+                            <% end %>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-9 font-weight-bold">Total</div>
+                            <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- total end -->
+                <div class="card col-lg-12">
+                    <div class="card-block quick-quote-navigator">
+                        <a href="javascript:saveCar();" class="btn btn-primary waves-effect d-inline-block">
+                            <i class="icofont icofont-cur-dollar"></i>
+                            Save
+                        </a><br>
+                        <a href="javascript:bookCars(<%= quote.id %>);" class="btn btn-green waves-effect d-inline-block">
+                            <i class="icofont icofont-cur-dollar"></i>
+                            Save and Book
+                        </a><br>
+                        <a href="javascript:gotoListOfQuotes();" class="btn btn-danger waves-effect d-inline-block">
+                            Return
+                        </a>
+                    </div>
+                </div>
+                <!-- Navigation end -->
+            </div>
+            <!-- left view end -->
+            <div class="card col-lg-6">
+                <div class="card-header">
+                    <h3 class="card-header-text d-inline-block m-b-0 f-w-600">Cars</h3>
+                </div>
+                <div class="card-block row">
+                    <div class="col-lg-12 md-group-add-on">
+                        <span class="md-add-on">
+                            <i class="icofont icofont-car"></i>
+                        </span>
+                        <div class="md-input-wrapper selectcashcar">
+                            <select class="md-form-control md-static selectcash" id="txtVehicleFilter" multiple="multiple">
+                            </select>
+                            <label style="top: -15px;">Search <span class="required">*</span></label>
+                        </div>
+                    </div>
+                    <!-- Nav tabs -->
+                    <div class="col-lg-12 tab-header">
+                        <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
+                        <% if (quote.id != nil) %>
+                              <% @cars.each do |car, index| %>
+                            <li id="car-tab<%= car.id %>" class="nav-item car<%= car.id %> index<%= index %>" style="display:block">
+                                <a class="nav-link" data-toggle="tab" href="#tab<%= car.id %>" role="tab" id="tab-a-<%= index %>">
+                                    <button onclick="removeCar(<%= car.id %>);">x</button>
+                                    <%#= car.vehicle.make + " " + car.vehicle.year %>
+                                </a>
+                                <div class="slide"></div>
+                            </li>
+                        <% end %>
+                    <% end %>
+                        </ul>
+                    </div>
+                    <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
+                    <% if (quote.id != nil) %>
+                         <% @cars.each do |car, index| %>
+                         <%#- include("partials/vehicle/vehicle-parameter", {
+                                    car: car,
+                                  vehicle: car.vehicle
+                            })%>
+                          <% end %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <!-- Add car end -->
+        <!-- Container-fluid ends -->
+        </div>
+    </div>
+</div>
+<script>
+	$(".tab-pane").removeClass("active");
+  const quoteNo = <%= quote.id || "nil" %>
+	// var idCarGenerator = <%#= cars.length %>
+  const quote = <%# JSON.stringify(quote) %>
+</script>
+<script src="/js/distance.js"></script>
+<script src="/js/quote.js"></script>

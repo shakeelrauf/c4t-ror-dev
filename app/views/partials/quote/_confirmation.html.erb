@@ -1,0 +1,271 @@
+<div class="row">
+    <div class="col-lg-12 md-group-add-on">
+        <div class="row">
+            <div class="col-lg-12 text-center confirmationtop">
+                <h3>Confirmation</h3><br>
+                Please read all information before process this form.
+            </div>
+            <div class="col-lg-6">
+                <div class="row card">
+                    <div class="col-lg-12 text-center">
+                        <div class="card-header">
+                            <h5>Customer:</h5>
+                        </div>
+                        <div class="card-block">
+                            <span id="txtNameConfirm"></span><br>
+                            <span id="txtPhoneConfirm"></span><br>
+                            <span id="txtTypeConfirm warning"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card">
+                    <div class="col-lg-12 text-center">
+                        <div class="card-header">
+                            <h5>Note:</h5>
+                        </div>
+                        <div class="card-block">
+                            <span id="txtCarsNoteConfirm"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card">
+                    <div class="col-lg-12 text-center">
+                        <div class="card-header">
+                            <h5>Total Price:</h5>
+                        </div>
+                        <div class="card-block total-confirm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row list-car-confirm">
+                </div>
+            </div>
+            <div class="col-lg-12 text-center confirmationbottom">
+                Once you be sure of all information, please click on «Finish» for sending and save this quote.
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function fillStep3() {
+    $.ajax("/customers/"+$("#txtPhone").val()+"/address/distance/json?address="+
+    $("#txtAddress").val()+" "+$("#txtCity").val()+" "+$("#txtPostal").val().replace(" ", "")).done(r_distance => {
+
+        $("#txtNameConfirm").text($("#txtFirstName").val() + " " + $("#txtLastName").val());
+        $("#txtPhoneConfirm").text($('#txtPhone').find('option:selected').text());
+        $("#txtTypeConfirm").text($("#txtType").val());
+        $("#txtCarsNoteConfirm").text($("#txtVehicleNote").val());
+        $(".total-confirm").html("");
+        $(".list-car-confirm").html("");
+        var isAllDropOff = true;
+        var bonusCarsBasePrice = 0;
+        var totalSteel = 0;
+        var totalPrice = 0;
+        lstCars.forEach(function(car) {
+            if(Number(car.weight) <= 1500) {
+                bonusCarsBasePrice += Number(settings.smallCarPrice);
+            } else if(Number(car.weight) > 3000) {
+                bonusCarsBasePrice += Number(settings.midCarPrice);
+            } else {
+                bonusCarsBasePrice += Number(settings.largeCarPrice);
+            }
+            // Vehicle weight (Kg to T) x steelPrice in settings.
+            totalSteel += Number(car.weight)/1000;
+            var basePrice = ((Number(car.weight)/1000) * Number(settings.steelPrice));
+            var iMissingWheels = car.missingParts.filter(part => part.indexOf("Wheel") != -1).length;
+            var missingWheelsPrice = iMissingWheels * Number(settings.wheelPrice);
+    		var iMissingTires = car.missingParts.filter(part => part.indexOf("Tire") != -1).length;
+            var missingTiresPrice = iMissingTires * Number(settings.tirePrice);
+            var missingBattery = car.missingParts.filter(part => part.indexOf("Battery") != -1).length * Number(settings.batteryPrice);
+            var missingCatalyser = car.missingParts.filter(part => part.indexOf("Catalyzer") != -1).length * Number(settings.catalysorPrice);
+            var isDropped = car.hasOwnProperty('dropoff');
+            var carPrice = Number(basePrice - missingWheelsPrice - missingTiresPrice - missingBattery - missingCatalyser - (isDropped?0:Number(settings.pickup)));
+            totalPrice += carPrice;
+            if(!isDropped) {
+                isAllDropOff = false;
+            }
+            $(".list-car-confirm").append(`
+                        <div class="panel-info col-lg-6">
+                            <div class="panel-heading bg-info">
+                                ` + car.make + " " + car.model + " " + car.year + `
+                            </div>
+                            <div class="panel-body">
+                                Base Price: ` + basePrice.toFixed(2) + `
+                                <hr>
+                                <b>Missing Parts:</b>
+                                ` + (iMissingWheels != 0 ? "<br>" + iMissingWheels + "x Wheels: -" + missingWheelsPrice.toFixed(2) + " $": "") + `
+    							` + (iMissingTires != 0 ? "<br>" + iMissingTires + "x Tires: -" + missingTiresPrice.toFixed(2) + " $": "") + `
+                                ` + (missingBattery != 0 ? "<br>Battery: -" + missingBattery.toFixed(2) + " $": "") + `
+                                ` + (missingCatalyser != 0 ? "<br>Catalytic converter: -" + missingCatalyser.toFixed(2) + " $": "") + `
+                                <hr>
+                                <b>Reduction:</b>
+                                ` + (isDropped ? "" : "<br>Pickup car: -" + Number(settings.pickup).toFixed(2) + " $") + `
+                                <hr>
+                                <b>Donation:</b>
+                                ` + (typeof car.donation != 'undefined' && car.donation != "" ? "<b><u>" + $("#option"+car.id+"-Donation").find(":selected").text() + "</u></b>": "No") + `
+                            </div>
+                            <div class="panel-footer">
+                                Car Price: ` + carPrice.toFixed(2) + ` $
+                            </div>
+                        </div>`);
+            $(".total-confirm").append(`
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        ` + car.make + " " + car.model + " " + car.year + `:
+                                    </div>
+                                    <div class="col-lg-4">
+                                        ` + carPrice.toFixed(2) + ` $
+                                    </div>
+                                </div>`);
+        });
+        $(".total-confirm").append("<hr>");
+        if(!isAllDropOff) {
+            $(".total-confirm").append(`
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        Free Distance
+                                    </div>
+                                    <div class="col-lg-4">
+                                        ` + Number(r_distance.freeDistance).toFixed(1) + ` Km
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        Total Distance
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <b><u>-` + Number(r_distance.totalDistance).toFixed(1) + ` Km</u></b>
+                                    </div>
+                                </div>`);
+            if(r_distance.freeDistance - r_distance.totalDistance < 0) {
+                $(".total-confirm").append(`
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        Excess Distance
+                                    </div>
+                                    <div class="col-lg-4">
+                                        ` + Math.abs(r_distance.freeDistance - r_distance.totalDistance).toFixed(1) + ` Km
+                                    </div>
+                                </div>`);
+            } else {
+                $(".total-confirm").append(`
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        Excess Distance
+                                    </div>
+                                    <div class="col-lg-4">
+                                        0 Km
+                                    </div>
+                                </div>`);
+            }
+        }
+        if(!isAllDropOff && r_distance.excessDistance > 0) {
+            totalPrice -= Number(r_distance.additionnalPrice);
+            $(".total-confirm").append(`
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        Excess Distance Price
+                                    </div>
+                                    <div class="col-lg-4">
+                                        -`+r_distance.additionnalPrice+` $
+                                    </div>
+                                </div>`);
+        }
+        if($("#txtGrade").val() != "None" && $("#txtGrade").val() != "Custom") {
+            var steelBonus = totalSteel * (Number(settings.steelPrice) * Number(settings[$("#txtGrade").val().toLowerCase() + "PercSteel"])/100 + Number(settings[$("#txtGrade").val().toLowerCase() + "DollarSteel"]));
+            var carBonus = lstCars.length * (bonusCarsBasePrice * Number(settings[$("#txtGrade").val().toLowerCase() + "PercCar"])/100 + Number(settings[$("#txtGrade").val().toLowerCase() + "DollarCar"]));
+            totalPrice += steelBonus + carBonus;
+            $(".total-confirm").append(`
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        ` + $("#txtGrade").val() + ` Bonus:
+                                    </div>
+                                    <div class="col-lg-4">
+                                        ` + (steelBonus + carBonus).toFixed(2) + ` $
+                                    </div>
+                                </div>`);
+        } else if($("#txtGrade").val() == "Custom") {
+            var steelBonus = totalSteel * (Number(settings.steelPrice) * Number($("#txtCustomPercSteel").val())/100 + Number($("#txtCustomDollarSteel").val()));
+            var carBonus = lstCars.length * (bonusCarsBasePrice * Number($("#txtCustomPercCar").val())/100 + Number($("#txtCustomDollarCar").val()));
+            totalPrice += steelBonus + carBonus;
+            $(".total-confirm").append(`
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        ` + $("#txtGrade").val() + ` Bonus:
+                                    </div>
+                                    <div class="col-lg-4">
+                                        ` + (steelBonus + carBonus).toFixed(2) + ` $
+                                    </div>
+                                </div>`);
+        }
+        $(".total-confirm").append(`
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-8 font-weight-bold">
+                                        Total:
+                                    </div>
+                                    <div class="col-lg-4">
+                                        ` + totalPrice.toFixed(2) + ` $
+                                    </div>
+    								<div class="col-lg-8 font-weight-bold">
+                                        Total (Rounded):
+                                    </div>
+                                    <div class="col-lg-4 total font-weight-bold">
+                                        ` + (Math.round(totalPrice / 5) * 5).toFixed(2) + ` $
+                                    </div>
+                                    <% @user = @user.first %>
+                                    <% if (@user.roles == "admin")  %>
+                                    <div class="col-lg-8 font-weight-bold">
+                                        Custom bonus:
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input type="number" id="txtCustomBonus" value="0" step="0.01" class="form-control" onChange="updateTotalWithCustomBonus();">
+                                    </div>
+                                    <div class="col-lg-1">
+                                        $
+                                    </div>
+                                    <% end %>
+                                    ` + ($("#txtType").val() != "Individual" ? `
+                                    <hr>
+                                    <div class="col-lg-8">
+                                        PST Tax:
+                                    </div>
+                                    <div class="col-lg-4 PST">
+                                        ` + ($("#txtProvince").val() == "On" ?
+                                        (Math.round(totalPrice / 5) * 5 * 0.08).toFixed(2) :
+                                        (Math.round(totalPrice / 5) * 5 * 0.09975).toFixed(2) ) + ` $
+                                    </div>
+                                    <div class="col-lg-8">
+                                        GST Tax:
+                                    </div>
+                                    <div class="col-lg-4 GST">
+                                        ` + (Math.round(totalPrice / 5) * 5 * 0.05).toFixed(2) + ` $
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-8 font-weight-bold">
+                                        Total after tax:
+                                    </div>
+                                    <div class="col-lg-4 total-after-tax font-weight-bold">
+                                        ` + ($("#txtProvince").val() == "On" ?
+                                        (Math.round(totalPrice / 5) * 5 * 1.13).toFixed(2) :
+                                        (Math.round(totalPrice / 5) * 5 * 1.14975).toFixed(2) ) + ` $
+                                    </div>
+                                    ` : `
+                                    <div class="col-lg-12">
+                                        <hr>
+                                    </div>
+                                    <div class="col-lg-8 font-weight-bold">
+                                        Total after tax:
+                                    </div>
+                                    <div class="col-lg-4 total-after-tax font-weight-bold">
+                                        ` + (Math.round(totalPrice / 5) * 5).toFixed(2) + ` $
+                                    </div>`) + `
+                                </div>`);
+    });
+}
+</script>
