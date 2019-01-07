@@ -36,7 +36,7 @@ class QuoteController < ApplicationController
         if (!r_quote.first.isSatisfactionSMSQuoteSent && r_quote.first.customer.cellPhone)
           sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
           sms.call
-          quotes.update(isSatisfactionSMSQuoteSent: 1)
+          quotes.first.update(isSatisfactionSMSQuoteSent: 1)
         end
       end
     end
