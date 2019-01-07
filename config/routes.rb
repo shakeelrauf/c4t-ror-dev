@@ -19,14 +19,18 @@ Rails.application.routes.draw do
 
 	scope controller: :quote do
     post 'quotes',                           action: :create
-    post '/create-car',                      action: :create_car
+    get '/quotes/json',                      action: :quote_with_filter
+		get '/status/json', 										 action: :status_json
+		get '/quotes/:id/edit',             	 	 action: :edit_quotes
+    get '/phone-numbers-select2', 					 action: :phone_list
+    get '/vehicles-select2', 					       action: :vehicle_list
+		post '/create-car',                      action: :create_car
     post '/remove-car',                      action: :remove_car
     get '/quotecar/:carNo',                  action: :retrive_car
-    # get '/quotes',                           action: :get_quotes_by_filters
-    get '/quotes/:no',                       action: :quote_with_filter
+
+		# get '/quotes',                           action: :get_quotes_by_filters
     patch '/quotes/:no',                     action: :quote
     post '/quote/:no/status',              	 action: :update_quote_status
-    get '/quotes/:id/edit',             	 	 action: :edit_quotes
     delete '/quotecar/:carNo',               action: :destroy
     get '/clients/:no/quotes',               action: :particular_customer_quotes
     get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
@@ -36,6 +40,9 @@ Rails.application.routes.draw do
 	end
 	
   resources :customers
+  scope controller: :customers do
+    get '/customers/id/:no/json',             action: :get_customer
+  end
   namespace :api do
 		namespace :v1 do
 			scope controller: :address do
@@ -60,13 +67,13 @@ Rails.application.routes.draw do
       scope controller: :customer do
 				get '/clients', action: :index
 				post '/clients', action: :create
-				get '/clients/:no', action: :show
-				patch '/clients/:no', action: :update
 				get '/client/phones', action: :phones
-				get '/client/phones/:phone', action: :client_phones
 				get "/clients/statistics/heardofus", action:  :heardofus
 				get '/clients/:customerId/postal', action: :postal
-      end
+        get '/clients/:no', action: :show
+				patch '/clients/:no', action: :update
+				get '/client/phones/:phone', action: :client_phones
+			end
 
 			scope controller: :distance do
 				get  "/distance/:postal",            action: :distance
@@ -103,7 +110,7 @@ Rails.application.routes.draw do
         post '/remove-car',                      action: :remove_car
         get '/quotecar/:carNo',                  action: :retrive_car
         get '/quotes',                           action: :get_quotes_by_filters
-        get '/quotes/:no',                       action: :quote_with_filter
+        get '/quotes/json',                      action: :quote_with_filter
         patch '/quotes/:no',                     action: :quote
         patch '/change_status',                  action: :update_status
         patch '/quotes/:no/status',              action: :update_quote_status

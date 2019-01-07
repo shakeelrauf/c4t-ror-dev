@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+	layout 'dashboard'
 	skip_before_action :verify_authenticity_token
 	include ApplicationHelper
 	include Response
@@ -100,8 +101,8 @@ class ApplicationController < ActionController::Base
 	end
 
 	def get_token
-		if has_session? && is_session_expired?
-			session[:token]["access_type"]+" "+session[:token]["access_token"]
+		if has_session? && !is_session_expired?
+			session[:token]["token_type"]+" "+session[:token]["access_token"]
 		end
 	end
 

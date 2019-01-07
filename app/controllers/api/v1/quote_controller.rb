@@ -15,6 +15,31 @@ class Api::V1::QuoteController < ApiController
 	  return render_json_response(@car, :ok)	 	
   end
 
+  def quote_with_filter
+    limit = 100
+    offset = 0
+    limit  = params[:limit] if params[:limit].to_i > 0
+    offset  = params[:offset] if params[:offset].to_i > 0
+    query =  "SELECT * from Quotes "
+    if params[:filter]
+      params[:filter] = "%" + params[:filter].gsub(/[\s]/, "% %").gsub('?','') + "%"
+      filters =  params[:filter].split(' ')
+      length =  filters.length
+      filters.each.with_index do |fil,i|
+        query+= "INNER JOIN Status ON Status.idStatus = Quotes.idStatus INNER JOIN Users ON Users.idUser = Quotes.idUser INNER JOIN Clients ON Clients.idClient = Quotes.idClient WHERE" if i == 0
+        query+= " ('note' LIKE '#{fil}' OR 'referNo' LIKE '#{fil}' OR 'Clients.firstName' LIKE '#{fil}' OR 'Clients.lastName' LIKE '#{fil}' OR 'Clients.phone' LIKE '#{fil}' OR 'Clients.cellPhone' LIKE '#{fil}' OR 'Clients.secondaryPhone' LIKE '#{fil}' OR 'Users.firstName' LIKE '#{fil}' OR 'Users.lastName' LIKE '#{fil}' OR 'Status.name' LIKE '#{fil}')"
+        query+= " AND" if i < (length -1)
+      end
+      # query+= " AND 'dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}'" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
+      # query+= " AND 'dtCreated' <= '#{params[:beforeDate]+ ' 23:59:59'}'" if params[:beforeDate] && params[:beforeDate].to_s.length == 10 && DateTime.parse(params[:beforeDate], "YYYY-MM-DD")
+      @quotes = Quote.run_sql_query(query)
+      @quotes =  Quote.includes(:dispatcher, :customer,:status).where('idQuote IN (?)', @quotes.pluck("idQuote")).to_json(include: [:dispatcher, :customer, :status])
+    else
+      @quotes =  Quote.includes(:dispatcher, :customer, :status).to_json(include: [:dispatcher, :customer, :status])
+    end
+    return render_json_response(@quotes, :ok)
+  end
+
     # Creates a blank quote
   def create
     # Find the last settings

@@ -20,4 +20,8 @@ class CustomersController < ApplicationController
     @status = ApiCall.get("/status",{})
   end
 
+  def get_customer
+    res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
+    respond_json(res)
+  end
 end
