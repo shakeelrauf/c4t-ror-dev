@@ -1,5 +1,5 @@
 class Api::V1::QuoteController < ApiController
-	# before_action :authenticate_user
+	before_action :authenticate_user, except: [:particular_customer_quotes,:all_status]
   include ActionView::Helpers::NumberHelper
 
     # Creates a blank quote car
@@ -214,11 +214,12 @@ class Api::V1::QuoteController < ApiController
     if (params[:filter].class.to_s != "NilClass")
       filter = "%" + params[:filter] + "%"
     end
-    lstQuotes = Quote.includes(:dispatcher, :customer, :status).where("(note LIKE ?  OR status.name LIKE ? OR dispatcher.firstName LIKE ? OR dispatcher.lastName LIKE ? OR reference  LIKE ? ) AND idClient = ?", filter, filter, filter, filter, filter, params[:no]).order('DESC').offset(offset).limit(30)
+    lstQuotes = Quote.includes(:dispatcher, :customer, :status).where(idClient: params[:no]).order('dtCreated DESC').offset(offset).limit(30).to_json(include: [:dispatcher, :customer, :status])
+    # lstQuotes = Quote.includes(:dispatcher, :customer, :status).where("(note LIKE ?  OR status.name LIKE ? OR dispatcher.firstName LIKE ? OR dispatcher.lastName LIKE ? OR reference  LIKE ? ) AND idClient = ?", filter, filter, filter, filter, filter, params[:no]).order('DESC').offset(offset).limit(30)
 
-    lstQuotes.each do |quote|
-      # TODO! Format each quote before send it.
-    end
+    # lstQuotes.each do |quote|
+    #   # TODO! Format each quote before send it.
+    # end
       return render_json_response(lstQuotes, :ok)
   end
 
