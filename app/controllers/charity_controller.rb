@@ -1,7 +1,6 @@
 class CharityController < ApplicationController
 	# before_action :authenticate_user
 	# before_action :authenticate_admin, only: [:heardofus, :update]
-	# before_action :check_type, only: [:heardsofus, :update]
 
 	def create
 		debugger
@@ -27,12 +26,4 @@ class CharityController < ApplicationController
 		redirect_to '/charities'
 	end
 
-	private
-	def check_type 
-		# return render_json_response({:error => TYPE_ERROR_MSG, :success => false}, :bad_request) if !params[:type].present?
-	end
-
-	def charit_params
-		
-	end
 end
