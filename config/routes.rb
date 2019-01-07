@@ -16,15 +16,17 @@ Rails.application.routes.draw do
     post '/create-car',                      action: :create_car
     post '/remove-car',                      action: :remove_car
     get '/quotecar/:carNo',                  action: :retrive_car
-    get '/quotes',                           action: :get_quotes_by_filters
+    # get '/quotes',                           action: :get_quotes_by_filters
     get '/quotes/:no',                       action: :quote_with_filter
     patch '/quotes/:no',                     action: :quote
     patch '/quotes/:no/status',              action: :update_quote_status
+    get '/quotes/:id/edit',             	 action: :edit_quotes
     delete '/quotecar/:carNo',               action: :destroy
     get '/clients/:no/quotes',               action: :particular_customer_quotes
     get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
     get '/status',                           action: :all_status
-    get '/all_quotes',                       action: :all_quotes
+    get '/quotes',                       		 action: :all_quotes
+    get '/create-quote',                     action: :create_quotes
 	end
 	
   resources :customers
