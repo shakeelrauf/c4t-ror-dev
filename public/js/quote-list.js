@@ -92,52 +92,53 @@ $(document).ready(function() {
         $(".table-quotes").html("");
         $.ajax("/status/json").done(function(status) {
             $.ajax(quotesUrl).done(function(quotes) {
+                debugger
                 quotes.forEach(function(quote) {
                     var backgroundType = "muted";
-                    if(quote.status.color == "yellow") {
+                    if(quote["status"]["color"] == "yellow") {
                         backgroundType = "warning";
-                    } else if(quote.status.color == "blue") {
+                    } else if(quote["status"]["color"] == "blue") {
                         backgroundType = "info";
-                    } else if(quote.status.color == "green") {
+                    } else if(quote["status"]["color"] == "green") {
                         backgroundType = "success";
-                    } else if(quote.status.color == "red") {
+                    } else if(quote["status"]["color"] == "red") {
                         backgroundType = "danger";
-                    } else if(quote.status.color == "orange") {
+                    } else if(quote["status"]["color"] == "orange") {
                         backgroundType = "primary";
                     }
                     $(".table-quotes").append(`
                         <tr>`+
                             (!$(".table-quotes").first().hasClass("client-profile") ?
-                            `<td>` + quote.reference + `</td>
-                            <td>`+quote.customer.firstName+` `+quote.customer.lastName+`</td>
+                            `<td>` + quote["idQuote"] + `</td>
+                            <td>`+quote["customer"]["firstName"]+` `+quote["customer"]["lastName"]+`</td>
                             <td>
-                                <a href="tel:+`+quote.customer.phone+`">
-                                    +`+quote.customer.phone.substring(0, 3) + " " + quote.customer.phone.substring(3, 6) + "-" + quote.customer.phone.substring(6)+`
+                                <a href="tel:+`+quote["customer"]["phone"]+`">
+                                    +`+quote["customer"]["phone"].substring(0, 3) + " " + quote['customer']['phone'].substring(3, 6) + "-" + quote["customer"]["phone"].substring(6)+`
                                 </a>
                             </td>`
                             : "")+
-                            `<td>`+(new Date(Date.parse(quote.dtCreated)).toLocaleString("fr-CA"))+`</td>`+
+                            `<td>`+(new Date(Date.parse(quote["dtCreated"])).toLocaleString("fr-CA"))+`</td>`+
                             (!$(".table-quotes").first().hasClass("user-profile") ?
-                            `<td>`+quote.dispatcher.firstName+" "+quote.dispatcher.lastName+`</td>`
+                            `<td>`+quote["dispatcher"]["firstName"]+" "+quote["dispatcher"]["lastName"]+`</td>`
                             : "")+
                             `<td>
-                                <select class="quote-status-list form-control badge badge-`+backgroundType+`" data-quote-no="`+quote.id+`">
+                                <select class="quote-status-list form-control badge badge-`+backgroundType+`" data-quote-no="`+quote["idQuote"]+`">
                                 </select>
                             </td>
-                            <td class="timerFromLastStatus" data-timer="` + (moment().diff(moment(quote.dtStatusUpdated), "s") || 0) + `">0m</td>
+                            <td class="timerFromLastStatus" data-timer="` + (moment().diff(moment(quote["dtStatusUpdated"]), "s") || 0) + `">0m</td>
                             <td class="faq-table-btn">
-                                <a href="/quotes/`+quote.id+`/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                                <a href="/quotes/`+quote["idQuote"]+`/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                     <i class="icofont icofont-ui-edit"></i>
                                 </a>
-                                <a href="/quotes/`+quote.id+`/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                                <a href="/quotes/`+quote["idQuote"]+`/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
                                     <i class="icofont icofont-eye-alt"></i>
                                 </a>
                             </td>
                         </tr>`);
                     status.forEach(function(stat) {
-                        $("select.quote-status-list[data-quote-no='"+quote.id+"']").append(`
-                                    <option value="`+stat.id+`" `+(stat.id == quote.status.id ? "selected" : "")+`>
-                                        `+stat.name+`
+                        $("select.quote-status-list[data-quote-no='"+quote["idQuote"]+"']").append(`
+                                    <option value="`+stat["idStatus"]+`" `+(stat["idStatus"] == quote["status"]["idStatus"] ? "selected" : "")+`>
+                                        `+stat["name"]+`
                                     </option>`);
                     });
                 });

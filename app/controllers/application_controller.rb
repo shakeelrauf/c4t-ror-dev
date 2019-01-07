@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+	layout 'dashboard'
 	skip_before_action :verify_authenticity_token
 	include ApplicationHelper
 	include Response

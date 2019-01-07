@@ -85,7 +85,7 @@ class Api::V1::CustomerController < ApiController
 
   def show
     puts 'Edit Screen API'
-    client = Customer.includes(:address,:heardofus,business: [:contacts]).where(idClient: params[:no]).to_json(include: [:address,:heardofus,business: {include: :contacts}])
+    client = Customer.includes(:address,:heardofus,business: [:contacts]).where(idClient: params[:no]).first.to_json(include: [:address,:heardofus,business: {include: :contacts}])
     if client
       return render_json_response(client, :ok)
     else
@@ -207,7 +207,8 @@ class Api::V1::CustomerController < ApiController
   end
 
   def phones
-    phones = Customer.select('idClient AS id, phone, cellPhone, secondaryPhone').where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params['search'] + "%", params['search'] + "%", params['search'] + "%").limit(params['limit'].to_i).offset(params['offset'].to_i * params['limit'].to_i)
+    phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
+    phones = Customer.all if !params[:search].present?
     return render_json_response(phones, :ok) if !phones.empty?
   end
 

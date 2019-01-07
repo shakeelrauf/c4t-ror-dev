@@ -24,7 +24,7 @@ class SendFormController < ApplicationController
         break
       end
     end
-    successful_login(user, res1)
+    successful_login(user,res1)
     return respond_ok
   end
 

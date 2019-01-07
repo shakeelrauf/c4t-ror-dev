@@ -1,6 +1,3 @@
-<%= render :partial => 'shared/header' %>
-<%= render :partial => 'shared/menu' %>
-
 <div class="content-wrapper">
         <!-- Container-fluid starts -->
         <div class="container-fluid">
@@ -198,61 +195,60 @@
             </div>
         </div>
         <!-- Container-fluid ends -->
-    </div>
 </div>
-<script>
-function growling(message, type) {
-    $.growl({
-        message: message
-    },{
-        type: "success",
-        allow_dismiss: true,
-        label: 'Cancel',
-        className: 'btn-xs btn-inverse',
-        delay: 0,
-        placement: {
-            from: 'top',
-            align: 'center'
-        },
-        animate: { enter: 'animated fadeInDown' }
-    });
-}
+<% content_for :js do %>
+  <script>
+      function growling(message, type) {
+          $.growl({
+              message: message
+          },{
+              type: "success",
+              allow_dismiss: true,
+              label: 'Cancel',
+              className: 'btn-xs btn-inverse',
+              delay: 0,
+              placement: {
+                  from: 'top',
+                  align: 'center'
+              },
+              animate: { enter: 'animated fadeInDown' }
+          });
+      }
 
-$(document).ready(function() {
-    $("#crm-contact").DataTable({
-        "paging": false,
-        "searching": false,
-        "info":     false,
-        "order": [],
-        "fixedHeader": true
-    });
-    <% isAdded = nil %>
-<% if (isAdded && isAdded == "true") %>
-    growling("The quote is maked and customer [added/edited]!", "success");
-<% elsif (isAdded && isAdded == "false" && reason) %>
-    growling("An error occur: " + reason, "danger");
+      $(document).ready(function() {
+          $("#crm-contact").DataTable({
+              "paging": false,
+              "searching": false,
+              "info":     false,
+              "order": [],
+              "fixedHeader": true
+          });
+          <% if (params[:isAdded] && params[:isAdded] == "true") %>
+            growling("The quote is maked and customer [added/edited]!", "success");
+          <% elsif (params[:isAdded] && params[:isAdded] == "false" && params[:reason]) %>
+            growling("An error occur: " + reason, "danger");
+          <% end %>
+          function updateTimer(val) {
+              var myTime = Number($(val).attr("data-timer"))+1;
+              $(val).attr("data-timer", myTime);
+              // Less than 1 hour.
+              if(myTime < 3600) {
+                  $(val).text(Math.floor(myTime/60) + "m");
+                  // Between 1 hour and 48 hours
+              } else if(myTime < 3600 * 48) {
+                  $(val).text(Math.floor(myTime/3600) + "h");
+                  // After 48 hours
+              } else {
+                  $(val).text(Math.floor(myTime/(3600*24)) + "d");
+              }
+          }
+
+          setInterval(() => {
+              $.each($('.timerFromLastStatus'), function(i, val){
+                  updateTimer(val)
+              });
+          }, 1000);
+      });
+  </script>
+  <%= public_js_path 'quote-list.js' %>
 <% end %>
-
-    function updateTimer(val) {
-        var myTime = Number($(val).attr("data-timer"))+1;
-        $(val).attr("data-timer", myTime);
-        // Less than 1 hour.
-        if(myTime < 3600) {
-            $(val).text(Math.floor(myTime/60) + "m");
-        // Between 1 hour and 48 hours
-        } else if(myTime < 3600 * 48) {
-            $(val).text(Math.floor(myTime/3600) + "h");
-        // After 48 hours
-        } else {
-            $(val).text(Math.floor(myTime/(3600*24)) + "d");
-        }
-    }
-
-    setInterval(() => {
-        $.each($('.timerFromLastStatus'), function(i, val){
-            updateTimer(val)
-        });
-    }, 1000);
-});
-</script>
-<script type="text/javascript" src="/js/quote-list.js"></script>
