@@ -1,5 +1,5 @@
 class CustomersController < ApplicationController
-  before_action :login_required
+  # before_action :login_required
 
 
   def new
