@@ -1,0 +1,75 @@
+<%= render :partial => 'shared/header' %>
+<%= render :partial => 'shared/menu' %>
+<div class="content-wrapper">
+        <!-- Container-fluid starts -->
+        <div class="container-fluid">
+            <!-- Row Starts -->
+            <div class="row">
+                <div class="col-sm-12 p-0">
+                    <div class="main-header">
+                        <h4>Edit Heard Of Us</h4>
+                        <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+                            <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
+                            <li class="breadcrumb-item">Administration</li>
+                            <li class="breadcrumb-item"><a href="/heardofus">Heard Of Us</a></li>
+                            <li class="breadcrumb-item"><a href="/heardofus/add">Add Heard Of Us</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Row end -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-sm-12">
+                        <!-- Shopping cart start -->
+                        <div class="card">
+                            <div class="card-header">
+	                            <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                                    Edit Heard Of Us
+                                </h5>
+                            </div>
+                            <form method="PUT" action="/update">
+                                <% if (@heardofus.id) %>
+                                <input type="hidden" name="no" value="<%= @heardofus.id %>">
+                                <% end %>
+                                <div class="card-block row">
+                                    <div class="col-lg-10 md-group-add-on">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-social-google-talk"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="text" name="type" class="md-form-control md-static" required value="<%= @heardofus.type %>">
+                                            <label>Name <span class="required">*</span></label>
+                                        </div>
+                                    </div>
+                                    <input type="submit" class="col-lg-3 btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" value="Save">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid ends -->
+    </div>
+</div>
+</div>
+<!-- end save dialog-->
+<script>
+function growling(message, type) {
+    $.growl({
+        message: message
+    },{
+        type: type,
+        allow_dismiss: true,
+        label: 'Cancel',
+        className: 'btn-xs btn-inverse',
+        delay: 0,
+        placement: {
+            from: 'bottom',
+            align: 'right'
+        },
+        animate: { enter: 'animated fadeInUp' }
+    });
+}
+</script>

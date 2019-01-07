@@ -37,7 +37,6 @@
                   password: $("#txtPassword").val()
               }
           }).done(function(logInfo) {
-              debugger
               if(logInfo["error"]) {
                   $("#txtPassword").val("");
                   $(".loading").addClass("hidden");

@@ -10,7 +10,25 @@ Rails.application.routes.draw do
     get 	:dashboard,												action: :dashboard
     get   :dispatch, 												action: :dispatched
   end
+
+  root "dashboard#dashboard"
+
+  scope  controller: :charity do
+    get '/charities',                           action: :get_charities
+    get '/charities/add',              	 				action: :new
+    get '/charities/:no',              	 				action: :edit
+    post '/charities',                          action: :create
+    get '/update',                     				action: :update
+  end
   
+  scope  controller: :heardofus do
+    get '/heardofus',                           action: :get_heardsofus
+    get '/heardofus/add',              	 				action: :new
+    get '/heardofus/:no',              	 				action: :edit
+    post '/heardofus',                          action: :create
+    get '/update',                     				action: :update
+  end
+
 	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
 	  collection do
 	    post '/blacklist/:no', 								action: :blacklist
