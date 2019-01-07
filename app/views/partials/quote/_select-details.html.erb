@@ -1,0 +1,222 @@
+<div class="row">
+    <div class="col-lg-12 md-group-add-on">
+        <!-- Nav tabs -->
+        <div class="tab-header">
+            <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
+            </ul>
+        </div>
+        <!-- end of tab-header -->
+
+        <div class="tab-content tab-content-details">
+        </div>
+    </div>
+</div>
+<script>
+//Set handler for missing parts or options for each car in step 2.
+function initDetailsListeners() {
+    $(".selectnumber").change(function() {
+        var carId = $(this).closest(".tab-pane").attr("id").substr(3);
+        var part = $(this).attr("name");
+        var iMissings = $(this).val();
+        //Search if missing part exist.
+        var aMissingsParts = lstCars[lstCars.findIndex(car => car.id == carId)].missingParts;
+        var iArray = aMissingsParts.map(oPart => { return oPart.type; }).indexOf(part);
+        if(iArray == -1 && iMissings > 0) {
+            aMissingsParts.push({
+                "type": part,
+                "amount": iMissings
+            });
+        } else if(iArray >= 0 && iMissings > 0) {
+            aMissingsParts[iArray].amount = iMissings;
+        } else if(iArray >= 0 && iMissings == 0) {
+            aMissingsParts.splice(iArray, 1);
+        }
+        lstCars[lstCars.findIndex(car => car.id == carId)].missingParts = aMissingsParts;
+    });
+
+    $(".handlingOption").on("click", function(e) {
+        var id = $(e.target).attr("id");
+        var carId = id.substring(6).split('-')[0];
+        if($(e.target).is(':checked')) {
+            //Reduce price
+            if(id.indexOf("Battery") != -1) {
+                lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.push({"type": "Battery", "amount": 1});
+            } else if(id.indexOf("Catalyzer") != -1) {
+                lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.push({"type": "Catalyzer", "amount": 1});
+            } else if(id.indexOf("key") != -1) {
+                lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.push({"type": "Key", "amount": 1});
+            } else { //FlatBedTruckRequired
+                lstCars[lstCars.findIndex(car => car.id == carId)].flatBedTruckRequired = true;
+            }
+        } else {
+            //Add price.
+			if(id.indexOf("Battery") != -1) {
+                lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.splice(lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.indexOf(oPart => {
+                    return oPart.type == "Battery";
+                }),1);
+            } else if(id.indexOf("Catalyzer") != -1) {
+                lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.splice(lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.indexOf(oPart => {
+                    return oPart.type == "Catalyzer";
+                }),1);
+            } else if(id.indexOf("key") != -1) {
+                lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.splice(lstCars[lstCars.findIndex(car => car.id == carId)].missingParts.indexOf(oPart => {
+                    return oPart.type == "Key";
+                }),1);
+            } else { //FlatBedTruckRequired
+                lstCars[lstCars.findIndex(car => car.id == carId)].flatBedTruckRequired = false;
+            }
+        }
+    });
+    $(".handlingOptionRadio").on("change", function(e) {
+        var id = $(e.target).attr("id");
+        var carId = id.substring(6).split('-')[0];
+        if($(e.target).val() == "dropoff") {
+            lstCars[lstCars.findIndex(car => car.id == carId)].dropoff = "1";
+        } else {
+            delete lstCars[lstCars.findIndex(car => car.id == carId)].dropoff;
+        }
+    });
+    $(".handlingDonation").on("change", function(e) {
+        var id = $(e.target).attr("id");
+        var carId = id.substring(6).split('-')[0];
+        lstCars[lstCars.findIndex(car => car.id == carId)].donation = $(e.target).val();
+    });
+}
+
+//Fill all fields on step 2.
+function fillStep2() {
+    $(".tab-details").html("");
+    $(".tab-content-details").html("");
+
+    $.ajax("/settings/json").done(function(parameters) {
+        settings = parameters;
+        var isActive = true;
+        lstCars.forEach(function(car) {
+            $(".tab-details").append(`
+                <li class="nav-item" style="display:block">
+                    <a class="nav-link` + (isActive?" active":"") + `" data-toggle="tab" href="#tab` + car.id + `" role="tab">` + car.make + " " + car.model + " " + car.year + `</a>
+                    <div class="slide"></div>
+                </li>`);
+            $(".tab-content-details").append(`
+                <div class="tab-pane` + (isActive?" active":"") + `" id="tab` + car.id + `" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-header-text">` + car.make + " " + car.model + " " + car.year + `</h5>
+                        </div>
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h6>Missing parts</h6>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mmd-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-disc"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="number" name="wheels" min="0" max="18" value="0" class="md-form-control selectnumber md-static" step="1" data-old-value="0">
+                                            <label>Missing Wheels</label>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="col-lg-6">
+                                    <div class="mmd-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-wheel"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="number" name="tires" min="0" max="18" value="0" class="md-form-control selectnumber md-static" step="1" data-old-value="0">
+                                            <label>Missing Tires</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="mmd-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-ui-battery"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="checkbox" class="md-form-control md-static handlingOption" id="option`+car.id+`-Battery">
+                                            <label>Missing Battery</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="mmd-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-key"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="checkbox" class="md-form-control md-static handlingOption" id="option`+car.id+`-key">
+                                            <label>Missing Key</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="mmd-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-cloudy"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="checkbox" class="md-form-control md-static handlingOption" id="option`+car.id+`-Catalyzer">
+                                            <label>Missing Catalytic converter</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h6>Car Options</h6>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="md-group-add-on">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-truck-loaded"></i>
+                                        </span>
+                                        <label class="howto">Choose how to get this car</label>
+                                        <div class="md-input-wrapper cashradio">
+                                            <input type="radio" name="pickup`+car.id+`" value="pickup" checked="checked" class="handlingOptionRadio" id="option`+car.id+`-Pickup">
+                                            <label>Pickup (-50$)</label><br>
+										</div>
+										<div class="md-input-wrapper cashradio">
+                                            <input type="radio" name="pickup`+car.id+`" value="dropoff" class="handlingOptionRadio" id="option`+car.id+`-Dropoff">
+                                            <label>Drop Off (0$)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="md-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-truck-loaded"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <input type="checkbox" class="md-form-control md-static handlingOption" id="option`+car.id+`-FlatBedTruck">
+                                            <label>Required flat bed truck</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="mmd-group-add-on cashcheckdiv">
+                                        <span class="md-add-on">
+                                            <i class="icofont icofont-group-students"></i>
+                                        </span>
+                                        <div class="md-input-wrapper">
+                                            <select class="md-form-control handlingDonation md-static selectcash" id="option`+car.id+`-Donation">
+                                                <option value="">No</option>
+                                                <% @charities.each do |charitie|  %>
+                                                <option value="<%= charitie.id %>"><%= charitie.name %></option>
+                                                <% end %>
+                                            </select>
+                                            <label>Donation</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`);
+            isActive = false;
+        });
+
+        initDetailsListeners();
+    });
+}
+</script>

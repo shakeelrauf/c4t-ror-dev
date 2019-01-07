@@ -1,0 +1,324 @@
+<div class="row">
+    <div class="col-lg-4 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-phone"></i>
+        </span>
+        <div class="md-input-wrapper selectcashphone">
+            <select class="md-form-control md-static selectcash" id="txtPhone"></select>
+            <label>Phone Number <span class="required">*</span></label>
+        </div>
+    </div>
+    <div class="col-lg-2 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-headphone-alt"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="number" class="md-form-control md-static" id="txtExtension">
+            <label>Extension</label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-ui-email"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="email" class="md-form-control md-static" id="txtEmail">
+            <label>Email</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-smart-phone"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="tel" class="md-form-control md-static" id="txtCell">
+            <label>Cell Phone</label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-phone"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="tel" class="md-form-control md-static" id="txtSecondPhone">
+            <label>Other Phone</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-ui-user"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtFirstName">
+            <label>First Name <span class="required">*</span></label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-ui-user"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtLastName">
+            <label>Last Name</label>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-lg-3 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-bank-alt"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <select class="md-form-control md-static selectcash" id="txtType">
+                <option>Individual</option>
+                <option>Business</option>
+                <option>Garage</option>
+                <option>Dealership</option>
+                <option>Tow Truck</option>
+            </select>
+            <label>Type</label>
+        </div>
+    </div>
+</div>
+<div class="row company-data force-hidden">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-company"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtContactPosition">
+            <label>Position <span class="required">*</span></label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-bank"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtCompanyName">
+            <label>Company Name <span class="required">*</span></label>
+        </div>
+    </div>
+</div>
+<div class="row company-data force-hidden">
+    <div class="col-lg-12 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-bank"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtDescription">
+            <label>Company Description</label>
+        </div>
+    </div>
+</div>
+<div class="row company-data force-hidden">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-bank"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtPST">
+            <label>PST Tax Reference Number <span class="required">*</span></label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-bank"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtGST">
+            <label>GST Tax Reference Number <span class="required">*</span></label>
+        </div>
+    </div>
+</div>
+<%= render :partial => 'customers/customers_data' %>
+<hr>
+<div class="row">
+    <div class="col-lg-12 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-address-book"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtAddress" required onchange="validateAddress()">
+            <label>Address <span class="required">*</span></label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-5 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-address-book"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtCity" required onchange="validateAddress()">
+            <label>City <span class="required">*</span></label>
+        </div>
+    </div>
+    <div class="col-lg-3 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-ui-message"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtPostal">
+            <label>Postal Code</label>
+        </div>
+    </div>
+    <div class="col-lg-4 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-address-book"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <select class="md-form-control md-static selectcash" id="txtProvince" required onchange="validateAddress()">
+                <option value="On">Ontario</option>
+                <option value="Bc">British Columbia</option>
+                <option value="Qc">Québec</option>
+                <option value="Al">Alberta</option>
+                <option value="Ns">Nova Scotia</option>
+                <option value="Nl">Newfoundland and Labrador</option>
+                <option value="Sa">Saskatchewan</option>
+                <option value="Ma">Manitoba</option>
+                <option value="Nb">New Brunswick</option>
+                <option value="Pe">Prince Edward Island</option>
+            </select>
+            <label>Province <span class="required">*</span></label>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-social-google-talk"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <select class="md-form-control md-static selectcash" id="txtHeardOfUs">
+                <option disabled selected value style="display:none"></option>
+            <% @heardsofus.each do |heardofus| %>
+                <option><%= heardofus.type %></option>
+            <% end %>
+                <option>Other</option>
+            </select>
+            <label>Heard of Us <span class="required">*</span></label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-coins"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <select class="md-form-control md-static selectcash" id="txtGrade">
+                <option>None</option>
+                <option>Bronze</option>
+                <option>Silver</option>
+                <option>Gold</option>
+                <option>Custom</option>
+            </select>
+            <label>Grade</label>
+        </div>
+    </div>
+</div>
+<div class="row inputCreateHidden hidden" style="height:0px;">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-question-circle"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="text" class="md-form-control md-static" id="txtHow">
+            <label>How he know us <span class="required">*</span></label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-info"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <textarea class="md-form-control md-static" id="txtNote"></textarea>
+            <label>Note</label>
+        </div>
+    </div>
+</div>
+<div class="row custom-grade-data force-hidden">
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-coins"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarCar">
+            <label>($) Car Bonus</label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-coins"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercCar">
+            <label>(%) Car Bonus</label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-coins"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarSteel">
+            <label>($) Steel Bonus</label>
+        </div>
+    </div>
+    <div class="col-lg-6 md-group-add-on">
+        <span class="md-add-on">
+            <i class="icofont icofont-coins"></i>
+        </span>
+        <div class="md-input-wrapper">
+            <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercSteel">
+            <label>(%) Steel Bonus</label>
+        </div>
+    </div>
+</div>
+<script>
+     userRole = "<%= @user.first.roles %>"
+     <% client = @customers.first %>
+    <% if (client) %>
+$(document).ready(function() {
+    $("#txtPhone").append(`<option value="<%= client.id %>"><%- client.phone %></option>`);
+    $("#txtExtension").val("<%= client.extension %>");
+    $("#txtEmail").val("<%= client.email %>");
+    $("#txtCell").val("<%= client.cellPhone %>");
+    $("#txtSecondPhone").val("<%= client.secondaryPhone %>");
+    $("#txtFirstName").val("<%= client.firstName %>");
+    $("#txtLastName").val("<%= client.lastName %>");
+    <% if (client.business) %>
+    $("#txtType").val("<%= client.type %>");
+    $("#txtContactPosition").val("<%= client.business.contactPosition %>");
+    $("#txtCompanyName").val("<%= client.business.name %>");
+    $("#txtDescription").val("<%= client.business.description %>");
+    $("#txtPST").val("<%= client.business.pstTaxNo %>");
+    $("#txtGST").val("<%= client.business.gstTaxNo %>");
+    <% end %>
+    $("#txtAddress").val("<%= client.address.first.address if client.address.first.present? %>");
+    $("#txtCity").val("<%= client.address.first.city if client.address.first.present? %>");
+    $("#txtPostal").val("<%= client.address.first.postal if client.address.first.present? %>");
+    $("#txtProvince option[value=<%= client.address.first.province if client.address.first.present? %>]").prop('selected', true);
+    $("#txtHeardOfUs").val("Other");
+    $("#txtGrade").val("<%= client.grade %>");
+    $("#txtHow").val("<%= client.heardofus %>");
+    $("#txtNote").val("<%= client.note %>");
+    $("#txtCustomDollarCar").val("<%= client.customDollarCar %>");
+    $("#txtCustomPercCar").val("<%= client.customPercCar %>");
+    $("#txtCustomDollarSteel").val("<%= client.customDollarSteel %>");
+    $("#txtCustomPercSteel").val("<%= client.customPercSteel %>");
+
+    //Go next step:
+    setTimeout(function() {
+        wizard.steps("next");
+    }, 100);
+});
+    <% end %>
+</script>
