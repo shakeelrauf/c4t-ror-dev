@@ -21,6 +21,7 @@
             </div>
          </div>
          <!-- Row end -->
+         <form method="post" action="/customers" id="customer-form">
          <div class="row">
             <div class="col-sm-12">
                <div class="card">
@@ -34,7 +35,7 @@
                            <i class="icofont icofont-phone"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="tel" class="md-form-control md-static" id="txtPhone" value="">
+                              <input type="tel" class="md-form-control md-static" id="txtPhone" name="phoneNumber" value="">
                               <label>Phone Number <span class="required">*</span></label>
                            </div>
                         </div>
@@ -43,7 +44,8 @@
                            <i class="icofont icofont-headphone-alt"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="number" class="md-form-control md-static" id="txtExtension">
+                              <input type="number" class="md-form-control md-static" id="txtExtension" name=
+                              "extension">
                               <label>Extension</label>
                            </div>
                         </div>
@@ -52,7 +54,7 @@
                            <i class="icofont icofont-ui-email"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="email" class="md-form-control md-static" id="txtEmail">
+                              <input type="email" class="md-form-control md-static" name="email" id="txtEmail">
                               <label>Email</label>
                            </div>
                         </div>
@@ -63,7 +65,7 @@
                            <i class="icofont icofont-smart-phone"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="tel" class="md-form-control md-static" id="txtCell">
+                              <input type="tel" class="md-form-control md-static" name="phoneNumber2" id="txtCell">
                               <label>Cell Phone</label>
                            </div>
                         </div>
@@ -72,7 +74,7 @@
                            <i class="icofont icofont-phone"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="tel" class="md-form-control md-static" id="txtSecondPhone">
+                              <input type="tel" class="md-form-control md-static" name="phoneNumber3" id="txtSecondPhone">
                               <label>Other Phone</label>
                            </div>
                         </div>
@@ -83,7 +85,7 @@
                            <i class="icofont icofont-ui-user"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="text" class="md-form-control md-static" id="txtFirstName" value="">
+                              <input type="text" class="md-form-control md-static" name="firstName" id="txtFirstName" value="">
                               <label>First Name <span class="required">*</span></label>
                            </div>
                         </div>
@@ -92,7 +94,7 @@
                            <i class="icofont icofont-ui-user"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <input type="text" class="md-form-control md-static" id="txtLastName" value="">
+                              <input type="text" class="md-form-control md-static" id="txtLastName" name="lastName" value="">
                               <label>Last Name</label>
                            </div>
                         </div>
@@ -104,7 +106,7 @@
                            <i class="icofont icofont-bank-alt"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <select class="md-form-control md-static selectcash" id="txtType">
+                              <select class="md-form-control md-static selectcash" id="txtType" name="type">
                                  <option>Individual</option>
                                  <option>Business</option>
                                  <option>Garage</option>
@@ -246,7 +248,7 @@
                                  <i class="icofont icofont-address-book"></i>
                                  </span>
                                  <div class="md-input-wrapper">
-                                    <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" required="" value="">
+                                    <input type="text" class="md-form-control txtAddress md-static" name="address" id="txtAddress"  value="">
                                     <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" required="" value="">
                                     <label>Address <span class="required">*</span></label>
                                  </div>
@@ -257,7 +259,7 @@
                                     <i class="icofont icofont-address-book"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtCity md-static" id="txtCity" required="" value="">
+                                       <input type="text" class="md-form-control txtCity md-static" name="city" id="txtCity" value="">
                                        <label>City <span class="required">*</span></label>
                                     </div>
                                  </div>
@@ -266,7 +268,7 @@
                                     <i class="icofont icofont-address-book"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince">
+                                       <select class="md-form-control province txtProvince md-static selectcash" name="province" id="txtProvince">
                                           <option value="ON">Ontario</option>
                                           <option value="BC">British Columbia</option>
                                           <option value="QC">Quebec</option>
@@ -286,7 +288,7 @@
                                     <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtPostal md-static" id="txtPostal" value="">
+                                       <input type="text" class="md-form-control txtPostal md-static" name="postal" id="txtPostal" value="">
                                        <label>Postal Code <span class="required">*</span></label>
                                     </div>
                                  </div>
@@ -380,7 +382,7 @@
                            <i class="icofont icofont-social-google-talk"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <select class="md-form-control md-static selectcash" id="txtHeardOfUs">
+                              <select class="md-form-control md-static selectcash" id="txtHeardOfUs" name="heardOfUs">
                                  <option disabled="" selected="" value="" style="display:none"></option>
                                  <option>41</option>
                                  <option>a</option>
@@ -432,7 +434,7 @@
                            <i class="icofont icofont-coins"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <select class="md-form-control md-static selectcash" id="txtGrade">
+                              <select class="md-form-control md-static selectcash" id="txtGrade" name="grade">
                                  <option>None</option>
                                  <option>Bronze</option>
                                  <option>Silver</option>
@@ -460,7 +462,7 @@
                            <i class="icofont icofont-info"></i>
                            </span>
                            <div class="md-input-wrapper">
-                              <textarea class="md-form-control md-static" id="txtNote"></textarea>
+                              <textarea class="md-form-control md-static" name="note" id="txtNote"></textarea>
                               <label>Note</label>
                            </div>
                         </div>
@@ -508,7 +510,7 @@
                   <div class="col-sm-12">
                      <div class="row">
                         <div class="col-lg-12 text-center">
-                           <button type="button" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" id="saveCustomerButton" data-id-customer="new">Save</button>
+                           <button type="submit" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" id="saveCustomerButton" data-id-customer="new">Save</button>
                            <a href="/customers" class="btn btn-primary waves-effect m-r-20 f-w-600 md-close d-inline-block">Return</a>
                            <br><br>
                         </div>
@@ -521,3 +523,87 @@
    </div>
    <!-- Container-fluid ends -->
 </div>
+<script type="text/javascript">
+    function growlOfSuccess(message) {
+        $.growl({
+            message: message
+        },{
+            type: "success",
+            allow_dismiss: true,
+            label: 'Cancel',
+            className: 'btn-xs btn-inverse',
+            delay: 0,
+            placement: {
+                from: 'top',
+                align: 'center'
+            },
+            animate: { enter: 'animated fadeInDown' }
+        });
+    }
+
+    function growling(message) {
+        $.growl({
+            message: message
+        },{
+            type: "danger",
+            allow_dismiss: true,
+            label: 'Cancel',
+            className: 'btn-xs btn-inverse',
+            placement: {
+                from: 'top',
+                align: 'center'
+            },
+            delay: 0,
+            animate: { enter: 'animated fadeInDown' }
+        });
+    }
+
+    $(document).ready(function(){
+        function valid_fields(){
+            var $phone_num = $("#txtPhone").val();
+            var $first_name = $("#txtFirstName").val();
+            var $address = $("#txtAddress").val();
+            var $city = $("#txtCity").val();
+            var $province = $("#txtProvince").val();
+            var $postal = $("#txtPostal").val();
+            var $heard = $("#txtHeardOfUs").val();
+            if ($phone_num == "" ||
+                $first_name == "" ||
+                $address == "" ||
+                $city == "" ||
+                $province == "" ||
+                $postal == "" ||
+                $heard == "" ||
+                $heard == null)
+            {
+                growling("Please send all required attributes");
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        $("#customer-form").submit(function(e){
+
+            e.preventDefault();
+            if (valid_fields()){
+                $('#saveCustomerButton').attr('disabled','disabled')
+                $.ajax({
+                    method: "post",
+                    url: "/customers",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(res){
+                        $('#saveCustomerButton').removeAttr('disabled');
+                        if(res.response.idClient != undefined){
+                            growlOfSuccess("Customer created successfully");
+                        }
+                        else{
+                            growling(res.response.error)
+                        }
+                    }
+                });
+            }
+        });
+    })
+</script>

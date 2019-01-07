@@ -1,6 +1,6 @@
 class Api::V1::CustomerController < ApiController
   include ActionView::Helpers::NumberHelper
-	before_action :authenticate_user, except: [:index,:show]
+	# before_action :authenticate_user
 
   def create
     if check_params
@@ -13,7 +13,7 @@ class Api::V1::CustomerController < ApiController
       customPercCar = 0
       customPercSteel = 0
 
-      if current_user.roles.eql?("admin") 
+      if current_user.present? && current_user.roles.eql?("admin") 
         customDollarCar = params[:customDollarCar] if params[:customDollarCar]
         customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
         customPercCar = params[:customPercCar] if params[:customPercCar]
@@ -42,10 +42,12 @@ class Api::V1::CustomerController < ApiController
           params[:addresses].each do |a|
             puts "ADDRESS ADDING :: #{a["address"]}"
             newAddress = client.address.new( address: a["address"],city: a["city"],postal: a["postal"],province: a["province"].upcase)
-            distance = get_distance(newAddress)
-            newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
+            #need map api keys to get distance
+            # distance = get_distance(newAddress)
+            newAddress.distance = 361715
+            # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
             newAddress.save!
-            if !params[:company].eql?("0")
+            if params[:company].eql?("0")
               busi = client.build_business({
                 name: params[:name],
                 description: params[:description],

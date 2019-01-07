@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     get 	:dashboard,												action: :dashboard
     get   :dispatch, 												action: :dispatched
   end
+
+  root "dashboard#dashboard"
   
   scope  controller: :heardofus do
     get '/heardofus',                           action: :get_heardsofus
