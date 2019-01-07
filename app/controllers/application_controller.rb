@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
 			return true
 		elsif (request.get?)
 			session[:return_url] = request.url
+
+			logger.info("Auth NOT successful, sending to login")
+			redirect_to login_path
+			return false
 		else
 			logger.info("Auth NOT successful, sending to login")
 			redirect_to login_path
