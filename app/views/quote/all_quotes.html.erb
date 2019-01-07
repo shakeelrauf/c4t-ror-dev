@@ -240,7 +240,7 @@ $(document).ready(function() {
         if(myTime < 3600) {
             $(val).text(Math.floor(myTime/60) + "m");
         // Between 1 hour and 48 hours
-        } elsif(myTime < 3600 * 48) {
+        } else if(myTime < 3600 * 48) {
             $(val).text(Math.floor(myTime/3600) + "h");
         // After 48 hours
         } else {
