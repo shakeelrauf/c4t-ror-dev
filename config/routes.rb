@@ -11,6 +11,14 @@ Rails.application.routes.draw do
     get   :dispatch, 												action: :dispatched
   end
   
+  scope  controller: :heardofus do
+    get '/heardofus',                           action: :get_heardsofus
+    get '/heardofus/add',              	 				action: :new
+    get '/heardofus/:no',              	 				action: :edit
+    post '/heardofus',                          action: :create
+    get '/update',                     				action: :update
+  end
+
 	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
 	  collection do
 	    post '/blacklist/:no', 								action: :blacklist
