@@ -22,11 +22,11 @@ class ApplicationController < ActionController::Base
 			return true
 		elsif (request.get?)
 			session[:return_url] = request.url
+		else
+			logger.info("Auth NOT successful, sending to login")
+			redirect_to login_path
+			return false
 		end
-
-		logger.info("Auth NOT successful, sending to login")
-		redirect_to login_path
-		return false
 	end
 
 	def set_session_expiration
@@ -100,8 +100,10 @@ class ApplicationController < ActionController::Base
 	end
 
 	def get_token
-		if has_session? && is_session_expired?
-			session[:token]["access_type"]+" "+session[:token]["access_token"]
+		if has_session? && !is_session_expired?
+			session[:token]["token_type"]+" "+session[:token]["access_token"]
+		else
+			reset_session
 		end
 	end
 
@@ -113,6 +115,7 @@ class ApplicationController < ActionController::Base
 		session[:user_id] = user["idUser"]
 		session[Constants::CSRF_TOKENS] = []
 		h = SecureRandom.hex(Constants::CSRF_SIZE)
+		session[:expires_at] = 1.day.from_now
 		cookies[Constants::CSRF_COOKIE] = {
 				:value => h,
 				:expires => 1.day.from_now,

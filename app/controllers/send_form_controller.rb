@@ -12,9 +12,9 @@ class SendFormController < ApplicationController
         "client_secret": params[:password],
         "grant_type": "client_credentials"
     }
-    res = ApiCall.post("/token", body,headers )
-    return respond_error("Authentication failed!") if res["error"]
-    token = res["access_token"]
+    res1 = ApiCall.post("/token", body,headers )
+    return respond_error("Authentication failed!") if res1["error"]
+    token = res1["access_token"]
     res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": "Bearer "+token})
     users = res
     user = {}
@@ -24,7 +24,7 @@ class SendFormController < ApplicationController
         break
       end
     end
-    successful_login(user,"asas")
+    successful_login(user, res1)
     return respond_ok
   end
 
