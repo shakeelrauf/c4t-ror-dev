@@ -2,7 +2,11 @@ class DashboardController < ApplicationController
   before_action :login_required
     
   def dashboard
-
+    heardofus = ApiCall.get('/clients/statistics/heardofus',{}, headers)
+    countClients =  heardofus.count
+    render locals: {user: current_user,
+                      heardofus: heardofus,
+                      countClients: countClients}
   end
 
   def dispatched

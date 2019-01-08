@@ -208,7 +208,6 @@ class Api::V1::CustomerController < ApiController
 
   def phones
     phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
-    phones = Customer.all if !params[:search].present?
     return render_json_response(phones, :ok) if !phones.empty?
   end
 
@@ -219,31 +218,18 @@ class Api::V1::CustomerController < ApiController
   end
 
   def heardofus
-    # clients.count({
-    #         group: "Customer.idHeardOfUs",
-    #         include: [{
-    #             model: HeardOfUs, as: "heardofus"
-    #         }],
-    #         attributes: ["heardofus.type"]
-    #     }).then(counters => {
-    #         var lstData = [];
-    #         var letters = '0123456789ABCDEF';
-    #         var color = "";
-    #         counters.forEach(counter => {
-    #             color = "#";
-    #             for (var i = 0; i < 6; i++) {
-    #                 color += letters[Math.floor(Math.random() * 16)];
-    #             }
-    #             lstData.push({
-    #                 label: counter.type,
-    #                 data: counter.count,
-    #                 color: color
-    #             })
-    #         });
-    #         res.json(lstData);
-    #     });
-
-    count = Customer.joins(:heardofus).select("heardsofus.type").group("idHeardOfUs")
+    count = Customer.joins(:heardofus).select("heardsofus.type ").group("idHeardOfUs")
+    last_data = []
+    letters = [*'0'..'9',*'A'..'F']
+    color = ""
+    count.each.with_index(1) do |counter, index|
+      color = "#"
+      color+=(0...6).map{ letters.sample }.join
+      last_data.push({label: counter["type"],
+                     data: index,
+                     color: color})
+    end
+    return render_json_response(last_data, :ok)
   end
 
   def postal

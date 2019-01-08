@@ -34,14 +34,10 @@ class Api::V1::VehiclesController < ApiController
       filters = filter.split(' ')
       query = "Select * FROM VehiculesInfo WHERE"
       filters.each do |fil|
-      	query.concat(" ('year' LIKE '#{fil}' OR 'make' LIKE #{fil} OR 'model' LIKE '#{fil}' OR 'trim' LIKE '#{fil}' OR 'body' LIKE '#{fil}' OR 'drive' LIKE '#{fil}' OR 'transmission' LIKE '#{fil}' OR 'seats' LIKE '#{fil}' OR 'doors' LIKE '#{fil}' OR 'weight' LIKE '#{fil}')")
+      	query.concat("'year' LIKE '#{fil}' OR 'make' LIKE '#{fil}' OR 'model' LIKE '#{fil}' OR 'trim' LIKE '#{fil}' OR 'body' LIKE '#{fil}' OR 'drive' LIKE '#{fil}' OR 'transmission' LIKE '#{fil}' OR 'seats' LIKE '#{fil}' OR 'doors' LIKE '#{fil}' OR 'weight' LIKE '#{fil}'")
       	query.concat(" AND ") if !fil.eql?(filters.last)
 			end
 	    r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
-			return render_json_response(r_vehicles, :ok) if r_vehicles
-			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
-		else
-			r_vehicles = VehicleInfo.all
 			return render_json_response(r_vehicles, :ok) if r_vehicles
 			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
 	  end
