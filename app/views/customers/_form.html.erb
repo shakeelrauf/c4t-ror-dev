@@ -192,6 +192,9 @@
                      <div class="row">
                         <h6>Address List</h6>
                         <div class="col-lg-12 row address-edit-list">
+                          <% if action_name == "edit" && @customer.try(:address).present? %>
+                            <%= render :partial => 'customers/edit_address', locals: { addresses: @customer.try(:address) } %>
+                          <% else %>
                            <div class="col-lg-12 row address-edit" id="addressundefined">
                               <div class="col-lg-4 md-group-add-on">
                                  <span class="md-add-on">
@@ -253,6 +256,7 @@
                               </div>
                               <!-- row -->
                            </div>
+                           <% end %>
                         </div>
                         <div class="col-lg-12">
                            <a href="javascript:addAddress({});" class="btn btn-primary f-right md-trigger">

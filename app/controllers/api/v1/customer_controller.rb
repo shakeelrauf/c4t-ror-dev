@@ -49,27 +49,28 @@ class Api::V1::CustomerController < ApiController
             # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
             newAddress.save!
             # if params[:company].eql?("0") #prev
-            if !params[:type].eql?("Individual")
-              busi = client.build_business({
-                name: params[:name],
-                description: params[:description],
-                contactPosition: params[:contactPosition],
-                pstTaxNo: params[:pstTaxNo],
-                gstTaxNo: params[:gstTaxNo]})
-              if busi.save
-                create_contacts(params, busi)
-                #prev
-                # client.business = {}; 
-                # comp = Business.where(params[:id]).first
-                # if comp.present?
-                #   client.business = comp
-                  return render_json_response(client, :ok)
-                # end
-              end
-            else
-              return render_json_response(client, :ok)
-            end
           end
+          if !params[:type].eql?("Individual")
+            busi = client.build_business({
+              name: params[:name],
+              description: params[:description],
+              contactPosition: params[:contactPosition],
+              pstTaxNo: params[:pstTaxNo],
+              gstTaxNo: params[:gstTaxNo]})
+            if busi.save
+              create_contacts(params, busi)
+              #prev
+              # client.business = {}; 
+              # comp = Business.where(params[:id]).first
+              # if comp.present?
+              #   client.business = comp
+                # return render_json_response(client, :ok) #prev
+              # end
+            end
+          else
+            # return render_json_response(client, :ok) #prev
+          end
+          return render_json_response(client, :ok)
         else
           render_json_response({:error => ALREADY_EXISTS, :success => false}, :unprocessable_entity)
         end
@@ -123,6 +124,7 @@ class Api::V1::CustomerController < ApiController
           customDollarSteel = 0
           customPercCar = 0
           customPercSteel = 0
+          updatedClient = ""
 
           if current_user.present? && current_user.roles.eql?("admin") 
             customDollarCar = params[:customDollarCar] if params[:customDollarCar]
@@ -189,11 +191,11 @@ class Api::V1::CustomerController < ApiController
                   #prev
                   # updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first.to_json(:business, :address)
                   updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first
-                  return render_json_response(updatedClient, :ok)
+                  # return render_json_response(updatedClient, :ok) #prev
                 else
                   if Contact.where(idBusiness: params[:no]).destroy_all
                     # if Business.where(id: params[:no]).destroy_all #prev
-                      return render_json_response(clientNote, :ok)
+                      # return render_json_response(clientNote, :ok) #prev
                     # end
                   end
                 end
@@ -217,16 +219,23 @@ class Api::V1::CustomerController < ApiController
                 busi.contacts.destroy_all
                 create_contacts(params, busi)
                 updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
-                return render_json_response(updatedClient, :ok) if updatedClient
+                # return render_json_response(updatedClient, :ok) if updatedClient #prev
               else
                 if Contact.where(idBusiness: params[:no]).destroy_all
                   if Business.where(id: params[:no]).destroy_all
                     updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
-                    return render_json_response(updatedClient, :ok) if updatedClient.present?
+                    # return render_json_response(updatedClient, :ok) if updatedClient.present? #prev
                   end
                 end
               end
             end
+          end
+          if updatedClient.present?
+            return render_json_response(updatedClient, :ok)
+          elsif clientNote.present?
+            return render_json_response(clientNote, :ok)
+          else
+            render_json_response({:error => CLIENT_NOT_FOUND, :success => false}, :not_found)
           end
         end
       end
