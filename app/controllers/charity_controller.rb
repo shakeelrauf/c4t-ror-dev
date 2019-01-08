@@ -1,6 +1,6 @@
 class CharityController < ApplicationController
 	# before_action :authenticate_user
-	# before_action :authenticate_admin, only: [:heardofus, :update]
+	# before_action :authenticate_admin
 
 	def create
 		hou = Charitie.new(name: params[:name], phone: params[:phone], email: params[:email], address: params[:address], info: params[:info])

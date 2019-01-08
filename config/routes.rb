@@ -13,12 +13,17 @@ Rails.application.routes.draw do
 
   root "dashboard#dashboard"
 
+  scope  controller: :setting do
+    get '/settings',                           action: :all
+    post '/settings',                          action: :update
+  end
+
   scope  controller: :charity do
     get '/charities',                           action: :get_charities
     get '/charities/add',              	 				action: :new
     get '/charities/:no',              	 				action: :edit
     post '/charities',                          action: :create
-    get '/update',                     				action: :update
+    get '/update',                     					action: :update
   end
   
   scope  controller: :heardofus do
@@ -26,7 +31,7 @@ Rails.application.routes.draw do
     get '/heardofus/add',              	 				action: :new
     get '/heardofus/:no',              	 				action: :edit
     post '/heardofus',                          action: :create
-    get '/update',                     				action: :update
+    get '/update_hou',                     			action: :update
   end
 
 	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
