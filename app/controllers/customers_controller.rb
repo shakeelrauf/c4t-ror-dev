@@ -1,5 +1,5 @@
 class CustomersController < ApplicationController
-  # before_action :login_required
+  before_action :login_required
 
   def new
     @customer = Customer.new
@@ -15,7 +15,7 @@ class CustomersController < ApplicationController
   end
 
   def show
-    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}", { no: params[:id] }, headers)).first
+    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}", { no: params[:id] }, headers))
     @quotes = JSON.parse(ApiCall.get("/clients/#{params[:id]}/quotes", {}, headers))
     @status = ApiCall.get("/status", {}, headers)
   end
