@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApiController  
   before_action :set_user, only: [:show, :update, :destroy, :block_user]
-  before_action :authenticate_admin
+  before_action :authenticate_user
 
   def create
 	# Validate if user asked this is a super admin.

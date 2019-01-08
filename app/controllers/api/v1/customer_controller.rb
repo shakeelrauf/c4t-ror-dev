@@ -1,6 +1,7 @@
 class Api::V1::CustomerController < ApiController
   include ActionView::Helpers::NumberHelper
-	# before_action :authenticate_user
+  before_action :authenticate_user
+	# before_action :authenticate_admin
 
   def create
     if check_params
@@ -47,7 +48,8 @@ class Api::V1::CustomerController < ApiController
             newAddress.distance = 361715
             # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
             newAddress.save!
-            if params[:company].eql?("0")
+            # if params[:company].eql?("0") #prev
+            if !params[:type].eql?("Individual")
               busi = client.build_business({
                 name: params[:name],
                 description: params[:description],
@@ -55,12 +57,17 @@ class Api::V1::CustomerController < ApiController
                 pstTaxNo: params[:pstTaxNo],
                 gstTaxNo: params[:gstTaxNo]})
               if busi.save
-                client.business = {};
-                comp = Business.where(params[:id]).first
-                if comp.present?
-                  client.business = comp
+                  params[:contacts].each do |contact|
+                   cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
+                   cont.save!
+                  end
+                #prev
+                # client.business = {}; 
+                # comp = Business.where(params[:id]).first
+                # if comp.present?
+                #   client.business = comp
                   return render_json_response(client, :ok)
-                end
+                # end
               end
             else
               return render_json_response(client, :ok)
@@ -103,21 +110,23 @@ class Api::V1::CustomerController < ApiController
       if !clientNote
         render_json_response({:error => CLIENT_NOT_FOUND, :success => false}, :not_found)
       else
-        puts "Role:---------#{current_user.roles}"
+        # puts "Role:---------#{current_user.roles}"
         #Not admin can't edit previous notes. He can only add after.
-        params[:type] = clientNote.type + "<br>" + params[:type].gsub(clientNote.type, "") if !current_user.roles.eql?("admin")
+        params[:type] = clientNote.type + "<br>" + params[:type].gsub(clientNote.type, "") if current_user && !current_user.roles.eql?("admin")
         formatted_address = params[:address] + " " + params[:city] + ", " + params[:province].upcase + ", " + params[:postal]
         puts "formatted_address:---------#{formatted_address}"
         #Calculate distance with google map.
-        address = get_address(formatted_address)
+        #need map api keys
+        # address = get_address(formatted_address)
+        address = "address"
 
-        if address
+        if address.present?
           customDollarCar = 0
           customDollarSteel = 0
           customPercCar = 0
           customPercSteel = 0
 
-          if current_user.roles.eql?("admin") 
+          if current_user.present? && current_user.roles.eql?("admin") 
             customDollarCar = params[:customDollarCar] if params[:customDollarCar]
             customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
             customPercCar = params[:customPercCar] if params[:customPercCar]
@@ -127,25 +136,39 @@ class Api::V1::CustomerController < ApiController
           heardofus = Heardofus.find_or_create_by(type: params[:heardOfUs])
           clientNote.update(idHeardOfUs: heardofus.id, firstName: params[:firstName], lastName: params[:lastName], email: params[:email],
               type: params[:type], phone: params[:phoneNumber], extension: params[:extension], cellPhone: params[:phoneNumber2], secondaryPhone: params[:phoneNumber3],
-              note: params[:note], grade: params[:grade], customDollarCar: customDollarCar, customDollarSteel: customDollarSteel, customPercCar: customPercCar, customPercSteel: customPercSteel) if client.present
+              note: params[:note], grade: params[:grade], customDollarCar: customDollarCar, customDollarSteel: customDollarSteel, customPercCar: customPercCar, customPercSteel: customPercSteel) if clientNote.present?
+          # params[:addresses].each do |a|
+          #   return render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request) if  !address.address || !address.city || !address.postal || !address.province
+          # end
           params[:addresses].each do |a|
-            return render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request) if  !address.address || !address.city || !address.postal || !address.province
-          end
-          params[:addresses].each do |a|
-            if address.idAddress.eql?('')
+            # if address.idAddress.eql?('') #prev
+            if address
+              #prev
+              # addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
+              #               idAddress: address.idAddress,
+              #               distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]).first
               addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
-                            idAddress: address.idAddress,
-                            distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]).first
+                            distance: 361715).first
               if addresses.present?
+                #prev
+                # addresses.update(address: a["address"],city: a["city"],
+                #   postal: a["postal"],
+                #   province: a["province"].upcase,
+                #   distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
+                # )
+
                 addresses.update(address: a["address"],city: a["city"],
                   postal: a["postal"],
                   province: a["province"].upcase,
-                  distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
+                  distance: 361715
                 )
               else
+                #prev
+                # Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
+                #                idAddress: address.idAddress,
+                #                distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
                 Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
-                               idAddress: address.idAddress,
-                               distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
+                                               distance: 361715)
               end
                 if !params[:type].eql?("Individual")
                   busi = Business.where(idClient: params[:no]).first
@@ -163,13 +186,17 @@ class Api::V1::CustomerController < ApiController
                                     pstTaxNo: params[:pstTaxNo],
                                     gstTaxNo: params[:gstTaxNo])
                   end
-                  updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first.to_json(:business, :address)
+                  busi.contacts.destroy_all
+                  create_contacts(params, busi)
+                  #prev
+                  # updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first.to_json(:business, :address)
+                  updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first
                   return render_json_response(updatedClient, :ok)
                 else
                   if Contact.where(idBusiness: params[:no]).destroy_all
-                    if Business.where(id: params[:no]).destroy_all
+                    # if Business.where(id: params[:no]).destroy_all #prev
                       return render_json_response(clientNote, :ok)
-                    end
+                    # end
                   end
                 end
             else
@@ -189,6 +216,8 @@ class Api::V1::CustomerController < ApiController
                                          pstTaxNo: params[:pstTaxNo],
                                          gstTaxNo: params[:gstTaxNo])
                 end
+                busi.contacts.destroy_all
+                create_contacts(params, busi)
                 updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
                 return render_json_response(updatedClient, :ok) if updatedClient
               else
@@ -258,5 +287,12 @@ class Api::V1::CustomerController < ApiController
 
   def check_address(distance)
     distance["rows"] && distance["rows"].length == 2 && distance["rows"][0]["elements"] && distance["rows"][0]["elements"][1]["status"] == "OK"
+  end
+
+  def create_contacts(params, busi)
+    params[:contacts].each do |contact|
+      cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
+      cont.save!
+    end
   end
 end
