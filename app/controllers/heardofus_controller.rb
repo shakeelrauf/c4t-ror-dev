@@ -1,6 +1,6 @@
 class HeardofusController < ApplicationController
-	before_action :authenticate_user
-	before_action :authenticate_admin
+	# before_action :authenticate_user
+	# before_action :authenticate_admin
 	# before_action :check_type, only: [:heardsofus, :update]
 
 	def create
@@ -24,6 +24,7 @@ class HeardofusController < ApplicationController
 	end
 
 	def update
+		debugger
 		hou = Heardofus.find_by_id(params[:no])
 		hou.update(type: params[:type])
 		redirect_to '/heardofus'
