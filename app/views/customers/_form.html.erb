@@ -177,6 +177,9 @@
                      <div class="row company-data force-hidden">
                         <h6>Contact List</h6>
                         <div class="col-lg-12 row contact-edit-list">
+                          <% if action_name == "edit" && @customer.try(:business).try(:contacts).present? %>
+                            <%= render :partial => 'customers/edit_contacts', locals: { contacts: @customer.try(:business).try(:contacts) } %>
+                          <% end %>
                         </div>
                         <div class="col-lg-12">
                            <a href="javascript:addContact({});" class="btn btn-primary f-right md-trigger">
@@ -223,7 +226,7 @@
                                                <i class="icofont icofont-ui-user"></i>
                                            </span>
                                            <div class="md-input-wrapper">
-                                               <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod]">
+                                               <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
                                                    <option disabled selected style="display:none"></option>
                                                    <option`+(contactData.paymentMethod == "By Check" ? " selected" : "")+`>By Check</option>
                                                    <option`+(contactData.paymentMethod == "Cash" ? " selected" : "")+`>Cash</option>
@@ -301,16 +304,16 @@
                                     </div>
                                  </div>
                                  <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                                    <button onclick="removeAddress(undefined)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
+                                    <span onclick="removeAddress(undefined)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
                                     <i class="icofont icofont-ui-remove"></i>
-                                    </button>
+                                    </span>
                                  </div>
                               </div>
                               <!-- row -->
                            </div>
                         </div>
                         <div class="col-lg-12">
-                           <a href="javascript:createAddress();" class="btn btn-primary f-right md-trigger">
+                           <a href="javascript:addAddress({});" class="btn btn-primary f-right md-trigger">
                            <i class="icofont icofont-ui-add"></i> Add Address
                            </a>
                         </div>
@@ -324,9 +327,9 @@
                                                    <i class="icofont icofont-address-book"></i>
                                                </span>
                                                <div class="md-input-wrapper">
-                                                     <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" required value="`+(
+                                                     <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
                                                        address.address || "")+`">
-                                                      <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" required value="`+(
+                                                      <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
                                                        address.id || "")+`">
                                                    <label>Address <span class="required">*</span></label>
                                                </div>
@@ -338,7 +341,7 @@
                                                        <i class="icofont icofont-address-book"></i>
                                                    </span>
                                                    <div class="md-input-wrapper">
-                                                        <input type="text" class="md-form-control txtCity md-static" id="txtCity" required value="`+(address.city || "")+`">
+                                                        <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`">
                                                        <label>City <span class="required">*</span></label>
                                                    </div>
                                                </div>
@@ -374,9 +377,9 @@
                                                </div>
                            
                                                <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                                                   <button onclick="removeAddress(` + address.id + `)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
+                                                   <span onclick="removeAddress(` + address.id + `)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
                                                        <i class="icofont icofont-ui-remove"></i>
-                                                   </button>
+                                                   </span>
                                                </div>
                                            </div><!-- row -->
                                          </div>`);
@@ -581,6 +584,12 @@
               $(".company-data").removeClass("force-hidden");
           } else {
               $(".company-data").addClass("force-hidden");
+          }
+      }
+      function removeAddress(addressId) {
+          if (confirm("Are you sure? We'll verify if there quotes associated with this address first.")) {
+            // doGrowlingDanger(json.message);
+            $("#address" + addressId).remove();
           }
       }
 

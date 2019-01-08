@@ -81,11 +81,12 @@ class CustomersController < ApplicationController
   def contact_data(params)
     contacts = []
     if params[:contacts].present?
-      params[:contacts].each do |contact|
-        contacts << { "firstName": contact["firstName"],
-                      "lastName": contact["lastName"],
-                      "paymentMethod": contact["paymentMethod"]
-                    }
+      p_key = params[:contacts]
+      p_key["firstName"].zip(p_key["lastName"], p_key["paymentMethod"]).each do |fn, ln, pm|
+        contacts << { "firstName": fn,
+              "lastName": ln,
+              "paymentMethod": pm
+            }
       end
     end
     contacts

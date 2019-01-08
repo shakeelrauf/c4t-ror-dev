@@ -57,6 +57,10 @@ class Api::V1::CustomerController < ApiController
                 pstTaxNo: params[:pstTaxNo],
                 gstTaxNo: params[:gstTaxNo]})
               if busi.save
+                  params[:contacts].each do |contact|
+                   cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
+                   cont.save!
+                  end
                 #prev
                 # client.business = {}; 
                 # comp = Business.where(params[:id]).first
@@ -182,6 +186,8 @@ class Api::V1::CustomerController < ApiController
                                     pstTaxNo: params[:pstTaxNo],
                                     gstTaxNo: params[:gstTaxNo])
                   end
+                  busi.contacts.destroy_all
+                  create_contacts(params, busi)
                   #prev
                   # updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first.to_json(:business, :address)
                   updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first
@@ -210,6 +216,8 @@ class Api::V1::CustomerController < ApiController
                                          pstTaxNo: params[:pstTaxNo],
                                          gstTaxNo: params[:gstTaxNo])
                 end
+                busi.contacts.destroy_all
+                create_contacts(params, busi)
                 updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
                 return render_json_response(updatedClient, :ok) if updatedClient
               else
@@ -293,5 +301,12 @@ class Api::V1::CustomerController < ApiController
 
   def check_address(distance)
     distance["rows"] && distance["rows"].length == 2 && distance["rows"][0]["elements"] && distance["rows"][0]["elements"][1]["status"] == "OK"
+  end
+
+  def create_contacts(params, busi)
+    params[:contacts].each do |contact|
+      cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
+      cont.save!
+    end
   end
 end
