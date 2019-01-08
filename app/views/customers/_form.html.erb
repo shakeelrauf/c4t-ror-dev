@@ -256,7 +256,7 @@
                                  <i class="icofont icofont-address-book"></i>
                                  </span>
                                  <div class="md-input-wrapper">
-                                    <input type="text" class="md-form-control txtAddress md-static" name="address" id="txtAddress"  value="<%= action_name == "edit" ? @customer.address.last.address : "" %>">
+                                    <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress"  value="<%= action_name == "edit" ? @customer.address.last.address : "" %>">
                                     <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" required="" value="<%= action_name == "edit" ? @customer.address.last.address : "" %>">
                                     <label>Address <span class="required">*</span></label>
                                  </div>
@@ -267,7 +267,7 @@
                                     <i class="icofont icofont-address-book"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtCity md-static" name="city" id="txtCity" value="<%= action_name == "edit" ? @customer.address.last.city : "" %>">
+                                       <input type="text" class="md-form-control txtCity md-static" name="addresses[city][]" id="txtCity" value="<%= action_name == "edit" ? @customer.address.last.city : "" %>">
                                        <label>City <span class="required">*</span></label>
                                     </div>
                                  </div>
@@ -276,7 +276,7 @@
                                     <i class="icofont icofont-address-book"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <select class="md-form-control province txtProvince md-static selectcash" name="province" id="txtProvince">
+                                       <select class="md-form-control province txtProvince md-static selectcash" name="addresses[province][]" id="txtProvince">
                                         <% if action_name == "edit" %>
                                             <option selected="selected"><%= @customer.address.last.province %></option>
                                         <% end %>
@@ -299,7 +299,7 @@
                                     <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtPostal md-static" name="postal" id="txtPostal" value="<%= action_name == "edit" ? @customer.address.last.postal : "" %>">
+                                       <input type="text" class="md-form-control txtPostal md-static" name="addresses[postal][]" id="txtPostal" value="<%= action_name == "edit" ? @customer.address.last.postal : "" %>">
                                        <label>Postal Code <span class="required">*</span></label>
                                     </div>
                                  </div>
@@ -328,7 +328,7 @@
                                                </span>
                                                <div class="md-input-wrapper">
                                                      <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
-                                                       address.address || "")+`">
+                                                       address.address || "")+`" name="addresses[address][]">
                                                       <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
                                                        address.id || "")+`">
                                                    <label>Address <span class="required">*</span></label>
@@ -341,7 +341,7 @@
                                                        <i class="icofont icofont-address-book"></i>
                                                    </span>
                                                    <div class="md-input-wrapper">
-                                                        <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`">
+                                                        <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`" name="addresses[city][]">
                                                        <label>City <span class="required">*</span></label>
                                                    </div>
                                                </div>
@@ -350,7 +350,7 @@
                                                        <i class="icofont icofont-address-book"></i>
                                                    </span>
                                                    <div class="md-input-wrapper">
-                                                       <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince" >
+                                                       <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince" name="addresses[province][]">
                                                            <option value="ON"`+(address.province == "ON" ? " selected" : "")+`>Ontario</option>
                                                            <option value="BC"`+(address.province == "BC" ? " selected" : "")+`>British Columbia</option>
                                                            <option value="QC"`+(address.province == "QC" ? " selected" : "")+`>Quebec</option>
@@ -371,7 +371,7 @@
                                                    </span>
                                                    <div class="md-input-wrapper">
                                                         <input type="text" class="md-form-control txtPostal md-static" id="txtPostal"
-                                                              value="` + (address.postal ? (address.postal.substr(0,3) + " " + address.postal.substr(3)) : "") + `">
+                                                              value="` + (address.postal ? (address.postal.substr(0,3) + " " + address.postal.substr(3)) : "") + `" name="addresses[postal][]">
                                                        <label>Postal Code <span class="required">*</span></label>
                                                    </div>
                                                </div>

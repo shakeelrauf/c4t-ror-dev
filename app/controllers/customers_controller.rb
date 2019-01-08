@@ -39,42 +39,49 @@ class CustomersController < ApplicationController
 
   def form_body(params)
     {
-      "heardOfUs": params[:heardOfUs],
-      "phoneNumber": params[:phoneNumber],
-      "firstName": params[:firstName],
-      "lastName": params[:lastName],
-      "email": params[:email],
-      "type": params[:type],
-      "extension": params[:extension],
-      "phoneNumber2": params[:phoneNumber2],
-      "phoneNumber3": params[:phoneNumber3],
-      "note": params[:note],
-      "grade": params[:grade],
-      "address": params[:address],
-      "city": params[:city],
-      "province": params[:province],
-      "postal": params[:postal],
-      "addresses": address_data(params),
-      "contacts": contact_data(params)
+      "heardOfUs":      params[:heardOfUs],
+      "phoneNumber":    params[:phoneNumber],
+      "firstName":      params[:firstName],
+      "lastName":       params[:lastName],
+      "email":          params[:email],
+      "type":           params[:type],
+      "extension":      params[:extension],
+      "phoneNumber2":   params[:phoneNumber2],
+      "phoneNumber3":   params[:phoneNumber3],
+      "note":           params[:note],
+      "grade":          params[:grade],
+      "address":        params[:address],
+      "city":           params[:city],
+      "province":       params[:province],
+      "postal":         params[:postal],
+      "addresses":      address_data(params),
+      "contacts":       contact_data(params)
     }.merge(company_data(params))
   end
 
   def address_data(params)
-    [{
-      "address": params[:address],
-      "city": params[:city],
-      "province": params[:province],
-      "postal": params[:postal]
-    }]
+    addresses = []
+    if params[:addresses].present?
+      p_key = params[:addresses]
+      p_key["address"].zip(p_key["city"], p_key["province"], p_key["postal"]).each do |adr, city, pro, pos|
+        addresses << {
+                        "address":  adr,
+                        "city":     city,
+                        "province": pro,
+                        "postal":   pos
+                      }
+      end
+    end
+    addresses
   end
 
   def company_data(params)
     {
-      "name": params[:name],
-      "description": params[:description],
-      "contactPosition": params[:contactPosition],
-      "pstTaxNo": params[:pstTaxNo],
-      "gstTaxNo": params[:gstTaxNo]
+      "name":             params[:name],
+      "description":      params[:description],
+      "contactPosition":  params[:contactPosition],
+      "pstTaxNo":         params[:pstTaxNo],
+      "gstTaxNo":         params[:gstTaxNo]
     }
   end
 
@@ -83,10 +90,10 @@ class CustomersController < ApplicationController
     if params[:contacts].present?
       p_key = params[:contacts]
       p_key["firstName"].zip(p_key["lastName"], p_key["paymentMethod"]).each do |fn, ln, pm|
-        contacts << { "firstName": fn,
-              "lastName": ln,
-              "paymentMethod": pm
-            }
+        contacts << { "firstName":     fn,
+                      "lastName":      ln,
+                      "paymentMethod": pm
+                    }
       end
     end
     contacts
