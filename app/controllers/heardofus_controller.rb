@@ -24,7 +24,6 @@ class HeardofusController < ApplicationController
 	end
 
 	def update
-		debugger
 		hou = Heardofus.find_by_id(params[:no])
 		hou.update(type: params[:type])
 		redirect_to '/heardofus'
