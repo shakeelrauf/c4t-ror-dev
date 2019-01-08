@@ -37,6 +37,11 @@ gem 'active_model_serializers'
 gem "httparty"
 gem 'twilio-ruby'
 gem 'whenever'
+
+gem 'postmark', '1.10.0'
+gem 'griddler'
+gem 'griddler-postmark'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do

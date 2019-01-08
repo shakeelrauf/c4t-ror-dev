@@ -4,6 +4,12 @@ Rails.application.routes.draw do
     get 	:login
     post 	:login, 													action: :login_user
     get 	:logout,													action: :logout
+    get   :forget_pw
+    post	:change_pw_save
+    get		:invalid_key
+		get		"/pw_init/:id/:key",							action: :pw_init
+		get		"/pw_init/",							action: :pw_init
+    post 	:forgot_pw, 											action: :forgot_reset
   end
 
   scope  controller: :dashboard do

@@ -92,7 +92,6 @@ $(document).ready(function() {
         $(".table-quotes").html("");
         $.ajax("/status/json").done(function(status) {
             $.ajax(quotesUrl).done(function(quotes) {
-                debugger
                 quotes.forEach(function(quote) {
                     var backgroundType = "muted";
                     if(quote["status"]["color"] == "yellow") {

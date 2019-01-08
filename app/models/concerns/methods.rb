@@ -19,8 +19,8 @@ module Methods
 		end
 
     def self.run_sql_query(query, offset=nil , limit=nil)
-			query += " Offset #{offset}" if offset.present?
-			query += " Limit #{limit}" if limit.present?
+			query += " limit #{limit}" if limit.present?
+			query += " offset #{offset}" if offset.present?
 			result = ActiveRecord::Base.connection.select_all(query)
 			return  result
 		end

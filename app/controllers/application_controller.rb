@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 	include ApplicationHelper
 	include Response
 	helper_method :current_user
+	include Postmarker
+
 	def headers
 		{"Content-Type": "application/x-www-form-urlencoded","Authorization": get_token}
 	end
@@ -11,27 +13,31 @@ class ApplicationController < ActionController::Base
 	def login_required
 		u = current_user
 		if (!u.nil? && session[:token].present?)
+
 			if (has_session? && is_session_expired?)
 				end_session
 				redirect_to login_path
 				return false
 			end
+
 			logger.info("Auth successful")
-			@p = u
-			@pid = u.id.to_s
+
+			# Ensure the force pw
+			if u.force_new_pw
+				render "send_form/change_password", layout: 'login'
+			elsif (session[:return_url].present?)
+				puts "=======> session[:return_url]: #{session[:return_url]} "
+				redirect_to session[:return_url]
+				session[:return_url] = nil
+			end
 			set_session_expiration
 			return true
 		elsif (request.get?)
+			# I18n.locale = :fr
 			session[:return_url] = request.url
-
-			logger.info("Auth NOT successful, sending to login")
-			redirect_to login_path
-			return false
-		else
-			logger.info("Auth NOT successful, sending to login")
-			redirect_to login_path
-			return false
 		end
+		redirect_to login_path
+		return false
 	end
 
 	def set_session_expiration
@@ -106,7 +112,7 @@ class ApplicationController < ActionController::Base
 
 	def get_token
 		if has_session? && !is_session_expired?
-			session[:token]["token_type"]+" "+session[:token]["access_token"]
+			session[:token]
 		else
 			reset_session
 		end
@@ -117,6 +123,7 @@ class ApplicationController < ActionController::Base
 		reset_session
 		session[:return_url] = ru
 		session[:token] = token
+		session[:token_type] = "Bearer"
 		session[:user_id] = user["idUser"]
 		session[Constants::CSRF_TOKENS] = []
 		h = SecureRandom.hex(Constants::CSRF_SIZE)
@@ -148,5 +155,16 @@ class ApplicationController < ActionController::Base
 
 	def current_username
 		(current_user.present? ? current_user.username : nil)
+	end
+
+	def build_and_send_email_domain subject, view, email_to, locals={}, attachments=[]
+		r = root_url
+		locals[:root_url] = r
+		content = render_to_string(:template => view,
+															 :layout => false,
+															 :formats=>[:html],
+															 :locals => locals)
+
+		send_email_domain subject, content, email_to, attachments
 	end
 end
