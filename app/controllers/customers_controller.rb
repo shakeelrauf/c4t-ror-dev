@@ -21,6 +21,16 @@ class CustomersController < ApplicationController
     @status = ApiCall.get("/status", {}, headers)
   end
 
+  def edit
+    @customer = Customer.find_by_id(params[:id])
+    @heard = Heardofus.find_by_id(@customer.idHeardOfUs)
+  end
+
+  def update
+    res = ApiCall.patch("/clients/"+params[:id], form_body(params), headers)
+    render json: { response: res }
+  end
+
   private
 
   def form_body(params)
@@ -40,8 +50,9 @@ class CustomersController < ApplicationController
       "city": params[:city],
       "province": params[:province],
       "postal": params[:postal],
-      "addresses": address_data(params)
-    }
+      "addresses": address_data(params),
+      "contacts": contact_data(params)
+    }.merge(company_data(params))
   end
 
   def address_data(params)
@@ -52,5 +63,29 @@ class CustomersController < ApplicationController
       "postal": params[:postal]
     }]
   end
+
+  def company_data(params)
+    {
+      "name": params[:name],
+      "description": params[:description],
+      "contactPosition": params[:contactPosition],
+      "pstTaxNo": params[:pstTaxNo],
+      "gstTaxNo": params[:gstTaxNo]
+    }
+  end
+
+  def contact_data(params)
+    contacts = []
+    if params[:contacts].present?
+      params[:contacts].each do |contact|
+        contacts << { "firstName": contact["firstName"],
+                      "lastName": contact["lastName"],
+                      "paymentMethod": contact["paymentMethod"]
+                    }
+      end
+    end
+    contacts
+  end
+
 
 end
