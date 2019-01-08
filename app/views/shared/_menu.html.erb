@@ -6,8 +6,8 @@
             <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle") %>
           </div>
          <div class="f-left info">
-            <p>Admin User </p>
-            <p class="designation">Admin
+            <p><%= current_user.name %></p>
+            <p class="designation"><%= current_user.roles.upcase %>
                <i class="icofont icofont-caret-down m-l-5"></i>
             </p>
          </div>

@@ -63,7 +63,7 @@
                <span>
                   <%= image_tag("avatar-1.png", alt: "User Image", class: "rounded-circle", style: "width: 40px") %>
                 </span>
-               <span>Talha <b>Waseem</b> <i class=" icofont icofont-simple-down"></i></span>
+               <span><%= current_user.firstName.capitalize %> <b><%= current_user.lastName.capitalize %></b> <i class=" icofont icofont-simple-down"></i></span>
                </a>
                <ul class="dropdown-menu settings-menu">
                   <li><a href="/settings"><i class="icon-settings"></i>Settings</a></li>

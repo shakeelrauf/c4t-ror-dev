@@ -1,6 +1,5 @@
 class CustomersController < ApplicationController
-  # before_action :login_required
-
+  before_action :login_required
 
   def new
     @customer = Customer.new
@@ -16,9 +15,24 @@ class CustomersController < ApplicationController
   end
 
   def show
-    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}", { no: params[:id] }, headers)).first
+    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}", { no: params[:id] }, headers))
     @quotes = JSON.parse(ApiCall.get("/clients/#{params[:id]}/quotes", {}, headers))
     @status = ApiCall.get("/status", {}, headers)
+  end
+
+  def edit
+    @customer = Customer.find_by_id(params[:id])
+    @heard = Heardofus.find_by_id(@customer.idHeardOfUs)
+  end
+
+  def update
+    res = ApiCall.patch("/clients/"+params[:id], form_body(params), headers)
+    render json: { response: res }
+  end
+
+  def get_customer
+    res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
+    respond_json(res)
   end
 
   private
@@ -40,8 +54,9 @@ class CustomersController < ApplicationController
       "city": params[:city],
       "province": params[:province],
       "postal": params[:postal],
-      "addresses": address_data(params)
-    }
+      "addresses": address_data(params),
+      "contacts": contact_data(params)
+    }.merge(company_data(params))
   end
 
   def address_data(params)
@@ -53,8 +68,27 @@ class CustomersController < ApplicationController
     }]
   end
 
-  def get_customer
-    res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
-    respond_json(res)
+  def company_data(params)
+    {
+      "name": params[:name],
+      "description": params[:description],
+      "contactPosition": params[:contactPosition],
+      "pstTaxNo": params[:pstTaxNo],
+      "gstTaxNo": params[:gstTaxNo]
+    }
   end
+
+  def contact_data(params)
+    contacts = []
+    if params[:contacts].present?
+      params[:contacts].each do |contact|
+        contacts << { "firstName": contact["firstName"],
+                      "lastName": contact["lastName"],
+                      "paymentMethod": contact["paymentMethod"]
+                    }
+      end
+    end
+    contacts
+  end
+
 end
