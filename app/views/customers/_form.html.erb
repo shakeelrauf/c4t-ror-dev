@@ -110,7 +110,7 @@
                            <div class="md-input-wrapper">
                               <select class="md-form-control md-static selectcash" id="txtType" name="type">
                                  <% if action_name == "edit" %>
-                                    <option selected="selected"><%= @customer.type %></option>
+                                    <option selected="selected"><%= @customer.type.delete("<br>") %></option>
                                  <% end %>
                                  <option>Individual</option>
                                  <option>Business</option>
@@ -186,65 +186,7 @@
                            <i class="icofont icofont-ui-add"></i> Add contact
                            </a>
                         </div>
-                        <script>
-                           function checkContactToRemove(contact){
-                               var contactLength = contact.length;
-                               if(contact[contactLength-1].attributes[6].value!=0){
-                                   alert('Contact Can not be deleted');
-                                   return false;
-                               }else{
-                                   $(contact).closest('.contact-edit').remove();
-                               }
-                           }
-                           
-                           
-                           function addContact(contactData) {
-                               
-                               $(".contact-edit-list").append(`
-                                   <div class="col-lg-12 row contact-edit">
-                                       <div class="col-lg-4 md-group-add-on">
-                                           <span class="md-add-on">
-                                               <i class="icofont icofont-ui-user"></i>
-                                           </span>
-                                           <div class="md-input-wrapper">
-                                               <input type="text" class="md-form-control first-name md-static" value="`+(contactData.firstName || "")+`" name="contacts[firstName][]">
-                                               <input type="hidden" class="md-form-control idContact md-static" value="`+(contactData.id || "")+`">
-                                               <label>Contact First Name <span class="required">*</span></label>
-                                           </div>
-                                       </div>
-                                       <div class="col-lg-4 md-group-add-on">
-                                           <span class="md-add-on">
-                                               <i class="icofont icofont-ui-user"></i>
-                                           </span>
-                                           <div class="md-input-wrapper">
-                                               <input type="text" class="md-form-control last-name md-static" value="`+(contactData.lastName || "")+`" name="contacts[lastName][]">
-                                               <label>Contact Last Name <span class="required">*</span></label>
-                                           </div>
-                                       </div>
-                                       <div class="col-lg-3 md-group-add-on">
-                                           <span class="md-add-on">
-                                               <i class="icofont icofont-ui-user"></i>
-                                           </span>
-                                           <div class="md-input-wrapper">
-                                               <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
-                                                   <option disabled selected style="display:none"></option>
-                                                   <option`+(contactData.paymentMethod == "By Check" ? " selected" : "")+`>By Check</option>
-                                                   <option`+(contactData.paymentMethod == "Cash" ? " selected" : "")+`>Cash</option>
-                                                   <option`+(contactData.paymentMethod == "Electronic Transfer" ? " selected" : "")+`>Electronic Transfer</option>
-                                               </select>
-                                               <label>Contact Prefered Payment Method <span class="required">*</span></label>
-                                           </div>
-                                       </div>
-                                       <div class="col-lg-1 md-group-add-on">                     
-                           
-                                       
-                                           <button onclick="checkContactToRemove($(this));" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(contactData.id || "")+`">
-                                               <i class="icofont icofont-ui-remove"></i>
-                                           </button>
-                                       </div>
-                                   </div>`);
-                           }
-                        </script>
+
                      </div>
                      <hr>
                      <div class="row">
@@ -317,74 +259,6 @@
                            <i class="icofont icofont-ui-add"></i> Add Address
                            </a>
                         </div>
-                        <script>
-                           function addAddress(address) {
-                           
-                               $(".address-edit-list").append(`
-                                         <div class="col-lg-12 row address-edit" id="address` + address.id + `">
-                                           <div class="col-lg-4 md-group-add-on">
-                                               <span class="md-add-on">
-                                                   <i class="icofont icofont-address-book"></i>
-                                               </span>
-                                               <div class="md-input-wrapper">
-                                                     <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
-                                                       address.address || "")+`" name="addresses[address][]">
-                                                      <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
-                                                       address.id || "")+`">
-                                                   <label>Address <span class="required">*</span></label>
-                                               </div>
-                                            </div>
-                           
-                                           <div class="row">
-                                               <div class="col-lg-4 md-group-add-on">
-                                                   <span class="md-add-on">
-                                                       <i class="icofont icofont-address-book"></i>
-                                                   </span>
-                                                   <div class="md-input-wrapper">
-                                                        <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`" name="addresses[city][]">
-                                                       <label>City <span class="required">*</span></label>
-                                                   </div>
-                                               </div>
-                                               <div class="col-lg-4 md-group-add-on">
-                                                   <span class="md-add-on">
-                                                       <i class="icofont icofont-address-book"></i>
-                                                   </span>
-                                                   <div class="md-input-wrapper">
-                                                       <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince" name="addresses[province][]">
-                                                           <option value="ON"`+(address.province == "ON" ? " selected" : "")+`>Ontario</option>
-                                                           <option value="BC"`+(address.province == "BC" ? " selected" : "")+`>British Columbia</option>
-                                                           <option value="QC"`+(address.province == "QC" ? " selected" : "")+`>Quebec</option>
-                                                           <option value="AL"`+(address.province == "AL" ? " selected" : "")+`>Alberta</option>
-                                                           <option value="NS"`+(address.province == "NS" ? " selected" : "")+`>Nova Scotia</option>
-                                                           <option value="NL"`+(address.province == "NL" ? " selected" : "")+`>Newfoundland and Labrador</option>
-                                                           <option value="SA"`+(address.province == "SA" ? " selected" : "")+`>Saskatchewan</option>
-                                                           <option value="MA"`+(address.province == "MA" ? " selected" : "")+`>Manitoba</option>
-                                                           <option value="NB"`+(address.province == "NB" ? " selected" : "")+`>New Brunswick</option>
-                                                           <option value="PE"`+(address.province == "PE" ? " selected" : "")+`>Prince Edward Island</option>
-                                                       </select>
-                                                       <label>Province <span class="required">*</span></label>
-                                                   </div>
-                                               </div>
-                                               <div class="col-lg-3 md-group-add-on">
-                                                   <span class="md-add-on">
-                                                       <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
-                                                   </span>
-                                                   <div class="md-input-wrapper">
-                                                        <input type="text" class="md-form-control txtPostal md-static" id="txtPostal"
-                                                              value="` + (address.postal ? (address.postal.substr(0,3) + " " + address.postal.substr(3)) : "") + `" name="addresses[postal][]">
-                                                       <label>Postal Code <span class="required">*</span></label>
-                                                   </div>
-                                               </div>
-                           
-                                               <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                                                   <span onclick="removeAddress(` + address.id + `)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
-                                                       <i class="icofont icofont-ui-remove"></i>
-                                                   </span>
-                                               </div>
-                                           </div><!-- row -->
-                                         </div>`);
-                           }
-                        </script>
                      </div>
                      <hr>
                      <div class="row">
@@ -592,6 +466,131 @@
             $("#address" + addressId).remove();
           }
       }
+
+    function checkContactToRemove(contact){
+         var contactLength = contact.length;
+         if(contact[contactLength-1].attributes[6].value!=0){
+             alert('Contact Can not be deleted');
+             return false;
+         }else{
+             $(contact).closest('.contact-edit').remove();
+         }
+     }
+     
+     
+     function addContact(contactData) {
+         
+         $(".contact-edit-list").append(`
+             <div class="col-lg-12 row contact-edit">
+                 <div class="col-lg-4 md-group-add-on">
+                     <span class="md-add-on">
+                         <i class="icofont icofont-ui-user"></i>
+                     </span>
+                     <div class="md-input-wrapper">
+                         <input type="text" class="md-form-control first-name md-static" value="`+(contactData.firstName || "")+`" name="contacts[firstName][]">
+                         <input type="hidden" class="md-form-control idContact md-static" value="`+(contactData.id || "")+`">
+                         <label>Contact First Name <span class="required">*</span></label>
+                     </div>
+                 </div>
+                 <div class="col-lg-4 md-group-add-on">
+                     <span class="md-add-on">
+                         <i class="icofont icofont-ui-user"></i>
+                     </span>
+                     <div class="md-input-wrapper">
+                         <input type="text" class="md-form-control last-name md-static" value="`+(contactData.lastName || "")+`" name="contacts[lastName][]">
+                         <label>Contact Last Name <span class="required">*</span></label>
+                     </div>
+                 </div>
+                 <div class="col-lg-3 md-group-add-on">
+                     <span class="md-add-on">
+                         <i class="icofont icofont-ui-user"></i>
+                     </span>
+                     <div class="md-input-wrapper">
+                         <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
+                             <option disabled selected style="display:none"></option>
+                             <option`+(contactData.paymentMethod == "By Check" ? " selected" : "")+`>By Check</option>
+                             <option`+(contactData.paymentMethod == "Cash" ? " selected" : "")+`>Cash</option>
+                             <option`+(contactData.paymentMethod == "Electronic Transfer" ? " selected" : "")+`>Electronic Transfer</option>
+                         </select>
+                         <label>Contact Prefered Payment Method <span class="required">*</span></label>
+                     </div>
+                 </div>
+                 <div class="col-lg-1 md-group-add-on">                     
+     
+                 
+                     <button onclick="checkContactToRemove($(this));" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(contactData.id || "")+`">
+                         <i class="icofont icofont-ui-remove"></i>
+                     </button>
+                 </div>
+             </div>`);
+     }
+
+    function addAddress(address) {
+       
+           $(".address-edit-list").append(`
+                     <div class="col-lg-12 row address-edit" id="address` + address.id + `">
+                       <div class="col-lg-4 md-group-add-on">
+                           <span class="md-add-on">
+                               <i class="icofont icofont-address-book"></i>
+                           </span>
+                           <div class="md-input-wrapper">
+                                 <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
+                                   address.address || "")+`" name="addresses[address][]">
+                                  <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
+                                   address.id || "")+`">
+                               <label>Address <span class="required">*</span></label>
+                           </div>
+                        </div>
+       
+                       <div class="row">
+                           <div class="col-lg-4 md-group-add-on">
+                               <span class="md-add-on">
+                                   <i class="icofont icofont-address-book"></i>
+                               </span>
+                               <div class="md-input-wrapper">
+                                    <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`" name="addresses[city][]">
+                                   <label>City <span class="required">*</span></label>
+                               </div>
+                           </div>
+                           <div class="col-lg-4 md-group-add-on">
+                               <span class="md-add-on">
+                                   <i class="icofont icofont-address-book"></i>
+                               </span>
+                               <div class="md-input-wrapper">
+                                   <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince" name="addresses[province][]">
+                                       <option value="ON"`+(address.province == "ON" ? " selected" : "")+`>Ontario</option>
+                                       <option value="BC"`+(address.province == "BC" ? " selected" : "")+`>British Columbia</option>
+                                       <option value="QC"`+(address.province == "QC" ? " selected" : "")+`>Quebec</option>
+                                       <option value="AL"`+(address.province == "AL" ? " selected" : "")+`>Alberta</option>
+                                       <option value="NS"`+(address.province == "NS" ? " selected" : "")+`>Nova Scotia</option>
+                                       <option value="NL"`+(address.province == "NL" ? " selected" : "")+`>Newfoundland and Labrador</option>
+                                       <option value="SA"`+(address.province == "SA" ? " selected" : "")+`>Saskatchewan</option>
+                                       <option value="MA"`+(address.province == "MA" ? " selected" : "")+`>Manitoba</option>
+                                       <option value="NB"`+(address.province == "NB" ? " selected" : "")+`>New Brunswick</option>
+                                       <option value="PE"`+(address.province == "PE" ? " selected" : "")+`>Prince Edward Island</option>
+                                   </select>
+                                   <label>Province <span class="required">*</span></label>
+                               </div>
+                           </div>
+                           <div class="col-lg-3 md-group-add-on">
+                               <span class="md-add-on">
+                                   <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
+                               </span>
+                               <div class="md-input-wrapper">
+                                    <input type="text" class="md-form-control txtPostal md-static" id="txtPostal"
+                                          value="` + (address.postal ? (address.postal.substr(0,3) + " " + address.postal.substr(3)) : "") + `" name="addresses[postal][]">
+                                   <label>Postal Code <span class="required">*</span></label>
+                               </div>
+                           </div>
+       
+                           <div class="col-lg-1 md-group-add-on" id="addressRemove">
+                               <span onclick="removeAddress(` + address.id + `)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
+                                   <i class="icofont icofont-ui-remove"></i>
+                               </span>
+                           </div>
+                       </div><!-- row -->
+                     </div>`);
+       }
 
       $(document).ready(function(){
           function valid_fields(){

@@ -57,10 +57,7 @@ class Api::V1::CustomerController < ApiController
                 pstTaxNo: params[:pstTaxNo],
                 gstTaxNo: params[:gstTaxNo]})
               if busi.save
-                  params[:contacts].each do |contact|
-                   cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
-                   cont.save!
-                  end
+                create_contacts(params, busi)
                 #prev
                 # client.business = {}; 
                 # comp = Business.where(params[:id]).first
@@ -112,7 +109,8 @@ class Api::V1::CustomerController < ApiController
       else
         # puts "Role:---------#{current_user.roles}"
         #Not admin can't edit previous notes. He can only add after.
-        params[:type] = clientNote.type + "<br>" + params[:type].gsub(clientNote.type, "") if current_user && !current_user.roles.eql?("admin")
+        #prev
+        # params[:type] = clientNote.type + "<br>" + params[:type].gsub(clientNote.type, "") if current_user && !current_user.roles.eql?("admin")
         formatted_address = params[:address] + " " + params[:city] + ", " + params[:province].upcase + ", " + params[:postal]
         puts "formatted_address:---------#{formatted_address}"
         #Calculate distance with google map.
@@ -304,9 +302,11 @@ class Api::V1::CustomerController < ApiController
   end
 
   def create_contacts(params, busi)
-    params[:contacts].each do |contact|
-      cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
-      cont.save!
+    unless params[:contacts].include?("")
+      params[:contacts].each do |contact|
+        cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
+        cont.save!
+      end
     end
   end
 end
