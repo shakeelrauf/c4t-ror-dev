@@ -1,6 +1,5 @@
 class CustomersController < ApplicationController
-  # before_action :login_required
-
+  before_action :login_required
 
   def new
     @customer = Customer.new
@@ -30,7 +29,7 @@ class CustomersController < ApplicationController
     res = ApiCall.patch("/clients/"+params[:id], form_body(params), headers)
     render json: { response: res }
   end
-  
+
   def get_customer
     res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
     respond_json(res)
