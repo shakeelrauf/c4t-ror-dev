@@ -21,6 +21,11 @@ class CustomersController < ApplicationController
     @status = ApiCall.get("/status", {}, headers)
   end
 
+  def get_customer
+    res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
+    respond_json(res)
+  end
+
   private
 
   def form_body(params)
@@ -53,8 +58,5 @@ class CustomersController < ApplicationController
     }]
   end
 
-  def get_customer
-    res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
-    respond_json(res)
-  end
+
 end
