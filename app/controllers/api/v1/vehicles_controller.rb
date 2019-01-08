@@ -29,18 +29,21 @@ class Api::V1::VehiclesController < ApiController
     offset = 0;
     limit = to_number(params[:limit]) if limit_valid
     offset = (to_number(params[:offset]) * limit) if offset_valid
-    
-    if params[:filter]
-      filter = "%" + params[:filter].gsub(/[\s]/, "% %") + "%"
+    if params[:filter].present?
+      filter = + params[:filter].gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select FROM VehiculesInfo WHERE"
+      query = "Select * FROM VehiculesInfo WHERE"
       filters.each do |fil|
-      	query.concat(" (year LIKE #{fil} or make LIKE #{fil} or model LIKE #{fil} or trim LIKE #{fil} or body LIKE #{fil} or drive LIKE #{fil} or transmission LIKE #{fil} or seats LIKE #{fil} doors LIKE #{fil} or weight LIKE #{fil})")
-      	query.concat(" and ") if !fil.eql?(filters.last)
-      end
+      	query.concat(" ('year' LIKE '#{fil}' OR 'make' LIKE #{fil} OR 'model' LIKE '#{fil}' OR 'trim' LIKE '#{fil}' OR 'body' LIKE '#{fil}' OR 'drive' LIKE '#{fil}' OR 'transmission' LIKE '#{fil}' OR 'seats' LIKE '#{fil}' OR 'doors' LIKE '#{fil}' OR 'weight' LIKE '#{fil}')")
+      	query.concat(" AND ") if !fil.eql?(filters.last)
+			end
 	    r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
-	    return render_json_response(r_vehicles, :ok) if r_vehicles
-	    return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
+			return render_json_response(r_vehicles, :ok) if r_vehicles
+			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
+		else
+			r_vehicles = VehicleInfo.all
+			return render_json_response(r_vehicles, :ok) if r_vehicles
+			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
 	  end
 	end
 

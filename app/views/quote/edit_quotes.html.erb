@@ -1,8 +1,6 @@
-<%= render :partial => 'shared/header' %>
-<%= render :partial => 'shared/menu' %>
 
 
-<link rel="stylesheet" type="text/css" href="/assets/css/pages/quote.css">
+<%= public_css_path('quote.css') %>
 
 <div class="content-wrapper">
     <!-- Container-fluid starts -->
@@ -286,11 +284,13 @@
         </div>
     </div>
 </div>
-<script>
-	$(".tab-pane").removeClass("active");
-  const quoteNo = <%= quote.id || "nil" %>
-	// var idCarGenerator = <%#= cars.length %>
-  const quote = <%# JSON.stringify(quote) %>
-</script>
-<script src="/js/distance.js"></script>
-<script src="/js/quote.js"></script>
+<% content_for :js do %>
+
+  <script>
+      $(".tab-pane").removeClass("active");
+      const quoteNo = <%= quote.id || "nil" %>
+      // var idCarGenerator = <%#= cars.length %>
+  </script>
+  <%= public_js_path 'distance.js' %>
+  <%= public_js_path 'quote.js' %>
+<% end %>

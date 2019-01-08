@@ -38,7 +38,7 @@ class ApiController < ApplicationController
   end
 
   def current_user
-    user = User.where("dtLastLogin >= (NOW() - INTERVAL 1 HOUR) AND isActive = 1 AND accessToken = ?", request.authorization).first
+    user = User.where("isActive = 1 AND accessToken = ?", request.authorization).first
     if user.present?
       user.phone = "" if user.phone.nil?
       return user

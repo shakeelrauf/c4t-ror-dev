@@ -1,8 +1,9 @@
 class ApplicationController < ActionController::Base
+	layout 'dashboard'
 	skip_before_action :verify_authenticity_token
 	include ApplicationHelper
 	include Response
-
+	helper_method :current_user
 	def headers
 		{"Content-Type": "application/x-www-form-urlencoded","Authorization": get_token}
 	end
@@ -22,6 +23,10 @@ class ApplicationController < ActionController::Base
 			return true
 		elsif (request.get?)
 			session[:return_url] = request.url
+
+			logger.info("Auth NOT successful, sending to login")
+			redirect_to login_path
+			return false
 		else
 			logger.info("Auth NOT successful, sending to login")
 			redirect_to login_path

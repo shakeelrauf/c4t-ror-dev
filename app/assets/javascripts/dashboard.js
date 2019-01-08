@@ -36,9 +36,9 @@
 //= require menu.js
 //= require pages/calendar.js
 //= require pages/distance.js
-// require jquery/js/jquery.min.js
-// require jquery-ui/js/jquery-ui.min.js
-// require jquery.steps/js/jquery.steps.js
-// require datatables.net/js/jquery.dataTables.min.js
-// require datedropper/datedropper.js
-// require jquery-confirm/dist/jquery-confirm.min.js
+//= require jquery/js/jquery.min.js
+//= require jquery-ui/js/jquery-ui.min.js
+//= require jquery.steps/js/jquery.steps.js
+//= require datatables.net/js/jquery.dataTables.min.js
+//= require datedropper/datedropper.js
+//= require jquery-confirm/dist/jquery-confirm.min.js
