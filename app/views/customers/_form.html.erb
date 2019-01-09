@@ -201,8 +201,8 @@
                                  <i class="icofont icofont-address-book"></i>
                                  </span>
                                  <div class="md-input-wrapper">
-                                    <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress"  value="<%= action_name == "edit" ? @customer.address.last.address : "" %>">
-                                    <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" required="" value="<%= action_name == "edit" ? @customer.address.last.address : "" %>">
+                                    <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress"  value="">
+                                    <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" required="" value="">
                                     <label>Address <span class="required">*</span></label>
                                  </div>
                               </div>
@@ -212,7 +212,7 @@
                                     <i class="icofont icofont-address-book"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtCity md-static" name="addresses[city][]" id="txtCity" value="<%= action_name == "edit" ? @customer.address.last.city : "" %>">
+                                       <input type="text" class="md-form-control txtCity md-static" name="addresses[city][]" id="txtCity" value="">
                                        <label>City <span class="required">*</span></label>
                                     </div>
                                  </div>
@@ -222,9 +222,6 @@
                                     </span>
                                     <div class="md-input-wrapper">
                                        <select class="md-form-control province txtProvince md-static selectcash" name="addresses[province][]" id="txtProvince">
-                                        <% if action_name == "edit" %>
-                                            <option selected="selected"><%= @customer.address.last.province %></option>
-                                        <% end %>
                                           <option value="ON">Ontario</option>
                                           <option value="BC">British Columbia</option>
                                           <option value="QC">Quebec</option>
@@ -244,7 +241,7 @@
                                     <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
                                     </span>
                                     <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtPostal md-static" name="addresses[postal][]" id="txtPostal" value="<%= action_name == "edit" ? @customer.address.last.postal : "" %>">
+                                       <input type="text" class="md-form-control txtPostal md-static" name="addresses[postal][]" id="txtPostal" value="">
                                        <label>Postal Code <span class="required">*</span></label>
                                     </div>
                                  </div>
