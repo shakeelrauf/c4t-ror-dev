@@ -169,7 +169,7 @@
 																</tr>
 																<tr>
 																	<th scope="row">Email</th>
-																	<td><a href="mailto:<%= @customer["email"] %>"><%= @customer["email"] %></a></td>
+																	<td style="width:120%;word-break: break-all;"><a href="mailto:<%= @customer["email"] %>"><%= @customer["email"] %></a></td>
 																</tr>
 																<tr>
 																	<th scope="row">Heard of Us</th>
@@ -337,6 +337,7 @@
 		</div>
 		<!-- Container-fluid ends -->
 	</div>
+<% content_for :js do %>
 	<script>
 	function growlOfSuccess(message) {
 	    $.growl({
@@ -364,5 +365,6 @@
 	// var customersList = [<%# JSON.stringify(customer) %>];
 	// var userRole = "<%#= user.roles %>";
 	</script>
-	 <%= public_js_path('customers-script.js') %>
-	 <%= public_js_path('quote-list.js') %>
+	<%= public_js_path('customers-script.js') %>
+	<%= public_js_path('quote-list.js') %>
+<% end %>
