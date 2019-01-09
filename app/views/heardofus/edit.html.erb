@@ -29,8 +29,8 @@
                                 </h5>
                             </div>
                             <form method="PUT" action="/update_hou">
-                                <% if (@heardofus.id) %>
-                                <input type="hidden" name="no" value="<%= @heardofus.id %>">
+                                <% if (@heardofus["idHeardOfUs"]) %>
+                                <input type="hidden" name="no" value="<%= @heardofus["idHeardOfUs"] %>">
                                 <% end %>
                                 <div class="card-block row">
                                     <div class="col-lg-10 md-group-add-on">
@@ -38,7 +38,7 @@
                                             <i class="icofont icofont-social-google-talk"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="text" name="type" class="md-form-control md-static" required value="<%= @heardofus.type %>">
+                                            <input type="text" name="type" class="md-form-control md-static" required value="<%= @heardofus["type"] %>">
                                             <label>Name <span class="required">*</span></label>
                                         </div>
                                     </div>

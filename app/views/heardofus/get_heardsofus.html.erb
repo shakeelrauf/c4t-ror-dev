@@ -44,9 +44,9 @@
                                                 <tbody class="table-quotes">
                                                 <% @heardsOfUs.each do |heardOfUs| %>
                                                     <tr>
-														<td><%= heardOfUs.type %></td>
+														<td><%= heardOfUs["type"] %></td>
                                                         <td class="faq-table-btn">
-                                                            <a href="/heardofus/<%= heardOfUs.id %>" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                                                            <a href="/heardofus/<%= heardOfUs["idHeardOfUs"] %>" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                                                 <i class="icofont icofont-ui-edit"></i>
                                                             </a>
                                                         </td>

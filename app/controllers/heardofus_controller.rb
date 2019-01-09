@@ -4,30 +4,32 @@ class HeardofusController < ApplicationController
 	# before_action :check_type, only: [:heardsofus, :update]
 
 	def create
-		hou = Heardofus.find_by_type(params[:type])
-		if hou.nil?
-			hou = Heardofus.new(type: params[:type])
-			hou.save!
-			redirect_to '/heardofus'
-		end
+    res = ApiCall.post("/heardsofus", form_body(params), headers )
+		redirect_to '/heardofus'
 	end
 
 	def get_heardsofus
- 		@heardsOfUs = Heardofus.all
+ 		# @heardsOfUs = Heardofus.all
+    @heardsOfUs = ApiCall.get("/heardsofus",{}, headers)
 	end
 
 	def new
 	end
 
 	def edit
-		@heardofus =  Heardofus.find_by_id params[:no]
+		@heardofus = ApiCall.get("/heardsofus/#{params[:no]}", {}, headers)
 	end
 
 	def update
-		hou = Heardofus.find_by_id(params[:no])
-		hou.update(type: params[:type])
+    res = ApiCall.put("/heardsofus/#{params[:no]}", form_body(params), headers)
 		redirect_to '/heardofus'
 	end
+
+	def form_body(params)
+    {
+      "type":      params[:type]
+    }
+  end
 
 	private
 	def check_type 

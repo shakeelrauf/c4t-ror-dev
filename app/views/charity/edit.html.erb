@@ -29,8 +29,8 @@
                                 </h5>
                             </div>
                             <form method="GET" action="/update">
-                                <% if (@charitie.id) %>
-                                <input type="hidden" name="id" value="<%= @charitie.id %>">
+                                <% if (@charitie["idCharitie"]) %>
+                                <input type="hidden" name="id" value="<%= @charitie["idCharitie"] %>">
                                 <% end %>
                                 <div class="card-block row">
                                     <div class="col-lg-10 md-group-add-on">
@@ -38,7 +38,7 @@
                                             <i class="icofont icofont-group-students"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="text" name="name" class="md-form-control md-static" required value="<%= @charitie.name %>">
+                                            <input type="text" name="name" class="md-form-control md-static" required value="<%= @charitie["name"] %>">
                                             <label>Name <span class="required">*</span></label>
                                         </div>
                                     </div>
@@ -47,7 +47,7 @@
                                             <i class="icofont icofont-phone"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="tel" name="phone" class="md-form-control md-static" value="<%= @charitie.phone %>">
+                                            <input type="tel" name="phone" class="md-form-control md-static" value="<%= @charitie["phone"] %>">
                                             <label>Phone <span class=""></span></label>
                                         </div>
                                     </div>
@@ -56,7 +56,7 @@
                                             <i class="icofont icofont-ui-email"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="email" name="email" class="md-form-control md-static" value="<%= @charitie.email %>">
+                                            <input type="email" name="email" class="md-form-control md-static" value="<%= @charitie["email"] %>">
                                             <label>Email <span class=""></span></label>
                                         </div>
                                     </div>
@@ -65,7 +65,7 @@
                                             <i class="icofont icofont-address-book"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="text" name="address" class="md-form-control md-static" value="<%= @charitie.address %>">
+                                            <input type="text" name="address" class="md-form-control md-static" value="<%= @charitie["address"] %>">
                                             <label>Address <span class=""></span></label>
                                         </div>
                                     </div>
@@ -74,7 +74,7 @@
                                             <i class="icofont icofont-info"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="text" name="info" class="md-form-control md-static" value="<%= @charitie.info %>">
+                                            <input type="text" name="info" class="md-form-control md-static" value="<%= @charitie["info"] %>">
                                             <label>Info <span class=""></span></label>
                                         </div>
                                     </div>
