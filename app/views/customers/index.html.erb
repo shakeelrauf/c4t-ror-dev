@@ -132,11 +132,11 @@
                             <td>`+ customer.heardofus.type +`</td>
                             <td>`+ customer.grade +`</td>
                             <td class="faq-table-btn">
-                            `+($(".designation").text().trim() == "admin" || $(".designation").text().trim() == "dispatcher" ?
-                                `<a href="/customers/`+ customer.id +`/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                            `+($(".designation").text().trim().includes("ADMIN") || $(".designation").text().trim() == "dispatcher" ?
+                                `<a href="/customers/`+ customer.idClient +`/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                     <i class="icofont icofont-ui-edit"></i>
                                 </a>` : "")+`
-                                <a href="/customers/`+ customer.id +`" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                                <a href="/customers/`+ customer.idClient +`" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
                                     <i class="icofont icofont-eye-alt"></i>
                                 </a>
                             </td>
