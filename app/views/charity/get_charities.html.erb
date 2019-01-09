@@ -48,21 +48,21 @@
                                                 <tbody class="table-quotes">
                                                 <% @charities.each do |charity| %>
 											                          <tr>
-																									<td><%= charity.name %></td>
+																									<td><%= charity["name"] %></td>
 											                                                        <td>
-																										<a href="tel:+<%= charity.phone[0,12] %>">
-																											+<%= charity.phone %>
+																										<a href="tel:+<%= charity["phone"][0,12] %>">
+																											+<%= charity["phone"] %>
 																										</a>
 																									</td>
 											                                                        <td>
-																										<a href="mailto:<%= charity.email %>">
-																											<%= charity.email %>
+																										<a href="mailto:<%= charity["email"] %>">
+																											<%= charity["email"] %>
 																										</a>
 																									</td>
-                                                        <td><%= charity.address %></td>
-                                                        <td><%= charity.info %></td>
+                                                        <td><%= charity["address"] %></td>
+                                                        <td><%= charity["info"] %></td>
                                                         <td class="faq-table-btn">
-                                                            <a href="/charities/<%= charity.id %>" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                                                            <a href="/charities/<%= charity["idCharitie"] %>" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                                                 <i class="icofont icofont-ui-edit"></i>
                                                             </a>
                                                         </td>
