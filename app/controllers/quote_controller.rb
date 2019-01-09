@@ -83,7 +83,6 @@ class QuoteController < ApplicationController
     respond_json(returned)
   end
 
-
   def create_quotes
 		@status = Status.all
 		@heardsofus = Heardofus.all
@@ -93,10 +92,38 @@ class QuoteController < ApplicationController
   end
 
 	def edit_quotes
-		@quote = Quote.find(params[:id])
-		@heardsofus = Heardofus.all
-		@cars = QuoteCar.all
+    @quote = ApiCall.get("/quotes/#{params[:id]}", {}, headers)
+    cars = ApiCall.get("/quotes/#{params[:id]}/cars", {}, headers)
+    @charities = ApiCall.get("/charities",{}, headers)
+    @heardsofus = ApiCall.get("/heardsofus", {}, headers)
+    carsFormated = []
+    cars.length.times do |i|
+      cars[i]["vehicle"] = cars[i]["information"]
+      if cars[i]["address"]
+        cars[i]["address"]["label"] = "";
+        cars[i]["address"]["label"] += (cars[i]["address"]["address"] && cars[i]["address"]["address"] != "") ? cars[i]["address"]["address"] + " " : ""
+        cars[i]["address"]["label"] += (cars[i]["address"]["city"] && cars[i]["address"]["city"] != "") ? cars[i]["address"]["city"] + ", " : ""
+        cars[i]["address"]["label"] += (cars[i]["address"]["province"] && cars[i]["address"]["province"] != "") ? cars[i]["address"]["province"] + " " : ""
+        cars[i]["address"]["label"] += (cars[i]["address"]["postal"] && cars[i]["address"]["postal"] != "") ? cars[i]["address"]["postal"] + " " : ""
+      end
+      carsFormated.push(cars[i])
+    end
+    render  locals: {
+                       req: request,
+                       user: current_user,
+                       quote: JSON.parse(@quote.to_json),
+                       cars: carsFormated,
+                       charities: JSON.parse(@charities.to_json),
+                       heardsofus: JSON.parse(@heardsofus.to_json)
+                     }
   end
+
+  def remove_car
+    @quote_car = QuoteCar.where(idQuoteCars: params[:car])
+    @quote_car.destroy_all
+    return render_json_response({:msg => "ok"}, :ok)
+  end
+
 
   def status_json
     res = ApiCall.get("/status", {}, headers)

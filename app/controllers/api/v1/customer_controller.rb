@@ -243,8 +243,11 @@ class Api::V1::CustomerController < ApiController
   end
 
   def phones
-    phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
-    return render_json_response(phones, :ok) if !phones.empty?
+    if  params[:search].present?
+     phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
+     return render_json_response(phones, :ok) if !phones.empty?
+    end
+    return render_json_response([], :ok)
   end
 
   def client_phones

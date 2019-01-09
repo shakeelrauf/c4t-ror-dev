@@ -61,7 +61,7 @@ Rails.application.routes.draw do
     get '/phone-numbers-select2', 					 action: :phone_list
     get '/vehicles-select2', 					       action: :vehicle_list
 		post '/create-car',                      action: :create_car
-    post '/remove-car',                      action: :remove_car
+    post '/car-remove',                      action: :remove_car
     get '/quotecar/:carNo',                  action: :retrive_car
 
 		# get '/quotes',                           action: :get_quotes_by_filters
@@ -142,20 +142,21 @@ Rails.application.routes.draw do
 			end
 
       scope controller: :quote do
-        post 'quotes',                           action: :create
-        post '/create-car',                      action: :create_car
-        post '/remove-car',                      action: :remove_car
-        get '/quotecar/:carNo',                  action: :retrive_car
-        get '/quotes',                           action: :get_quotes_by_filters
-        get '/quotes/json',                      action: :quote_with_filter
+				get '/quotes/:no',                     	 action: :show
+				get '/clients/:no/quotes',               action: :particular_customer_quotes
+				get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
+				get '/quotecar/:carNo',                  action: :retrive_car
+				get '/quotes',                           action: :get_quotes_by_filters
+				get '/quotes/json',                      action: :quote_with_filter
+				get '/status',                           action: :all_status
+				get '/all_quotes',                       action: :all_quotes
+				post 'quotes',                           action: :create
+				post '/create-car',                      action: :create_car
+        post '/car-remove',                      action: :remove_car
         patch '/quotes/:no',                     action: :quote
         patch '/change_status',                  action: :update_status
         patch '/quotes/:no/status',              action: :update_quote_status
         delete '/quotecar/:carNo',               action: :destroy
-        get '/clients/:no/quotes',               action: :particular_customer_quotes
-        get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
-        get '/status',                           action: :all_status
-        get '/all_quotes',                       action: :all_quotes
     	end
 
 			scope controller: :schedules do
