@@ -1,7 +1,7 @@
 require 'action_view'
 
 class Api::V1::AddressController < ApiController
-	before_action :authenticate_user
+	before_action :authenticate_user, except: [:destroy]
 	include ActionView::Helpers::NumberHelper
 
 	def client_address
@@ -46,7 +46,7 @@ class Api::V1::AddressController < ApiController
 
 	def destroy
 		count = QuoteCar.where(idAddress: params[:addressId]).count
-		return render_json_response({error: NO_CAR_MSG, success: false}, :not_found) if count <= 0
+		return render_json_response({error: NO_CAR_MSG, success: false}, :ok) if count > 0
 		Address.where(idAddress: params[:addressId]).destroy_all
 		return render_json_response({message: ADDRESS_DELETE_MSG, success: true}, :ok)
 	end

@@ -12,6 +12,13 @@ Rails.application.routes.draw do
     post 	:forgot_pw, 											action: :forgot_reset
   end
 
+  scope controller: :quotecars do
+		get :quotescars
+		get '/quotescar/:carNo',              action: :show
+		post '/cars',         								action: :create_car
+		get '/cars',         									action: :list_cars
+	end
+
   scope  controller: :dashboard do
     get 	:dashboard,												action: :dashboard
     get   :dispatch, 												action: :dispatched
@@ -126,6 +133,7 @@ Rails.application.routes.draw do
 				get :quotescars
 				get '/quotescar/:carNo',             action: :show
 				get '/quotes/:quoteNo/cars',         action: :list
+				get '/cars',         action: :list_cars
 			end
 
 			scope controller: :quick_quote do
