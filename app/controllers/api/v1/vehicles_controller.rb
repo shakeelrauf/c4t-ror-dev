@@ -40,7 +40,8 @@ class Api::V1::VehiclesController < ApiController
 	    r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
 			return render_json_response(r_vehicles, :ok) if r_vehicles
 			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
-	  end
+		end
+		return render_json_response({}, :ok)
 	end
 
 	def vehicle_count

@@ -1,5 +1,5 @@
 class QuotecarsController < ApplicationController
-		# before_action :authenticate_user
+  	before_action :login_required
 
 	def quotescars
 		list = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]])
@@ -17,6 +17,7 @@ class QuotecarsController < ApplicationController
  	end
 
  	def list_cars
- 		@cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).all
+ 		@cars = ApiCall.get("/cars",{}, headers)
+ 		# @cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).all
  	end
 end
