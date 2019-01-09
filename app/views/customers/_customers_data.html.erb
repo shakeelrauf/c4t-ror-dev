@@ -6,7 +6,7 @@
         <td><%= customer["type"] %></td>
         <td><%= customer["phone"][0..2] + " " + customer["phone"][3..5] + "-" + customer["phone"] %></td>
         <td><%= customer["extension"] %></td>
-        <td><%= customer["type"] %></td>
+        <td><%= customer["heardofus"]["type"] %></td>
         <td><%= customer["grade"] %></td>
         <td class="faq-table-btn">
             <%# if user.roles == "admin" || user.roles == "dispatcher"  %>
