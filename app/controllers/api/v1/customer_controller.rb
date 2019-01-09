@@ -84,7 +84,7 @@ class Api::V1::CustomerController < ApiController
     filter = "%"
     offset = params[:offset].to_i if params[:offset] && to_number(params[:offset])
     filter = "%" + params[:filter] + "%" if params[:filter]    
-    lstClients = Customer.includes(:address).where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? OR phone LIKE ? or extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC, LastName ASC").limit(30).offset(offset).to_json(include: :address)
+    lstClients = Customer.includes(:address).where("firstName LIKE ? or lastName LIKE ? or type LIKE ? or email LIKE ? OR phone LIKE ? or extension LIKE ? OR cellPhone LIKE ? or secondaryPhone LIKE ? OR grade LIKE ? or note LIKE ?", filter,filter,filter,filter,filter,filter,filter,filter,filter,filter).order("firstName ASC, LastName ASC").limit(60).offset(offset).to_json(include: :address)
     return render json: lstClients, status: :ok, adapter: :json_api
   end
 
