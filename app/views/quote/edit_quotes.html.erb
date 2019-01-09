@@ -25,7 +25,7 @@
             </div>
         </div>
         <!-- Row end -->
-        <div class="row">
+        <div class="row" id="quote" data-id="<%= quote["idQuote"] %>">
             <div class="col-lg-12">
             <%
               if (quote["idQuote"] != nil) %>
@@ -116,53 +116,50 @@
                     <div class="card-header">
                         <h5>Price</h5>
                     </div>
-                    <div class="card-block">
-                        <div class="cars-total-list">
-                            <!--
+
+                  <div class="card-block">
+                    <div class="cars-total-list">
+                      <!--
                             <div class="row">
                                 <div class="md-group-add-on">
                                     <h6><%#= req.i18n.__SET_ALL_CARS_TO_PICKUP_DROPOFF %></h6>
                                     <table class="col-lg-12">
                                         <tr>
-                                        <%#
-                                            var allCarsPicked = false;
-                                            var allCarsDropped = false;
-                                            if(quote["idQuote"] != nil) {
-                                                allCarsPicked = true;
-                                                allCarsDropped = true;
-                                                cars.forEach(car => {
-                                                    try {
-                                                        car.missingParts = JSON.parse(car.missingParts);
-                                                    } catch(e) {
-                                                                                    if(typeof car.missingParts != "object") {
-                                                          car.missingParts = [];
-                                                        }
-                                                    }
-                                                    if(car.gettingMethod == "dropoff") {
-                                                        allCarsPicked = false;
-                                                    } else {
-                                                        allCarsDropped = false;
-                                                    }
-                                                });
-                                            }
-                                        %>
+                           <%
+                            allCarsPicked = false
+                            allCarsDropped = false
+                            if(quote["idQuote"] != nil)
+                                allCarsPicked = true
+                              allCarsDropped = true
+                              cars.each do |car|
+                                begin
+                                  car["missingParts"] = JSON.parse(car["missingParts"])
+                                rescue
+                                  car["missingParts"] = []
+                                end
+                                if car["gettingMethod"] == "dropoff"
+                                   allCarsPicked = false
+                                else
+                                  allCarsDropped = false
+                                end
+                              end
+                            end
+                          %>
                                             <td>
                                                 <div class="md-input-wrapper cashradio">
-                                                    <input type="radio" name="allPickup" value="pickup"<%#
-                                                        if(quote["idQuote"] != nil && allCarsPicked) {
-                                                            %> checked="checked"<%#
-                                                        }
-                                                     %>>
+                                                    <input type="radio" name="allPickup" value="pickup"<%
+                      if(quote["idQuote"] != nil && allCarsPicked) %>
+                        checked="checked"
+                      <% end %>>
                                                     <label>Pickup</label><br>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="md-input-wrapper cashradio">
-                                                    <input type="radio" name="allPickup" value="dropoff"<%#
-                                                        if(quote["idQuote"] != nil && allCarsDropped) {
-                                                            %> checked="checked"<%#
-                                                        }
-                                                     %>>
+                                                    <input type="radio" name="allPickup" value="dropoff"<%
+                      if(quote["idQuote"] != nil && allCarsDropped) %>
+                        checked="checked"
+                      <% end %>>
                                                     <label>Drop Off</label>
                                                 </div>
                                             </td>
@@ -172,47 +169,45 @@
                             </div>
                             <hr>
                             -->
-                            <div class="row font-weight-bold" style="">
-                                <div class="col-lg-6"></div>
-                                <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Pickup</div>
-                                <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Drop Off</div>
-                            </div>
+                                  <div class="row font-weight-bold" style="">
+                                    <div class="col-lg-6"></div>
+                                    <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Pickup</div>
+                                    <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Drop Off</div>
+                                  </div>
+                      <% if (quote["idQuote"] != nil)
+                           cars.each.with_index do |car, index|
+                             bonusCarsBasePrice = 0
+                            if((car["weight"]).to_i <= 1500)
+                                bonusCarsBasePrice += quote["smallCarPrice"].to_i
+                            elsif((car["weight"]).to_i > 3000)
+                                bonusCarsBasePrice += quote["midCarPrice"].to_i
+                            else
+                                bonusCarsBasePrice += quote["largeCarPrice"].to_i
+                            end
+                            carPrice = ((car["information"]["weight"].to_i/1000 * car["quote"]["steelPrice"].to_i) - ( car["quote"]["wheelPrice"].to_i))
 
-                            <% if (quote["idQuote"] != nil)
-                                 cars.each.with_index do |car, index|
-                                     bonusCarsBasePrice = 0
-                                    if((car["weight"]).to_i <= 1500)
-                                        bonusCarsBasePrice += quote["smallCarPrice"].to_i
-                                    elsif((car["weight"]).to_i > 3000)
-                                        bonusCarsBasePrice += quote["midCarPrice"].to_i
-                                    else
-                                        bonusCarsBasePrice += quote["largeCarPrice"].to_i
-                                    end
-                                    carPrice = ((car["information"]["weight"].to_i/1000 * car["quote"]["steelPrice"].to_i) - ( car["quote"]["wheelPrice"].to_i))
+%>
 
-                            %>
-
-                                <div class="row car<%= car["idQuoteCars"] %> index<%= index %>" id="car-price<%= car["idQuoteCars"] %>">
-                                    <div class="col-lg-6">
-                                    <%# if car.first.vehicle.present? %>
-                                        <%#= car.vehicle.first.make + " " + car.vehicle.first.model + " " + car.vehicle.first.year %>
-                                    <%# end %>
+                                    <div class="row car<%= car["idQuoteCars"] %> index<%= index %>" id="car-price<%= car["idQuoteCars"] %>">
+                                      <div class="col-lg-6">
+                                        <%= car["vehicle"]["make"] + " " + car["vehicle"]["model"] + " " + car["vehicle"]["year"] %>
+                                      </div>
+                                      <div id="car-price-pickup-<%= car["idQuoteCars"] %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
+                                      </div>
+                                      <div id="car-price-dropoff-<%= car["idQuoteCars"] %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
+                                      </div>
                                     </div>
-                                    <div id="car-price-pickup-<%= car["idQuoteCars"] %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
+                        <% end %>
+                      <%   end %>
                                     </div>
-                                    <div id="car-price-dropoff-<%= car["idQuoteCars"] %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
+                                    <hr>
+                                    <div class="row">
+                                      <div class="col-lg-9 font-weight-bold">
+                                        <%= "Total" %>:
+                                      </div>
+                                      <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
                                     </div>
-                                </div>
-                                <% end %>
-
-                            <% end %>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-lg-9 font-weight-bold">Total</div>
-                            <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
-                        </div>
-                    </div>
+                              </div>
                 </div>
                 <!-- total end -->
                 <div class="card col-lg-12">
@@ -256,7 +251,7 @@
                             <li id="car-tab<%= car["idQuoteCars"] %>" class="nav-item car<%= car["idQuoteCars"] %> index<%= index %>" style="display:block">
                                 <a class="nav-link" data-toggle="tab" href="#tab<%= car["idQuoteCars"] %>" role="tab" id="tab-a-<%= index %>">
                                     <button onclick="removeCar(<%= car["idQuoteCars"] %>);">x</button>
-                                    <%#= car.vehicle.make + " " + car.vehicle.year %>
+                                    <%= car["vehicle"]["make"] + " " + car["vehicle"]["year"] %>
                                 </a>
                                 <div class="slide"></div>
                             </li>
@@ -264,7 +259,13 @@
                     <% end %>
                         </ul>
                     </div>
-
+                  <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
+                    <%if(@quote["idQuote"] != nil) %>
+                        <%  cars.each do |car, index| %>
+                          <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car["vehicle"]} %>
+                        <% end %>
+                    <% end %>
+                  </div>
                 </div>
             </div>
             <!-- Add car end -->
@@ -276,7 +277,7 @@
 
   <script>
       $(".tab-pane").removeClass("active");
-      const quoteNo = (<%= quote["idQuote"] || "nil" %>);
+      const quoteNo = (<%= quote["idQuote"] || "null" %>);
       // var idCarGenerator = <%#= cars.length %>
   </script>
   <%= public_js_path 'distance.js' %>

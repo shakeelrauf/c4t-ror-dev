@@ -2,9 +2,8 @@ class Api::V1::QuoteController < ApiController
 	before_action :authenticate_user, except: [:particular_customer_quotes,:all_status]
   include ActionView::Helpers::NumberHelper
 
-    # Creates a blank quote car
   def create_car
-    @car = QuoteCar.create(
+    @car = QuoteCar.new(
       idQuote: params[:quote],
       idCar: params[:veh],
       missingWheels: 0,
@@ -12,6 +11,7 @@ class Api::V1::QuoteController < ApiController
       missingCat: nil,
       gettingMethod: "pickup",
     )
+    @car.save!
 	  return render_json_response(@car, :ok)	 	
   end
 

@@ -54,16 +54,20 @@ Rails.application.routes.draw do
 	end
 
 	scope controller: :quote do
-    post 'quotes',                           action: :create
+		post 'quotes',                           action: :create
+		post 'quote',                            action: :create_quote
     get '/quotes/json',                      action: :quote_with_filter
 		get '/status/json', 										 action: :status_json
+    get '/vehicles/:no/json', 							 action: :vehicle_json
 		get '/quotes/:id/edit',             	 	 action: :edit_quotes
     get '/phone-numbers-select2', 					 action: :phone_list
     get '/vehicles-select2', 					       action: :vehicle_list
-		post '/create-car',                      action: :create_car
+		post '/car-create',                      action: :create_car
     post '/car-remove',                      action: :remove_car
     get '/quotecar/:carNo',                  action: :retrive_car
-
+		get '/render-vehicle-parameters', 			 action: :render_vehicle
+		get '/car-price', 											 action: :car_price
+		post '/car-price', 											 action: :car_price
 		# get '/quotes',                           action: :get_quotes_by_filters
     patch '/quotes/:no',                     action: :quote
     post '/quote/:no/status',              	 action: :update_quote_status
@@ -78,6 +82,7 @@ Rails.application.routes.draw do
   resources :customers
   scope controller: :customers do
     get '/customers/id/:no/json',             action: :get_customer
+    get '/customers/:customerId/postal-select2', action: :postal_list
   end
   namespace :api do
 		namespace :v1 do

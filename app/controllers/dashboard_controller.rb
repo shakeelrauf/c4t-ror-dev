@@ -19,8 +19,8 @@ class DashboardController < ApplicationController
 
   def list_unscheduled_cars(schedules, cars)
     un_scheduled_cars = {}
-    return un_scheduled_cars if cars["error"]
-    return un_scheduled_cars if schedules["error"]
+    return un_scheduled_cars if !(cars.is_a? Array) && cars["error"]
+    return un_scheduled_cars if !(schedules.is_a? Array) && schedules["error"]
     if cars && cars.length
       cars.each do |car|
         found = false

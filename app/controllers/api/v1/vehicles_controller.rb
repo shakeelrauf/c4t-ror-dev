@@ -1,6 +1,7 @@
 class Api::V1::VehiclesController < ApiController
 	before_action :authenticate_user
 	include API::V1::Validations
+
 	def create
 		if current_user.roles.eql?('admin')
   		return render_json_response({:error => NOT_AN_ADMIN, :success => false}, :unauthorized)
@@ -16,8 +17,8 @@ class Api::V1::VehiclesController < ApiController
 	end
 
 	def show
-		info = VehicleInfo.where(id: params[:no])
-    if !info
+		info = VehicleInfo.where(idVehiculeInfo: params[:no]).first
+    if info.nil?
       return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
     else
     	return render_json_response(info, :ok) 
@@ -27,14 +28,14 @@ class Api::V1::VehiclesController < ApiController
 	def index
 		limit = 30;
     offset = 0;
-    limit = to_number(params[:limit]) if limit_valid
-    offset = (to_number(params[:offset]) * limit) if offset_valid
+    limit = (params[:limit].to_i) if limit_valid
+    offset = ((params[:offset].to_i) * limit) if offset_valid
     if params[:filter].present?
       filter = + params[:filter].gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * FROM VehiculesInfo WHERE"
+      query = "Select * from VehiculesInfo where"
       filters.each do |fil|
-      	query.concat("'year' LIKE '#{fil}' OR 'make' LIKE '#{fil}' OR 'model' LIKE '#{fil}' OR 'trim' LIKE '#{fil}' OR 'body' LIKE '#{fil}' OR 'drive' LIKE '#{fil}' OR 'transmission' LIKE '#{fil}' OR 'seats' LIKE '#{fil}' OR 'doors' LIKE '#{fil}' OR 'weight' LIKE '#{fil}'")
+      	query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
       	query.concat(" AND ") if !fil.eql?(filters.last)
 			end
 	    r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
