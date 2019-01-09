@@ -194,7 +194,7 @@
                         <div class="col-lg-12 row address-edit-list">
                           <% if action_name == "edit" && @customer.try(:address).present? %>
                             <%= render :partial => 'customers/edit_address', locals: { addresses: @customer.try(:address) } %>
-                          <% else %>
+                          <% elsif action_name == "new" %>
                            <div class="col-lg-12 row address-edit" id="addressundefined">
                               <div class="col-lg-4 md-group-add-on">
                                  <span class="md-add-on">
