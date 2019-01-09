@@ -44,9 +44,9 @@ class Api::V1::CustomerController < ApiController
             puts "ADDRESS ADDING :: #{a["address"]}"
             newAddress = client.address.new( address: a["address"],city: a["city"],postal: a["postal"],province: a["province"].upcase)
             #need map api keys to get distance
-            # distance = get_distance(newAddress)
-            newAddress.distance = 361715
+            distance = JSON.parse(get_distance(newAddress))
             # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
+            newAddress.distance = (distance["rows"][0]["elements"][0]["distance"]["value"] + distance["rows"][0]["elements"][0]["distance"]["value"])
             newAddress.save!
             # if params[:company].eql?("0") #prev
           end
@@ -287,7 +287,7 @@ class Api::V1::CustomerController < ApiController
 
   def get_address(formatted_address)
     twoAddress = "7628 Flewellyn Rd Stittsville, ON, K2S 1B6|" + formatted_address;
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=#{process.env.GOOGLE_MAP_TOKEN}&origins=#{twoAddress}&destinations=#{twoAddress}"
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=#{ENV['GOOGLE_MAP_TOKEN']}&origins=#{twoAddress}&destinations=#{twoAddress}"
     response = HTTParty.get(url)
     response.body
   end

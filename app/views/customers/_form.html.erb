@@ -466,8 +466,21 @@
       }
       function removeAddress(addressId) {
           if (confirm("Are you sure? We'll verify if there quotes associated with this address first.")) {
-            // doGrowlingDanger(json.message);
-            $("#address" + addressId).remove();
+            $.ajax({
+                method: "POST",
+                url: "/api/v1/address-remove",
+                data: {
+                   addressId: addressId
+                },
+                success: function(json){
+                    if (json.error) {
+                      growling(json.error);
+                    } else {
+                      growlOfSuccess(json.message);
+                      $("#address" + addressId).remove();
+                    }
+                }
+            });
           }
       }
 
