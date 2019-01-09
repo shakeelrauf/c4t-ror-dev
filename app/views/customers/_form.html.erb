@@ -416,6 +416,7 @@
 </div>
 <% content_for :js do %>
   <script type="text/javascript">
+
       var success_response = "Customer created successfully";
       <% if action_name == "edit" %>
           success_response = "Customer is now edited!"
@@ -607,6 +608,17 @@
        }
 
       $(document).ready(function(){
+         $("select").each(function(){
+            var usedNames = {};
+            $("option", this).each(function () {
+                if(usedNames[this.text]) {
+                    $(this).remove();
+                } else {
+                    usedNames[this.text] = this.value;
+                }
+            });
+         });
+
           function valid_fields(){
               var $phone_num = $("#txtPhone").val();
               var $first_name = $("#txtFirstName").val();
