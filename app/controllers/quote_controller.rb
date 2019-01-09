@@ -6,10 +6,66 @@ class QuoteController < ApplicationController
     @status = Status.all
   end
 
+  def create_quote
+    quickquote =  ApiCall.post("/quickquotes", params.to_json, headers)
+    return respond_json({error: quickquote["error"]}) if quickquote["error"].present?
+    return respond_json({message: "QuickQuote saved"})
+  end
+
+  def car_price
+    return respond_json({"netPrice": nil}) if params[:missingWheel] == "" || params[:missingBattery] == "" || params[:missingCat] == ""
+    quote = ApiCall.get("/quotes/#{params[:quoteId]}", {}, headers)
+    carDistance =  params[:distance]
+    carDistance = carDistance.to_i if carDistance.present?
+    excessDistance = 0.0
+    excessDistance = [carDistance- quote["freeDistance"].to_i, 0.0 ].max if carDistance.present? && carDistance != "NOT_FOUND" && carDistance != "ZERO_RESULTS"
+    pickupCost    = quote["pickup"]
+    isPickup      = (params[:gettingMethod] == "pickup")
+    excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
+    distanceCost  = excessDistance * excessCost
+    weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f
+    dropoff = weightPrice
+    dropoff -=  params[:missingWheels].to_i * quote["steelPrice"].to_f
+    dropoff -=  params[:missingCat].to_i * quote["catPrice"].to_f
+    dropoff -=  params[:missingBattery].to_i * quote["batteryPrice"].to_f
+    dropoffPrice = [dropoff,0.0].max
+    pickupPrice = 0.0
+    if carDistance.present? && carDistance >  0.01 && excessDistance.present?
+      pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
+    end
+    netPrice = (isPickup ? pickupPrice : dropoffPrice)
+    r = {netPrice: netPrice,
+         pickupPrice: pickupPrice,
+         dropoffPrice: dropoffPrice
+    }
+    r[:weight] =  params[:weight].to_f / 1000.0
+    r[:steelPrice] =  quote["steelPrice"].to_f
+    r[:weightPrice] = weightPrice
+    r[:distance] = carDistance.to_f
+    r[:freeDistance] = quote["freeDistance"].to_f
+    r[:excessDistance] = excessDistance.to_f
+    r[:excessCost] =  excessCost.to_f
+    r[:distanceCost] = -distanceCost.to_f
+    r[:missingCatCost] = quote["catPrice"].to_f
+    r[:missingBatCost] = quote["batteryPrice"].to_f
+    r[:missingCat] = -(quote["catPrice"].to_f * params[:missingCat].to_f)
+    r[:missingBat] = -(quote["batteryPrice"].to_f * params[:missingBattery].to_f)
+    r[:missingWheelsCost] = quote["wheelPrice"].to_f
+    r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
+    r[:pickupCost] = quote["pickup"].to_f
+    r[:carPrice] = netPrice.to_f
+    respond_json(r)
+  end
+
   def quote_with_filter
     res = ApiCall.get("/quotes/json?limit=#{params[:limit]}
                   &offset=#{params[:offset]}&afterDate=#{params[:afterDate]}&beforeDate=#{params[:beforeDate]}&filter=#{params[:filter]}",{} , headers )
     respond_json(res)
+  end
+
+  def vehicle_json
+    vehicle = ApiCall.get("/vehicles/#{params[:no]}", {}, headers)
+    respond_json(vehicle)
   end
 
   def vehicle_list
@@ -19,16 +75,8 @@ class QuoteController < ApplicationController
       if vehicle["make"] == "Other"
         item["text"]= "Other"
       else
-        item["text"] = vehicle["make"] + " "
-        +  vehicle["year"] + " "
-        + vehicle["model"] + " "
-        + vehicle["body"] + " "
-        + vehicle["trim"] + " "
-        + vehicle["transmission"] + " "
-        + vehicle["drive"] + " "
-        + vehicle["doors"] + " doors and "
-        + vehicle["seats"] + " seats.";
-        item["id"] = vehicle["id"]
+        item["text"] = vehicle["make"] + " " + vehicle["year"] + " " + vehicle["model"] + " " + vehicle["body"] + " " + vehicle["trim"] + " " + vehicle["transmission"] + " " + vehicle["drive"] + " " + vehicle["doors"] + " doors and " + vehicle["seats"] + " seats."
+        item["id"] = vehicle["idVehiculeInfo"]
         created = false
         groups.length.times do |i|
           if groups[i]["text"] == vehicle["make"]
@@ -91,22 +139,29 @@ class QuoteController < ApplicationController
 		@charities = Charitie.all
   end
 
+  def create_car
+    quote_car = ApiCall.post("/create-car",quote_car_params, headers)
+    respond_json(quote_car)
+  end
+
 	def edit_quotes
     @quote = ApiCall.get("/quotes/#{params[:id]}", {}, headers)
     cars = ApiCall.get("/quotes/#{params[:id]}/cars", {}, headers)
     @charities = ApiCall.get("/charities",{}, headers)
     @heardsofus = ApiCall.get("/heardsofus", {}, headers)
     carsFormated = []
-    cars.length.times do |i|
-      cars[i]["vehicle"] = cars[i]["information"]
-      if cars[i]["address"]
-        cars[i]["address"]["label"] = "";
-        cars[i]["address"]["label"] += (cars[i]["address"]["address"] && cars[i]["address"]["address"] != "") ? cars[i]["address"]["address"] + " " : ""
-        cars[i]["address"]["label"] += (cars[i]["address"]["city"] && cars[i]["address"]["city"] != "") ? cars[i]["address"]["city"] + ", " : ""
-        cars[i]["address"]["label"] += (cars[i]["address"]["province"] && cars[i]["address"]["province"] != "") ? cars[i]["address"]["province"] + " " : ""
-        cars[i]["address"]["label"] += (cars[i]["address"]["postal"] && cars[i]["address"]["postal"] != "") ? cars[i]["address"]["postal"] + " " : ""
+    if cars.is_a? Array
+      cars.length.times do |i|
+        cars[i]["vehicle"] = cars[i]["information"]
+        if cars[i]["address"]
+          cars[i]["address"]["label"] = ""
+          cars[i]["address"]["label"] += (cars[i]["address"]["address"] && cars[i]["address"]["address"] != "") ? cars[i]["address"]["address"] + " " : ""
+          cars[i]["address"]["label"] += (cars[i]["address"]["city"] && cars[i]["address"]["city"] != "") ? cars[i]["address"]["city"] + ", " : ""
+          cars[i]["address"]["label"] += (cars[i]["address"]["province"] && cars[i]["address"]["province"] != "") ? cars[i]["address"]["province"] + " " : ""
+          cars[i]["address"]["label"] += (cars[i]["address"]["postal"] && cars[i]["address"]["postal"] != "") ? cars[i]["address"]["postal"] + " " : ""
+        end
+        carsFormated.push(cars[i])
       end
-      carsFormated.push(cars[i])
     end
     render  locals: {
                        req: request,
@@ -116,6 +171,16 @@ class QuoteController < ApplicationController
                        charities: JSON.parse(@charities.to_json),
                        heardsofus: JSON.parse(@heardsofus.to_json)
                      }
+  end
+
+  def render_vehicle
+    vehicle = ApiCall.get("/vehicles/#{params[:vehicle]}", {}, headers)
+    car = ApiCall.get("/quotecar/#{params[:car]}", {}, headers)
+    car["vehicle"] =  vehicle
+    render partial: 'quote/vehicle_parameters', locals: {
+        car: car,
+        vehicle: vehicle,
+    }
   end
 
   def remove_car
@@ -152,4 +217,8 @@ class QuoteController < ApplicationController
     end
   end
 
+  private
+  def quote_car_params
+    {quote: params[:quote],veh: params[:veh]}
+  end
 end

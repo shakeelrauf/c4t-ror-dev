@@ -1,0 +1,320 @@
+<div id="tab<%= car["idQuoteCars"] %>" class="card col-lg-12 tab-pane car-pane active car-<%= car["idQuoteCars"] %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-weight="<%= (vehicle['weight']).to_f %>">
+  <div class="card-header">
+    <h5 class="card-header-text"><%= vehicle["make"] + " " + vehicle["model"] + " " + vehicle["year"] %></h5>
+  </div>
+  <div class="card-block">
+    <div class="row">
+      <div class="col-lg-1">
+              <span class="md-add-on">
+                <i class="icofont icofont-disc"></i>
+              </span>
+      </div>
+      <div class="col-lg-5">
+        <div class="md-input-wrapper">
+          <input type="number" name="wheels<%= car['idQuoteCars'] %>" min="0" max="4"
+                 onkeyup="calcPrice(<%= car['idQuoteCars'] %>);" onchange="calcPrice(<%= car['idQuoteCars'] %>);"
+                 value="<%= car['missingWheels'] %>" class="md-form-control md-static"
+                 data-old-value="">
+
+          <label style="top: -15px;">Missing Wheels<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-1">
+        <span class="md-add-on">
+          <i class="icofont icofont-disc"></i>
+        </span>
+      </div>
+      <div class="col-lg-5">
+        <div class="md-input-wrapper">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="cat<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car["idQuoteCars"] %>);" value="1" <%
+                  if(car != nil && car["missingCat"] == "1") %>
+                    checked="checked"
+                  <% end %> class="handlingOptionRadio">
+                  <label>Yes</label><br>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="cat<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="0"<%
+                        if(car == nil || car['missingCat'] == "0") %>
+                          checked="checked"
+                        <% end %> class="handlingOptionRadio">
+                <label>No</label>
+              </div>
+            </div>
+          </div>
+          <label style="top: -15px;font-size: 13px">Catalytic Converter Missing<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-1">
+        <span class="md-add-on">
+          <i class="icofont icofont-truck-loaded"></i>
+        </span>
+      </div>
+      <div class="col-lg-5">
+        <div class="md-input-wrapper">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="pickup<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="pickup"<%
+                  if(car == nil || car['gettingMethod'] == "pickup")
+                %>
+                 checked="checked"
+                 <% end %>
+                 class="handlingOptionRadio">
+                  <label>Pickup</label><br>
+                </div>
+                </div>
+                  <div class="col-lg-8">
+                    <div class="md-input-wrapper cashradio">
+                      <input type="radio" name="pickup<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="dropoff"<%
+                        if(car != nil && car['gettingMethod'] == "dropoff") %>
+                          checked="checked"
+                         <% end %> class="handlingOptionRadio">
+                        <label>Drop Off</label>
+                    </div>
+                  </div>
+          </div>
+          <label style="top: -15px;font-size: 13px">Transport<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-1">
+        <span class="md-add-on">
+          <i class="icofont icofont-truck"></i>
+        </span>
+      </div>
+      <div class="col-lg-5">
+        <div class="md-input-wrapper">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="bat<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="1" <%
+                  if(car != nil && car['missingBattery'] == "1")%>
+                  checked="checked"
+                  <%end%>
+                  class="handlingOptionRadio">
+                  <label>Yes</label><br>
+                </div>
+                </div>
+                  <div class="col-lg-4">
+                    <div class="md-input-wrapper cashradio">
+                      <input type="radio" name="bat<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="0"<%
+                        if(car == nil || car['missingBattery'] == "0")%>
+                          checked="checked"
+                        <%end%>
+                        class="handlingOptionRadio">
+                        <label>No</label>
+                    </div>
+                  </div>
+          </div>
+          <label style="top: -15px;font-size: 13px">Battery Missing<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-1">
+        <span class="md-add-on">
+            <i class="icofont icofont-disc"></i>
+        </span>
+      </div>
+      <div class="col-lg-11">
+          <div class="md-input-wrapper">
+              <input type="hidden" id="car-distance<%= car['idQuoteCars'] %>" name="car-distance<%= car['idQuoteCars'] %>" value="<%= car["distance"] %>"/>
+              <input type="hidden" id="car-excess-distance<%= car['idQuoteCars'] %>" name="car-excess-distance<%= car['idQuoteCars'] %>" value=""/>
+              <select class="md-form-control md-static car-location-select2" name="car-location<%= car['idQuoteCars'] %>" id="car-location<%= car['idQuoteCars'] %>">
+                <% if (car["address"])  %>
+                 <option value="<%= car['address']['idAddress'] %>" selected><%= car["address"]["label"] %></option>
+                <% end %>
+              </select>
+              <label style="top: -15px;">Select an address or enter a Postal Code for this car<span class="required">*</span></label>
+              </div>
+              </div>
+              <div class="col-lg-1 car-ex-address<%= car['idQuoteCars'] %>" style="display:none;">
+              <span class="md-add-on">
+                  <i class="icofont icofont-disc"></i>
+              </span>
+          </div>
+          <div class="col-lg-5 car-ex-address<%= car['idQuoteCars'] %>" style="display:none;">
+            <div class="md-input-wrapper">
+              <input type="text" name="car-street<%= car['idQuoteCars'] %>" value="" class="md-form-control md-static"/>
+              <label style="top: -15px;">Street<span class="required">*</span></label>
+            </div>
+          </div>
+          <div class="col-lg-6 car-ex-address<%= car['idQuoteCars'] %>" style="display:none;">
+            <div class="md-input-wrapper">
+              <input type="text" name="car-city<%= car['idQuoteCars'] %>" value="" class="md-form-control md-static"/>
+              <label style="top: -15px;">City<span class="required">*</span></label>
+            </div>
+          </div>
+          <div class="col-lg-1 car-ex-address<%= car['idQuoteCars'] %>" style="display:none;">
+              <span class="md-add-on">
+                  <i class="icofont icofont-disc"></i>
+              </span>
+              </div>
+              <div class="col-lg-5 car-ex-address<%= car['idQuoteCars'] %>" style="display:none;">
+                <div class="md-input-wrapper">
+                  <select class="md-form-control md-static" name="car-province<%= car['idQuoteCars'] %>" id="car-province<%= car['idQuoteCars'] %>">
+                    <option value="ON">Ontario</option>
+                    <option value="BC">British Columbia</option>
+                    <option value="QC">Quebec</option>
+                    <option value="AL">Alberta</option>
+                    <option value="NS">Nova Scotia</option>
+                    <option value="NL">Newfoundland and Labrador</option>
+                    <option value="SA">Saskatchewan</option>
+                    <option value="MA">Manitoba</option>
+                    <option value="NB">New Brunswick</option>
+                    <option value="PE">Prince Edward Island</option>
+                  </select>
+                  <label style="top: -15px;">Province<span class="required">*</span></label>
+                </div>
+              </div>
+              <div class="col-lg-6 car-ex-address<%= car['idQuoteCars'] %>" style="display:none;">
+                <div class="md-input-wrapper">
+                  <input type="text" name="car-postal<%= car['idQuoteCars'] %>" value="" class="md-form-control md-static"/>
+                  <label style="top: -15px;">Postal<span class="required">*</span></label>
+                </div>
+              </div>
+    </div><!--row-->
+    <% if (current_user.roles == "admin") %>
+    <div class="card-header">
+      <h6 class="card-header-text">Price calculation</h6>
+    </div>
+    <style>
+      .n {text-align: right}
+    </style>
+    <div class="card-block">
+      <div class="row">
+        <div class="col-lg-6">
+          <h6>Details</h6>
+        </div>
+        <div class="col-lg-6">
+          <h6>Amounts</h6>
+        </div>
+        <div class="col-lg-4">
+          Weight:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="weight<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+        </div>
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-4">
+          Steel Price:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="steelPrice<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Weight price:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="weightPrice<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Distance:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="distance<%= car['idQuoteCars'] %>"><%= (car["distance"]).to_i %></div>
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-4">
+          Free Distance:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="freeDistance<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-4">
+          Excess Distance:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="excessDistance<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-4">
+          Excess Distance cost:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="excessCost<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Distance cost:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="distanceCost<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Missing Cat cost:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="missingCatCost<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Missing Cat:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="missingCat<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Missing Battery cost:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="missingBatCost<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Missing Battery:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="missingBat<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Missing Wheels cost:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="missingWheelsCost<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Missing Wheels:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="missingWheels<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Pickup cost:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="pickupCost<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-4">
+          Pickup:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="pickup<%= car['idQuoteCars'] %>"></div>
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-4">
+          Net:
+        </div>
+        <div class="col-lg-2">
+          <div class="n" id="carPrice<%= car['idQuoteCars'] %>"></div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

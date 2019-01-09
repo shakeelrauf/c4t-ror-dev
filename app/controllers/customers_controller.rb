@@ -14,6 +14,25 @@ class CustomersController < ApplicationController
     @customers = ApiCall.get("/clients",{}, headers)
   end
 
+  def postal_list
+    s = params[:search] || ""
+    addresses = ApiCall.get("/clients/#{params[:customerId]}/postal?search=#{s}", {}, headers)
+    returned = {
+        results: [],
+        pagination: {
+            more: true
+        }
+    }
+    addresses.each do |address|
+      t = ""
+      t += address["address"] + ", " if address["address"] && address["address"] != ""
+      t += address["city"] + ", " if address["city"] && address["city"] != ""
+      t += address["province"] + ", " if address["province"] && address["province"] != ""
+      returned[:results].push({id: address["idAddress"], text: t+ address["postal"]})
+    end
+    respond_json(returned)
+  end
+
   def show
     @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}", { no: params[:id] }, headers))
     @quotes = JSON.parse(ApiCall.get("/clients/#{params[:id]}/quotes", {}, headers))
