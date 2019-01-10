@@ -256,14 +256,14 @@
 											<i class="icofont icofont-ui-search"></i>
 										</span>
 										<div class="md-input-wrapper">
-											<input type="text" class="md-form-control search-bar-quote">
+											<input type="text" class="md-form-control search-bar-quote" id="search-bar-quote">
 											<label>Search</label>
 										</div>
 									</div>
 									<div class="col-lg-12">
 										<div class="project-table">
 											<div class="table-responsive">
-												<table class="table table-hover">
+												<table class="table table-hover" id="quote-datatable">
 													<thead>
 		                                                <tr>
 															<th>Reference number</th>
@@ -357,14 +357,28 @@
 	}
 
 	$(document).ready(function() {
-
 		<% if params[:action] == "edit" %>
 		    growlOfSuccess("Customer is now edited!");
 		<% end %>
+		$("#quote-datatable").DataTable({
+		  "paging": false,
+		  "searching": true,
+		  "info":     false,
+		  "order": [],
+		  "fixedHeader": true
+		});
+		$("#quote-datatable_filter").css({"visibility": "hidden","height": "0px"});
+		$("#quote-datatable_length").css({"visibility": "hidden","height": "0px"});
+	});
+
+
+	$("#search-bar-quote").keyup(function(){
+		$("#quote-datatable_filter").find("input").val($(this).val());
+		$("#quote-datatable_filter").find("input").trigger("keyup");
 	});
 	// var customersList = [<%# JSON.stringify(customer) %>];
 	// var userRole = "<%#= user.roles %>";
 	</script>
 	<%= public_js_path('customers-script.js') %>
-	<%= public_js_path('quote-list.js') %>
+	<%#= public_js_path('quote-list.js') %>
 <% end %>
