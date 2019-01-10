@@ -34,7 +34,7 @@
                                 <% @settings.each do |setting| %>
                                   <% if (setting["grade"] == nil || setting["grade"] == "") %>
                                     <div class="form-group row">
-                                        <label class="col-sm-3  col-form-label form-control-label"><%= setting["name"] %></label>
+                                        <label class="col-sm-3  col-form-label form-control-label"><%= label(setting["name"]) %></label>
                                         <div class="col-sm-9 ">
                                             <input class="form-control" type="number" step="0.01" onchange="setTwoNumberDecimal" name="<%= setting["name"] %>" value="<%= setting["value"] %>">
                                         </div>

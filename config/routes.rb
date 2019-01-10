@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 		get '/quotescar/:carNo',              action: :show
 		post '/cars',         								action: :create_car
 		get '/cars',         									action: :list_cars
+		get '/cars-select2',         					action: :search_cars
+		get 'vehicles/count', 								action: :car_count
 	end
 
   scope  controller: :dashboard do

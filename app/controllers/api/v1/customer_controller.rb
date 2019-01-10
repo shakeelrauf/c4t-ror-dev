@@ -147,8 +147,13 @@ class Api::V1::CustomerController < ApiController
               # addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
               #               idAddress: address.idAddress,
               #               distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]).first
-              addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
-                            distance: 361715).first
+              # addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
+                            # distance: 361715).first
+              if a["idAddress"].present?
+                addresses = Address.where(idAddress: a["idAddress"]).first
+              else
+                addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,distance: 361715).first
+              end
               if addresses.present?
                 #prev
                 # addresses.update(address: a["address"],city: a["city"],

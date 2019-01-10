@@ -150,20 +150,28 @@
 																<tr>
 																	<th scope="row">Mobile Number</th>
 																	<td>
-																		<% if @customer["cellPhone"] != "" %>
+																		<% if @customer["secondaryPhone"].length >= 10 && @customer["cellPhone"] != "" %>
 																		<a href="tel:+<%= @customer["cellPhone"] %>">
 																			+<%= @customer["cellPhone"][0..2] + " " + @customer["cellPhone"][3..5] + "-" + @customer["cellPhone"][6..10] %>
 																		</a>
+																		<% else %>
+																			<a href="tel:+<%= @customer["secondaryPhone"] %>">
+																				+<%= @customer["cellPhone"] %>
+																			</a>
 																		<% end %>
 																	</td>
 																</tr>
 																<tr>
 																	<th scope="row">Other Phone</th>
 																	<td>
-																		<% if @customer["secondaryPhone"] != "" %>
+																		<% if @customer["secondaryPhone"].length >= 10 && @customer["secondaryPhone"] != "" %>
 																		<a href="tel:+<%= @customer["secondaryPhone"] %>">
 																			+<%= @customer["secondaryPhone"][0..2] + " " + @customer["secondaryPhone"][3..5] + "-" + @customer["secondaryPhone"][6..10] %>
 																		</a>
+																		<% else %>
+																			<a href="tel:+<%= @customer["secondaryPhone"] %>">
+																				+<%= @customer["secondaryPhone"] %>
+																			</a>
 																		<% end %>
 																	</td>
 																</tr>
@@ -256,14 +264,14 @@
 											<i class="icofont icofont-ui-search"></i>
 										</span>
 										<div class="md-input-wrapper">
-											<input type="text" class="md-form-control search-bar-quote">
+											<input type="text" class="md-form-control search-bar-quote" id="search-bar-quote">
 											<label>Search</label>
 										</div>
 									</div>
 									<div class="col-lg-12">
 										<div class="project-table">
 											<div class="table-responsive">
-												<table class="table table-hover">
+												<table class="table table-hover" id="quote-datatable">
 													<thead>
 		                                                <tr>
 															<th>Reference number</th>
@@ -279,27 +287,18 @@
 	                                                    <tr>
 															<td><%= quote["referNo"] %></td>
 	                                                        <td><%= quote["note"] %></td>
-	                                                        <td><%#= new Date(Date.parse(quote["dtCreated"])).toLocaleString("fr-CA") %>
-	                                                        <%=  DateTime.parse(@quotes.first["dtCreated"] ,"%d/%m/%y") %>	
+	                                                        <td><%=  DateTime.parse(quote["dtCreated"]).strftime('%d/%m/%Y, %I:%M:%S:%p') %>	
 	                                                        </td>
 	                                                        <td><%= quote["dispatcher"]["firstName"] %> <%= quote["dispatcher"]["lastName"] %></td>
 	                                                        <td>
-																<%
-	                                                                backgroundType = "muted";
-	                                                                if quote["status"]["color"] == "yellow" 
-	                                                                    backgroundType = "warning"
-	                                                                 elsif quote["status"]["color"] == "blue" 
-	                                                                    backgroundType = "info"
-	                                                                 elsif quote["status"]["color"] == "green" 
-	                                                                    backgroundType = "success"
-	                                                                elsif quote["status"]["color"] == "red"
-	                                                                    backgroundType = "danger"
-	                                                                elsif quote["status"]["color"] == "orange"
-	                                                                    backgroundType = "primary"
-	                                                                end
-	                                                            %>
-																<select class="quote-status-list selectcash form-control badge badge-<%= backgroundType %>" data-quote-no="<%= quote["idQuote"] %>">
+																
+																<select class="quote-status-list selectcash form-control badge badge-<%= background_color(quote["status"]["color"]) %>" data-quote-no="<%= quote["idQuote"] %>">
 	                                                            <% @status.each do |stat| %>
+	                                                            	<% if stat["idStatus"] == quote["status"]["idStatus"] %>
+	                                                            		<option value="<%= stat["idStatus"] %>" selected>
+	                                                            			<%= stat["name"] %>
+	                                                            		</option>
+	                                                            	<% end %>
 																	<option value="<%= stat["idStatus"] %>">
 	                                                                    <%= stat["name"] %>
 	                                                                </option>
@@ -357,14 +356,78 @@
 	}
 
 	$(document).ready(function() {
-
 		<% if params[:action] == "edit" %>
 		    growlOfSuccess("Customer is now edited!");
 		<% end %>
+		$("#quote-datatable").DataTable({
+		  "paging": false,
+		  "searching": true,
+		  "info":     false,
+		  "order": [],
+		  "fixedHeader": true
+		});
+		$("#quote-datatable_filter").css({"visibility": "hidden","height": "0px"});
+		$("#quote-datatable_length").css({"visibility": "hidden","height": "0px"});
+		$("select").each(function(){
+            var usedNames = {};
+            $("option", this).each(function () {
+                if(usedNames[this.text]) {
+                    $(this).remove();
+                } else {
+                    usedNames[this.text] = this.value;
+                }
+            });
+        });
 	});
+
+
+	$("#search-bar-quote").keyup(function(){
+		$("#quote-datatable_filter").find("input").val($(this).val());
+		$("#quote-datatable_filter").find("input").trigger("keyup");
+	});
+	$(".quote-status-list").change(function() {
+        var mySelect = this;
+        $.ajax({
+            url: "/api/v1/quotes/"+$(this).data("quote-no")+"/status",
+            method: "patch",
+            data: {
+                status: $(this).val()
+            }
+        }).done(function(response) {
+            if(response.error) {
+                growlOfSuccess("An error occur: " + response.error, "danger");
+            } else {
+                //Reset timer.
+                $(mySelect).closest("tr").find(".timerFromLastStatus").attr("data-timer", "0");
+                $(mySelect).closest("tr").find(".timerFromLastStatus").text("0m");
+                //Remove badge-color.
+                $(mySelect).removeClass(mySelect.className.split(' ').pop());
+                //Set new color from type of status.
+                if($(mySelect).val() == "1") {
+                    $(mySelect).addClass("badge-primary");
+                } else if($(mySelect).val() == "2") {
+                    $(mySelect).addClass("badge-warning");
+                } else if($(mySelect).val() == "3") {
+                    $(mySelect).addClass("badge-success");
+                } else if($(mySelect).val() == "4") {
+                    $(mySelect).addClass("badge-info");
+                } else if($(mySelect).val() == "5") {
+                    $(mySelect).addClass("badge-info");
+                } else if($(mySelect).val() == "6") {
+                    $(mySelect).addClass("badge-success");
+                } else if($(mySelect).val() == "7") {
+                    $(mySelect).addClass("badge-primary");
+                } else if($(mySelect).val() == "8") {
+                    $(mySelect).addClass("badge-danger");
+                } else {
+                    $(mySelect).addClass("badge-muted");
+                }
+            }
+        });
+    });
 	// var customersList = [<%# JSON.stringify(customer) %>];
 	// var userRole = "<%#= user.roles %>";
 	</script>
 	<%= public_js_path('customers-script.js') %>
-	<%= public_js_path('quote-list.js') %>
+	<%#= public_js_path('quote-list.js') %>
 <% end %>
