@@ -22,6 +22,8 @@
                         </div>
                     </div>
                 </div>
+                <% a = params["weight"] if params["weight"].present? %>
+                <input type="hidden" name="oid" id="oid" value="<%= a %>" >
                 <!-- Row end -->
                 <div class="row">
                     <div class="col-sm-12">
@@ -33,7 +35,7 @@
                             </div>
                             <div class="card-block">
                                 <h6>Add new car</h6>
-                                <form class="row" action="/cars" method="POST">
+                                <form class="row" id="myForm" action="/cars" method="POST">
                                     <div class="md-group-add-on col-lg-2">
                                         <span class="md-add-on">
                                             <i class="icofont icofont-ui-calendar"></i>
@@ -244,6 +246,14 @@
 </div>
 <% content_for :js do %>
     <script>
+
+    $(document).ready(function(){
+        var value = $("#oid").val();
+        if (value){
+            alert("The car is added.");
+        }
+    });
+
     function growling(message, type) {
         $.growl({
             message: message
