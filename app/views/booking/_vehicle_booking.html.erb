@@ -1,0 +1,235 @@
+<div class="card col-lg-12 tab-pane active" id="tabpanel-<%= car["idQuoteCars"] %>" role="tabpanel" style="display: <%= index == 0 ? 'block' : 'none' %>">
+  <div class="card-header">
+    <h5 class="card-header-text"><%= vehicle["make"] + " " + vehicle["model"] + " " + vehicle["year"] %></h5>
+  </div>
+  <div class="card-block">
+    <div class="row" style="padding-bottom:10px">
+      <div class="col-lg-4">
+        <h6>Do you have the keys?</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Drive train</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Tires condition</h6>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="radio" name="gotKeys-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["gotKeys"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="gotKeys-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio" <%= (car["gotKeys"] == "0") ? 'checked="checked"' : '' %>
+          ><label>&nbsp;No</label>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <select name="drivetrain-<%= car["idQuoteCars"] %>" class="md-form-control md-static drivetrain-select">
+          <option value="">Select a drive train</option>
+          <option value="flatbed" <%= (car["drivetrain"] == 'flatbed' ? 'selected' : '') %>>FLATBED</option>
+          <option value="fwd"     <%= (car["drivetrain"] == 'fwd' ? 'selected' : '') %>>FWD</option>
+          <option value="awd"     <%= (car["drivetrain"] == 'awd' ? 'selected' : '') %>>AWD</option>
+          <option value="4x4"     <%= (car["drivetrain"] == '4x4' ? 'selected' : '') %>>4X4</option>
+          <option value="rwd"     <%= (car["drivetrain"] == 'rwd' ? 'selected' : '') %>>RWD</option>
+          <option value="unk"     <%= (car["drivetrain"] == 'unk' ? 'selected' : '') %>>Unknown</option>
+        </select>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <select name="tiresCondition-<%= car["idQuoteCars"] %>" class="md-form-control md-static tires-select">
+          <option value="">Select the tire condition</option>
+          <option value="rear_flat"  <%= (car["tiresCondition"] == 'rear_flat' ? 'selected' : '') %>>Rear flat</option>
+          <option value="good"       <%= (car["tiresCondition"] == 'good' ? 'selected' : '') %>>Good</option>
+          <option value="all_flat"   <%= (car["tiresCondition"] == 'all_flat' ? 'selected' : '') %>>All flat</option>
+          <option value="front_flat" <%= (car["tiresCondition"] == 'front_flat' ? 'selected' : '') %>>Front flat</option>
+          <option value="seized"     <%= (car["tiresCondition"] == 'seized' ? 'selected' : '') %>>Seized</option>
+          <option value="none"       <%= (car["tiresCondition"] == 'none' ? 'selected' : '') %>>None</option>
+          <option value="backseat"   <%= (car["tiresCondition"] == 'backseat' ? 'selected' : '') %>>In backseet</option>
+          <option value="broken"     <%= (car["tiresCondition"] == 'broken' ? 'selected' : '') %>>Broken</option>
+          <option value="unk"        <%= (car["tiresCondition"] == 'unk' ? 'selected' : '') %>>Unknown</option>
+        </select>
+      </div>
+    </div>
+    <div class="row prompt-line" style="padding-bottom:10px; display:none">
+      <div class="col-lg-4 " >
+      </div>
+      <div class="col-lg-4">
+        <h6 class="2wd-ability" style="display:none">Do you you have 2WD ability?</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6 class="can-go-neutral" style="display:none">Can the car go in neutral?</h6>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6 2wd-ability" style="display:none">
+          <input type="radio" name="canDo2wd-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["canDo2wd"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="canDo2wd-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio" <%= (car["canDo2wd"] == "0") ? 'checked="checked"' : '' %>
+          ><label>&nbsp;No</label>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6 can-go-neutral" style="display:none">
+          <input type="radio" name="canGoNeutral-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["canGoNeutral"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="canGoNeutral-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio" <%= (car["canGoNeutral"] == "0") ? 'checked="checked"' : '' %>
+          ><label>&nbsp;No</label>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-bottom:10px">
+      <div class="col-lg-4">
+        <h6>Ownership?</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Running?</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Complete?</h6>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="radio" name="ownership-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["ownership"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="ownership-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio" <%= (car["ownership"] == "0") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;No</label>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="radio" name="running-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["running"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="running-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio" <%= (car["running"] == "0") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;No</label>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="radio" name="complete-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["complete"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="complete-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio" <%= (car["complete"] == "0") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;No</label>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-bottom:10px">
+      <div class="col-lg-4">
+        <h6>Color</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Receipt #</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>VIN #</h6>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="color-<%= car["idQuoteCars"] %>" value="<%= car["color"] %>"/>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="receipt-<%= car["idQuoteCars"] %>" value="<%= car["receipt"] %>"/>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="vin-<%= car["idQuoteCars"] %>" value="<%= car["vin"] %>"/>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-bottom:10px">
+      <div class="col-lg-4">
+        <h6>O/S Name</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>O/S Address</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Cash regular</h6>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="ownershipName-<%= car["idQuoteCars"] %>" value="<%= car["ownershipName"] %>"/>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="ownershipAddress-<%= car["idQuoteCars"] %>" value="<%= car["ownershipAddress"] %>"/>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="number" name="cashRegular-<%= car["idQuoteCars"] %>" value="<%= car["cashRegular"] %>"/>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-bottom:10px">
+      <div class="col-lg-4">
+        <h6>Time booked</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Date booked</h6>
+      </div>
+      <div class="col-lg-4">
+        <h6>Is Car Towable?</h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <select id="timeBooked-<%= car["idQuoteCars"] %>" name="timeBooked-<%= car["idQuoteCars"] %>" class="md-form-control md-static">
+            <option value="" disabled>Select the time</option>
+            <option value="1" <%= (car["timeBooked"] == '1' ? 'selected' : '') %>>8am-12pm</option>
+            <option value="2" <%= (car["timeBooked"] == '2' ? 'selected' : '') %>>12pm-5pm</option>
+            <option value="3" <%= (car["timeBooked"] == '3' ? 'selected' : '') %>>9am-5pm</option>
+            <option value="4" <%= (car["timeBooked"] == '4' ? 'selected' : '') %>>5pm-11pm</option>
+            <option value="5" <%= (car["timeBooked"] == '5' ? 'selected' : '') %>>5pm-10pm</option>
+            <option value="6" <%= (car["timeBooked"] == '6' ? 'selected' : '') %>>9pm-11pm</option>
+            <option value="d" <%= (car["timeBooked"] == 'd' ? 'selected' : '') %>>Dropoff</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" class="date-field" name="dateBooked-<%= car["idQuoteCars"] %>" value="<%= car["dateBooked"] %>"/>
+        </div>
+      </div>
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="radio" name="isTowable-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio towable-select" <%= (car["isTowable"] == "1") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;Yes</label>
+          <div style="width:20px;display: inline-block"></div>
+          <input type="radio" name="isTowable-<%= car["idQuoteCars"] %>" value="0" class="handlingOptionRadio towable-select" <%= (car["isTowable"] == "0") ? 'checked="checked"' : '' %>>
+          <label>&nbsp;No</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <h6>Car Notes</h6>
+      </div>
+      <div class="col-lg-6">
+        <h6>Driver Notes</h6>
+      </div>
+      <div class="col-lg-6">
+        <div class="mmd-group-add-on cashcheckdiv">
+          <div class="md-input-wrapper">
+            <textarea name="carNotes-<%= car["idQuoteCars"] %>" rows="3" cols="50"><%= car["carNotes"] %></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mmd-group-add-on cashcheckdiv">
+          <div class="md-input-wrapper">
+            <textarea name="driverNotes-<%= car["idQuoteCars"] %>" rows="3" cols="50"><%= car["driverNotes"] %></textarea>
+          </div>
+        </div>
+      </div>
+    </div><!-- row -->
+  </div>
+</div>

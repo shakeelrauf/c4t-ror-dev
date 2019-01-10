@@ -278,9 +278,7 @@ class Api::V1::CustomerController < ApiController
 
   def postal
     addresses = Address.select('idAddress AS id, idClient, address, city, province, distance, postal').where('postal LIKE ? and idClient = ?', params[:search], params[:customer_id])
-    if addresses
-      return render_json_response(addresses, :ok)
-    end
+    return render_json_response(addresses, :ok)
   end
 	
   private 

@@ -1,0 +1,85 @@
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 p-0">
+        <div class="main-header">
+          <h4><%= "QUICK QUOTE" %></h4>
+          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+            <li class="breadcrumb-item">
+              <a href="/dashboard">
+                <i class="icofont icofont-home"></i>
+              </a>
+            </li>
+            <li class="breadcrumb-item">Clients</li>
+            <li class="breadcrumb-item"><a href="/quotes"><%= "QUOTE" %></a></li>
+            <li class="breadcrumb-item"><a href="/quotes/<%= quote["idQuote"] %>/edit"><%= "EDIT QUOTE" %></a></li>
+            <li class="breadcrumb-item"><a href="/quotes/<%= quote["idQuote"] %>/book"><%= "BOOK QUOTE" %></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <form id="the_form">
+      <div class="row">
+        <div class="col-lg-12">
+          <h2><%= "Book QUote" %></h2>
+        </div>
+        <div class="card col-lg-12">
+          <div class="card-header">
+            <a href="/quotes/<%= quote["idQuote"] %>/pdf" target="_blank" class="btn btn-danger waves-effect d-inline-block f-right">
+              <i class="icofont icofont-file-pdf"></i>
+              Envelop
+            </a>
+            <h5><%= quote["refNo"] %></h5>
+          </div>
+          <div class="card-block row">
+            <!-- Nav tabs -->
+            <div class="col-lg-12 tab-header">
+              <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
+                <%if(quote["idQuote"] != nil)
+                    cars.each do |car, index| %>
+                      <li class="nav-item car<%= car["idQuoteCars"] %>" style="display:block" id="cartab-<%= car["idQuoteCars"] %>">
+                        <a class="nav-link<%= index == 0 ? " active" : "" %>" data-toggle="tab" href="#tab<%= car["idQuoteCars"] %>" role="tab"><%= car["make"] + " " + car["model"] + " " + car["year"] %></a>
+                        <div class="slide"></div>
+                      </li>
+                    <% end
+                end%>
+                  </ul>
+                  </div>
+                  <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
+                    <% if(quote["idQuote"] != nil)
+                        quote["cars"].each.with_index do |car, index| %>
+                        <%= render partial: "vehicle_booking",locals: {
+                            vehicle: cars[index],
+                            car: car,
+                            index: index}
+                        %>
+                      <%
+                        end
+                      end%>
+                  </div>
+          </div>
+          <div class="card-block quick-quote-navigator" style="padding-top: 0px;">
+            <a href="javascript:saveBooking();" class="btn btn-primary waves-effect d-inline-block">
+              <i class="icofont icofont-cur-dollar"></i>
+              <%= "SAVE" %>
+            </a><br>
+            <a href="javascript:scheduleBooking(<%= quote["idQuote"] %>);" class="btn btn-green waves-effect d-inline-block">
+              <i class="icofont icofont-cur-dollar"></i>
+              <%= "SAVE AND SCHEDULE" %>
+            </a><br>
+            <a href="javascript:gotoEditQuote(<%= quote["idQuote"] %>);" class="btn btn-danger waves-effect d-inline-block">
+              <%= "RETURN" %>
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<% content_for :js do %>
+  <script>
+      var quoteNo = "<%= quote["idQuote"] || nil %>";
+  </script>
+  <%= public_js_path("book-quote.js") %>
+  <%= public_js_path("common.js") %>
+<% end %>

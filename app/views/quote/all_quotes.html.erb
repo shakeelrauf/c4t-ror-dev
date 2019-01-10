@@ -1,103 +1,173 @@
 <div class="content-wrapper">
-        <!-- Container-fluid starts -->
-        <div class="container-fluid">
-            <!-- Main content starts -->
-            <div >
-                <!-- Row Starts -->
-                <div class="row">
-                    <div class="col-sm-12 p-0">
-                        <div class="main-header">
-                            <h4>Quotes</h4>
-                            <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                                <li class="breadcrumb-item">
-                                    <a href="/dashboard">
-                                        <i class="icofont icofont-home"></i>
-                                    </a>
-                                </li>
-                                <li class="breadcrumb-item">Clients</li>
-                                <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-                <!-- Row end -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
-                                    Quotes
-                                </h5>
-                                <a href="/create-quote" class="btn btn-primary waves-effect waves-light f-right md-trigger">
-                                    <i class="icofont icofont-law-document"></i>  Create Quote
-                                </a>
-                            </div>
-                            <div class="card-block">
-                                <div class="row">
-                                    <div class="md-group-add-on col-lg-5">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-ui-search"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" class="md-form-control md-static search-bar-quote">
-                                            <label>Search</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-3">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-filter"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <select class="md-form-control md-static filter-quote selectcash">
-                                                <option value="">All</option>
-                                            <% @status.each do |stat| %>
-                                                <option value="<%= stat.name %>"><%= stat.name %></option>
-                                            <% end %>
-                                            </select>
-                                            <label>Status</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-calendar"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="date" name="dtStart" value="2000-01-01" class="md-form-control md-static">
-                                            <label>From</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-calendar"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="date" name="dtEnd" value="<%= DateTime.now.strftime("YYYY-MM-DD") %>" class="md-form-control md-static">
-                                            <label>To</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-10"></div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-calculator"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <select class="md-form-control md-static shortcut-date-quotes selectcash">
-                                                <option selected style="display:none;"></option>
-                                                <option>Today</option>
-                                                <option>Yesterday</option>
-                                                <option>Last week</option>
-                                                <option>Last month</option>
-                                            </select>
-                                            <label>Preset</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="table-content crm-table">
-                                        <div class="project-table">
-                                            <table id="crm-contact" class="table table-striped nowrap table-responsive">
-                                                <thead>
-                                                <tr>
+      <div class="container-fluid">
+          <div >
+              <div class="row">
+                  <div class="col-sm-12 p-0">
+                      <div class="main-header">
+                          <h4>Quotes</h4>
+                          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+                              <li class="breadcrumb-item">
+                                  <a href="/dashboard">
+                                      <i class="icofont icofont-home"></i>
+                                  </a>
+                              </li>
+                              <li class="breadcrumb-item">Clients</li>
+                              <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
+                          </ol>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-12">
+                      <div class="card">
+                          <div class="card-header">
+                              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                                  Quotes
+                              </h5>
+                              <a href="/create-quote" class="btn btn-primary waves-effect waves-light f-right md-trigger">
+                                  <i class="icofont icofont-law-document"></i>  Create Quote
+                              </a>
+                          </div>
+                          <div class="card-block">
+                              <div class="row">
+                                  <div class="md-group-add-on col-lg-5">
+                                      <span class="md-add-on">
+                                          <i class="icofont icofont-ui-search"></i>
+                                      </span>
+                                      <div class="md-input-wrapper">
+                                          <input type="text" class="md-form-control md-static search-bar-quote">
+                                          <label>Search</label>
+                                      </div>
+                                  </div>
+                                  <div class="md-group-add-on col-lg-3">
+                                      <span class="md-add-on">
+                                          <i class="icofont icofont-filter"></i>
+                                      </span>
+                                      <div class="md-input-wrapper">
+                                          <select class="md-form-control md-static filter-quote selectcash">
+                                              <option value="">All</option>
+                                          <% @status.each do |stat| %>
+                                              <option value="<%= stat.name %>"><%= stat.name %></option>
+                                          <% end %>
+                                          </select>
+                                          <label>Status</label>
+                                      </div>
+                                  </div>
+                                  <div class="md-group-add-on col-lg-2">
+                                      <span class="md-add-on">
+                                          <i class="icofont icofont-calendar"></i>
+                                      </span>
+                                      <div class="md-input-wrapper">
+                                          <input type="date" name="dtStart" value="2000-01-01" class="md-form-control md-static">
+                                          <label>From</label>
+                                      </div>
+                                  </div>
+                                  <div class="md-group-add-on col-lg-2">
+                                      <span class="md-add-on">
+                                          <i class="icofont icofont-calendar"></i>
+                                      </span>
+                                      <div class="md-input-wrapper">
+                                          <input type="date" name="dtEnd" value="<%= DateTime.now.strftime("YYYY-MM-DD") %>" class="md-form-control md-static">
+                                          <label>To</label>
+                                      </div>
+                                  </div>
+                                  <div class="col-lg-10"></div>
+                                  <div class="md-group-add-on col-lg-2">
+                                      <span class="md-add-on">
+                                          <i class="icofont icofont-calculator"></i>
+                                      </span>
+                                      <div class="md-input-wrapper">
+                                          <select class="md-form-control md-static shortcut-date-quotes selectcash">
+                                              <option selected style="display:none;"></option>
+                                              <option>Today</option>
+                                              <option>Yesterday</option>
+                                              <option>Last week</option>
+                                              <option>Last month</option>
+                                          </select>
+                                          <label>Preset</label>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                  <div class="table-content crm-table">
+                                      <div class="project-table">
+                                          <table id="crm-contact" class="table table-striped nowrap table-responsive">
+                                              <thead>
+                                              <tr>
+                                                <th>Reference number</th>
+                                                <th>Client Name</th>
+                                                <th>Client Phone</th>
+                                                <th>Date Added</th>
+                                                <th>Dispatcher</th>
+                                                <th>Status</th>
+                                                <th>Time from last status</th>
+                                                <th>Action</th>
+                                              </tr>
+                                              </thead>
+                                              <tbody class="table-quotes">
+                                              <% @quotes.each do |quote| %>
+                                                  <tr>
+                                                    <td><%= quote.referNo %></td>
+                                                    <td>
+                                                      <% if (quote.customer) %>
+                                                      <%= quote.customer.firstName %> <%= quote.customer.lastName %>
+                                                      <% end %>
+                                                    </td>
+                                                    <td>
+                                                      <% if (quote.customer) %>
+                                                      <%= quote.customer.phone[0, 3] + " " + quote.customer.phone[3, 6] + "-" + quote.customer.phone[6] %>
+                                                      <% end %>
+                                                    </td>
+                                                      <td><%= !quote.dtCreated.nil? ? quote.dtCreated.to_datetime.strftime("%Y-%m-%d %H:%M") : "" %></td>
+                                                      <td><%= quote.dispatcher.firstName %> <%= quote.dispatcher.lastName %></td>
+                                                      <td>
+                                                          <%
+                                                              backgroundType = "muted"
+                                                              if (quote.status.color == "yellow")
+                                                                  backgroundType = "warning";
+                                                               elsif (quote.status.color == "blue")
+                                                                  backgroundType = "info";
+                                                               elsif (quote.status.color == "green")
+                                                                  backgroundType = "success";
+                                                               elsif (quote.status.color == "red")
+                                                                  backgroundType = "danger";
+                                                               elsif (quote.status.color == "orange")
+                                                                  backgroundType = "primary";
+                                                              end
+                                                          %>
+                                                          <select class="quote-status-list selectcash form-control badge badge-<%= backgroundType %>" data-quote-no="<%= quote.id %>">
+                                                                                        <% @status.each do |stat| %>
+                                                            <option value="<%= stat.id %>"<% if (stat.id == quote.status.id) %> selected<% end %>>
+                                                                                                <%= stat.name %>
+                                                                                            </option>
+                                                                                        <% end %>
+                                                          </select>
+                                                      </td>
+                                                      <td class="timerFromLastStatus" data-timer="<%= (DateTime.now -  quote.dtStatusUpdated.to_datetime) || 0 %>">
+                                                        <% diff = 555 || 0 %>
+                                                        <% if (diff < 3600) %>
+                                                          <%= (diff/60).ceil %>m
+                                                        <%  elsif (diff < 3600 * 48) %>
+                                                          <%= (diff/3600).ceil %>h
+                                                        <%  else  %>
+                                                          <%= (diff/(3600*24).ceil) %>d
+                                                        <% end %>
+                                                      </td>
+                                                      <td class="faq-table-btn">
+                                                        <a href="/quotes/<%= quote.id %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                                                          <i class="icofont icofont-ui-edit"></i>
+                                                        </a>
+                            <!--
+                            <a href="/quotes/<%= quote.id %>/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                              <i class="icofont icofont-eye-alt"></i>
+                            </a>
+                            -->
+                                                      </td>
+                                                  </tr>
+                                              <% end %>
+                                              </tbody>
+                                              <tfoot>
+                                              <tr>
                                                   <th>Reference number</th>
                                                   <th>Client Name</th>
                                                   <th>Client Phone</th>
@@ -106,149 +176,73 @@
                                                   <th>Status</th>
                                                   <th>Time from last status</th>
                                                   <th>Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody class="table-quotes">
-                                                <% @quotes.each do |quote| %>
-                                                    <tr>
-                                                      <td><%= quote.referNo %></td>
-                                                      <td>
-                                                        <% if (quote.customer) %>
-                                                        <%= quote.customer.firstName %> <%= quote.customer.lastName %>
-                                                        <% end %>
-                                                      </td>
-                                                      <td>
-                                                        <% if (quote.customer) %>
-                                                        <%= quote.customer.phone[0, 3] + " " + quote.customer.phone[3, 6] + "-" + quote.customer.phone[6] %>
-                                                        <% end %>
-                                                      </td>
-                                                        <td><%= quote.dtCreated.strftime("YYYY-MM-DD HH:mm") %></td>
-                                                        <td><%= quote.dispatcher.firstName %> <%= quote.dispatcher.lastName %></td>
-                                                        <td>
-                                                            <%
-                                                                backgroundType = "muted"
-                                                                if (quote.status.color == "yellow")
-                                                                    backgroundType = "warning";
-                                                                 elsif (quote.status.color == "blue")
-                                                                    backgroundType = "info";
-                                                                 elsif (quote.status.color == "green")
-                                                                    backgroundType = "success";
-                                                                 elsif (quote.status.color == "red")
-                                                                    backgroundType = "danger";
-                                                                 elsif (quote.status.color == "orange")
-                                                                    backgroundType = "primary";
-                                                                end
-                                                            %>
-                              <select class="quote-status-list selectcash form-control badge badge-<%= backgroundType %>" data-quote-no="<%= quote.id %>">
-                                                            <% @status.each do |stat| %>
-                                <option value="<%= stat.id %>"<% if (stat.id == quote.status.id) %> selected<% end %>>
-                                                                    <%= stat.name %>
-                                                                </option>
-                                                            <% end %>
-                                                            </select>
-                            </td>
-                                                        <td class="timerFromLastStatus" data-timer="<%= quote.dtStatusUpdated || 0 %>">
-                                                    <%
-                                                        diff = 555 || 0 %>
-                                                    <%    if (diff < 3600)
-                                                    %>
-                                                        <%= (diff/60).ceil %>m
-                                                    <%  elsif (diff < 3600 * 48) %>
-                                                        <%= (diff/3600).ceil %>h
-                                                    <%  else  %>
-                                                        <%= (diff/(3600*24).ceil) %>d
-                                                    <% end %>
-                                                        </td>
-                                                        <td class="faq-table-btn">
-                              <a href="/quotes/<%= quote.id %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
-                                <i class="icofont icofont-ui-edit"></i>
-                              </a>
-                              <!--
-                              <a href="/quotes/<%= quote.id %>/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
-                                <i class="icofont icofont-eye-alt"></i>
-                              </a>
-                              -->
-                            </td>
-                                                    </tr>
-                                                <% end %>
-                                                </tbody>
-                                                <tfoot>
-                                                <tr>
-                                                    <th>Reference number</th>
-                                                    <th>Client Name</th>
-                                                    <th>Client Phone</th>
-                                                    <th>Date Added</th>
-                                                    <th>Dispatcher</th>
-                                                    <th>Status</th>
-                                                    <th>Time from last status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Container-fluid ends -->
+                                              </tr>
+                                              </tfoot>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Container-fluid ends -->
 </div>
 <% content_for :js do %>
-  <script>
-      function growling(message, type) {
-          $.growl({
-              message: message
-          },{
-              type: "success",
-              allow_dismiss: true,
-              label: 'Cancel',
-              className: 'btn-xs btn-inverse',
-              delay: 0,
-              placement: {
-                  from: 'top',
-                  align: 'center'
-              },
-              animate: { enter: 'animated fadeInDown' }
-          });
-      }
+<script>
+    function growling(message, type) {
+        $.growl({
+            message: message
+        },{
+            type: "success",
+            allow_dismiss: true,
+            label: 'Cancel',
+            className: 'btn-xs btn-inverse',
+            delay: 0,
+            placement: {
+                from: 'top',
+                align: 'center'
+            },
+            animate: { enter: 'animated fadeInDown' }
+        });
+    }
 
-      $(document).ready(function() {
-          $("#crm-contact").DataTable({
-              "paging": false,
-              "searching": false,
-              "info":     false,
-              "order": [],
-              "fixedHeader": true
-          });
-          <% if (params[:isAdded] && params[:isAdded] == "true") %>
-            growling("The quote is maked and customer [added/edited]!", "success");
-          <% elsif (params[:isAdded] && params[:isAdded] == "false" && params[:reason]) %>
-            growling("An error occur: " + reason, "danger");
-          <% end %>
-          function updateTimer(val) {
-              var myTime = Number($(val).attr("data-timer"))+1;
-              $(val).attr("data-timer", myTime);
-              // Less than 1 hour.
-              if(myTime < 3600) {
-                  $(val).text(Math.floor(myTime/60) + "m");
-                  // Between 1 hour and 48 hours
-              } else if(myTime < 3600 * 48) {
-                  $(val).text(Math.floor(myTime/3600) + "h");
-                  // After 48 hours
-              } else {
-                  $(val).text(Math.floor(myTime/(3600*24)) + "d");
-              }
+    $(document).ready(function() {
+        $("#crm-contact").DataTable({
+            "paging": false,
+            "searching": false,
+            "info":     false,
+            "order": [],
+            "fixedHeader": true
+        });
+        <% if (params[:isAdded] && params[:isAdded] == "true") %>
+          growling("The quote is maked and customer [added/edited]!", "success");
+        <% elsif (params[:isAdded] && params[:isAdded] == "false" && params[:reason]) %>
+          growling("An error occur: " + reason, "danger");
+        <% end %>
+        function updateTimer(val) {
+            var myTime = Number($(val).attr("data-timer"))+1;
+            $(val).attr("data-timer", myTime);
+            // Less than 1 hour.
+            if(myTime < 3600) {
+                $(val).text(Math.floor(myTime/60) + "m");
+                // Between 1 hour and 48 hours
+            } else if(myTime < 3600 * 48) {
+                $(val).text(Math.floor(myTime/3600) + "h");
+                // After 48 hours
+            } else {
+                $(val).text(Math.floor(myTime/(3600*24)) + "d");
           }
+        }
 
-          setInterval(() => {
-              $.each($('.timerFromLastStatus'), function(i, val){
-                  updateTimer(val)
-              });
-          }, 1000);
-      });
-  </script>
-  <%= public_js_path 'quote-list.js' %>
+        setInterval(() => {
+            $.each($('.timerFromLastStatus'), function(i, val){
+                updateTimer(val)
+            });
+        }, 1000);
+    });
+</script>
+<%= public_js_path 'quote-list.js' %>
 <% end %>
