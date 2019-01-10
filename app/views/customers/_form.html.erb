@@ -202,7 +202,7 @@
                                  </span>
                                  <div class="md-input-wrapper">
                                     <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress"  value="">
-                                    <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" required="" value="">
+                                     <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" name="addresses[idAddress][]" value="1">
                                     <label>Address <span class="required">*</span></label>
                                  </div>
                               </div>
@@ -256,9 +256,13 @@
                            <% end %>
                         </div>
                         <div class="col-lg-12">
-                           <a href="javascript:addAddress({});" class="btn btn-primary f-right md-trigger">
-                           <i class="icofont icofont-ui-add"></i> Add Address
-                           </a>
+                           <% if action_name == "edit" %>
+                              <a href="javascript:addAddress({});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
+                              </a>
+                           <% else %>
+                              <span  class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
+                              </span>
+                           <% end %>
                         </div>
                      </div>
                      <hr>
@@ -619,6 +623,39 @@
             });
          });
 
+         function address_validates(){
+            var flag = true;
+            $('.txtAddress, .txtCity, .txtProvince, .txtPostal').filter(function() {
+             if (this.value == '') {
+               flag = false;
+               return false;
+             }
+            });
+           return flag;
+         }
+
+         function contacts_validates(){
+            var flag = true;
+            $('.contact-edit-list input').filter(function() {
+             if (this.value == '') {
+               flag = false;
+               return false;
+             }
+            });
+           return flag;
+         }
+
+         function company_validates(){
+            var flag = true;
+            $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST').filter(function() {
+             if (this.value == '') {
+               flag = false;
+               return false;
+             }
+            });
+           return flag;
+         }
+
           function valid_fields(){
               var $phone_num = $("#txtPhone").val();
               var $first_name = $("#txtFirstName").val();
@@ -627,14 +664,17 @@
               var $province = $("#txtProvince").val();
               var $postal = $("#txtPostal").val();
               var $heard = $("#txtHeardOfUs").val();
-              if ($phone_num == "" ||
+              if ($phone_num == ""  ||
                   $first_name == "" ||
-                  $address == "" ||
-                  $city == "" ||
-                  $province == "" ||
-                  $postal == "" ||
-                  $heard == "" ||
-                  $heard == null)
+                  $address == ""    ||
+                  $city == ""       ||
+                  $province == ""   ||
+                  $postal == ""     ||
+                  $heard == ""      ||
+                  $heard == null    ||
+                  address_validates() == false ||
+                  contacts_validates() == false ||
+                  company_validates() == false)
               {
                   growling("Please send all required attributes");
                   return false;
