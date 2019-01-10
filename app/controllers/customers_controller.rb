@@ -82,7 +82,10 @@ class CustomersController < ApplicationController
     addresses = []
     if params[:addresses].present?
       p_key = params[:addresses]
-      p_key["address"].zip(p_key["city"], p_key["province"], p_key["postal"], p_key["idAddress"]).each do |adr, city, pro, pos, id|
+      p_key["address"].zip(p_key["city"],
+                           p_key["province"],
+                           p_key["postal"],
+                           p_key["idAddress"]).each do |adr, city, pro, pos, id|
         addresses << {
                         "address":   adr,
                         "city":      city,
