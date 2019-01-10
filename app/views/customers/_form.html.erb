@@ -511,7 +511,7 @@
                          <i class="icofont icofont-ui-user"></i>
                      </span>
                      <div class="md-input-wrapper">
-                         <input type="text" class="md-form-control first-name md-static" value="`+(contactData.firstName || "")+`" name="contacts[firstName][]">
+                         <input type="text" class="md-form-control first-name contact-fn md-static" value="`+(contactData.firstName || "")+`" name="contacts[firstName][]">
                          <input type="hidden" class="md-form-control idContact md-static" value="`+(contactData.id || "")+`">
                          <label>Contact First Name <span class="required">*</span></label>
                      </div>
@@ -521,7 +521,7 @@
                          <i class="icofont icofont-ui-user"></i>
                      </span>
                      <div class="md-input-wrapper">
-                         <input type="text" class="md-form-control last-name md-static" value="`+(contactData.lastName || "")+`" name="contacts[lastName][]">
+                         <input type="text" class="md-form-control last-name contact-ln md-static" value="`+(contactData.lastName || "")+`" name="contacts[lastName][]">
                          <label>Contact Last Name <span class="required">*</span></label>
                      </div>
                  </div>
@@ -530,7 +530,7 @@
                          <i class="icofont icofont-ui-user"></i>
                      </span>
                      <div class="md-input-wrapper">
-                         <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
+                         <select class="md-form-control payment-method md-static selectcash contact-selectcash" name="contacts[paymentMethod][]">
                              <option disabled selected style="display:none"></option>
                              <option`+(contactData.paymentMethod == "By Check" ? " selected" : "")+`>By Check</option>
                              <option`+(contactData.paymentMethod == "Cash" ? " selected" : "")+`>Cash</option>
@@ -644,7 +644,7 @@
 
          function contacts_validates(){
             var flag = true;
-            $('.contact-edit-list input').filter(function() {
+            $('.contact-fn, contact-ln, .contact-selectcash').filter(function() {
              if (this.value == '') {
                flag = false;
                return false;
