@@ -43,8 +43,12 @@ class QuotecarsController < ApplicationController
 	    end
  			returned = {}
 	    returned[:results] = groups
-	    returned[:limit] = 15
-	    returned[:offset] = 0
+	    returned[:pagination] = {}
+	    if(groups.length != 30)
+	      returned[:pagination][:more] = false
+	    else
+	      returned[:pagination][:more] = true
+	    end
 	    respond_json(returned)
 	  end
  	end
