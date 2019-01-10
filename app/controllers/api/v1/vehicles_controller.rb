@@ -3,16 +3,12 @@ class Api::V1::VehiclesController < ApiController
 	include API::V1::Validations
 
 	def create
-		if current_user.roles.eql?('admin')
-  		return render_json_response({:error => NOT_AN_ADMIN, :success => false}, :unauthorized)
-  	else
-      if invalid_params
-        return render_json_response({:error => INVALID_PARAMS, :success => false}, :unprocessable_entity)
-      else
-        r_vehicle = VehicleInfo.create(vehicle_params)
-        return render_json_response(r_vehicle, :ok) if r_vehicle
-        return render_json_response({:error => PROBLEM_OCCURRED, :success => false}, :unprocessable_entity)
-      end
+    if invalid_params
+      return render_json_response({:error => INVALID_PARAMS, :success => false}, :unprocessable_entity)
+    else
+      r_vehicle = VehicleInfo.create(vehicle_params)
+      return render_json_response(r_vehicle, :ok) if r_vehicle
+      return render_json_response({:error => PROBLEM_OCCURRED, :success => false}, :unprocessable_entity)
     end
 	end
 
@@ -80,6 +76,6 @@ class Api::V1::VehiclesController < ApiController
 		params[:offset] && is_number(params[:offset]) && to_number(params[:limioffsett]) > 0
 	end
 	def vehicle_params
-		params.permit(:vehicle, :year, :make, :model, :trim, :body, :drive, :transmission, :seats, :doors, :weight)
+		params.permit(:idVehiculeInfo, :year, :make, :model, :trim, :body, :drive, :transmission, :seats, :doors, :weight)
 	end
 end
