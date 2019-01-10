@@ -257,7 +257,7 @@
                         </div>
                         <div class="col-lg-12">
                            <% if action_name == "edit" %>
-                              <a href="javascript:addAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
+                              <a href="javascript:addCusAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
                               </a>
                            <% else %>
                               <span  class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
@@ -553,7 +553,7 @@
        return Math.random().toString(36).substring(7)
      }
 
-    function addAddress(address) {
+    function addCusAddress(address) {
            $(".address-edit-list").append(`
                      <div class="col-lg-12 row address-edit" id="mathaddress`+(address.rand)+`" >
                        <div class="col-lg-4 md-group-add-on">
