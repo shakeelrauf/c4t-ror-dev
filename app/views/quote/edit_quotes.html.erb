@@ -48,7 +48,7 @@
                             <div class="md-input-wrapper">
                                 <select class="md-form-control md-static" name="phone"><%
                                 if (quote["idQuote"] != nil && quote["customer"] != nil) %>
-                                    <option value="<%= quote["customer"]["id"] %>" selected><%=
+                                    <option value="<%= quote["customer"]["idClient"] %>" selected><%=
                                         quote["customer"]["phone"][0,3] + " " + quote["customer"]["phone"][3,3] + "-" + quote["customer"]["phone"][6,10] +
                                         " " + quote["customer"]["firstName"] + " " + quote["customer"]["lastName"]
                                     %></option>
@@ -94,12 +94,12 @@
                                     <%  heardOfUsFound = false %>
                                     <% heardsofus.each do |heardofus| %>
                                     <% if (quote["idQuote"] != nil && quote["customer"]) %>
-                                    <option<%= heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"] ? " selected" : "" %>><%= heardofus["type"] %></option>
-                                    <%  if(heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"]) %>
+                                      <option<%= heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"] ? " selected" : "" %>><%= heardofus["type"] %></option>
+                                      <%  if(heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"]) %>
                                           <% heardOfUsFound = true %>
-                                    <% else %>
-                                    <option><%= heardofus["type"] %></option>
-                                    <% end %>
+                                      <% else %>
+                                        <option><%= heardofus["type"] %></option>
+                                      <% end %>
                                     <% if(quote["idQuote"] != nil && !heardOfUsFound && quote["customer"]) %>
                                     <option selected><%= quote["customer"]["heardofus"]["type"] %></option>
                                     <% end %>
@@ -277,9 +277,10 @@
 
   <script>
       $(".tab-pane").removeClass("active");
-      const quoteNo = (<%= quote["idQuote"] || "null" %>);
+      var quoteNo = (<%= quote["idQuote"] || "null" %>);
       // var idCarGenerator = <%#= cars.length %>
   </script>
   <%= public_js_path 'distance.js' %>
+  <%= public_js_path 'common.js' %>
   <%= public_js_path 'quote.js' %>
 <% end %>

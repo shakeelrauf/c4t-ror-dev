@@ -6,12 +6,6 @@ class QuoteController < ApplicationController
     @status = Status.all
   end
 
-  def create_quote
-    quickquote =  ApiCall.post("/quickquotes", params.to_json, headers)
-    return respond_json({error: quickquote["error"]}) if quickquote["error"].present?
-    return respond_json({message: "QuickQuote saved"})
-  end
-
   def car_price
     return respond_json({"netPrice": nil}) if params[:missingWheel] == "" || params[:missingBattery] == "" || params[:missingCat] == ""
     quote = ApiCall.get("/quotes/#{params[:quoteId]}", {}, headers)
@@ -61,6 +55,12 @@ class QuoteController < ApplicationController
     res = ApiCall.get("/quotes/json?limit=#{params[:limit]}
                   &offset=#{params[:offset]}&afterDate=#{params[:afterDate]}&beforeDate=#{params[:beforeDate]}&filter=#{params[:filter]}",{} , headers )
     respond_json(res)
+  end
+
+  def create_quote
+    quickquote =  ApiCall.post("/quickquotes", JSON.parse(params.to_json), headers)
+    return respond_json({error: quickquote["error"]}) if quickquote["error"].present?
+    return respond_json({message: "QuickQuote saved"})
   end
 
   def vehicle_json
@@ -131,12 +131,9 @@ class QuoteController < ApplicationController
     respond_json(returned)
   end
 
-  def create_quotes
-		@status = Status.all
-		@heardsofus = Heardofus.all
-		@customers = Customer.all
-		@user = User.all
-		@charities = Charitie.all
+  def create
+    quickquote =  ApiCall.post("/quotes", {}, headers)
+    redirect_to edit_quote_path(id: quickquote["idQuote"])
   end
 
   def create_car
@@ -164,7 +161,6 @@ class QuoteController < ApplicationController
       end
     end
     render  locals: {
-                       req: request,
                        user: current_user,
                        quote: JSON.parse(@quote.to_json),
                        cars: carsFormated,
@@ -197,21 +193,18 @@ class QuoteController < ApplicationController
 
   def update_quote_status
     if (params[:status])
-      quotes = Quote.includes(:customer).where(idQuote: params[:no])
+      quotes = Quote.includes(:customer).where(idQuote: params[:no]).first
       if quotes.present?
-        results = quotes.first.update(
-          idStatus: params[:status],
-          dtStatusUpdated: Time.now
-        )
+        quotes.idStatus = params[:status]
+        quotes.dtStatusUpdated = Time.now
+        quotes.save!
       end
-      r_quote = Quote.includes(:customer).where(idQuote: params[:no])
-      # If status is «in Yard», send sms to customer for know his appreciation.
       if (params[:status] == 6)
         # Check if sms already sent.
-        if (!r_quote.first.isSatisfactionSMSQuoteSent && r_quote.first.customer.cellPhone)
+        if (!quotes.isSatisfactionSMSQuoteSent && quotes.customer.cellPhone)
           sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
           sms.call
-          quotes.first.update(isSatisfactionSMSQuoteSent: 1)
+          quotes.update(isSatisfactionSMSQuoteSent: 1)
         end
       end
     end

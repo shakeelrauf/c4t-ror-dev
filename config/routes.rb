@@ -51,15 +51,20 @@ Rails.application.routes.draw do
 	  collection do
 	    post '/blacklist/:no', 								action: :blacklist
 	  end
-	end
+  end
+  scope controller: :booking do
+    get '/quotes/:no/book', 								action: :book
+    post '/booking', 												action: :booking
+  end
+
 
 	scope controller: :quote do
-		post 'quotes',                           action: :create
-		post 'quote',                            action: :create_quote
+		post '/quotes',                          action: :create
+		post '/quote',                           action: :create_quote
     get '/quotes/json',                      action: :quote_with_filter
 		get '/status/json', 										 action: :status_json
     get '/vehicles/:no/json', 							 action: :vehicle_json
-		get '/quotes/:id/edit',             	 	 action: :edit_quotes
+		get '/quotes/:id/edit',             	 	 action: :edit_quotes, 								as: :edit_quote
     get '/phone-numbers-select2', 					 action: :phone_list
     get '/vehicles-select2', 					       action: :vehicle_list
 		post '/car-create',                      action: :create_car
@@ -76,7 +81,7 @@ Rails.application.routes.draw do
     get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
     get '/status',                           action: :all_status
     get '/quotes',                       		 action: :all_quotes
-    get '/create-quote',                     action: :create_quotes
+    get '/create-quote',                     action: :create, 						 as: :create_quote
 	end
 	
   resources :customers
@@ -95,8 +100,8 @@ Rails.application.routes.draw do
 				post 'address-create',               action: :create
       end
 
-			scope :booking , controller: :booking do
-				post :booking, 											 action: :update
+			scope  controller: :booking do
+				post '/booking', 											 action: :update
       end
 
 			resources :charities, :param => :no, :only => [:index,:create,:show,:update]

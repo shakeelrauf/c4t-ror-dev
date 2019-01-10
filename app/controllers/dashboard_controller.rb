@@ -24,7 +24,7 @@ class DashboardController < ApplicationController
     if cars && cars.length
       cars.each do |car|
         found = false
-        if !(schedules.is_a? Array) 
+        if !(schedules.is_a? Array)
           schedules.each do |schedule|
             if car && car["idQuoteCars"] == schedule["idCar"]
               found =  true

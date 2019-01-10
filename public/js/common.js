@@ -7,7 +7,7 @@ function apost(options, onDone) {
       alert("Session timed out, or an error occurred.");
       document.location = "/login?redirect=" + document.location;
     } else {
-        onDone(JSON.parse(data));
+        onDone(data);
     }
   })
   .fail(function() {
