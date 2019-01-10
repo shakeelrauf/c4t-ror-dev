@@ -19,14 +19,16 @@ class DashboardController < ApplicationController
 
   def list_unscheduled_cars(schedules, cars)
     un_scheduled_cars = {}
-    return un_scheduled_cars if !(cars.is_a? Array) && cars["error"]
-    return un_scheduled_cars if !(schedules.is_a? Array) && schedules["error"]
+    return un_scheduled_cars if !(cars.is_a? Array) && (cars["error"] ||  cars["data"])
+    return un_scheduled_cars if !(schedules.is_a? Array) && (schedules["error"] || schedules["data"])
     if cars && cars.length
       cars.each do |car|
         found = false
-        schedules.each do |schedule|
-          if car && car["idQuoteCars"] == schedule["idCar"]
-            found =  true
+        if !(schedules.is_a? Array)
+          schedules.each do |schedule|
+            if car && car["idQuoteCars"] == schedule["idCar"]
+              found =  true
+            end
           end
         end
         if !found && car["quote"]["status"]["name"]=="Accepted"

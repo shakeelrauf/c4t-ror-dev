@@ -37,23 +37,23 @@ $(document).ready(function() {
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
                 $(".tab-details").append(`
-                <li id="car-tab` + car.id + `" class="nav-item car"` + car.id + ` veh-`+ veh.id + `" style="display:block">
-                    <a class="nav-link active" data-toggle="tab" href="#tab` + car.id + `" role="tab">
-                        <button onclick="removeCar(` + car.id + `);">x</button>
+                <li id="car-tab` + car.idQuoteCars + `" class="nav-item car"` + car.idQuoteCars + ` veh-`+ veh.idVehiculeInfo + `" style="display:block">
+                    <a class="nav-link active" data-toggle="tab" href="#tab` + car.idQuoteCars + `" role="tab">
+                        <button onclick="removeCar(` + car.idQuoteCars + `);">x</button>
                         ` + veh.make + " " + veh.year + `
                     </a>
                     <div class="slide"></div>
                 </li>`);
 
                 $(".cars-total-list").append(`
-                    <div id="car-price`+ car.id + `" class="row car` + veh.id + ` index` + car.id + `">
+                    <div id="car-price`+ car.idQuoteCars + `" class="row car` + veh.idVehiculeInfo + ` index` + car.idQuoteCars + `">
                         <div class="col-lg-6">
                             ` + veh.make + " " + veh.model + " " + veh.year + `
                         </div>
-                        <div id="car-price-pickup-` + car.id + `" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
+                        <div id="car-price-pickup-` + car.idQuoteCars + `" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
                           missing info
                         </div>
-                        <div id="car-price-dropoff-` + car.id + `" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
+                        <div id="car-price-dropoff-` + car.idQuoteCars + `" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
                           missing info
                         </div>
                     </div>`);
@@ -62,9 +62,8 @@ $(document).ready(function() {
                 calcPrice(car.idQuoteCars,car.idQuote);
                 $('#txtVehicleFilter').html("");
                 $(".selectcashcar .select2-selection__rendered").html("");
-
                 // Make the car postal selecter a select2
-                createPostalSelect2($("#car-location" + car.id));
+                createPostalSelect2($("#car-location" + car.idQuoteCars));
             });
         });
       });
@@ -132,9 +131,6 @@ $(document).ready(function() {
 
     calcPrices();
 });
-
-// Creates a select2 dropdown on a select
-// for postal code search
 function createPostalSelect2(s) {
   var clientId = $("select[name=phone] option:selected").val();
   if (!clientId) {
@@ -333,9 +329,7 @@ function calcPrice(carId,quote_id) {
 
 function calcPrice(carId) {
     var t = $("#tab" + carId);
-    if( quote_id == undefined){
-        quote_id = $("#quote").data("id");
-    }
+    quote_id = $("#quote").data("id");
     // Get the distance from the input field
     var distance = $("#car-distance" + carId).val();
     if (isNaN(parseInt(distance))) {
@@ -511,7 +505,7 @@ function saveCar(callback) {
         url: "/quote",
         data: {
             "quote": quoteNo,
-            "cars": JSON.stringify(cars),
+            "cars": cars,
             "phone": unformatPhone($("select[name=phone] option:selected").text()),
             "firstName": $("input[name=firstName]").val(),
             "lastName": $("input[name=lastName]").val(),

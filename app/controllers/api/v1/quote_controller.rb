@@ -67,37 +67,30 @@ class Api::V1::QuoteController < ApiController
 
     # Creates a blank quote
   def create
-    # Find the last settings
-    # Copy them in the quote for now
-    	
-    settings = db.query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)", {
-      type: db.QueryTypes.SELECT
-    })
-
-    # The settings hash
-    s = {}
+    settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
+    settings_hash = {}
     settings.each do |setting|
-      s[setting.name] = setting.value
+      settings_hash[setting["name"]] = setting["value"]
     end
-
-    count = Quote.where(dtCreated: moment().format("YYYY-MM-01 00:00:00"))
-      reference = moment().format("YYMM") + ("0000" + (count + 1)).slice(-4)
-      quote = Quote.create(
-        idUser: current_user.idUser,
-        reference: reference,
-        smallCarPrice: s.smallCarPrice,
-        midCarPrice: s.midCarPrice,
-        largeCarPrice: s.largeCarPrice,
-        steelPrice: s.steelPrice,
-        wheelPrice: s.wheelPrice,
-        catPrice: s.catalysorPrice,
-        batteryPrice: s.batteryPrice,
-        excessCost: s.excessPrice,
-        freeDistance: s.freeDistance,
-        pickup: s.pickup
-      )
- 		 return render_json_response(quote, :ok)
-
+    count = Quote.where(dtCreated: DateTime.now.strftime("%Y-%m-01 00:00:00")).count
+    reference = DateTime.now.strftime("%Y%m") +("0000"+( count+1).to_s).last(4)
+    quote = Quote.create(
+      idUser: current_user.idUser,
+      referNo: reference,
+      smallCarPrice: settings_hash["smallCarPrice"] || "0",
+      midCarPrice: settings_hash["midCarPrice"] || "0",
+      largeCarPrice: settings_hash["largeCarPrice"] || "0",
+      steelPrice: settings_hash["steelPrice"] || "0",
+      wheelPrice: settings_hash["wheelPrice"] || "0",
+      catPrice: settings_hash["catalysorPrice"] || "0",
+      batteryPrice: settings_hash["batteryPrice"] || "0",
+      excessCost: settings_hash["excessPrice"] || "0",
+      freeDistance: settings_hash["freeDistance"] || "0",
+      pickup: settings_hash["pickup"] || "0",
+      dtCreated: DateTime.now,
+      dtStatusUpdated: DateTime.now
+    )
+    return render_json_response(quote, :ok)
   end
 
   # Creates a blank quote ca

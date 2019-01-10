@@ -257,7 +257,7 @@
                         </div>
                         <div class="col-lg-12">
                            <% if action_name == "edit" %>
-                              <a href="javascript:addAddress({});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
+                              <a href="javascript:addCusAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
                               </a>
                            <% else %>
                               <span  class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
@@ -468,21 +468,26 @@
       }
       function removeAddress(addressId) {
           if (confirm("Are you sure? We'll verify if there quotes associated with this address first.")) {
-            $.ajax({
-                method: "POST",
-                url: "/api/v1/address-remove",
-                data: {
-                   addressId: addressId
-                },
-                success: function(json){
-                    if (json.error) {
-                      growling(json.error);
-                    } else {
-                      growlOfSuccess(json.message);
-                      $("#address" + addressId).remove();
-                    }
-                }
-            });
+            if (!addressId.toString().includes("math")){
+               $.ajax({
+                   method: "POST",
+                   url: "/api/v1/address-remove",
+                   data: {
+                      addressId: addressId
+                   },
+                   success: function(json){
+                       if (json.error) {
+                         growling(json.error);
+                       } else {
+                         growlOfSuccess(json.message);
+                         $("#address" + addressId).remove();
+                       }
+                   }
+               });
+            }
+            else {
+               $("#" + addressId).remove();
+            }
           }
       }
 
@@ -506,7 +511,7 @@
                          <i class="icofont icofont-ui-user"></i>
                      </span>
                      <div class="md-input-wrapper">
-                         <input type="text" class="md-form-control first-name md-static" value="`+(contactData.firstName || "")+`" name="contacts[firstName][]">
+                         <input type="text" class="md-form-control first-name contact-fn md-static" value="`+(contactData.firstName || "")+`" name="contacts[firstName][]">
                          <input type="hidden" class="md-form-control idContact md-static" value="`+(contactData.id || "")+`">
                          <label>Contact First Name <span class="required">*</span></label>
                      </div>
@@ -516,7 +521,7 @@
                          <i class="icofont icofont-ui-user"></i>
                      </span>
                      <div class="md-input-wrapper">
-                         <input type="text" class="md-form-control last-name md-static" value="`+(contactData.lastName || "")+`" name="contacts[lastName][]">
+                         <input type="text" class="md-form-control last-name contact-ln md-static" value="`+(contactData.lastName || "")+`" name="contacts[lastName][]">
                          <label>Contact Last Name <span class="required">*</span></label>
                      </div>
                  </div>
@@ -525,7 +530,7 @@
                          <i class="icofont icofont-ui-user"></i>
                      </span>
                      <div class="md-input-wrapper">
-                         <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
+                         <select class="md-form-control payment-method md-static selectcash contact-selectcash" name="contacts[paymentMethod][]">
                              <option disabled selected style="display:none"></option>
                              <option`+(contactData.paymentMethod == "By Check" ? " selected" : "")+`>By Check</option>
                              <option`+(contactData.paymentMethod == "Cash" ? " selected" : "")+`>Cash</option>
@@ -544,10 +549,13 @@
              </div>`);
      }
 
-    function addAddress(address) {
-       
+     function rand(){
+       return Math.random().toString(36).substring(7)
+     }
+
+    function addCusAddress(address) {
            $(".address-edit-list").append(`
-                     <div class="col-lg-12 row address-edit" id="address` + address.id + `">
+                     <div class="col-lg-12 row address-edit" id="mathaddress`+(address.rand)+`" >
                        <div class="col-lg-4 md-group-add-on">
                            <span class="md-add-on">
                                <i class="icofont icofont-address-book"></i>
@@ -603,7 +611,7 @@
                            </div>
        
                            <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                               <span onclick="removeAddress(` + address.id + `)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
+                               <span onclick="removeAddress('mathaddress`+(address.rand)+`')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
                                    <i class="icofont icofont-ui-remove"></i>
                                </span>
                            </div>
@@ -636,7 +644,7 @@
 
          function contacts_validates(){
             var flag = true;
-            $('.contact-edit-list input').filter(function() {
+            $('.contact-fn, contact-ln, .contact-selectcash').filter(function() {
              if (this.value == '') {
                flag = false;
                return false;
@@ -647,12 +655,14 @@
 
          function company_validates(){
             var flag = true;
-            $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST').filter(function() {
-             if (this.value == '') {
-               flag = false;
-               return false;
-             }
-            });
+            if(!$(".company-data").hasClass("force-hidden")){
+               $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST').filter(function() {
+                if (this.value == '') {
+                  flag = false;
+                  return false;
+                }
+               });
+            }
            return flag;
          }
 

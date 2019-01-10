@@ -13,6 +13,7 @@ class Api::V1::SchedulesController < ApiController
                                   ]
                                 } 
                               ]))
+
     render json: selected, status: :ok, adapter: :json_api
   end
 
