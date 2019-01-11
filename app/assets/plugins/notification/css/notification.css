@@ -37,9 +37,9 @@
 }
 
 .alert-success {
-  background-color: #4caf50;
-  border-color: transparent;
-  color: #ffffff;
+  background-color: #4caf50 !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
 }
 
 .alert-success hr {
@@ -65,9 +65,9 @@
 }
 
 .alert-warning {
-  background-color: #ffc107;
-  border-color: transparent;
-  color: #ffffff;
+  background-color: #ffc107 !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
 }
 
 .alert-warning hr {
@@ -79,9 +79,9 @@
 }
 
 .alert-danger {
-  background-color: #f44336;
-  border-color: transparent;
-  color: #ffffff;
+  background-color: #f44336 !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
 }
 
 .alert-danger hr {
