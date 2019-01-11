@@ -25,7 +25,7 @@ class Api::V1::VehiclesController < ApiController
 		limit = 30
     offset = 0
     limit = (params[:limit].to_i)
-    offset = ((params[:offset].to_i) * limit)
+    offset = ((params[:offset].to_i) * limit) if params[:offset] != "-1"
     if params[:filter].present?
       filter = + params[:filter].gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
