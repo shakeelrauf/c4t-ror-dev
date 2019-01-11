@@ -7,35 +7,35 @@ class BookingController < ApplicationController
     cars =  ApiCall.get("/quotes/#{params[:no]}/cars",{},headers)
     charities =  ApiCall.get("/charities",{}, headers)
     heardofus =  ApiCall.get("/heardsofus", {}, headers)
-    carsFormated = []
+    cars_formated = []
     cars.length.times do |i|
-      carsFormated.push(cars[i]["information"])
-      carsFormated[i]["vehicle"] = cars[i]["information"]
-      carsFormated[i]["id"] = cars[i]["idQuoteCars"]
-      carsFormated[i]["donation"] = cars[i]["donation"]
-      carsFormated[i]["gettingMethod"] = cars[i]["gettingMethod"]
-      carsFormated[i]["flatBedTruckRequired"] = cars[i]["flatBedTruckRequired"]
-      carsFormated[i]["gotKeys"] = cars[i]["gotKeys"]
-      carsFormated[i]["drivetrain"] = cars[i]["drivetrain"]
-      carsFormated[i]["tiresCondition"] = cars[i]["tiresCondition"]
-      carsFormated[i]["ownership"] = cars[i]["ownership"]
-      carsFormated[i]["running"] = cars[i]["running"]
-      carsFormated[i]["complete"] = cars[i]["complete"]
-      carsFormated[i]["color"] = cars[i]["color"]
-      carsFormated[i]["receipt"] = cars[i]["receipt"]
-      carsFormated[i]["vin"] = cars[i]["vin"]
-      carsFormated[i]["ownershipName"] = cars[i]["ownershipName"]
-      carsFormated[i]["ownershipAddress"] = cars[i]["ownershipAddress"]
-      carsFormated[i]["cashRegular"] = cars[i]["cashRegular"]
-      carsFormated[i]["timeBooked"] = cars[i]["timeBooked"]
-      carsFormated[i]["dateBooked"] = cars[i]["dateBooked"]
-      carsFormated[i]["carNotes"] = cars[i]["carNotes"]
-      carsFormated[i]["driverNotes"] = cars[i]["driverNotes"]
+      cars_formated.push(cars[i]["information"])
+      cars_formated[i]["vehicle"] = cars[i]["information"]
+      cars_formated[i]["id"] = cars[i]["idQuoteCars"]
+      cars_formated[i]["donation"] = cars[i]["donation"]
+      cars_formated[i]["gettingMethod"] = cars[i]["gettingMethod"]
+      cars_formated[i]["flatBedTruckRequired"] = cars[i]["flatBedTruckRequired"]
+      cars_formated[i]["gotKeys"] = cars[i]["gotKeys"]
+      cars_formated[i]["drivetrain"] = cars[i]["drivetrain"]
+      cars_formated[i]["tiresCondition"] = cars[i]["tiresCondition"]
+      cars_formated[i]["ownership"] = cars[i]["ownership"]
+      cars_formated[i]["running"] = cars[i]["running"]
+      cars_formated[i]["complete"] = cars[i]["complete"]
+      cars_formated[i]["color"] = cars[i]["color"]
+      cars_formated[i]["receipt"] = cars[i]["receipt"]
+      cars_formated[i]["vin"] = cars[i]["vin"]
+      cars_formated[i]["ownershipName"] = cars[i]["ownershipName"]
+      cars_formated[i]["ownershipAddress"] = cars[i]["ownershipAddress"]
+      cars_formated[i]["cashRegular"] = cars[i]["cashRegular"]
+      cars_formated[i]["timeBooked"] = cars[i]["timeBooked"]
+      cars_formated[i]["dateBooked"] = cars[i]["dateBooked"]
+      cars_formated[i]["carNotes"] = cars[i]["carNotes"]
+      cars_formated[i]["driverNotes"] = cars[i]["driverNotes"]
     end
     locals =  {
         user: current_user,
         quote: quote,
-        cars: carsFormated,
+        cars: cars_formated,
         charities: charities,
         heardsofus: heardofus,
     }
