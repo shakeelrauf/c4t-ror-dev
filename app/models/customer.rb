@@ -80,8 +80,8 @@ class Customer < ApplicationRecord
 			                    "idAddress": id
 			                  }
 			  end
-		end
-		addresses
+			end
+			addresses
 		end
 
 		def company_data(params)
