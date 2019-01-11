@@ -4,7 +4,11 @@
         <td><%= customer["firstName"] %></td>
         <td><%= customer["lastName"] %></td>
         <td><%= customer["type"] %></td>
-        <td><%= customer["phone"][0..2] + " " + customer["phone"][3..5] + "-" + customer["phone"] %></td>
+        <% if customer["phone"].length >= 8 %>
+            <td><%= customer["phone"][0..2] + " " + customer["phone"][3..5] + "-" + customer["phone"] %></td>
+        <% else %>
+            <td><%= customer["phone"] %></td>
+        <% end %>
         <td><%= customer["extension"] %></td>
         <td><%= customer["heardofus"]["type"] %></td>
         <td><%= customer["grade"] %></td>

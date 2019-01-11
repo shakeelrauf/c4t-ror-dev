@@ -23,7 +23,7 @@
             </div>
          </div>
          <!-- Row end -->
-         <form method="<%= action_name == "edit" ? "put" : "post" %>" action="<%= action_name == "edit" ? "/customers/#{@customer.id}" : "/customers" %>" id="customer-form">
+         <%= form_for(@customer, html: {id: "customer-form"}) do |form| %>
          <div class="row">
             <div class="col-sm-12">
                <div class="card">
@@ -414,6 +414,7 @@
                </div>
             </div>
          </div>
+         <% end %>
       </div>
    </div>
    <!-- Container-fluid ends -->
@@ -693,27 +694,35 @@
                   return true;
               }
           }
-          $("#customer-form").submit(function(e){
-              e.preventDefault();
-              if (valid_fields()){
-                  $('#saveCustomerButton').attr('disabled','disabled')
-                  $.ajax({
-                      method: $(this).attr("method"),
-                      url: $(this).attr("action"),
-                      data: $(this).serialize(),
-                      dataType: "json",
-                      success: function(res){
-                          $('#saveCustomerButton').removeAttr('disabled');
-                          if(res.response.idClient != undefined){
-                              growlOfSuccess(success_response);
-                          }
-                          else{
-                              growling(res.response.error)
-                          }
-                      }
-                  });
-              }
+           $("#saveCustomerButton").click(function(e){
+            if (valid_fields()){
+               $("#customer-form").submit();
+            }
+            else{
+               e.preventDefault();
+            }
           });
+          // $("#customer-form").submit(function(e){
+          //     e.preventDefault();
+          //     if (valid_fields()){
+          //         $('#saveCustomerButton').attr('disabled','disabled')
+          //         $.ajax({
+          //             method: $(this).attr("method"),
+          //             url: $(this).attr("action"),
+          //             data: $(this).serialize(),
+          //             dataType: "json",
+          //             success: function(res){
+          //                 $('#saveCustomerButton').removeAttr('disabled');
+          //                 if(res.response.idClient != undefined){
+          //                     growlOfSuccess(success_response);
+          //                 }
+          //                 else{
+          //                     growling(res.response.error)
+          //                 }
+          //             }
+          //         });
+          //     }
+          // });
           $("#txtType").change(function() {
               changeViewType();
           });
