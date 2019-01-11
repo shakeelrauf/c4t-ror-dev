@@ -45,20 +45,19 @@ class Api::V1::QuoteController < ApiController
     offset = 0
     limit  = params[:limit] if params[:limit].to_i > 0
     offset  = params[:offset] if params[:offset].to_i > 0
-    query =  "SELECT * from Quotes "
+    query =  ""
     if params[:filter]
       params[:filter] = "%" + params[:filter].gsub(/[\s]/, "% %").gsub('?','') + "%"
       filters =  params[:filter].split(' ')
       length =  filters.length
       filters.each.with_index do |fil,i|
-        query+= "INNER JOIN Status ON Status.idStatus = Quotes.idStatus INNER JOIN Users ON Users.idUser = Quotes.idUser INNER JOIN Clients ON Clients.idClient = Quotes.idClient WHERE" if i == 0
-        query+= " ('note' LIKE '#{fil}' OR 'referNo' LIKE '#{fil}' OR 'Clients.firstName' LIKE '#{fil}' OR 'Clients.lastName' LIKE '#{fil}' OR 'Clients.phone' LIKE '#{fil}' OR 'Clients.cellPhone' LIKE '#{fil}' OR 'Clients.secondaryPhone' LIKE '#{fil}' OR 'Users.firstName' LIKE '#{fil}' OR 'Users.lastName' LIKE '#{fil}' OR 'Status.name' LIKE '#{fil}')"
-        query+= " AND" if i < (length -1)
+        query+= "'note' like '#{fil}' OR referNo like '#{fil}' OR Clients.firstName like '#{fil}' OR Clients.lastName like '#{fil}' OR Clients.phone like '#{fil}' OR Clients.cellPhone like '#{fil}' OR Clients.secondaryPhone like '#{fil}' OR Users.firstName like '#{fil}' OR Users.lastName like '#{fil}' OR Status.name like '#{fil}'"
+        query+= " AND " if i < (length -1)
       end
-      # query+= " AND 'dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}'" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
-      # query+= " AND 'dtCreated' <= '#{params[:beforeDate]+ ' 23:59:59'}'" if params[:beforeDate] && params[:beforeDate].to_s.length == 10 && DateTime.parse(params[:beforeDate], "YYYY-MM-DD")
-      @quotes = Quote.run_sql_query(query)
-      @quotes =  Quote.includes(:dispatcher, :customer,:status).where('idQuote IN (?)', @quotes.pluck("idQuote")).to_json(include: [:dispatcher, :customer, :status])
+      query+= " AND 'dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}'" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
+      query+= " AND 'dtCreated' <= '#{params[:beforeDate]+ ' 23:59:59'}'" if params[:beforeDate] && params[:beforeDate].to_s.length == 10 && DateTime.parse(params[:beforeDate], "YYYY-MM-DD")
+
+      @quotes =  Quote.joins(:status, :customer, :dispatcher).where(query).to_json(include: [:dispatcher, :customer, :status])
     else
       @quotes =  Quote.includes(:dispatcher, :customer, :status).to_json(include: [:dispatcher, :customer, :status])
     end
@@ -269,7 +268,7 @@ class Api::V1::QuoteController < ApiController
     # lstQuotes = Quote.includes(:dispatcher, :customer, :status).order('dtCreated DESC').offset(offset).limit(30).to_json(include: [:dispatcher, :customer, :status])
     # it should be this query which is written down
     lstQuotes = Quote.includes(:dispatcher, :customer, :status).where(idClient: params[:no]).order('dtCreated DESC').offset(offset).limit(30).to_json(include: [:dispatcher, :customer, :status])
-    # lstQuotes = Quote.includes(:dispatcher, :customer, :status).where("(note LIKE ?  OR status.name LIKE ? OR dispatcher.firstName LIKE ? OR dispatcher.lastName LIKE ? OR reference  LIKE ? ) AND idClient = ?", filter, filter, filter, filter, filter, params[:no]).order('DESC').offset(offset).limit(30)
+    # lstQuotes = Quote.includes(:dispatcher, :customer, :status).where("(note like ?  OR status.name LIKE ? OR dispatcher.firstName LIKE ? OR dispatcher.lastName LIKE ? OR reference  LIKE ? ) AND idClient = ?", filter, filter, filter, filter, filter, params[:no]).order('DESC').offset(offset).limit(30)
 
     # lstQuotes.each do |quote|
     #   # TODO! Format each quote before send it.
