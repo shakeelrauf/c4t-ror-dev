@@ -22,10 +22,10 @@ class Api::V1::VehiclesController < ApiController
 	end
 
 	def index
-		limit = 30;
-    offset = 0;
-    limit = (params[:limit].to_i) if limit_valid
-    offset = ((params[:offset].to_i) * limit) if offset_valid
+		limit = 30
+    offset = 0
+    limit = (params[:limit].to_i)
+    offset = ((params[:offset].to_i) * limit)
     if params[:filter].present?
       filter = + params[:filter].gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
@@ -38,28 +38,27 @@ class Api::V1::VehiclesController < ApiController
 			return render_json_response(r_vehicles, :ok) if r_vehicles
 			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
 		end
-		return render_json_response({}, :ok)
+		r_vehicles = VehicleInfo.all.limit(limit).offset(offset) if !params[:filter].present?
+		return render_json_response(r_vehicles, :ok)
 	end
 
 	def vehicle_count
-    limit = 30;
-    offset = 0;
-    where = {};
-    
-    limit = to_number(params[:limit]) if limit_valid
-    offset = (to_number(params[:offset]) * limit) if offset_valid
-    
-    if params[:filter]
+		limit = params[:limit].gsub("?","").to_i
+    if params[:filter].present?
 			filter = "%" + params[:filter].gsub(/[\s]/, "% %") + "%"
 			filters = filter.split(' ')
-			query = "Select * FROM VehiculesInfo WHERE"
+			query = "Select * from VehiculesInfo where"
 			filters.each do |fil|
-				query.concat(" (year LIKE #{fil} or make LIKE #{fil} or model LIKE #{fil} or trim LIKE #{fil} or body LIKE #{fil} or drive LIKE #{fil} or transmission LIKE #{fil} or seats LIKE #{fil} doors LIKE #{fil} or weight LIKE #{fil})")
-				query.concat(" and ") if !fil.eql?(filters.last)
+				query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
+				query.concat(" AND ") if !fil.eql?(filters.last)
 			end
-			count = VehicleInfo.run_sql_query(query, offset, limit).count
-	    return render_json_response((count/limit).ceil, :ok) 
+			count = VehicleInfo.run_sql_query(query).count
+	    return render_json_response((count/limit).ceil, :ok) if count
 	    return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
+		else
+			count = VehicleInfo.all.count
+			return render_json_response((count/limit).ceil, :ok) if count
+			return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
 	  end
 	end
 

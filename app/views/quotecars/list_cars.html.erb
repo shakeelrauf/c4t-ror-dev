@@ -161,7 +161,8 @@
                                                     <a href="javascript:void(0);">«</a>
                                                 </li>
                                             <% i = 1 %>
-                                            <% while i <= 10 %>
+                                              <% pages = 10 if pages > 10 %>
+                                            <% while i <= pages %>
                                                 <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
                                                     <a href="javascript:void(0);"><%= i %></a>
                                                 </li>
@@ -188,17 +189,17 @@
                                                 </thead>
                                                 <tbody class="table-list">
                                                 <% @cars.each do |car| %>
-                                                    <tr data-car="<%= car["information"]["id"] %>">
-                                                        <td><%= car["information"]["year"] %></td>
-                                                        <td><%= car["information"]["make"] %></td>
-                                                        <td><%= car["information"]["model"] %></td>
-                                                        <td><%= car["information"]["trim"] %></td>
-                                                        <td><%= car["information"]["body"] %></td>
-                                                        <td><%= car["information"]["drive"] %></td>
-                                                        <td><%= car["information"]["transmission"] %></td>
-                                                        <td><%= car["information"]["seats"] %></td>
-                                                        <td><%= car["information"]["doors"] %></td>
-                                                        <td><%= car["information"]["weight"] %></td>
+                                                    <tr data-car="<%= car["id"] %>">
+                                                        <td><%= car["year"] %></td>
+                                                        <td><%= car["make"] %></td>
+                                                        <td><%= car["model"] %></td>
+                                                        <td><%= car["trim"] %></td>
+                                                        <td><%= car["body"] %></td>
+                                                        <td><%= car["drive"] %></td>
+                                                        <td><%= car["transmission"] %></td>
+                                                        <td><%= car["seats"] %></td>
+                                                        <td><%= car["doors"] %></td>
+                                                        <td><%= car["weight"] %></td>
                                                     </tr>
                                                 <% end %>
                                                 </tbody>
@@ -222,7 +223,7 @@
                                                     <a href="javascript:void(0);">«</a>
                                                 </li>
                                             <% i = 1 %>
-                                            <% while i <= 10 %>
+                                            <% while i <= pages %>
                                                 <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
                                                     <a href="javascript:void(0);"><%= i %></a>
                                                 </li>

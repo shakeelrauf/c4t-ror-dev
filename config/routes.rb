@@ -145,7 +145,8 @@ Rails.application.routes.draw do
 				get :quotescars
 				get '/quotescar/:carNo',             action: :show
 				get '/quotes/:quoteNo/cars',         action: :list
-				get '/cars',         action: :list_cars
+				get '/cars_count',         					 action: :list_cars_count
+				get '/cars',         								 action: :list_cars
 			end
 
 			scope controller: :quick_quote do

@@ -15,7 +15,9 @@ class QuotecarsController < ApplicationController
  	end
 
  	def list_cars
- 		@cars = ApiCall.get("/cars",{}, headers)
+ 		@cars = ApiCall.get("/vehicles?limit=15",{}, headers)
+		count =  ApiCall.get("/vehicles/count?limit=15",{}, headers)
+		render locals: {pages: count}
  	end
 
  	def car_count
@@ -24,33 +26,18 @@ class QuotecarsController < ApplicationController
  	end
 
  	def search_cars
- 		if params[:filter] != ""
-	 		vehicles = ApiCall.get("/vehicles?filter=#{params[:filter]}&offset=#{params[:offset]}", {},headers)
-	    returned = {}
-	    returned[:results] = vehicles
-	    returned[:pagination] = {}
-	    if(vehicles.length != 30)
-	      returned[:pagination][:more] = false
-	    else
-	      returned[:pagination][:more] = true
-	    end
-	    respond_json(returned)
-	  else
- 			vehicles = ApiCall.get("/cars?filter=#{params[:filter]}&offset=#{params[:offset]}",{}, headers)
- 			groups = []
-	 		vehicles.each do |vehicle|
-	 			groups << vehicle["information"]
-	    end
- 			returned = {}
-	    returned[:results] = groups
-	    returned[:pagination] = {}
-	    if(groups.length != 30)
-	      returned[:pagination][:more] = false
-	    else
-	      returned[:pagination][:more] = true
-	    end
-	    respond_json(returned)
-	  end
+		params[:filter] = params[:filter].gsub("?","")
+		params[:limt] = params[:limit].gsub("?","")
+		params[:offset] = params[:offset].gsub("?","")
+		vehicles = ApiCall.get("/vehicles?filter=#{params[:filter]}&offset=#{params[:offset]}&limit=#{params[:limit]}", {},headers)
+		count =  ApiCall.get("/vehicles/count?filter=#{params[:filter]}&limit=#{params[:limit]}",{}, headers)
+		result = {
+				count: count,
+				results: vehicles
+		}
+		puts "-----------------------------------------------------------------------#{vehicles.length}"
+
+		respond_json(result)
  	end
 
 	def form_body(params)

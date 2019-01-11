@@ -16,9 +16,19 @@ class Api::V1::QoutecarsController < ApiController
 		render json: JSON.parse(qc), status: :ok, adapter: :json_api
 	end
 
- 	def list_cars
- 		# cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:quoteNo]).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
-		cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
+	def list_cars
+		if params[:limit] && params[:offset]
+			limit =  params[:limit].gsub("?","").to_i
+			offset = limit * params[:offset].to_i
+			cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).limit(limit).offset(offset).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
+		else
+			cars = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
+		end
 		render json: JSON.parse(cars), status: :ok, adapter: :json_api
- 	end
+	end
+	
+	def list_cars_count
+		cars = QuoteCar.count
+		render json: JSON.parse({count: cars}.to_json), status: :ok, adapter: :json_api
+	end
 end
