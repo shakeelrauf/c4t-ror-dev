@@ -154,12 +154,8 @@ Rails.application.routes.draw do
 			end
 
       scope controller: :quote do
-				get '/quotes/:no',                     	 action: :show
-				get '/clients/:no/quotes',               action: :particular_customer_quotes
-				get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
-				get '/quotecar/:carNo',                  action: :retrive_car
-				get '/quotes',                           action: :get_quotes_by_filters
 				get '/quotes/json',                      action: :quote_with_filter
+				get '/quotes',                           action: :get_quotes_by_filters
 				get '/status',                           action: :all_status
 				get '/all_quotes',                       action: :all_quotes
 				post 'quotes',                           action: :create
@@ -169,6 +165,10 @@ Rails.application.routes.draw do
         patch '/change_status',                  action: :update_status
         patch '/quotes/:no/status',              action: :update_quote_status
         delete '/quotecar/:carNo',               action: :destroy
+				get '/quotes/:no',                     	 action: :show
+				get '/clients/:no/quotes',               action: :particular_customer_quotes
+				get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
+				get '/quotecar/:carNo',                  action: :retrive_car
     	end
 
 			scope controller: :schedules do

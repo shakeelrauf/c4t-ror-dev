@@ -9,10 +9,10 @@ class QuoteController < ApplicationController
   def car_price
     return respond_json({"netPrice": nil}) if params[:missingWheel] == "" || params[:missingBattery] == "" || params[:missingCat] == ""
     quote = ApiCall.get("/quotes/#{params[:quoteId]}", {}, headers)
-    carDistance =  params[:distance]
-    carDistance = carDistance.to_i if carDistance.present?
+    car_distance =  params[:distance]
+    car_distance = car_distance.to_i if car_distance.present?
     excessDistance = 0.0
-    excessDistance = [carDistance- quote["freeDistance"].to_i, 0.0 ].max if carDistance.present? && carDistance != "NOT_FOUND" && carDistance != "ZERO_RESULTS"
+    excessDistance = [car_distance- quote["freeDistance"].to_i, 0.0 ].max if car_distance.present? && car_distance != "NOT_FOUND" && car_distance != "ZERO_RESULTS"
     pickupCost    = quote["pickup"]
     isPickup      = (params[:gettingMethod] == "pickup")
     excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
@@ -24,7 +24,7 @@ class QuoteController < ApplicationController
     dropoff -=  params[:missingBattery].to_i * quote["batteryPrice"].to_f
     dropoffPrice = [dropoff,0.0].max
     pickupPrice = 0.0
-    if carDistance.present? && carDistance >  0.01 && excessDistance.present?
+    if car_distance.present? && car_distance >  0.01 && excessDistance.present?
       pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
     end
     netPrice = (isPickup ? pickupPrice : dropoffPrice)
@@ -35,7 +35,7 @@ class QuoteController < ApplicationController
     r[:weight] =  params[:weight].to_f / 1000.0
     r[:steelPrice] =  quote["steelPrice"].to_f
     r[:weightPrice] = weightPrice
-    r[:distance] = carDistance.to_f
+    r[:distance] = car_distance.to_f
     r[:freeDistance] = quote["freeDistance"].to_f
     r[:excessDistance] = excessDistance.to_f
     r[:excessCost] =  excessCost.to_f
