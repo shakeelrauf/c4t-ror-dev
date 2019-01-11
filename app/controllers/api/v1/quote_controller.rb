@@ -54,8 +54,8 @@ class Api::V1::QuoteController < ApiController
         query+= "'note' like '#{fil}' OR referNo like '#{fil}' OR Clients.firstName like '#{fil}' OR Clients.lastName like '#{fil}' OR Clients.phone like '#{fil}' OR Clients.cellPhone like '#{fil}' OR Clients.secondaryPhone like '#{fil}' OR Users.firstName like '#{fil}' OR Users.lastName like '#{fil}' OR Status.name like '#{fil}'"
         query+= " AND " if i < (length -1)
       end
-      query+= " AND 'dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}'" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
-      query+= " AND 'dtCreated' <= '#{params[:beforeDate]+ ' 23:59:59'}'" if params[:beforeDate] && params[:beforeDate].to_s.length == 10 && DateTime.parse(params[:beforeDate], "YYYY-MM-DD")
+      # query+= " AND 'dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}'" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
+      # query+= " AND 'dtCreated' <= '#{params[:beforeDate]+ ' 23:59:59'}'" if params[:beforeDate] && params[:beforeDate].to_s.length == 10 && DateTime.parse(params[:beforeDate], "YYYY-MM-DD")
 
       @quotes =  Quote.joins(:status, :customer, :dispatcher).where(query).to_json(include: [:dispatcher, :customer, :status])
     else
