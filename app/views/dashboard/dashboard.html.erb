@@ -87,6 +87,7 @@
 </div>
 <% content_for :js do %>
 <script>
+  
     var heardofus =<%= heardofus.to_json.to_s.html_safe %>;
     function donutChart(){
         $.plot("#heardOfUs", heardofus, {
