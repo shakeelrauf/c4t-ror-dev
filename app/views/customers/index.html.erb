@@ -1,6 +1,5 @@
 <%= render :partial => 'shared/header' %>
 <%= render :partial => 'shared/menu' %>
-
 <div class="content-wrapper">
         <!-- Container-fluid starts -->
         <div class="container-fluid">
@@ -87,6 +86,20 @@
         <!-- Container-fluid ends -->
     </div>
 </div>
+<style type="text/css">
+    .custom-growl{
+        position: fixed;
+        margin: 0px 0px 0px -148.516px;
+        z-index: 1031;
+        display: inline-block;
+        top: 20px;
+        left: 50%;
+    }
+    .close{
+        display: block;
+        z-index: 1030;
+    }
+</style>
 <% content_for :js do %>
     <script>
     function growlOfSuccess(message) {
@@ -106,6 +119,23 @@
         });
     }
 
+    function growling(message) {
+      $.growl({
+          message: message
+      },{
+          type: "danger",
+          allow_dismiss: true,
+          label: 'Cancel',
+          className: 'btn-xs btn-inverse',
+          placement: {
+              from: 'top',
+              align: 'center'
+          },
+          delay: 0,
+          animate: { enter: 'animated fadeInDown' }
+      });
+    }
+
     $(document).ready(function() {
       $("#crm-contact").DataTable({
           "paging": false,
@@ -113,6 +143,9 @@
           "info":     false,
           "order": [],
           "fixedHeader": true
+      });
+      $(".close").click(function(){
+        $(".custom-growl").hide();
       });
     });
 
@@ -148,6 +181,7 @@
                 }
            })
         });
+
     // var customersList = <%#= JSON.stringify(@customers.to_json) %>
     // var userRole = "<%#= user.roles %>"
     </script>

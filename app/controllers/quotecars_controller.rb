@@ -11,7 +11,7 @@ class QuotecarsController < ApplicationController
 
  	def create_car
     @car = ApiCall.post("/vehicles", form_body(params), headers )
-    redirect_to "/cars"
+    redirect_to carz_path(params: @car)
  	end
 
  	def list_cars

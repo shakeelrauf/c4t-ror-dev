@@ -6,8 +6,9 @@ class CustomersController < ApplicationController
   end
 
   def create
-    res = ApiCall.post("/clients", form_body(params), headers )
-    render json: { response: res }
+    res = ApiCall.post("/clients", Customer.form_body(params), headers )
+    growl(response_msg(res), "create")
+    redirect_to customers_path
   end
 
   def index
@@ -45,8 +46,9 @@ class CustomersController < ApplicationController
   end
 
   def update
-    res = ApiCall.patch("/clients/"+params[:id], form_body(params), headers)
-    render json: { response: res }
+    res = ApiCall.patch("/clients/"+params[:id], Customer.form_body(params), headers)
+    growl(response_msg(res), "update")
+    redirect_to customers_path
   end
 
   def get_customer
@@ -56,67 +58,26 @@ class CustomersController < ApplicationController
 
   private
 
-  def form_body(params)
-    {
-      "heardOfUs":      params[:heardOfUs],
-      "phoneNumber":    params[:phoneNumber],
-      "firstName":      params[:firstName],
-      "lastName":       params[:lastName],
-      "email":          params[:email],
-      "type":           params[:type],
-      "extension":      params[:extension],
-      "phoneNumber2":   params[:phoneNumber2],
-      "phoneNumber3":   params[:phoneNumber3],
-      "note":           params[:note],
-      "grade":          params[:grade],
-      "address":        params[:address],
-      "city":           params[:city],
-      "province":       params[:province],
-      "postal":         params[:postal],
-      "addresses":      address_data(params),
-      "contacts":       contact_data(params)
-    }.merge(company_data(params))
-  end
-
-  def address_data(params)
-    addresses = []
-    if params[:addresses].present?
-      p_key = params[:addresses]
-      p_key["address"].zip(p_key["city"], p_key["province"], p_key["postal"], p_key["idAddress"]).each do |adr, city, pro, pos, id|
-        addresses << {
-                        "address":   adr,
-                        "city":      city,
-                        "province":  pro,
-                        "postal":    pos,
-                        "idAddress": id
-                      }
-      end
+  def growl(res, action)
+    notice = "Customer is now edited!"
+    if action == "create"
+      notice = "Customer is created successfully!"
     end
-    addresses
-  end
-
-  def company_data(params)
-    {
-      "name":             params[:name],
-      "description":      params[:description],
-      "contactPosition":  params[:contactPosition],
-      "pstTaxNo":         params[:pstTaxNo],
-      "gstTaxNo":         params[:gstTaxNo]
-    }
-  end
-
-  def contact_data(params)
-    contacts = []
-    if params[:contacts].present?
-      p_key = params[:contacts]
-      p_key["firstName"].zip(p_key["lastName"], p_key["paymentMethod"]).each do |fn, ln, pm|
-        contacts << { "firstName":     fn,
-                      "lastName":      ln,
-                      "paymentMethod": pm
-                    }
-      end
+    if res == true
+      flash[:success] = notice
+    else
+      flash[:alert] = res
     end
-    contacts
+  end
+
+  def response_msg(res)
+    result = ""
+    if res["idClient"].present?
+      result = true
+    elsif res["error"].present?
+      result = res["error"]
+    end
+    result
   end
 
 end
