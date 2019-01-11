@@ -250,7 +250,7 @@
     $(document).ready(function(){
         var value = $("#oid").val();
         if (value){
-            alert("The car is added.");
+            doGrowlingSuccess("The car is now added.");
         }
     });
 
@@ -278,4 +278,5 @@
     });
     </script>
     <%= public_js_path('cars.js') %>
+    <%= public_js_path('common.js') %>
 <% end %>
