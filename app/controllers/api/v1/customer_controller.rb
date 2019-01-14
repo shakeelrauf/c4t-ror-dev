@@ -13,8 +13,7 @@ class Api::V1::CustomerController < ApiController
       customDollarSteel = 0
       customPercCar = 0
       customPercSteel = 0
-
-      if current_user.present? && current_user.roles.eql?("admin") 
+      if current_user.present? && current_user.roles.downcase.eql?("admin")
         customDollarCar = params[:customDollarCar] if params[:customDollarCar]
         customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
         customPercCar = params[:customPercCar] if params[:customPercCar]
@@ -126,7 +125,7 @@ class Api::V1::CustomerController < ApiController
           customPercSteel = 0
           updatedClient = ""
 
-          if current_user.present? && current_user.roles.eql?("admin") 
+          if current_user.present? && current_user.roles.downcase.eql?("admin")
             customDollarCar = params[:customDollarCar] if params[:customDollarCar]
             customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
             customPercCar = params[:customPercCar] if params[:customPercCar]
