@@ -27,7 +27,7 @@
             <div class="md-input-wrapper">
                <select class="md-form-control province txtProvince md-static selectcash" name="addresses[province][]" id="txtProvince">
                 <% if action_name == "edit" %>
-                    <option selected="selected"><%= address.province %></option>
+                    <option selected="selected"><%= province_name(address.province) %></option>
                 <% end %>
                   <option value="ON">Ontario</option>
                   <option value="BC">British Columbia</option>

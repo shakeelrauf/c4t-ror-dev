@@ -16,4 +16,32 @@ module CustomersHelper
     backgroundType
 	end
 
+    def province_name(name)
+        val = ""
+        if name == "ON"
+            val = "Ontario"
+        elsif name == "BC"
+            val = "British Columbia"
+        elsif name == "QC"
+            val = "Quebec"
+        elsif name == "AL"
+            val = "Alberta"
+        elsif name == "NS"
+            val = "Nova Scotia"
+        elsif name == "NL"
+            val = "Newfoundland and Labrador"
+        elsif name == "SA"
+            val = "Saskatchewan"
+        elsif name == "MA"
+            val = "Manitoba"
+        elsif name == "NB"
+            val = "New Brunswick"
+        elsif name == "PE"
+            val = "Prince Edward Island"
+        else
+            val = name
+        end
+        val
+    end
+
 end

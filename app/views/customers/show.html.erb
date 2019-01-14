@@ -119,7 +119,7 @@
 																</tr>
 																<tr>
 																	<th scope="row">Province</th>
-																	<td><%# include("partials/getProvinceByAbbreviation") %></td>
+																	<td><%= province_name(@customer["address"].first["province"]) if @customer["address"].present? %></td>
 																</tr>
 																<tr>
 																	<th scope="row">Postal</th>
