@@ -96,6 +96,7 @@ class QuoteController < ApplicationController
     else
       returned[:pagination][:more] = true
     end
+
     respond_json(returned)
   end
 
@@ -165,7 +166,7 @@ class QuoteController < ApplicationController
                        quote: JSON.parse(@quote.to_json),
                        cars: carsFormated,
                        charities: JSON.parse(@charities.to_json),
-                       heardsofus: JSON.parse(@heardsofus.to_json)
+                       heardsofus: @heardsofus
                      }
   end
 

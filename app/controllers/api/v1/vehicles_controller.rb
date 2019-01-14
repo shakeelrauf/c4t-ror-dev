@@ -24,7 +24,7 @@ class Api::V1::VehiclesController < ApiController
 	def index
 		limit = 30
     offset = 0
-    limit = (params[:limit].to_i)
+    limit = (params[:limit].present? ? params[:limit].to_i : 30)
     offset = ((params[:offset].to_i) * limit) if params[:offset] != "-1"
     if params[:filter].present?
       filter = + params[:filter].gsub(/[\s]/, "% %") + "%"

@@ -5,6 +5,7 @@ class BookingController < ApplicationController
   def book
     quote =  ApiCall.get("/quotes/#{params[:no]}", {}, headers)
     cars =  ApiCall.get("/quotes/#{params[:no]}/cars",{},headers)
+    respond_json({error: "Car list is empty please select a car"}) if cars.empty?
     charities =  ApiCall.get("/charities",{}, headers)
     heardofus =  ApiCall.get("/heardsofus", {}, headers)
     cars_formated = []

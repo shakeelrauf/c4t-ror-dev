@@ -93,18 +93,17 @@
                                   <option value="">Select an option</option>
                                     <%  heardOfUsFound = false %>
                                     <% heardsofus.each do |heardofus| %>
-                                    <% if (quote["idQuote"] != nil && quote["customer"]) %>
-                                      <option<%= heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"] ? " selected" : "" %>><%= heardofus["type"] %></option>
-                                      <%  if(heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"]) %>
-                                          <% heardOfUsFound = true %>
-                                      <% else %>
-                                        <option><%= heardofus["type"] %></option>
+                                      <% if (quote["idQuote"] != nil && quote["customer"] != nil) %>
+                                        <option<%= heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"] ? " selected" : "" %>><%= heardofus["type"] %></option>
+                                        <%  if(heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"]) %>
+                                            <% heardOfUsFound = true %>
+                                        <% else %>
+                                          <option><%= heardofus["type"] %></option>
+                                        <% end %>
+                                      <% elsif (quote["idQuote"] != nil && !heardOfUsFound ) %>
+                                          <option><%= heardofus["type"] %></option>
                                       <% end %>
-                                    <% if(quote["idQuote"] != nil && !heardOfUsFound && quote["customer"]) %>
-                                    <option selected><%= quote["customer"]["heardofus"]["type"] %></option>
-                                    <% end %>
-                                <% end %>
-                                <% end %>
+                                  <% end %>
                                 </select>
                                 <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
                             </div>
