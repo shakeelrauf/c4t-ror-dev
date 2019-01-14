@@ -44,23 +44,27 @@ class Customer < ApplicationRecord
 
 		def form_body(params)
 			{
-			  "heardOfUs":      params[:heardOfUs],
-			  "phoneNumber":    params[:phoneNumber],
-			  "firstName":      params[:firstName],
-			  "lastName":       params[:lastName],
-			  "email":          params[:email],
-			  "type":           params[:type],
-			  "extension":      params[:extension],
-			  "phoneNumber2":   params[:phoneNumber2],
-			  "phoneNumber3":   params[:phoneNumber3],
-			  "note":           params[:note],
-			  "grade":          params[:grade],
-			  "address":        params[:address],
-			  "city":           params[:city],
-			  "province":       params[:province],
-			  "postal":         params[:postal],
-			  "addresses":      address_data(params),
-			  "contacts":       contact_data(params)
+			  "heardOfUs":      	params[:heardOfUs],
+			  "phoneNumber":    	params[:phoneNumber],
+			  "firstName":      	params[:firstName],
+			  "lastName":       	params[:lastName],
+			  "email":          	params[:email],
+			  "type":           	params[:type],
+			  "extension":      	params[:extension],
+			  "phoneNumber2":   	params[:phoneNumber2],
+			  "phoneNumber3":   	params[:phoneNumber3],
+			  "note":           	params[:note],
+			  "grade":          	params[:grade],
+			  "address":        	params[:address],
+			  "city":           	params[:city],
+			  "province":       	params[:province],
+			  "postal":         	params[:postal],
+			  "customDollarCar":    params[:customDollarCar],
+			  "customDollarSteel":  params[:customDollarSteel],
+			  "customPercCar": 		params[:customPercCar],
+			  "customPercSteel": 	params[:customPercSteel],
+			  "addresses":      	address_data(params),
+			  "contacts":       	contact_data(params)
 			}.merge(company_data(params))
 		end
 
