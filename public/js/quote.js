@@ -512,11 +512,15 @@ function saveCar(callback) {
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val()
         }
-    }).done(function() {
+    }).done(function(s) {
       if (callback) {
         callback();
       } else {
-        doGrowlingMessage("Saved");
+          if(s.error){
+              doGrowlingDanger(s.error);
+          }else{
+              doGrowlingMessage("Saved");
+          }
       }
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
