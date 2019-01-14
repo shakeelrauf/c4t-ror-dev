@@ -37,8 +37,8 @@
               <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
                 <%if(quote["idQuote"] != nil)
                     cars.each do |car, index| %>
-                      <li class="nav-item car<%= car["idQuoteCars"] %>" style="display:block" id="cartab-<%= car["idQuoteCars"] %>">
-                        <a class="nav-link<%= index == 0 ? " active" : "" %>" data-toggle="tab" href="#tab<%= car["idQuoteCars"] %>" role="tab"><%= car["make"] + " " + car["model"] + " " + car["year"] %></a>
+                      <li class="nav-item car<%= car["id"] %>" style="display:block" id="cartab-<%= car["id"] %>">
+                        <a class="nav-link<%= index == 0 ? " active" : "" %>" data-toggle="tab" href="#tab<%= car["id"] %>" role="tab"><%= car["make"] + " " + car["model"] + " " + car["year"] %></a>
                         <div class="slide"></div>
                       </li>
                     <% end
