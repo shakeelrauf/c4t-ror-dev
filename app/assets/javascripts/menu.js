@@ -7,6 +7,10 @@
 $(document).ready(function() {
     /*chat box scroll*/
 
+    $(".close").click(function(){
+      $(".custom-growl").hide();
+    });
+
     $('.sidebar-toggle').on('click',function(){
         var $window = $(window);
         if($window.width() < 767){
