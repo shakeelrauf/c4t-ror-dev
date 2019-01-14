@@ -9,7 +9,7 @@ class Api::V1::QuickQuoteController < ApiController
    # The save a of a quote
   def save_quotes
     # Validate body data before insert.
-    if (params[:firstName] == nil || params[:lastName] == nil || params[:postal] == nil || !params[:heardofus] || params[:phone] == nil)
+    if (!params[:firstName].present? || !params[:lastName].present? || !params[:postal].present? || !params[:heardofus].present? || !params[:phone].present?)
       return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
 		else
       params[:postal] = IsValid.postal(params[:postal])
