@@ -129,7 +129,7 @@
                                                                                         <% end %>
                                                           </select>
                                                       </td>
-                                                      <td class="timerFromLastStatus<%= quote.idQuote %>" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
+                                                      <td class="timerFromLast timerFromLastStatus<%= quote.idQuote %>" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
                                                         <% content_for :js do %>
                                                           <script type="text/javascript">
                                                             $(document).ready(function(){
