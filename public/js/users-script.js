@@ -51,7 +51,6 @@ $(".blacklistDialogYes").click(function() {
             });
         } else {
             document.location = "/users?statechange=true";
-            doGrowlingMessage("User state is changed!");
         }
     });
 });
@@ -160,5 +159,12 @@ $("#btnSaveUser").click(function() {
                 }
             }
         });
+    }
+});
+
+$( document ).ready(function() {
+    var params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    if (params[0].length == 16){
+        doGrowlingMessage("User state is changed!");
     }
 });
