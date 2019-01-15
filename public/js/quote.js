@@ -110,7 +110,7 @@ $(document).ready(function() {
     $(".btn-edit-customer").click(function() {
         var clientId = $("select[name=phone]").val();
         if(clientId == null) {
-            window.open("/customers/add?firstName="+$("input[name=firstName]").val()+
+            window.open("/customers/new?firstName="+$("input[name=firstName]").val()+
             "&lastName="+$("input[name=lastName]").val()+
             "&postal="+$("input[name=postal]").val()+
             "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
