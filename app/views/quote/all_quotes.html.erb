@@ -115,7 +115,7 @@
                                                     </td>
                                                     <td>
                                                       <% if (quote.customer) %>
-                                                      <%= quote.customer.phone[0, 3] + " " + quote.customer.phone[3, 6] + "-" + quote.customer.phone[6] %>
+                                                      <%= quote.customer.phone[0, 3] + "-" + quote.customer.phone[3, 6] + "-" + quote.customer.phone[6] %>
                                                       <% end %>
                                                     </td>
                                                       <td><%= !quote.dtCreated.nil? ? quote.dtCreated.to_datetime.strftime("%Y-%m-%d %H:%M") : "" %></td>
