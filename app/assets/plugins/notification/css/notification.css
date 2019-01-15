@@ -161,6 +161,7 @@
 
 .growl-animated.alert-danger {
   box-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
+  right: 37% !important;
 }
 
 .alert-link {

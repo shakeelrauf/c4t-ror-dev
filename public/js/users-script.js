@@ -37,6 +37,7 @@ $(".blacklistDialogYes").click(function() {
       }
     }).done(function(data) {
         if(data.error) {
+
             $(".loading").addClass("hidden");
             $.growl({
                 message: data.error
@@ -50,6 +51,7 @@ $(".blacklistDialogYes").click(function() {
             });
         } else {
             document.location = "/users?statechange=true";
+            doGrowlingMessage("User state is changed!");
         }
     });
 });
