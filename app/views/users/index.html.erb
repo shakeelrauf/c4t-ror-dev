@@ -43,7 +43,7 @@
                       <% @users.each do |contact| %>
                         <tr>
                           <td>
-                            <% if(!contact["avatar"])  %>
+                            <% unless contact["avatar"].present?  %>
                              <img src="<%= image_path 'avatar-1.png' %>" class="d-inline-block rounded-circle " alt="avatar">
                             <%  else  %>
                              <img src='<%= contact["avatar"].present? ? (image_path "avatars/#{contact['avatar']}" rescue "") : "" %>' class="d-inline-block rounded-circle " alt="avatar">
