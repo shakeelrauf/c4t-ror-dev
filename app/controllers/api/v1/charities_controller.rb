@@ -17,20 +17,20 @@ class Api::V1::CharitiesController < ApiController
 	end
 
 	def create
-		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request) if !params_present?(charitie_params, ["name", "email", "phone", "info", "address"])
-  	charitie = Charitie.new(charitie_params)
-  	charitie.save
-  	if !charitie.errors[:email].blank?
-  		return render_json_response({:errors => INVALID_EMAIL}, :bad_request)
-  	elsif charitie.errors.any?
-  		return render_json_response({:errors => INVALID_CHARITIE, extra_errors: charitie.errors.messages}, :bad_request)
-  	else
-  		return render_json_response(charitie, :ok)
-  	end
+		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request) if !params_present?(charitie_params, ["name"])
+		charitie = Charitie.new(charitie_params)
+		charitie.save
+		if charitie.email.present? && !charitie.errors[:email].blank?
+			return render_json_response({:errors => INVALID_EMAIL}, :bad_request)
+		elsif charitie.errors.any?
+			return render_json_response({:errors => INVALID_CHARITIE, extra_errors: charitie.errors.messages}, :bad_request)
+		else
+			return render_json_response(charitie, :ok)
+		end
 	end
 
 	def update    
-		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request) if !params_present?(charitie_params, ["name", "email", "phone", "info", "address"])
+		return render_json_response({:errors => REQUIRED_ATTRIBUTES}, :bad_request) if !params_present?(charitie_params, ["name"])
   	charitie = Charitie.where(idCharitie: params[:no]).first
   	if charitie.present?
   		if charitie.update(charitie_params)

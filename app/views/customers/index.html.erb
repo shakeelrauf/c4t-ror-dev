@@ -86,20 +86,6 @@
         <!-- Container-fluid ends -->
     </div>
 </div>
-<style type="text/css">
-    .custom-growl{
-        position: fixed;
-        margin: 0px 0px 0px -148.516px;
-        z-index: 1031;
-        display: inline-block;
-        top: 20px;
-        left: 50%;
-    }
-    .close{
-        display: block;
-        z-index: 1030;
-    }
-</style>
 <% content_for :js do %>
     <script>
     function growlOfSuccess(message) {
@@ -143,9 +129,6 @@
           "info":     false,
           "order": [],
           "fixedHeader": true
-      });
-      $(".close").click(function(){
-        $(".custom-growl").hide();
       });
     });
 

@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-sm-12 p-0">
           <div class="main-header">
-            <h4><%= (userData.is_a?(Hash) ? "Edit" : "Create") %> User</h4>
+            <h4><%= (user.is_a?(Hash) ? "Edit" : "Create") %> User</h4>
             <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
               <li class="breadcrumb-item">
                 <a href="/dashboard">
@@ -17,8 +17,8 @@
               <li class="breadcrumb-item">Administration</li>
               <li class="breadcrumb-item"><a href="/users">Users</a></li>
               <li class="breadcrumb-item">
-                <a href="/users/<%= (userData.is_a?(Hash) ? userData["idUser"].to_s+"/edit" : "new") %>">
-                  <%= (userData.is_a?(Hash) ? "Edit" : "Create") %> User
+                <a href="/users/<%= (user.is_a?(Hash) ? user["idUser"].to_s+"/edit" : "new") %>">
+                  <%= (user.is_a?(Hash) ? "Edit" : "Create") %> User
                 </a>
               </li>
             </ol>
@@ -31,7 +31,7 @@
           <div class="card">
             <div class="card-header">
               <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
-                <%= (userData.is_a?(Hash) ? "Edit" : "Create") %> User
+                <%= (user.is_a?(Hash) ? "Edit" : "Create") %> User
               </h5>
               <a href="<%= (user["roles"] == "admin" ? "/users":"/profil") %>" class="btn btn-primary waves-effect waves-light f-right md-trigger">
                 <i class="icon-people"></i>  Return
@@ -45,19 +45,19 @@
                                     </span>
                   <div class="md-input-wrapper">
                     <input type="text" class="md-form-control md-static" id="txtUsername"<%=
-                      ( userData.is_a?(Hash) ? ' value=' + userData["username"] : "") %>>
+                      ( user.is_a?(Hash) ? ' value=' + user["username"] : "") %>>
                     <label>Username <span class="required">*</span></label>
                   </div>
                 </div>
                 <div class="md-group-add-on col-lg-6">
-                                    <span class="md-add-on" data-admin-only>
+                                    <span class="md-add-on">
                                         <i class="icofont icofont-company"></i>
                                     </span>
-                  <div class="md-input-wrapper" data-admin-only>
+                  <div class="md-input-wrapper">
                     <select class="md-form-control md-static selectcash" id="txtRole">
-                      <option value="customerService"<%= ( userData.is_a?(Hash) && userData["roles"] == "customerService" ? " selected" : "") %>>Customer Service</option>
-                      <option value="dispatcher"<%= ( userData.is_a?(Hash) && userData["roles"] == "dispatcher" ? " selected" : "") %>>Dispatcher</option>
-                      <option value="admin"<%= ( userData.is_a?(Hash) && userData["roles"] == "admin" ? " selected" : "") %>>Admin</option>
+                      <option value="customerService" <%= (  user["roles"] == "customerService" ? " selected" : "") %>>Customer Service</option>
+                      <option value="dispatcher" <%= (  user["roles"] == "dispatcher" ? " selected" : "") %>>Dispatcher</option>
+                      <option value="admin" <%= ( user["roles"] == "admin" ? " selected" : "") %>>Admin</option>
                     </select>
                     <label>Role</label>
                   </div>
@@ -68,7 +68,7 @@
                                     </span>
                   <div class="md-input-wrapper">
                     <input type="text" class="md-form-control md-static" id="txtFirstName"<%=
-                      ( userData.is_a?(Hash) ? ' value=' + userData["firstName"] : "") %>>
+                      ( user.is_a?(Hash) ? ' value=' + user["firstName"] : "") %>>
                     <label>First Name</label>
                   </div>
                 </div>
@@ -78,7 +78,7 @@
                                     </span>
                   <div class="md-input-wrapper">
                     <input type="text" class="md-form-control md-static" id="txtLastName"<%=
-                      ( userData.is_a?(Hash) ? ' value=' + userData["lastName"] : "") %>>
+                      ( user.is_a?(Hash) ? ' value=' + user["lastName"] : "") %>>
                     <label>Last Name</label>
                   </div>
                 </div>
@@ -88,7 +88,7 @@
                                     </span>
                   <div class="md-input-wrapper">
                     <input type="email" class="md-form-control md-static" id="txtEmail"<%=
-                      ( userData.is_a?(Hash) ? ' value=' + userData["email"] : "") %>>
+                      ( user.is_a?(Hash) ? ' value=' + user["email"] : "") %>>
                     <label>Email <span class="required">*</span></label>
                   </div>
                 </div>
@@ -98,7 +98,7 @@
                                     </span>
                   <div class="md-input-wrapper">
                     <input type="tel" class="md-form-control md-static" id="txtPhone" value="<%=
-                      ( userData.is_a?(Hash) ? userData["phone"] : "") %>">
+                      ( user.is_a?(Hash) ? user["phone"] : "") %>">
                     <label>Phone Number</label>
                   </div>
                 </div>
@@ -127,7 +127,7 @@
             </div>
             <div class="card-footer">
               <div class="text-center">
-                <button type="button" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block userSave" id="btnSaveUser" data-id-user="<%= ( userData.is_a?(Hash) ? userData["idUser"] : "new" ) %>">Save</button>
+                <button type="button" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block userSave" id="btnSaveUser" data-id-user="<%= ( user.is_a?(Hash) ? user["idUser"] : "new" ) %>">Save</button>
                 <a href="/users" class="btn btn-primary waves-effect m-r-20 f-w-600 md-close d-inline-block">
                   <i class="icon-people"></i> Return
                 </a>
@@ -144,7 +144,7 @@
 </div>
 <% content_for :js do %>
   <script>
-      var user = JSON.stringify(<%= (userData.to_json.to_s.html_safe) %>);
+      var user = JSON.stringify(<%= (user.to_json.to_s.html_safe) %>);
   </script>
   <%= public_js_path('users-script.js') %>
 <% end %>

@@ -129,9 +129,6 @@ $(document).ready(function() {
                                 <a href="/quotes/`+quote["idQuote"]+`/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                     <i class="icofont icofont-ui-edit"></i>
                                 </a>
-                                <a href="/quotes/`+quote["idQuote"]+`/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
-                                    <i class="icofont icofont-eye-alt"></i>
-                                </a>
                             </td>
                         </tr>`);
                     status.forEach(function(stat) {

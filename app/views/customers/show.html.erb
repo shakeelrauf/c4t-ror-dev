@@ -119,7 +119,7 @@
 																</tr>
 																<tr>
 																	<th scope="row">Province</th>
-																	<td><%# include("partials/getProvinceByAbbreviation") %></td>
+																	<td><%= province_name(@customer["address"].first["province"]) if @customer["address"].present? %></td>
 																</tr>
 																<tr>
 																	<th scope="row">Postal</th>
@@ -177,7 +177,7 @@
 																</tr>
 																<tr>
 																	<th scope="row">Email</th>
-																	<td style="width:120%;word-break: break-all;"><a href="mailto:<%= @customer["email"] %>"><%= @customer["email"] %></a></td>
+																	<td style="width:120%;word-break: break-all;display: block;"><a href="mailto:<%= @customer["email"] %>"><%= @customer["email"] %></a></td>
 																</tr>
 																<tr>
 																	<th scope="row">Heard of Us</th>

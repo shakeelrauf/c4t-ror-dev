@@ -15,8 +15,8 @@ class SettingController < ApplicationController
 
 	def update
 		@settings = ApiCall.put("/settings", JSON.parse(params.to_json), headers)
-		flash[:notice] = 'Setting is successfully Updated!'
-    redirect_to controller: 'setting', action: 'all', edited: true
+		flash[:success] = 'Setting is successfully Updated!'
+    redirect_to settings_path
 	end
 
 end
