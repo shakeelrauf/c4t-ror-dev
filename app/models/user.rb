@@ -3,7 +3,7 @@ class User < ApplicationRecord
 	include Roles
 	validates :email,  presence: true
  	validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
- 	validates_length_of :phone, minimum: 8, :message => "Phone number must be atleast 8 digits." 
+ 	validates_length_of :phone, minimum: 8, :message => "Phone number must be atleast 8 digits.", allow_blank: true
  	validates_length_of :password, minimum: 8
 	has_one :user_config
 

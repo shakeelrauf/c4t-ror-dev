@@ -40,9 +40,9 @@
             <div class="card-block text-center">
               <div class="row">
                 <div class="md-group-add-on col-lg-6">
-                                    <span class="md-add-on">
-                                        <i class="icofont icofont-globe"></i>
-                                    </span>
+                <span class="md-add-on">
+                    <i class="icofont icofont-globe"></i>
+                </span>
                   <div class="md-input-wrapper">
                     <input type="text" class="md-form-control md-static" id="txtUsername"<%=
                       ( user.is_a?(Hash) ? ' value=' + user["username"] : "") %>>
@@ -55,7 +55,7 @@
                                     </span>
                   <div class="md-input-wrapper">
                     <select class="md-form-control md-static selectcash" id="txtRole">
-                      <option value="customerService" <%= (  user["roles"] == "customerService" ? " selected" : "") %>>Customer Service</option>
+                      <option value="customerCare" <%= (  user["roles"] == "customerCare" ? " selected" : "") %>>Customer Care</option>
                       <option value="dispatcher" <%= (  user["roles"] == "dispatcher" ? " selected" : "") %>>Dispatcher</option>
                       <option value="admin" <%= ( user["roles"] == "admin" ? " selected" : "") %>>Admin</option>
                     </select>
