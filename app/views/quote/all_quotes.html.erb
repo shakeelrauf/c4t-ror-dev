@@ -143,14 +143,24 @@
                                                                                         <% end %>
                                                           </select>
                                                       </td>
-                                                      <td class="timerFromLastStatus" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
-                                                        <% diff = 555 || 0 %>
-                                                        <% if (diff < 3600) %>
-                                                          <%= (diff/60).ceil %>m
-                                                        <%  elsif (diff < 3600 * 48) %>
-                                                          <%= (diff/3600).ceil %>h
-                                                        <%  else  %>
-                                                          <%= (diff/(3600*24).ceil) %>d
+                                                      <td class="timerFromLastStatus<%= quote.idQuote %>" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
+                                                        <% content_for :js do %>
+                                                          <script type="text/javascript">
+                                                            $(document).ready(function(){
+                                                              var val = ""
+                                                              var diff = moment().diff(moment("<%= quote.dtStatusUpdated %>"), "s") || 0;
+                                                              if(diff < 3600) { // Less than 1 hour.
+                                                               val =  Math.floor(diff/60).toString() + "m"
+                                                              }
+                                                              else if(diff < 3600 * 48) { /* Between 1 hour and 48 hours */
+                                                                val = Math.floor(diff/3600).toString() + "h"
+                                                              }
+                                                              else { /* After 48 hours */
+                                                                val = Math.floor(diff/(3600*24)).toString() + "d"
+                                                               }
+                                                               $(".timerFromLastStatus<%= quote.idQuote %>").text(val);
+                                                             });
+                                                          </script>
                                                         <% end %>
                                                       </td>
                                                       <td class="faq-table-btn">
