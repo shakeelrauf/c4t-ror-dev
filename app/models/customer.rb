@@ -25,7 +25,7 @@ class Customer < ApplicationRecord
  #        }
  #    });
 	# end
-	def customUpsert(options={},where={})
+	def self.customUpsert(options={},where={})
 		@custom = where(where).first
 		if @custom.present?
 			@custom.update(options)
