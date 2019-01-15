@@ -209,6 +209,7 @@ class QuoteController < ApplicationController
         end
       end
     end
+    respond_json(quotes)
   end
 
   private
