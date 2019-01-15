@@ -62,7 +62,7 @@
                                 <% end %>
                               </td>
                               <td><%= contact["phone"] %></td>
-                              <td><%= contact["dtLastLogin"].present? ? (contact["dtLastLogin"].to_datetime.strftime("%Y-%m-%d %H h %M min %S sec")) : "" %></td>
+                              <td><%= (contact["dtLastLogin"][0...-8]) %></td>
                               <td><%= (contact["isActive"] == 1 ? "No":"Yes" ) %></td>
                               <td class="faq-table-btn">
                                 <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Blacklist user">
