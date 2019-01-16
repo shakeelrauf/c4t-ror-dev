@@ -15,15 +15,7 @@ class SendFormController < ApplicationController
     res1 = ApiCall.post("/token", body,headers )
     return respond_error("Authentication failed!") if res1["error"]
     token = res1["access_token"]
-    res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": token})
-    users = res
-    user = {}
-    for i in users
-      if i["username"] == params[:username]
-        user = i
-        break
-      end
-    end
+    user = User.find_by_username(params[:username])
     successful_login(user,token)
     return respond_ok
   end
