@@ -1,6 +1,7 @@
 $("#saveCustomerButton").click(function() {
+  debugger;
 
-    if(validateFields()) {
+    if(validateFields() && validatePhone()) {
         var heardOfUs = $("#txtHeardOfUs").val();
         if($("#txtHeardOfUs").val() == "Other") {
             heardOfUs = $("#txtHow").val();
@@ -142,6 +143,14 @@ function validateAddress() {
         }
     });
     */
+}
+
+function validatePhone() {
+    if( $("#txtPhone").val().length < 10 && $.isNumeric($("#txtPhone").val());) {
+            doGrowlingWarning("Phone Number must be atleast 10 digits");
+            return false;
+    }
+    return true;
 }
 
 function validateFields() {
