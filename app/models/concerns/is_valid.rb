@@ -80,7 +80,7 @@ class IsValid
     end
     return false if phone.length < 10
     return phone[0,3]+"-" + phone[3,3]+ "-" + phone[6,10] if phone.length == 10
-    return phone[0,3] + "-" + phone[3,3] + " " + phone[6,20]
+    return phone[0,3] + "-" + phone[3,3] + "-" + phone[6,20]
     return phone
   end
 
