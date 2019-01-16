@@ -5,7 +5,6 @@ class Customer < ApplicationRecord
 	has_one :business, class_name: 'Business',inverse_of: :client ,foreign_key: 'idClient'
 	belongs_to :heardofus, class_name: 'Heardofus', foreign_key: 'idHeardOfUs'
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
- 	validates_length_of :phone, minimum: 10, :message => "Phone number must be atleast 10 digits.", :numericality => true
 
 	def name
 		return self.firstName + ' ' + self.lastName
