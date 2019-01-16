@@ -692,6 +692,14 @@
                   growling("Please send all required attributes");
                   return false;
               }
+              else if($phone_num != ""  &&
+                      $phone_num.length < 10
+                     )
+              {
+                  growling("Phone number must be atleast 10 digits");
+                  return false;
+              }
+
               else{
                   return true;
               }
