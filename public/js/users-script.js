@@ -13,12 +13,11 @@ $(".crm-action-delete").click(function() {
     $(".loading").removeClass("hidden");
     var noUserToGet = $(this).data('contact-no');
     var userData = $("#usernameOf"+noUserToGet);
-    var active = ($(userData).hasClass("notActive") ? "0" : "1");
+    // var active = ($(userData).hasClass("notActive") ? "0" : "1");
+    var active = $(this).data('status');
     $(".userToBlacklist").text($(userData).text());
     $(".blacklistDialogYes").data('contact-no', noUserToGet);
     $(".blacklistDialogYes").data('contact-isactive', active);
-    $(".blacklistDialogNo").data('contact-no', noUserToGet);
-    $(".blacklistDialogNo").data('contact-isactive', active);
     $(".blacklistContactDialog").dialog("open");
 });
 
@@ -58,40 +57,9 @@ $(".blacklistDialogYes").click(function() {
 });
 
 $(".blacklistDialogNo").click(function() {
-    var userNo = $(this).data('contact-no');
-    var isActive = "0"
-    if(isActive == "0") {
-        isActive = "1";
-    } else {
-        isActive = "0";
-    }
-    $(".blacklistContactDialog").dialog("close");
-    $.ajax({
-      url: "/users/blacklist/" + userNo,
-      type: "POST",
-      data: {
-          isActive: isActive
-      }
-    }).done(function(data) {
-        if(data.error) {
-
-            $(".loading").addClass("hidden");
-            $.growl({
-                message: data.error
-            },{
-                type: "danger",
-                allow_dismiss: true,
-                label: 'Cancel',
-                className: 'btn-xs btn-inverse',
-                delay: 0,
-                animate: { enter: 'animated fadeInDown' }
-            });
-        } else {
-            document.location = "/users?statechange=true";
-        }
-    });
+    document.location = "/users";
+    
 });
-
 /////////////////////////////////////////////////////////////////
 //Edit user
 /////////////////////////////////////////////////////////////////
