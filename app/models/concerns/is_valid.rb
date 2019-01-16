@@ -79,7 +79,7 @@ class IsValid
       phone+=expression[i] if expression[i].to_i.integer?
     end
     return false if phone.length < 10
-    return phone[0,3]+" " + phone[3,3]+ "-" + phone[6,9] if phone.length == 10
+    return phone[0,3]+"-" + phone[3,3]+ "-" + phone[6,10] if phone.length == 10
     return phone[0,1] + "-" + phone[1,3] + " " + phone[4,3] + "-" + phone[7,10] if phone.length == 11
     return phone
   end
