@@ -98,7 +98,6 @@ $(document).ready(function() {
     });
 
     $("select[name=phone]").on('select2:select', function (e) {
-      debugger
         var clientId = $("select[name=phone] option:selected").val();
         $.ajax("/customers/id/" + clientId + "/json").done(client => {
             fillCustomer(client);
