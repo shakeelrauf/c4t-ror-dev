@@ -109,7 +109,7 @@ $(document).ready(function() {
                     $(".table-quotes").append(`
                         <tr>`+
                             (!$(".table-quotes").first().hasClass("client-profile") ?
-                            `<td>` + quote["idQuote"] + `</td>
+                            `<td>` + quote["referNo"] + `</td>
                             <td>`+quote["customer"]["firstName"]+` `+quote["customer"]["lastName"]+`</td>
                             <td>
                                 <a href="tel:+`+quote["customer"]["phone"]+`">
