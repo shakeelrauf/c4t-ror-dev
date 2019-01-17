@@ -113,7 +113,7 @@ $(document).ready(function() {
                             <td>`+quote["customer"]["firstName"]+` `+quote["customer"]["lastName"]+`</td>
                             <td>
                                 <a href="tel:+`+quote["customer"]["phone"]+`">
-                                    +`+quote["customer"]["phone"].substring(0, 3) + " " + quote['customer']['phone'].substring(3, 6) + "-" + quote["customer"]["phone"].substring(6)+`
+                                    +`+quote["customer"]["phone"].substring(0, 3) + "-" + quote['customer']['phone'].substring(3, 6) + "-" + quote["customer"]["phone"].substring(6)+`
                                 </a>
                             </td>`
                             : "")+

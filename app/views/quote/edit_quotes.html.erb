@@ -49,7 +49,7 @@
                                 <select class="md-form-control md-static" name="phone"><%
                                 if (quote["idQuote"] != nil && quote["customer"] != nil) %>
                                     <option value="<%= quote["customer"]["idClient"] %>" selected><%=
-                                        quote["customer"]["phone"][0,3] + " " + quote["customer"]["phone"][3,3] + "-" + quote["customer"]["phone"][6,10] +
+                                        quote["customer"]["phone"][0,3] + "-" + quote["customer"]["phone"][3,3] + "-" + quote["customer"]["phone"][6,10] +
                                         " " + quote["customer"]["firstName"] + " " + quote["customer"]["lastName"]
                                     %></option>
                                 <% end %>
