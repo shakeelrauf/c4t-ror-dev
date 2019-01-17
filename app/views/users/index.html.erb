@@ -63,7 +63,7 @@
                               </td>
                               <td>
                               <% if contact["phone"].present? %>
-                                <%= (contact["phone"][0, 3] if contact["phone"][0, 3].present?) + "-" + (contact["phone"][3, 3] if contact["phone"][3, 3].present?) + "-" + (contact["phone"][6, 20] if contact["phone"][6, 20].present?) %>
+                                <%= (contact["phone"][0, 3] if contact["phone"][0, 3].present?) + "-" + (contact["phone"][3, 3] if contact["phone"][3, 3].present?) + "-" + "#{(contact["phone"][6, 20] if contact["phone"][6, 20].present?)}" %>
                               <% end %>
                               </td>
                               <td>
