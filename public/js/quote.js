@@ -98,6 +98,7 @@ $(document).ready(function() {
     });
 
     $("select[name=phone]").on('select2:select', function (e) {
+      debugger
         var clientId = $("select[name=phone] option:selected").val();
         $.ajax("/customers/id/" + clientId + "/json").done(client => {
             fillCustomer(client);
@@ -538,7 +539,13 @@ function fillCustomer(data) {
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
-    $("select[name=heardOfUs]").val(data.heardofus.type);
+    if (data.has_quote == true) {
+      $("select[name=heardOfUs]").val("Repeat Customer");
+      $('.has_quote option:eq(1)').prop('selected', true);
+      $(".has_quote").attr('disabled',true);
+    } else {
+      $("select[name=heardOfUs]").val(data.heardofus.type);
+    }
     if (data.address.length > 0) {
       $("input[name=postal]").val((data.address[0] && data.address[0].postal) ? data.address[0].postal : "");
     } else {
