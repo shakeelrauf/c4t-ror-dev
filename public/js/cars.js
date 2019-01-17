@@ -36,6 +36,7 @@ function showList(list) {
 }
 
 function switchTab(t) {
+
     if($(t.currentTarget).hasClass("disabled")) {
         return;
     }
@@ -64,12 +65,8 @@ function resizePagination(total, res) {
             <a href="javascript:void(0);">«</a>
         </li>`);
     for(var i = 1; i <= total; i++) {
-        var ck = "";
-        if(i == 1){
-            ck = "active"
-        }
         $(".pagination.bootpag").append(`
-            <li data-lp="`+i+`" class="`+ck+`">
+            <li data-lp="`+i+`">
                 <a href="javascript:void(0);">`+i+`</a>
             </li>`);
     }
@@ -81,7 +78,6 @@ function resizePagination(total, res) {
     if(tab >= total-1) {
         tab = total-1;
     }
-
     $(".pagination.bootpag li[data-lp="+(tab+1)+"]").addClass("active");
     //disabled prev/next if at start or at end of tabs.
     if(tab <= 0) {
