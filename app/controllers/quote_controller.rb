@@ -2,7 +2,7 @@ class QuoteController < ApplicationController
   before_action :login_required
 
 	def all_quotes  
-    @quotes = Quote.includes(customer: [:address]).all
+    @quotes = Quote.joins(:status, :customer, :dispatcher).all
     @status = Status.all
   end
 
