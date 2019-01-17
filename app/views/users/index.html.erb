@@ -43,7 +43,7 @@
                       <% @users.each do |contact| %>
                         <tr>
                           <td>
-                            <% if(!contact["avatar"])  %>
+                            <% unless contact["avatar"].present?  %>
                              <img src="<%= image_path 'avatar-1.png' %>" class="d-inline-block rounded-circle " alt="avatar">
                             <%  else  %>
                              <img src='<%= contact["avatar"].present? ? (image_path "avatars/#{contact['avatar']}" rescue "") : "" %>' class="d-inline-block rounded-circle " alt="avatar">
@@ -57,15 +57,22 @@
                                 Admin
                                 <%  elsif(contact["roles"] == "dispatcher") %>
                                 Dispatcher
-                                <% elsif(contact["roles"] == "customerService")  %>
-                                Customer Service
+                                <% elsif(contact["roles"] == "customerCare")  %>
+                                Customer Care
                                 <% end %>
                               </td>
-                              <td><%= contact["phone"] %></td>
-                              <td><%= contact["dtLastLogin"].present? ? (contact["dtLastLogin"].to_datetime.strftime("%Y-%m-%d %H h %M min %S sec")) : "" %></td>
+                              <td>
+                              <% if contact["phone"].present? %>
+                                <%= (contact["phone"][0, 3] if contact["phone"][0, 3].present?) + "-" + (contact["phone"][3, 3] if contact["phone"][3, 3].present?) + "-" + (contact["phone"][6, 20] if contact["phone"][6, 20].present?) %>
+                              <% end %>
+                              </td>
+                              <td>
+                              <% if contact["dtLastLogin"].present? %>
+                                <%= contact["dtLastLogin"][0,10] + " " + contact["dtLastLogin"][11,2] + " h " + contact["dtLastLogin"][14,2] + " min"%></td>
+                              <% end %>
                               <td><%= (contact["isActive"] == 1 ? "No":"Yes" ) %></td>
                               <td class="faq-table-btn">
-                                <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Blacklist user">
+                                <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-status="<%= contact["isActive"] %>" data-placement="top" data-original-title="Blacklist user">
                                   <i class="icofont icofont-not-allowed"></i>
                                 </a>
                                 <a href="/users/<%= contact["idUser"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
@@ -130,5 +137,6 @@
           <% end %>
       });
   </script>
+  <%= public_js_path('common.js') %>
   <%= public_js_path('users-script.js') %>
 <% end %>

@@ -116,14 +116,14 @@ class QuoteController < ApplicationController
       client["phone"] =  client["secondaryPhone"] if client["phone"].match(params[:search]) && client["secondaryPhone"].match(params[:search])
       returned[:results].push({
                                  id: phone["idClient"],
-                                 text: client["phone"][0,3].to_s + " " + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
+                                 text: client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
                                      " " + client["firstName"].to_s + " " + client["lastName"].to_s
                              })
       if client["business"]
         client["business"]["contacts"].each do |contact|
           returned[:results].push({
                                       id: phone["idClient"],
-                                      text: client["phone"][0,3].to_s + " " + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
+                                      text: client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
                                           " " + contact["firstName"].to_s + " " + contact["lastName"].to_s
                                   })
         end
@@ -209,6 +209,7 @@ class QuoteController < ApplicationController
         end
       end
     end
+    respond_json(quotes)
   end
 
   private

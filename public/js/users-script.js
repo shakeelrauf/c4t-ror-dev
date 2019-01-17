@@ -13,7 +13,8 @@ $(".crm-action-delete").click(function() {
     $(".loading").removeClass("hidden");
     var noUserToGet = $(this).data('contact-no');
     var userData = $("#usernameOf"+noUserToGet);
-    var active = ($(userData).hasClass("notActive") ? "0" : "1");
+    // var active = ($(userData).hasClass("notActive") ? "0" : "1");
+    var active = $(this).data('status');
     $(".userToBlacklist").text($(userData).text());
     $(".blacklistDialogYes").data('contact-no', noUserToGet);
     $(".blacklistDialogYes").data('contact-isactive', active);
@@ -37,6 +38,7 @@ $(".blacklistDialogYes").click(function() {
       }
     }).done(function(data) {
         if(data.error) {
+
             $(".loading").addClass("hidden");
             $.growl({
                 message: data.error
@@ -55,10 +57,9 @@ $(".blacklistDialogYes").click(function() {
 });
 
 $(".blacklistDialogNo").click(function() {
-    $(".loading").addClass("hidden");
-    $(".blacklistContactDialog").dialog("close");
+    document.location = "/users";
+    
 });
-
 /////////////////////////////////////////////////////////////////
 //Edit user
 /////////////////////////////////////////////////////////////////
@@ -158,5 +159,12 @@ $("#btnSaveUser").click(function() {
                 }
             }
         });
+    }
+});
+
+$( document ).ready(function() {
+    var params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    if (params[0].length == 16){
+        doGrowlingMessage("User state is changed!");
     }
 });

@@ -12,7 +12,7 @@ $(document).ready(() => {
 function updateList() {
     $.ajax("/cars-select2?filter="+$(".search-bar-car").val()+"&limit=15&offset="+tab).done(list => {
         showList(list.results);
-        resizePagination(list.count);
+        resizePagination(list.count, list.results.length);
     });
 }
 
@@ -52,9 +52,12 @@ function switchTab(t) {
     updateList();
 }
 
-function resizePagination(total) {
+function resizePagination(total, res) {
     if(total > 10) {
         total = 10;
+    }
+    if (total == 0 && res != 0){
+        total = 1
     }
     $(".pagination.bootpag").html(`
         <li data-lp="prev" class="prev">

@@ -13,8 +13,9 @@ $(document).ready(function() {
                 growling("An error occur: " + response.error, "danger");
             } else {
                 //Reset timer.
-                $(mySelect).closest("tr").find(".timerFromLastStatus").attr("data-timer", "0");
-                $(mySelect).closest("tr").find(".timerFromLastStatus").text("0m");
+                $(mySelect).closest("tr").find(".timerFromLast").attr("data-timer", "0");
+                $(mySelect).closest("tr").find(".timerFromLastStatus" + response.idQuote).text("0m");
+                $(".timerFromLastStatus" + response.idQuote).text("0m");
                 //Remove badge-color.
                 $(mySelect).removeClass(mySelect.className.split(' ').pop());
                 //Set new color from type of status.
