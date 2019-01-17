@@ -63,7 +63,7 @@
                               </td>
                               <td>
                               <% if contact["phone"].present? %>
-                                <%= (contact["phone"][0, 3] if contact["phone"][0, 3].present?) + "-" + (contact["phone"][3, 3] if contact["phone"][3, 3].present?) + "-" + (contact["phone"][6, 20] if contact["phone"][6, 20].present?) %>
+                                <%= (contact["phone"][0, 3] if contact["phone"][0, 3].present?) + "-" + (contact["phone"][3, 3] if contact["phone"][3, 3].present?) + "-" + "#{(contact["phone"][6, 20] if contact["phone"][6, 20].present?)}" %>
                               <% end %>
                               </td>
                               <td>
@@ -72,7 +72,7 @@
                               <% end %>
                               <td><%= (contact["isActive"] == 1 ? "No":"Yes" ) %></td>
                               <td class="faq-table-btn">
-                                <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Blacklist user">
+                                <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-status="<%= contact["isActive"] %>" data-placement="top" data-original-title="Blacklist user">
                                   <i class="icofont icofont-not-allowed"></i>
                                 </a>
                                 <a href="/users/<%= contact["idUser"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Edit">

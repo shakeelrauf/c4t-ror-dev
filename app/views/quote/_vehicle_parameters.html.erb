@@ -205,7 +205,9 @@
           Steel Price:
         </div>
         <div class="col-lg-2">
-          <div class="n" id="steelPrice<%= car['idQuoteCars'] %>"></div>
+          <% if current_user.roles == "admin" %>
+            <div class="n" id="steelPrice<%= car['idQuoteCars'] %>"></div>
+          <% end %>
         </div>
         <div class="col-lg-4">
           Weight price:

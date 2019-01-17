@@ -147,20 +147,6 @@ end
     end
   end
 
-  # Blacklist user
-  def un_block_user
-    if (current_user && current_user.roles != "admin")
-      return render_json_response({:error => "You are not allowed to change state of this user."}, :ok)
-    else 
-      if (@user.isSuperadmin == 1)
-        return render_json_response({:error => "You can not change state of a super admin."}, :ok)
-      else
-        @user.update(isActive: params[:isActive])
-        return render_json_response({:message => "User state has changed."}, :ok)
-      end
-    end
-  end
-
     # Update avatar of specific user.
   def avatar
     @user = User.find_by_id(params[:user_no])

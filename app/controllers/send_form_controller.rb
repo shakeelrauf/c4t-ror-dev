@@ -15,15 +15,7 @@ class SendFormController < ApplicationController
     res1 = ApiCall.post("/token", body,headers )
     return respond_error("Authentication failed!") if res1["error"]
     token = res1["access_token"]
-    res = ApiCall.get("/users",{}, {"Content-Type": "application/x-www-form-urlencoded", "Authorization": token})
-    users = res
-    user = {}
-    for i in users
-      if i["username"] == params[:username]
-        user = i
-        break
-      end
-    end
+    user = User.find_by_username(params[:username])
     successful_login(user,token)
     return respond_ok
   end
@@ -46,15 +38,11 @@ class SendFormController < ApplicationController
       locals = {:key=>cfg.pw_reinit_key, :pid=>user.id.to_s}
       cfg.save!
       user.save!
-      if ENV["POSTMARK_API_KEY"].present?
-        res = render_to_string partial: "send_form/forgot_reset", locals: locals
-        build_and_send_email_domain("Reset Password",
+      res = render_to_string partial: "send_form/forgot_reset", locals: locals
+      build_and_send_email_domain("Reset Password",
                                     "send_form/pass_init_email",
                                     user.email,
                                     locals)
-      else
-        res = render_to_string  "send_form/pass_init_email", locals: locals
-      end
       respond_json({data: res})
     else
       respond_error("Username not found")

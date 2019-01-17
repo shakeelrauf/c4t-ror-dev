@@ -36,7 +36,7 @@
 							<li class="faq-contact-card">
 								<i class="icofont icofont-phone"></i>
 								<a href="tel:+<%= @customer["phone"] %>">
-									+<%= @customer["phone"][0..2] + " " + @customer["phone"][3..5] + "-" + @customer["phone"][6..10] %>
+									+<%= @customer["phone"][0..2] + "-" + @customer["phone"][3..5] + "-" + @customer["phone"][6..10] %>
 								</a>
 								<% if @customer["extension"] != "" %>
 									#<%= @customer["extension"] %>
@@ -152,7 +152,7 @@
 																	<td>
 																		<% if @customer["secondaryPhone"].length >= 10 && @customer["cellPhone"] != "" %>
 																		<a href="tel:+<%= @customer["cellPhone"] %>">
-																			+<%= @customer["cellPhone"][0..2] + " " + @customer["cellPhone"][3..5] + "-" + @customer["cellPhone"][6..10] %>
+																			+<%= @customer["cellPhone"][0..2] + "-" + @customer["cellPhone"][3..5] + "-" + @customer["cellPhone"][6..10] %>
 																		</a>
 																		<% else %>
 																			<a href="tel:+<%= @customer["secondaryPhone"] %>">
@@ -166,7 +166,7 @@
 																	<td>
 																		<% if @customer["secondaryPhone"].length >= 10 && @customer["secondaryPhone"] != "" %>
 																		<a href="tel:+<%= @customer["secondaryPhone"] %>">
-																			+<%= @customer["secondaryPhone"][0..2] + " " + @customer["secondaryPhone"][3..5] + "-" + @customer["secondaryPhone"][6..10] %>
+																			+<%= @customer["secondaryPhone"][0..2] + "-" + @customer["secondaryPhone"][3..5] + "-" + @customer["secondaryPhone"][6..10] %>
 																		</a>
 																		<% else %>
 																			<a href="tel:+<%= @customer["secondaryPhone"] %>">

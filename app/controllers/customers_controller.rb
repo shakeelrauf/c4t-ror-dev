@@ -53,6 +53,12 @@ class CustomersController < ApplicationController
 
   def get_customer
     res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
+    cus = JSON.parse(res)
+    customer = Customer.where(phone: cus["phone"])
+    if customer.first.quotes.present?
+      cus["has_quote"] = true
+      res = cus.to_json
+    end
     respond_json(res)
   end
 
