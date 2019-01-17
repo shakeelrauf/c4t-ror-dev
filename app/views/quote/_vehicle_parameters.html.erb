@@ -9,6 +9,7 @@
                 <i class="icofont icofont-disc"></i>
               </span>
       </div>
+
       <div class="col-lg-5">
         <div class="md-input-wrapper">
           <input type="number" name="wheels<%= car['idQuoteCars'] %>" min="0" max="4"
@@ -114,19 +115,17 @@
         </div>
       </div>
       <div class="col-lg-1">
-        <span class="md-add-on">
-            <i class="icofont icofont-disc"></i>
+        <span class="md-add-on map"  data-id="<%= car['idQuoteCars'] %>">
+            <i class="icofont icofont-map"></i>
         </span>
       </div>
       <div class="col-lg-11">
           <div class="md-input-wrapper">
               <input type="hidden" id="car-distance<%= car['idQuoteCars'] %>" name="car-distance<%= car['idQuoteCars'] %>" value="<%= car["distance"] %>"/>
               <input type="hidden" id="car-excess-distance<%= car['idQuoteCars'] %>" name="car-excess-distance<%= car['idQuoteCars'] %>" value=""/>
-              <select class="md-form-control md-static car-location-select2" name="car-location<%= car['idQuoteCars'] %>" id="car-location<%= car['idQuoteCars'] %>">
-                <% if (car["address"])  %>
-                 <option value="<%= car['address']['idAddress'] %>" selected><%= car["address"]["label"] %></option>
-                <% end %>
-              </select>
+              <input type="text" name="car-location<%= car['idQuoteCars'] %>" id="car-location<%= car['idQuoteCars'] %>" value="<%= car['address'].present? ?  car['address']['address'] : ''%>" class="md-form-control md-static"
+               >
+            <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
               <label style="top: -15px;">Select an address or enter a Postal Code for this car<span class="required">*</span></label>
               </div>
               </div>
