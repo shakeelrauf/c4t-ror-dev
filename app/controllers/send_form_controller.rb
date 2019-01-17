@@ -38,15 +38,11 @@ class SendFormController < ApplicationController
       locals = {:key=>cfg.pw_reinit_key, :pid=>user.id.to_s}
       cfg.save!
       user.save!
-      if ENV["POSTMARK_API_KEY"].present?
-        res = render_to_string partial: "send_form/forgot_reset", locals: locals
-        build_and_send_email_domain("Reset Password",
+      res = render_to_string partial: "send_form/forgot_reset", locals: locals
+      build_and_send_email_domain("Reset Password",
                                     "send_form/pass_init_email",
                                     user.email,
                                     locals)
-      else
-        res = render_to_string  "send_form/pass_init_email", locals: locals
-      end
       respond_json({data: res})
     else
       respond_error("Username not found")
