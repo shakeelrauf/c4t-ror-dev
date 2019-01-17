@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
 	def is_valid_password?(password)
 		return encrypt_pw(password) == self.password
-	endzq	l,mivmcx,l2
+	end
 
 	def self.encrypt_token text
 	  text = text.to_s unless text.is_a? String
