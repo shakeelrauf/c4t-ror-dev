@@ -64,8 +64,12 @@ function resizePagination(total, res) {
             <a href="javascript:void(0);">«</a>
         </li>`);
     for(var i = 1; i <= total; i++) {
+        var ck = "";
+        if(i == 1){
+            ck = "active"
+        }
         $(".pagination.bootpag").append(`
-            <li data-lp="`+i+`">
+            <li data-lp="`+i+`" class="`+ck+`">
                 <a href="javascript:void(0);">`+i+`</a>
             </li>`);
     }
