@@ -266,7 +266,7 @@ $(document).ready(function() {
                   ` + event.address + `<br>` +
                   `<hr>` +
                   event.information.quote.customer.firstName + " " + event.information.quote.customer.lastName + ` <br>
-                  <a href="tel:` + event.information.quote.customer.phone + `">` + event.information.quote.customer.phone.substr(0, 3) + " " + event.information.quote.customer.phone.substr(3, 3) + "-" + event.information.quote.customer.phone.substr(7) + `</a><br>
+                  <a href="tel:` + event.information.quote.customer.phone + `">` + event.information.quote.customer.phone.substr(0, 3) + "-" + event.information.quote.customer.phone.substr(3, 3) + "-" + event.information.quote.customer.phone.substr(6) + `</a><br>
                   <b>` + event.mmy + `</b><br>` +
                     `<a href="/quotes/` + event.information.quote.id + `/edit">View quote</a>
                 </div>`,

@@ -252,7 +252,7 @@ $(".search-bar-client").keyup(function() {
                     <td>`+ customer.firstName +`</td>
                     <td>`+ customer.lastName +`</td>
                     <td>`+ customer.type +`</td>
-                    <td>`+ customer.phone.substring(0, 3) + " " + customer.phone.substring(3, 6) + "-" + customer.phone.substring(6) +`</td>
+                    <td>`+ customer.phone.substring(0, 3) + "-" + customer.phone.substring(3, 6) + "-" + customer.phone.substring(6) +`</td>
                     <td>`+ customer.extension +`</td>
                     <td>`+ customer.heardofus.type +`</td>
                     <td>`+ customer.grade +`</td>

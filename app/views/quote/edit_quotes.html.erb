@@ -49,7 +49,7 @@
                                 <select class="md-form-control md-static" name="phone"><%
                                 if (quote["idQuote"] != nil && quote["customer"] != nil) %>
                                     <option value="<%= quote["customer"]["idClient"] %>" selected><%=
-                                        quote["customer"]["phone"][0,3] + " " + quote["customer"]["phone"][3,3] + "-" + quote["customer"]["phone"][6,10] +
+                                        quote["customer"]["phone"][0,3] + "-" + quote["customer"]["phone"][3,3] + "-" + quote["customer"]["phone"][6,10] +
                                         " " + quote["customer"]["firstName"] + " " + quote["customer"]["lastName"]
                                     %></option>
                                 <% end %>
@@ -89,8 +89,9 @@
                                 <i class="icofont icofont-ui-user"></i>
                             </span>
                             <div class="md-input-wrapper">
-                                <select class="md-form-control md-static" name="heardOfUs">
+                                <select class="md-form-control md-static has_quote" name="heardOfUs">
                                   <option value="">Select an option</option>
+                                    <option>Repeat Customer</option>
                                     <%  heardOfUsFound = false %>
                                     <% heardsofus.each do |heardofus| %>
                                       <% if (quote["idQuote"] != nil && quote["customer"] != nil) %>
@@ -105,6 +106,7 @@
                                       <% end %>
                                   <% end %>
                                 </select>
+                         <!--        <input type="text" class="md-form-control has_quote_1 hidden" name="heardOfUs" value="Repeat Customer" disabled="disabled"> -->
                                 <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
                             </div>
                         </div>
