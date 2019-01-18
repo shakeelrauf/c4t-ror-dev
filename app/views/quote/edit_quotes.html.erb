@@ -118,8 +118,7 @@
                     </div>
                   <div class="card-block">
                     <div class="cars-total-list">
-                      <div class="hiddenaddress" data-customeraddress="<%= quote.customer.address.present? ? quote.customer.address.first.address : "" %>">
-
+                      <div class="hiddenaddress" data-customeraddress="<%= (quote.customer.present? &&quote.customer.address.present?) ? quote.customer.address.first.address : "" %>">
 
                       </div>
 
@@ -266,6 +265,7 @@
   <%= public_js_path 'common.js' %>
   <%= public_js_path 'quote.js' %>
  <script type="text/javascript" src="http://www.google.com/jsapi?key=<%= ENV['GOOGLE_API_KEY'] %>"></script>
+
   <script type="text/javascript">
       $(".map").on("click", function () {
           var $this  = $(this),
