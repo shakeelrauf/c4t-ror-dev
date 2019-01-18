@@ -3,6 +3,7 @@ class CustomersController < ApplicationController
 
   def new
     @customer = Customer.new
+    @heard_of_us = all_heard_of_use
   end
 
   def create
@@ -43,6 +44,7 @@ class CustomersController < ApplicationController
   def edit
     @customer = Customer.find_by_id(params[:id])
     @heard = Heardofus.find_by_id(@customer.idHeardOfUs)
+    @heard_of_us = all_heard_of_use
   end
 
   def update
@@ -63,6 +65,10 @@ class CustomersController < ApplicationController
   end
 
   private
+
+  def all_heard_of_use
+    Heardofus.all
+  end
 
   def growl(res, action)
     notice = "Customer is now edited!"

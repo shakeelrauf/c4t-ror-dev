@@ -276,47 +276,9 @@
                                    <% if action_name == "edit" %>
                                     <option selected="selected"><%= @heard.type %></option>
                                    <% end %>
-                                    <option>41</option>
-                                    <option>a</option>
-                                    <option>Auction</option>
-                                    <option>BBB</option>
-                                    <option>Billboard</option>
-                                    <option>Dealership</option>
-                                    <option>Donate</option>
-                                    <option>Drive by</option>
-                                    <option>Facebook</option>
-                                    <option>Garage</option>
-                                    <option>Glenn</option>
-                                    <option>Google</option>
-                                    <option>gviuewho</option>
-                                    <option>heardOfUs</option>
-                                    <option>Kars 4 Kids</option>
-                                    <option>Kijiji</option>
-                                    <option>Kijiji/Email</option>
-                                    <option>Marketing Catherine</option>
-                                    <option>MTO</option>
-                                    <option>Newspaper Citizen</option>
-                                    <option>Newspaper Le Droit</option>
-                                    <option>Newspaper Sun</option>
-                                    <option>Other</option>
-                                    <option>Ottawa Junk Car</option>
-                                    <option>Ottawa's Finest</option>
-                                    <option>Radio</option>
-                                    <option>Return cust</option>
-                                    <option>Salvage Ottawa</option>
-                                    <option>Supersaver</option>
-                                    <option>test</option>
-                                    <option>Towing co</option>
-                                    <option>Truck</option>
-                                    <option>TV</option>
-                                    <option>Vehicle Recycling Ottawa</option>
-                                    <option>vgv</option>
-                                    <option>WEB</option>
-                                    <option>Website</option>
-                                    <option>Word of mouth</option>
-                                    <option>Yellow Pages</option>
-                                    <option>Yelp</option>
-                                    <option>Other</option>
+                                   <% @heard_of_us.each do |heard| %>
+                                       <option><%= heard.type %></option>
+                                   <% end %>
                                  </select>
                                  <label>Heard of Us <span class="required">*</span></label>
                               </div>
