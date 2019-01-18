@@ -1,0 +1,86 @@
+<div class="tab-pane" id="quotes" role="tabpanel">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-header-text">Quotes for this customer</h5>
+            <a href="/create-quote?no=<%= customer["idClient"] %>" class="btn btn-primary waves-effect waves-light f-right">+ ADD Quote</a>
+        </div>
+        <!-- end of card-header  -->
+        <div class="row">
+            <div class="md-group-add-on col-lg-12">
+                <span class="md-add-on">
+            <i class="icofont icofont-ui-search"></i>
+          </span>
+                <div class="md-input-wrapper">
+                    <input type="text" class="md-form-control search-bar-quote" id="search-bar-quote">
+                    <label>Search</label>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="project-table">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="quote-datatable">
+                            <thead>
+                                <tr>
+                                    <th>Reference number</th>
+                                    <th>Note</th>
+                                    <th>Date Added</th>
+                                    <th>Dispatcher</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-quotes client-profile">
+                                <% quotes.each do |quote| %>
+                                    <tr>
+                                        <td>
+                                            <%= quote["referNo"] %>
+                                        </td>
+                                        <td>
+                                            <%= quote["note"] %>
+                                        </td>
+                                        <td>
+                                            <%= quote_created_at(quote["dtCreated"]) %>
+                                        </td>
+                                        <td>
+                                            <%= quote["dispatcher"]["firstName"] %>
+                                                <%= quote["dispatcher"]["lastName"] %>
+                                        </td>
+                                        <td>
+
+                                            <select class="quote-status-list selectcash form-control badge badge-<%= background_color(quote["status"]["color"]) %>" data-quote-no="<%= quote["idQuote"] %>">
+                                                <% status.each do |stat| %>
+                                                  <% if stat["idStatus"] == quote["status"]["idStatus"] %>
+                                                      <option value="<%= stat["idStatus"] %>" selected>
+                                                          <%= stat["name"] %>
+                                                      </option>
+                                                  <% end %>
+                                                      <option value="<%= stat["idStatus"] %>">
+                                                          <%= stat["name"] %>
+                                                      </option>
+                                                <% end %>
+                                            </select>
+                                        </td>
+                                        <td class="faq-table-btn">
+                                            <a href="/quotes/<%= quote["idQuote"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                                                <i class="icofont icofont-ui-edit"></i>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                    <% end %>
+                            </tbody>
+                        </table>
+                        <!-- end of table -->
+                    </div>
+                    <!-- end of table responsive -->
+                </div>
+                <!-- end of project table -->
+            </div>
+            <!-- end of col-lg-12 -->
+        </div>
+        <!-- end of row -->
+    </div>
+    <!-- end of card-main -->
+</div>
+<!-- end of project pane -->
+</div>

@@ -44,4 +44,36 @@ module CustomersHelper
 		val
 	end
 
+	def has_business_contacts?(action, customer)
+		customer.try(:business).try(:contacts)
+	end
+
+  def business_contact_position(customer)
+    customer.try(:business).try(:contactPosition)
+  end
+
+  def business_name(customer)
+    customer.try(:business).try(:name)
+  end
+
+  def business_desc(customer)
+    customer.try(:business).try(:description)
+  end
+
+  def business_pstax(customer)
+    customer.try(:business).try(:pstTaxNo)
+  end
+
+  def business_gstax(customer)
+    customer.try(:business).try(:gstTaxNo)
+  end
+
+  def customer_address(customer)
+    customer.try(:address)
+  end
+
+  def quote_created_at(date)
+    DateTime.parse(date).strftime('%d/%m/%Y, %I:%M:%S:%p')
+  end
+
 end

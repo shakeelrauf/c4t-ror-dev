@@ -1,0 +1,147 @@
+<div class="tab-pane active" id="personal" role="tabpanel">
+  <div class="card">
+    <div class="card-header"><h5 class="card-header-text">About Me</h5>
+      <a href="/customers/<%= customer["idClient"] %>/edit" class="btn btn-primary waves-effect waves-light f-right crm-action-edit">
+        <i  class="icofont icofont-edit"></i>
+      </a>
+    </div>
+    <div class="card-block">
+      <div class="view-info">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="general-info">
+              <div class="row">
+                <div class="col-lg-12 col-xl-6">
+                  <table class="table m-0">
+                    <tbody>
+                      <tr>
+                        <th scope="row">First Name</th>
+                        <td><%= customer["firstName"] %></td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">Address</th>
+                        <td><%= customer["address"].first["address"] if  customer["address"].present? %></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">City</th>
+                        <td><%= customer["address"].first["city"] if  customer["address"].present? %></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Province</th>
+                        <td><%= province_name(customer["address"].first["province"]) if customer["address"].present? %></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Postal</th>
+                        <td><%= customer["address"].first["postal"] if  customer["address"].present? %></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Distance</th>
+                        <td><%= (customer["address"].first["distance"].to_i / 1000).round if  customer["address"].present? %> Km</td>
+                      </tr>
+                      <% if customer["type"] != "Individual" %>
+                      <tr>
+                        <th scope="row">PST Tax Reference Number</th>
+                        <td><%= customer["business"]["pstTaxNo"] if customer["business"]%></td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- end of table col-lg-6 -->
+
+                <div class="col-lg-12 col-xl-6">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <th scope="row">Last Name</th>
+                        <td><%= customer["lastName"] %></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Mobile Number</th>
+                        <td>
+                          <a href="tel:+<%= customer["cellPhone"] %>">
+                            +<%= IsValid.phone( customer["cellPhone"]) %>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Other Phone</th>
+                        <td>
+                          <a href="tel:+<%= customer["secondaryPhone"] %>">
+                            +<%= IsValid.phone( customer["secondaryPhone"]) %>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Email</th>
+                        <td style="width:120%;word-break: break-all;display: block;"><a href="mailto:<%= customer["email"] %>"><%= customer["email"] %></a></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Heard of Us</th>
+                        <td><%= customer["heardofus"]["type"] %></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Grade</th>
+                        <td><%= customer["grade"] %></td>
+                      </tr>
+                      <% if customer["type"] != "Individual" %>
+                      <tr>
+                        <th scope="row">GST Tax Reference Number</th>
+                        <td><%= customer["business"]["gstTaxNo"] if customer["business"] %></td>
+                      </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- end of table col-lg-6 -->
+              </div>
+              <!-- end of row -->
+            </div>
+            <!-- end of general info -->
+          </div>
+          <!-- end of col-lg-12 -->
+        </div>
+        <!-- end of row -->
+      </div>
+      <!-- end of view-info -->
+    </div>
+    <!-- end of card-block -->
+  </div>
+  <!-- end of card-->
+  <% if customer["type"] != "Individual" %>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-header-text">List of contacts</h5>
+    </div>
+    <div class="card-block">
+      <div class="row">
+        <table class="col-lg-12">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Payment Preference</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% if customer["business"].present? %> 
+            <% customer["business"]["contacts"].each do |contact| %>
+              <tr>
+                <td><%= contact["firstName"] %></td>
+                <td><%= contact["lastName"] %></td>
+                <td><%= contact["paymentMethod"] %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          </tbody>
+        </table>
+        <!-- end of col-lg-12 -->
+      </div>
+      <!-- end of row -->
+    </div>
+    <!-- end of card-block -->
+  </div>
+  <!-- end of card-->
+  <% end %>
+</div>

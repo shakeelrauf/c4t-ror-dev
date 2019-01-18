@@ -281,6 +281,11 @@ function calcPrice(carId,quote_id) {
     if (missingBatVal && missingBatVal != "") {
         missingBat = (missingBatVal == "1") ? 1 : 0;
     }
+    var missingStilVal = $("#tab" + carId + " input[name=still_driving"+carId+"]:checked").val();
+    var missingStil = "";
+    if (missingStilVal && missingStilVal != "") {
+        missingStil = (missingStilVal == "1") ? 1 : 0;
+    }
     // Car price data
     var data = {
         "car":            carId,
@@ -289,6 +294,7 @@ function calcPrice(carId,quote_id) {
         "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
         "missingBattery": missingBat,
         "missingCat":     missingCat,
+        "still_driving":  missingStil,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
     }
@@ -356,6 +362,11 @@ function calcPrice(carId) {
     if (missingBatVal && missingBatVal != "") {
         missingBat = (missingBatVal == "1") ? 1 : 0;
     }
+    var missingStilVal = $("#tab" + carId + " input[name=still_driving"+carId+"]:checked").val();
+    var missingStil = "";
+    if (missingStilVal && missingStilVal != "") {
+        missingStil = (missingStilVal == "1") ? 1 : 0;
+    }
     // Car price data
     var data = {
         "car":            carId,
@@ -364,6 +375,7 @@ function calcPrice(carId) {
         "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
         "missingBattery": missingBat,
         "missingCat":     missingCat,
+        "still_driving":  missingStil,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
     }
