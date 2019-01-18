@@ -41,7 +41,7 @@ class Api::V1::QuoteController < ApiController
   end
 
   def quote_with_filter
-    limit = 100
+    limit = 30
     offset = 0
     limit  = params[:limit] if params[:limit].to_i > 0
     offset  = params[:offset] if params[:offset].to_i > 0
@@ -55,7 +55,7 @@ class Api::V1::QuoteController < ApiController
         query+= " AND " if i < (length -1)
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}') AND ('dtCreated' >= '#{params[:beforeDate]+ ' 23:59:59'}'))" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
-      @quotes =  Quote.joins(:status, :customer, :dispatcher).where(query).to_json(include: [:dispatcher, :customer, :status])
+      @quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query).to_json(include: [:dispatcher, :customer, :status])
     else
       @quotes =  Quote.includes(:dispatcher, :customer, :status).to_json(include: [:dispatcher, :customer, :status])
     end

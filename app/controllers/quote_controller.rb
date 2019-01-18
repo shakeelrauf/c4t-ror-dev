@@ -2,7 +2,7 @@ class QuoteController < ApplicationController
   before_action :login_required
 
 	def all_quotes  
-    @quotes = Quote.joins(:status, :customer, :dispatcher).all
+    @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
     @status = Status.all
   end
 
@@ -52,7 +52,7 @@ class QuoteController < ApplicationController
   end
 
   def quote_with_filter
-    res = ApiCall.get("/quotes/json?limit=#{params[:limit]}
+    res = JSON.parse ApiCall.get("/quotes/json?limit=#{params[:limit]}
                   &offset=#{params[:offset]}&afterDate=#{params[:afterDate]}&beforeDate=#{params[:beforeDate]}&filter=#{params[:filter]}",{} , headers )
     respond_json(res)
   end

@@ -93,6 +93,7 @@ $(document).ready(function() {
         $(".table-quotes").html("");
         $.ajax("/status/json").done(function(status) {
             $.ajax(quotesUrl).done(function(quotes) {
+                debugger
                 quotes.forEach(function(quote) {
                     var backgroundType = "muted";
                     if(quote["status"]["color"] == "yellow") {
@@ -106,14 +107,24 @@ $(document).ready(function() {
                     } else if(quote["status"]["color"] == "orange") {
                         backgroundType = "primary";
                     }
+                    var firstName="",
+                        lastName="",
+                        phone="";
+                    if(quote["customer"] !=undefined) {
+                        firstName = quote["customer"]["firstName"];
+                        lastName = quote["customer"]["lastName"];
+                        if (quote["customer"]["phone"] != undefined) {
+                            phone = quote["customer"]["phone"].substring(0, 3) + "-" + quote['customer']['phone'].substring(3, 6) + "-" + quote["customer"]["phone"].substring(6)
+                        }
+                    }
                     $(".table-quotes").append(`
                         <tr>`+
                             (!$(".table-quotes").first().hasClass("client-profile") ?
                             `<td>` + quote["referNo"] + `</td>
-                            <td>`+quote["customer"]["firstName"]+` `+quote["customer"]["lastName"]+`</td>
+                            <td>`+firstName+` `+lastName+`</td>
                             <td>
-                                <a href="tel:+`+quote["customer"]["phone"]+`">
-                                    +`+quote["customer"]["phone"].substring(0, 3) + "-" + quote['customer']['phone'].substring(3, 6) + "-" + quote["customer"]["phone"].substring(6)+`
+                                <a href="tel:+`+phone+`">
+                                    +`+phone+`
                                 </a>
                             </td>`
                             : "")+
