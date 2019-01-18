@@ -3,6 +3,8 @@ class QuoteController < ApplicationController
 
 	def all_quotes  
     @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
+    @pages = (@quotes.count / 15).ceil
+    @quotes = @quotes.limit(15).offset(0)
     @status = Status.all
   end
 
@@ -52,8 +54,8 @@ class QuoteController < ApplicationController
   end
 
   def quote_with_filter
-    res = JSON.parse ApiCall.get("/quotes/json?limit=#{params[:limit]}
-                  &offset=#{params[:offset]}&afterDate=#{params[:afterDate]}&beforeDate=#{params[:beforeDate]}&filter=#{params[:filter]}",{} , headers )
+    res = ApiCall.get("/quotes/json?limit=#{params[:limit]}
+      &offset=#{params[:offset]}&afterDate=#{params[:afterDate]}&beforeDate=#{params[:beforeDate]}&filter=#{params[:filter]}",{} , headers )
     respond_json(res)
   end
 

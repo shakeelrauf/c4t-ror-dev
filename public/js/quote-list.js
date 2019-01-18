@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var tab = 0;
+
     //Update status of a particular quote.
     $(".quote-status-list").change(function() {
         var mySelect = this;
@@ -48,6 +50,10 @@ $(document).ready(function() {
         filtingQuotes();
     });
 
+    $(".pagination.bootpag li").click(t => {
+        switchTab(t);
+    });
+
     $(".filter-quote, input[name=dtStart], input[name=dtEnd]").change(function() {
         $(".shortcut-date-quotes option").first().prop("selected", true);
         filtingQuotes();
@@ -82,19 +88,18 @@ $(document).ready(function() {
         if(moment($("input[name=dtEnd]").val(), "YYYY-MM-DD").isValid()) {
             beforeDate = $("input[name=dtEnd]").val();
         }
-
-        var quotesUrl = "/quotes/json?beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=20&offset=0&filter="+filter;
+        var quotesUrl = "/quotes/json?beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=15&offset="+tab+"&filter="+filter;
         if($(".table-quotes").first().hasClass("user-profile")) {
-            quotesUrl = "/quotes/user/json?limit=20&offset=0&filter="+filter;
+            quotesUrl = "/quotes/user/json?limit=15&offset="+tab+"&filter="+filter;
         } else if($(".table-quotes").first().hasClass("client-profile")) {
-            quotesUrl = "/quotes/client/json?limit=20&offset=0&filter="+filter;
+            quotesUrl = "/quotes/client/json?limit=15&offset="+tab+"&filter="+filter;
         }
 
-        $(".table-quotes").html("");
         $.ajax("/status/json").done(function(status) {
-            $.ajax(quotesUrl).done(function(quotes) {
-                debugger
-                quotes.forEach(function(quote) {
+            $.ajax(quotesUrl).done(function(res) {
+                resizePagination(res.count,res.quotes);
+                $(".table-quotes").html("");
+                res.quotes.forEach(function(quote) {
                     var backgroundType = "muted";
                     if(quote["status"]["color"] == "yellow") {
                         backgroundType = "warning";
@@ -124,7 +129,7 @@ $(document).ready(function() {
                             <td>`+firstName+` `+lastName+`</td>
                             <td>
                                 <a href="tel:+`+phone+`">
-                                    +`+phone+`
+                                    `+phone+`
                                 </a>
                             </td>`
                             : "")+
@@ -179,5 +184,61 @@ $(document).ready(function() {
                 $("#option"+car.id+"-Donation").val(car.donation);
             });
         }, 300);
+    }
+
+    function switchTab(t) {
+
+        if($(t.currentTarget).hasClass("disabled")) {
+            return;
+        }
+        //Switch tab.
+        if($(t.currentTarget).data("lp") == "prev") {
+            tab--;
+        } else if($(t.currentTarget).data("lp") == "next") {
+            tab++;
+        } else {
+            tab = Number($(t.currentTarget).data("lp"))-1;
+        }
+        $(".pagination.bootpag li").removeClass("active");
+        //Get new list.
+        filtingQuotes();
+    }
+
+    function resizePagination(total, res) {
+        if(total > 10) {
+            total = 10;
+        }
+        if (total == 0 && res != 0){
+            total = 1
+        }
+        $(".pagination.bootpag").html(`
+            <li data-lp="prev" class="prev">
+                <a href="javascript:void(0);">«</a>
+            </li>`);
+        for(var i = 1; i <= total; i++) {
+            $(".pagination.bootpag").append(`
+                <li data-lp="`+i+`">
+                    <a href="javascript:void(0);">`+i+`</a>
+                </li>`);
+        }
+        $(".pagination.bootpag").append(`
+            <li data-lp="next" class="next">
+                <a href="javascript:void(0);">»</a>
+            </li>`);
+        //If current tab is after total, set current tab to last one.
+        if(tab >= total-1) {
+            tab = total-1;
+        }
+        $(".pagination.bootpag li[data-lp="+(tab+1)+"]").addClass("active");
+        //disabled prev/next if at start or at end of tabs.
+        if(tab <= 0) {
+            $(".pagination.bootpag li[data-lp=prev]").addClass("disabled");
+        }
+        if(tab >= Number($(".pagination.bootpag li").last().prev().data("lp"))-1) {
+            $(".pagination.bootpag li[data-lp=next]").addClass("disabled");
+        }
+        $(".pagination.bootpag li").click(t => {
+            switchTab(t);
+        });
     }
 });
