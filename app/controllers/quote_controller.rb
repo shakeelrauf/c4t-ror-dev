@@ -3,8 +3,8 @@ class QuoteController < ApplicationController
 
 	def all_quotes  
     @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
-    @pages = (@quotes.count / 30).ceil
-    @quotes = @quotes.limit(30).offset(0)
+    @pages = (@quotes.count / 15).ceil
+    @quotes = @quotes.limit(15).offset(0)
     @status = Status.all
   end
 

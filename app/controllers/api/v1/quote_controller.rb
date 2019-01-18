@@ -41,7 +41,7 @@ class Api::V1::QuoteController < ApiController
   end
 
   def quote_with_filter
-    limit = 30
+    limit = 15
     offset = 0
     limit  = params[:limit] if params[:limit].to_i > 0
     offset  = params[:offset] if params[:offset].to_i > 0
