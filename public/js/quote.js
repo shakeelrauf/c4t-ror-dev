@@ -65,9 +65,10 @@ $(document).ready(function() {
                 // sumTotal();
                 calcPrice(car.idQuoteCars,car.idQuote);
                 $('#txtVehicleFilter').html("");
+                $("#car-location" + car.idQuoteCars).val($(".hiddenaddress").data("customeraddress"))
                 $(".selectcashcar .select2-selection__rendered").html("");
                 // Make the car postal selecter a select2
-                createPostalSelect2($("#car-location" + car.idQuoteCars));
+                // createPostalSelect2($("#car-location" + car.idQuoteCars));
             });
         });
       });

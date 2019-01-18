@@ -316,8 +316,8 @@
             id = $this.data("id");
           $("#modalMap").attr("data-id", id).modal("toggle");
       })
-      var LATITUDE_ELEMENT_ID = "course_latitude";
-      var LONGITUDE_ELEMENT_ID = "course_longitude";
+      var LATITUDE_ELEMENT_ID = "56.1304";
+      var LONGITUDE_ELEMENT_ID = "106.3468";
       var MAP_DIV_ELEMENT_ID = "google_map";
 
       var DEFAULT_ZOOM_WHEN_NO_COORDINATE_EXISTS = 1;
@@ -326,7 +326,7 @@
       var DEFAULT_ZOOM_WHEN_COORDINATE_EXISTS = 15;
 
       // This is the zoom level required to position the marker
-      var REQUIRED_ZOOM = 15;
+      var REQUIRED_ZOOM = 5;
 
       google.load("maps", "2.x");
 
@@ -343,8 +343,8 @@
 
           map.setMapType(G_NORMAL_MAP);
 
-          var latitude = 1;
-          var longitude = 1;
+          var latitude = LATITUDE_ELEMENT_ID;
+          var longitude = LONGITUDE_ELEMENT_ID;
 
           if(latitude != 0 && longitude != 0) {
               //We have some sort of starting position, set map center and marker
