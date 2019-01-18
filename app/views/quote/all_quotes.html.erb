@@ -130,24 +130,6 @@
                                                           </select>
                                                       </td>
                                                       <td class="timerFromLast timerFromLastStatus<%= quote.idQuote %>" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
-                                                        <% content_for :js do %>
-                                                          <script type="text/javascript">
-                                                            $(document).ready(function(){
-                                                              var val = ""
-                                                              var diff = moment().diff(moment("<%= quote.dtStatusUpdated %>"), "s") || 0;
-                                                              if(diff < 3600) { // Less than 1 hour.
-                                                               val =  Math.floor(diff/60).toString() + "m"
-                                                              }
-                                                              else if(diff < 3600 * 48) { /* Between 1 hour and 48 hours */
-                                                                val = Math.floor(diff/3600).toString() + "h"
-                                                              }
-                                                              else { /* After 48 hours */
-                                                                val = Math.floor(diff/(3600*24)).toString() + "d"
-                                                               }
-                                                               $(".timerFromLastStatus<%= quote.idQuote %>").text(val);
-                                                             });
-                                                          </script>
-                                                        <% end %>
                                                       </td>
                                                       <td class="faq-table-btn">
                                                         <a href="/quotes/<%= quote.idQuote %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
@@ -183,6 +165,25 @@
 </div>
 <% content_for :js do %>
 <script>
+    var quote_ids = <%= raw @quotes.pluck(:idQuote, :dtStatusUpdated).as_json %>
+    quote_ids.forEach(function(quote){
+      date_quotes(quote[0], quote[1])
+    });
+    function date_quotes(id, date){
+      var val = ""
+      var diff = moment().diff(moment(date), "s") || 0;
+      if(diff < 3600) { // Less than 1 hour.
+       val =  Math.floor(diff/60).toString() + "m"
+      }
+      else if(diff < 3600 * 48) { /* Between 1 hour and 48 hours */
+        val = Math.floor(diff/3600).toString() + "h"
+      }
+      else { /* After 48 hours */
+        val = Math.floor(diff/(3600*24)).toString() + "d"
+       }
+       $(".timerFromLastStatus" + id).text(val);
+    }
+
     function growling(message, type) {
         $.growl({
             message: message
