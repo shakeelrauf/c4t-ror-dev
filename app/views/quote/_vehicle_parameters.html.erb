@@ -115,6 +115,39 @@
       </div>
       <div class="col-lg-1">
         <span class="md-add-on">
+          <i class="icofont icofont-truck"></i>
+        </span>
+      </div>
+      <div class="col-lg-11">
+        <div class="md-input-wrapper">
+          <div class="row">
+            <div class="col-lg-2">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="still_driving<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="1" <%
+                  if(car != nil && car['still_driving'] == "1")%>
+                  checked="checked"
+                  <%end%>
+                  class="handlingOptionRadio">
+                  <label>Yes</label><br>
+                </div>
+                </div>
+                  <div class="col-lg-2">
+                    <div class="md-input-wrapper cashradio">
+                      <input type="radio" name="still_driving<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="0"<%
+                        if(car == nil || car['still_driving'] == "0")%>
+                          checked="checked"
+                        <%end%>
+                        class="handlingOptionRadio">
+                        <label>No</label>
+                    </div>
+                  </div>
+          </div>
+          <label style="top: -15px;font-size: 13px">Still driving the vehicule?<span class="required">*</span></label>
+        </div>
+      </div>
+      <br>
+      <div class="col-lg-1">
+        <span class="md-add-on">
             <i class="icofont icofont-disc"></i>
         </span>
       </div>
