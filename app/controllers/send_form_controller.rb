@@ -36,6 +36,7 @@ class SendFormController < ApplicationController
       cfg =  user.cfg
       cfg.reinit_pw
       locals = {:key=>cfg.pw_reinit_key, :pid=>user.id.to_s}
+      puts "#{root_url}/pw_init/#{locals[:pid]}/#{locals[:key]}"
       cfg.save!
       user.save!
       res = render_to_string partial: "send_form/forgot_reset", locals: locals

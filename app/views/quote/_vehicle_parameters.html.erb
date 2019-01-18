@@ -9,6 +9,7 @@
                 <i class="icofont icofont-disc"></i>
               </span>
       </div>
+
       <div class="col-lg-5">
         <div class="md-input-wrapper">
           <input type="number" name="wheels<%= car['idQuoteCars'] %>" min="0" max="4"
@@ -115,6 +116,39 @@
       </div>
       <div class="col-lg-1">
         <span class="md-add-on">
+          <i class="icofont icofont-truck"></i>
+        </span>
+      </div>
+      <div class="col-lg-11">
+        <div class="md-input-wrapper">
+          <div class="row">
+            <div class="col-lg-2">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="still_driving<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="1" <%
+                  if(car != nil && car['still_driving'] == "1")%>
+                  checked="checked"
+                  <%end%>
+                  class="handlingOptionRadio">
+                  <label>Yes</label><br>
+                </div>
+                </div>
+                  <div class="col-lg-2">
+                    <div class="md-input-wrapper cashradio">
+                      <input type="radio" name="still_driving<%= car['idQuoteCars'] %>" onchange="calcPrice(<%= car['idQuoteCars'] %>);" value="0"<%
+                        if(car == nil || car['still_driving'] == "0")%>
+                          checked="checked"
+                        <%end%>
+                        class="handlingOptionRadio">
+                        <label>No</label>
+                    </div>
+                  </div>
+          </div>
+          <label style="top: -15px;font-size: 13px">Still driving the vehicule?<span class="required">*</span></label>
+        </div>
+      </div>
+      <br>
+      <div class="col-lg-1">
+        <span class="md-add-on">
             <i class="icofont icofont-disc"></i>
         </span>
       </div>
@@ -122,11 +156,9 @@
           <div class="md-input-wrapper">
               <input type="hidden" id="car-distance<%= car['idQuoteCars'] %>" name="car-distance<%= car['idQuoteCars'] %>" value="<%= car["distance"] %>"/>
               <input type="hidden" id="car-excess-distance<%= car['idQuoteCars'] %>" name="car-excess-distance<%= car['idQuoteCars'] %>" value=""/>
-              <select class="md-form-control md-static car-location-select2" name="car-location<%= car['idQuoteCars'] %>" id="car-location<%= car['idQuoteCars'] %>">
-                <% if (car["address"])  %>
-                 <option value="<%= car['address']['idAddress'] %>" selected><%= car["address"]["label"] %></option>
-                <% end %>
-              </select>
+              <input type="text" name="car-location<%= car['idQuoteCars'] %>" id="car-location<%= car['idQuoteCars'] %>" value="<%= car['address'].present? ?  car['address']['address'] : ''%>" class="md-form-control md-static"
+               >
+            <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
               <label style="top: -15px;">Select an address or enter a Postal Code for this car<span class="required">*</span></label>
               </div>
               </div>

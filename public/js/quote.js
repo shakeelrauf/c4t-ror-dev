@@ -44,7 +44,11 @@ $(document).ready(function() {
                     </a>
                     <div class="slide"></div>
                 </li>`);
-
+                $(".map").on("click", function () {
+                    var $this  = $(this),
+                        id = $this.data("id");
+                    $("#modalMap").attr("data-id", id).modal("toggle");
+                })
                 $(".cars-total-list").append(`
                     <div id="car-price`+ car.idQuoteCars + `" class="row car` + veh.idVehiculeInfo + ` index` + car.idQuoteCars + `">
                         <div class="col-lg-6">
@@ -276,6 +280,11 @@ function calcPrice(carId,quote_id) {
     if (missingBatVal && missingBatVal != "") {
         missingBat = (missingBatVal == "1") ? 1 : 0;
     }
+    var missingStilVal = $("#tab" + carId + " input[name=still_driving"+carId+"]:checked").val();
+    var missingStil = "";
+    if (missingStilVal && missingStilVal != "") {
+        missingStil = (missingStilVal == "1") ? 1 : 0;
+    }
     // Car price data
     var data = {
         "car":            carId,
@@ -284,6 +293,7 @@ function calcPrice(carId,quote_id) {
         "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
         "missingBattery": missingBat,
         "missingCat":     missingCat,
+        "still_driving":  missingStil,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
     }
@@ -351,6 +361,11 @@ function calcPrice(carId) {
     if (missingBatVal && missingBatVal != "") {
         missingBat = (missingBatVal == "1") ? 1 : 0;
     }
+    var missingStilVal = $("#tab" + carId + " input[name=still_driving"+carId+"]:checked").val();
+    var missingStil = "";
+    if (missingStilVal && missingStilVal != "") {
+        missingStil = (missingStilVal == "1") ? 1 : 0;
+    }
     // Car price data
     var data = {
         "car":            carId,
@@ -359,6 +374,7 @@ function calcPrice(carId) {
         "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
         "missingBattery": missingBat,
         "missingCat":     missingCat,
+        "still_driving":  missingStil,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
     }
@@ -538,6 +554,7 @@ function fillCustomer(data) {
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
+    $(".hiddenaddress").attr("data-customeraddress", data.address.address)
     if (data.has_quote == true) {
       $("select[name=heardOfUs]").val("Repeat Customer");
       $('.has_quote option:eq(1)').prop('selected', true);
