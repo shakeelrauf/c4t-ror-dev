@@ -44,7 +44,11 @@ $(document).ready(function() {
                     </a>
                     <div class="slide"></div>
                 </li>`);
-
+                $(".map").on("click", function () {
+                    var $this  = $(this),
+                        id = $this.data("id");
+                    $("#modalMap").attr("data-id", id).modal("toggle");
+                })
                 $(".cars-total-list").append(`
                     <div id="car-price`+ car.idQuoteCars + `" class="row car` + veh.idVehiculeInfo + ` index` + car.idQuoteCars + `">
                         <div class="col-lg-6">
@@ -550,6 +554,7 @@ function fillCustomer(data) {
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
+    $(".hiddenaddress").attr("data-customeraddress", data.address.address)
     if (data.has_quote == true) {
       $("select[name=heardOfUs]").val("Repeat Customer");
       $('.has_quote option:eq(1)').prop('selected', true);
