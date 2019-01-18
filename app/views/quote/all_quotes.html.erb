@@ -91,6 +91,23 @@
                               <div class="row">
                                   <div class="table-content crm-table">
                                       <div class="project-table">
+                                            <ul class="pagination bootpag">
+                                                <li data-lp="prev" class="prev">
+                                                    <a href="javascript:void(0);">«</a>
+                                                </li>
+                                            <% pages = @pages %>
+                                            <% i = 1 %>
+                                              <% pages = 10 if pages > 10 %>
+                                            <% while i <= pages %>
+                                                <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
+                                                    <a href="javascript:void(0);"><%= i %></a>
+                                                </li>
+                                              <% i = i+1 %>
+                                            <% end %>
+                                                <li data-lp="next" class="next">
+                                                    <a href="javascript:void(0);">»</a>
+                                                </li>
+                                            </ul>
                                           <table id="crm-contact" class="table table-striped nowrap table-responsive">
                                               <thead>
                                               <tr>
@@ -152,6 +169,21 @@
                                               </tr>
                                               </tfoot>
                                           </table>
+                                          <ul class="pagination bootpag">
+                                              <li data-lp="prev" class="prev">
+                                                  <a href="javascript:void(0);">«</a>
+                                              </li>
+                                          <% i = 1 %>
+                                          <% while i <= pages %>
+                                              <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
+                                                  <a href="javascript:void(0);"><%= i %></a>
+                                              </li>
+                                            <% i = i+1 %>
+                                          <% end %>
+                                              <li data-lp="next" class="next">
+                                                  <a href="javascript:void(0);">»</a>
+                                              </li>
+                                          </ul>
                                       </div>
                                   </div>
                               </div>
