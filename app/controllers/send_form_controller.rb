@@ -7,15 +7,10 @@ class SendFormController < ApplicationController
 
   def login_user
     return respond_error("Authentication failed!") if !params[:username].present? || !params[:password].present?
-    body = {
-        "client_id": params[:username],
-        "client_secret": params[:password],
-        "grant_type": "client_credentials"
-    }
-    res1 = ApiCall.post("/token", body,headers )
-    return respond_error("Authentication failed!") if res1["error"]
-    token = res1["access_token"]
-    user = User.find_by_username(params[:username])
+    user =  User.where(username: params[:username]).first
+    return respond_error("Authentication failed!") if (user.nil? and (user.present? ? !user.is_valid_password?(params[:password]) : true))
+    token =  User.encrypt_token(SecureRandom.random_bytes(128)).gsub('=','').gsub('+','')
+    user.update(accessToken: token )
     successful_login(user,token)
     return respond_ok
   end

@@ -143,37 +143,20 @@ class QuoteController < ApplicationController
   end
 
 	def edit_quotes
-    @quote = ApiCall.get("/quotes/#{params[:id]}", {}, headers)
-    cars = ApiCall.get("/quotes/#{params[:id]}/cars", {}, headers)
-    @charities = ApiCall.get("/charities",{}, headers)
-    @heardsofus = ApiCall.get("/heardsofus", {}, headers)
-    carsFormated = []
-    if cars.is_a? Array
-      cars.length.times do |i|
-        cars[i]["vehicle"] = cars[i]["information"]
-        if cars[i]["address"]
-          cars[i]["address"]["label"] = ""
-          cars[i]["address"]["label"] += (cars[i]["address"]["address"] && cars[i]["address"]["address"] != "") ? cars[i]["address"]["address"] + " " : ""
-          cars[i]["address"]["label"] += (cars[i]["address"]["city"] && cars[i]["address"]["city"] != "") ? cars[i]["address"]["city"] + ", " : ""
-          cars[i]["address"]["label"] += (cars[i]["address"]["province"] && cars[i]["address"]["province"] != "") ? cars[i]["address"]["province"] + " " : ""
-          cars[i]["address"]["label"] += (cars[i]["address"]["postal"] && cars[i]["address"]["postal"] != "") ? cars[i]["address"]["postal"] + " " : ""
-        end
-        carsFormated.push(cars[i])
-      end
-    end
+    @quote = Quote.includes(:dispatcher,customer: [:address,:heardofus]).where(idQuote: params[:id]).first
+    cars =  QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:id])
+    @heardsofus = Heardofus.all
     render  locals: {
                        user: current_user,
-                       quote: JSON.parse(@quote.to_json),
-                       cars: carsFormated,
-                       charities: JSON.parse(@charities.to_json),
+                       quote: @quote,
+                       cars: cars,
                        heardsofus: @heardsofus
                      }
   end
 
   def render_vehicle
-    vehicle = ApiCall.get("/vehicles/#{params[:vehicle]}", {}, headers)
-    car = ApiCall.get("/quotecar/#{params[:car]}", {}, headers)
-    car["vehicle"] =  vehicle
+    vehicle = VehicleInfo.where(idVehiculeInfo: params[:vehicle]).first
+    car = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuoteCars: params[:car]).first
     render partial: 'quote/vehicle_parameters', locals: {
         car: car,
         vehicle: vehicle,

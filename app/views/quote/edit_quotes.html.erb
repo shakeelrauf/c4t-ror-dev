@@ -14,9 +14,9 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item">Clients</li>
-                    <% if (quote["idQuote"] != nil) %>
+                    <% if (quote.idQuote != nil) %>
                         <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
-                        <li class="breadcrumb-item"><a href="/quotes/<%= quote["idQuote"] %>/edit">Edit Quotes</a></li>
+                        <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/edit">Edit Quotes</a></li>
                     <% else %>
                         <li class="breadcrumb-item"><a href="/create-quote">Create Quote</a></li>
                     <% end %>
@@ -25,10 +25,10 @@
             </div>
         </div>
         <!-- Row end -->
-        <div class="row" id="quote" data-id="<%= quote["idQuote"] %>">
+        <div class="row" id="quote" data-id="<%= quote.idQuote %>">
             <div class="col-lg-12">
             <%
-              if (quote["idQuote"] != nil) %>
+              if (quote.idQuote != nil) %>
                 <h2>Edit Quote</h2>
             <% else %>
                 <h2>Create Quote</h2>
@@ -47,10 +47,10 @@
                             </span>
                             <div class="md-input-wrapper">
                                 <select class="md-form-control md-static" name="phone"><%
-                                if (quote["idQuote"] != nil && quote["customer"] != nil) %>
-                                    <option value="<%= quote["customer"]["idClient"] %>" selected><%=
-                                        quote["customer"]["phone"][0,3] + "-" + quote["customer"]["phone"][3,3] + "-" + quote["customer"]["phone"][6,10] +
-                                        " " + quote["customer"]["firstName"] + " " + quote["customer"]["lastName"]
+                                if (quote.idQuote != nil && quote.customer != nil) %>
+                                    <option value="<%= quote.customer.idClient %>" selected><%=
+                                        quote.customer.phone[0,3] + "-" + quote.customer.phone[3,3] + "-" + quote.customer.phone[6,10] +
+                                        " " + quote.customer.firstName + " " + quote.customer.lastName
                                     %></option>
                                 <% end %>
                                 </select>
@@ -62,7 +62,7 @@
                                 <i class="icofont icofont-ui-user"></i>
                             </span>
                             <div class="md-input-wrapper">
-                                <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote["idQuote"] && quote["customer"] ? quote["customer"]["firstName"] : "" %>">
+                                <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote.idQuote && quote.customer ? quote.customer.firstName : "" %>">
                                 <label style="top: -15px;">First Name <span class="required">*</span></label>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                                 <i class="icofont icofont-ui-user"></i>
                             </span>
                             <div class="md-input-wrapper">
-                                <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote["idQuote"] && quote["customer"] ? quote["customer"]["lastName"] : "" %>">
+                                <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
                                 <label style="top: -15px;">Last Name<span class="required">*</span></label>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                                 <i class="icofont icofont-ui-user"></i>
                             </span>
                             <div class="md-input-wrapper">
-                                <input type="text" class="md-form-control md-static" name="postal" value="<%= quote["idQuote"] && quote["customer"] && quote["customer"]["address"][0] ? quote["customer"]["address"][0]["postal"] : "" %>">
+                                <input type="text" class="md-form-control md-static" name="postal" value="<%= quote.idQuote && quote.customer && quote.customer.address.first ? quote.customer.address.first.postal : "" %>">
                                 <label style="top: -15px;">Postal Code<span class="required">*</span></label>
                             </div>
                         </div>
@@ -94,15 +94,15 @@
                                     <option>Repeat Customer</option>
                                     <%  heardOfUsFound = false %>
                                     <% heardsofus.each do |heardofus| %>
-                                      <% if (quote["idQuote"] != nil && quote["customer"] != nil) %>
-                                        <option<%= heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"] ? " selected" : "" %>><%= heardofus["type"] %></option>
-                                        <%  if(heardofus["idHeardOfUs"] == quote["customer"]["idHeardOfUs"]) %>
+                                      <% if (quote.idQuote != nil && quote.customer != nil) %>
+                                        <option<%= heardofus.idHeardOfUs == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
+                                        <%  if(heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
                                             <% heardOfUsFound = true %>
                                         <% else %>
-                                          <option><%= heardofus["type"] %></option>
+                                          <option><%= heardofus.type %></option>
                                         <% end %>
-                                      <% elsif (quote["idQuote"] != nil && !heardOfUsFound ) %>
-                                          <option><%= heardofus["type"] %></option>
+                                      <% elsif (quote.idQuote != nil && !heardOfUsFound ) %>
+                                          <option><%= heardofus.type %></option>
                                       <% end %>
                                   <% end %>
                                 </select>
@@ -112,65 +112,14 @@
                         </div>
                     </div>
                 </div>
-                <!-- Customer end -->
                 <div class="card col-lg-12">
                     <div class="card-header">
                         <h5>Price</h5>
                     </div>
-
                   <div class="card-block">
                     <div class="cars-total-list">
-                      <!--
-                            <div class="row">
-                                <div class="md-group-add-on">
-                                    <h6><%#= req.i18n.__SET_ALL_CARS_TO_PICKUP_DROPOFF %></h6>
-                                    <table class="col-lg-12">
-                                        <tr>
-                           <%
-                            allCarsPicked = false
-                            allCarsDropped = false
-                            if(quote["idQuote"] != nil)
-                                allCarsPicked = true
-                              allCarsDropped = true
-                              cars.each do |car|
-                                begin
-                                  car["missingParts"] = JSON.parse(car["missingParts"])
-                                rescue
-                                  car["missingParts"] = []
-                                end
-                                if car["gettingMethod"] == "dropoff"
-                                   allCarsPicked = false
-                                else
-                                  allCarsDropped = false
-                                end
-                              end
-                            end
-                          %>
-                                            <td>
-                                                <div class="md-input-wrapper cashradio">
-                                                    <input type="radio" name="allPickup" value="pickup"<%
-                      if(quote["idQuote"] != nil && allCarsPicked) %>
-                        checked="checked"
-                      <% end %>>
-                                                    <label>Pickup</label><br>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="md-input-wrapper cashradio">
-                                                    <input type="radio" name="allPickup" value="dropoff"<%
-                      if(quote["idQuote"] != nil && allCarsDropped) %>
-                        checked="checked"
-                      <% end %>>
-                                                    <label>Drop Off</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <hr>
-                            -->
-                      <div class="hiddenaddress" data-customeraddress="<%= quote["customer"]["addresss"].present? ? quote["customer"]["addresss"]["address"] : "" %>">
+
+                      <div class="hiddenaddress" data-customeraddress="<%= quote.customer.address.present? ? quote.customer.address.address : "" %>">
 
                       </div>
 
@@ -179,27 +128,27 @@
                                     <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Pickup</div>
                                     <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Drop Off</div>
                                   </div>
-                      <% if (quote["idQuote"] != nil)
+                      <% if (quote.idQuote != nil)
                            cars.each.with_index do |car, index|
                              bonusCarsBasePrice = 0
-                            if((car["weight"]).to_i <= 1500)
-                                bonusCarsBasePrice += quote["smallCarPrice"].to_i
-                            elsif((car["weight"]).to_i > 3000)
-                                bonusCarsBasePrice += quote["midCarPrice"].to_i
+                            if((car.information.weight).to_i <= 1500)
+                                bonusCarsBasePrice += quote.smallCarPrice.to_i
+                            elsif((car.information.weight).to_i > 3000)
+                                bonusCarsBasePrice += quote.midCarPrice.to_i
                             else
-                                bonusCarsBasePrice += quote["largeCarPrice"].to_i
+                                bonusCarsBasePrice += quote.largeCarPrice.to_i
                             end
-                            carPrice = ((car["information"]["weight"].to_i/1000 * car["quote"]["steelPrice"].to_i) - ( car["quote"]["wheelPrice"].to_i))
+                            carPrice = ((car.information.weight.to_i/1000 * car.quote.steelPrice.to_i) - ( car.quote.wheelPrice.to_i))
 
 %>
 
-                                    <div class="row car<%= car["idQuoteCars"] %> index<%= index %>" id="car-price<%= car["idQuoteCars"] %>">
+                                    <div class="row car<%= car.idQuoteCars %> index<%= index %>" id="car-price<%= car.idQuoteCars %>">
                                       <div class="col-lg-6">
-                                        <%= car["vehicle"]["make"] + " " + car["vehicle"]["model"] + " " + car["vehicle"]["year"] %>
+                                        <%= car.information.make + " " + car.information.model + " " + car.information.year %>
                                       </div>
-                                      <div id="car-price-pickup-<%= car["idQuoteCars"] %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
+                                      <div id="car-price-pickup-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
                                       </div>
-                                      <div id="car-price-dropoff-<%= car["idQuoteCars"] %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
+                                      <div id="car-price-dropoff-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
                                       </div>
                                     </div>
                         <% end %>
@@ -221,7 +170,7 @@
                             <i class="icofont icofont-cur-dollar"></i>
                             Save
                         </a><br>
-                        <a href="javascript:bookCars(<%= quote["idQuote"] %>);" class="btn btn-green waves-effect d-inline-block">
+                        <a href="javascript:bookCars(<%= quote.idQuote %>);" class="btn btn-green waves-effect d-inline-block">
                             <i class="icofont icofont-cur-dollar"></i>
                             Save and Book
                         </a><br>
@@ -251,12 +200,12 @@
                     <!-- Nav tabs -->
                     <div class="col-lg-12 tab-header">
                         <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
-                        <% if (quote["idQuote"] != nil) %>
+                        <% if (quote.idQuote != nil) %>
                               <% cars.each.with_index do |car, index| %>
-                            <li id="car-tab<%= car["idQuoteCars"] %>" class="nav-item car<%= car["idQuoteCars"] %> index<%= index %>" style="display:block">
-                                <a class="nav-link" data-toggle="tab" href="#tab<%= car["idQuoteCars"] %>" role="tab" id="tab-a-<%= index %>">
-                                    <button onclick="removeCar(<%= car["idQuoteCars"] %>);">x</button>
-                                    <%= car["vehicle"]["make"] + " " + car["vehicle"]["year"] %>
+                            <li id="car-tab<%= car.idQuoteCars %>" class="nav-item car<%= car.idQuoteCars %> index<%= index %>" style="display:block">
+                                <a class="nav-link" data-toggle="tab" href="#tab<%= car.idQuoteCars %>" role="tab" id="tab-a-<%= index %>">
+                                    <button onclick="removeCar(<%= car.idQuoteCars %>);">x</button>
+                                    <%= car.information.make + " " + car.information.year %>
                                 </a>
                                 <div class="slide"></div>
                             </li>
@@ -265,9 +214,10 @@
                         </ul>
                     </div>
                   <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
-                    <%if(@quote["idQuote"] != nil) %>
-                        <%  cars.each do |car, index| %>
-                          <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car["vehicle"]} %>
+                    <%if(@quote.idQuote != nil) %>
+                      <% debugger %>
+                        <%  cars.each.with_index do |car, index| %>
+                          <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car.information} %>
                         <% end %>
                     <% end %>
                   </div>
@@ -303,7 +253,7 @@
 
   <script>
       $(".tab-pane").removeClass("active");
-      var quoteNo = (<%= quote["idQuote"] || "null" %>);
+      var quoteNo = (<%= quote.idQuote || "null" %>);
       // var idCarGenerator = <%#= cars.length %>
   </script>
   <%= public_js_path 'distance.js' %>
