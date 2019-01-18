@@ -115,7 +115,7 @@
                                                     </td>
                                                     <td>
                                                       <% if (quote.customer) %>
-                                                      <%= quote.customer.phone[0,3] + "-" + quote.customer.phone[3,3] + "-" + quote.customer.phone[6,10] %>
+                                                        <%= IsValid.phone(quote.customer.phone) %>
                                                       <% end %>
                                                     </td>
                                                       <td><%= !quote.dtCreated.nil? ? quote.dtCreated.to_datetime.strftime("%Y-%m-%d %H:%M") : "" %></td>
@@ -153,11 +153,6 @@
                                                         <a href="/quotes/<%= quote.idQuote %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                                           <i class="icofont icofont-ui-edit"></i>
                                                         </a>
-                            <!--
-                            <a href="/quotes/<%= quote.id %>/view" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
-                              <i class="icofont icofont-eye-alt"></i>
-                            </a>
-                            -->
                                                       </td>
                                                   </tr>
                                               <% end %>
