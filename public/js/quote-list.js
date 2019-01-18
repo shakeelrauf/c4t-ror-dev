@@ -95,10 +95,10 @@ $(document).ready(function() {
             quotesUrl = "/quotes/client/json?limit=15&offset="+tab+"&filter="+filter;
         }
 
-        $(".table-quotes").html("");
         $.ajax("/status/json").done(function(status) {
             $.ajax(quotesUrl).done(function(res) {
                 resizePagination(res.count,res.quotes);
+                $(".table-quotes").html("");
                 res.quotes.forEach(function(quote) {
                     var backgroundType = "muted";
                     if(quote["status"]["color"] == "yellow") {
@@ -129,7 +129,7 @@ $(document).ready(function() {
                             <td>`+firstName+` `+lastName+`</td>
                             <td>
                                 <a href="tel:+`+phone+`">
-                                    +`+phone+`
+                                    `+phone+`
                                 </a>
                             </td>`
                             : "")+
