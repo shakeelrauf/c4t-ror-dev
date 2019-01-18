@@ -222,7 +222,6 @@
                     </div>
                   <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
                     <%if(@quote.idQuote != nil) %>
-                      <% debugger %>
                         <%  cars.each.with_index do |car, index| %>
                           <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car.information} %>
                         <% end %>
