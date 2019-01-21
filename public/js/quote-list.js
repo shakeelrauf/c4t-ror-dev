@@ -213,6 +213,14 @@ function set_active() {
 			$(this).addClass("active")
 		}
 	});
+	if(parseInt($(".page.active").text()) > 1){
+		$(".first").removeClass("disabled");
+		$(".prev").removeClass("disabled");
+	}
+	else{
+		$(".first").addClass("disabled");
+		$(".prev").addClass("disabled");
+	}
 }
 
 function remove_active(){
@@ -226,6 +234,10 @@ function remove_active(){
 
 function resizePagination(total, res,type) {
 	var visiblePages = 10;
+	startPage = 1;
+	if (tab >= 9){
+		startPage = tab + 1
+	}
   if (total == 0 && res.length != 0){
       total = 1
       visiblePages = 1;
@@ -234,7 +246,7 @@ function resizePagination(total, res,type) {
   $('#pagination-demo').twbsPagination({
     totalPages: total,
     // the current page that show on start
-    startPage: 1,
+    startPage: startPage,
 
     // maximum visible pages
     visiblePages: visiblePages,
@@ -247,10 +259,10 @@ function resizePagination(total, res,type) {
     hrefVariable: '{{number}}',
 
     // Text labels
-    first: 'First',
-    prev: 'Previous',
-    next: 'Next',
-    last: 'Last',
+    first: '«',
+    prev: '',
+    next: '',
+    last: '»',
 
     // carousel-style pagination
     loop: false,

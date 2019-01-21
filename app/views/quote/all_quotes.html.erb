@@ -227,7 +227,8 @@
             "searching": false,
             "info":     false,
             "order": [],
-            "fixedHeader": true
+            "fixedHeader": true,
+            "destroy": true,
         });
         <% if (params[:isAdded] && params[:isAdded] == "true") %>
           growling("The quote is maked and customer [added/edited]!", "success");
@@ -254,7 +255,7 @@
                 updateTimer(val)
             });
         }, 1000);
-        resizePagination(<%= @pages %>, false, false)
     });
+    resizePagination(<%= @pages %>, false, false)
 </script>
 <% end %>
