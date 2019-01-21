@@ -1,4 +1,5 @@
 <%= public_css_path('quote.css') %>
+
 <div class="content-wrapper">
     <!-- Container-fluid starts -->
     <div class="container-fluid">
@@ -71,8 +72,8 @@
                                 <i class="icofont icofont-ui-user"></i>
                             </span>
                             <div class="md-input-wrapper">
-                                <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
-                                <label style="top: -15px;">Last Name<span class="required">*</span></label>
+                            <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
+                            <label style="top: -15px;">Last Name<span class="required">*</span></label>
                             </div>
                         </div>
                         <div class="col-lg-6 md-group-add-on">
@@ -152,22 +153,38 @@
                                     </div>
                         <% end %>
                       <%   end %>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                      <div class="col-lg-9 font-weight-bold">
-                                        <%= "Total" %>:
-                                      </div>
-                                      <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                      <div class="col-lg-9 font-weight-bold">
-                                        <%= "Notes" %>:
-                                      </div>
-                                      <textarea name="content" id="editor"></textarea>
-                                    </div>
-                              </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-lg-9 font-weight-bold">
+                        <%= "Total" %>:
+                      </div>
+                      <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
+                    </div>
+                    <br>
+                    <div class="form-body">
+                        <div class="form-row">
+                            <div class="form-controls" style="width:100%">
+                                <div class="col form-col-size15">
+                                    <label class="form-label"><%= "Note" %>:</label>
+                                </div>
+                                <div class="col form-col-size16" style="width:87%;float:right">
+                                    <%#= raw @fields['note'] %>
+                                </div>
+                            </div>
+                        </div><!-- /.form-row -->
+                        <div class="form-row" id="div_note_decision" style="display:none">
+                            <div class="form-controls" style="width:100%">
+                                <div class="col form-col-size15">
+                                    <label class="form-label"><%= "Note Decision" %>:</label>
+                                </div>
+                                <div class="col form-col-size16" style="width:87%;float:right">
+                                <%#= raw @fields['note_decision'] %>
+                                </div>
+                            </div>
+                        </div><!-- /.form-row -->
+                    </div><!-- /.form-body -->
+                  </div>
                 </div>
                 <!-- total end -->
                 <div class="card col-lg-12">
