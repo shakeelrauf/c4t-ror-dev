@@ -8,7 +8,7 @@ class UsersController < DashboardController
 
   def edit
     @user = User.find_by_id(params[:no])
-    render :form, locals: {user: current_user, user: @user}
+    render :form, locals: {user: @user}
   end
 
   def create
@@ -33,6 +33,6 @@ class UsersController < DashboardController
 
   def new
     @user = User.new
-    render :form, locals: {user: current_user, userData: @user}
+    render :form, locals: { user: @user}
   end
 end

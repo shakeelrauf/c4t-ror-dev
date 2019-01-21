@@ -166,8 +166,9 @@
                 </div>
 
               <div class="col card col-lg-12" style="width:87%;float:right">
+                <%= cktext_area :note, quote.note, ckeditor: {toolbar: 'mini'} %>
+
               </div>
-              <%= cktext_area "note", quote.note, ckeditor: {toolbar: 'mini'} %>
 
               <!-- total end -->
                 <div class="card col-lg-12">

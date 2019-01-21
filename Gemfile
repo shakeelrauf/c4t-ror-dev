@@ -41,7 +41,8 @@ gem 'whenever'
 gem 'postmark', '1.10.0'
 gem 'griddler'
 gem 'griddler-postmark'
-
+# gem 'ckeditor', '4.1.3'
+gem 'ckeditor', github: 'galetahub/ckeditor'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
