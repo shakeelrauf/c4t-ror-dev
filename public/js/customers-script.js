@@ -269,12 +269,16 @@ $(document).ready(function(){
         }
     }
      $("#saveCustomerButton").click(function(e){
-      if (valid_fields()){
-         $("#customer-form").submit();
-      }
-      else{
-         e.preventDefault();
-      }
+         if($(".the_form").valid()) {
+             if (valid_fields()) {
+                 $("#customer-form").submit();
+             }
+             else {
+                 e.preventDefault();
+             }
+         }else{
+             e.preventDefault();
+         }
     });
     // $("#customer-form").submit(function(e){
     //     e.preventDefault();
