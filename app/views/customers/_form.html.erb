@@ -23,7 +23,7 @@
             </div>
          </div>
          <!-- Row end -->
-         <%= form_for(@customer, html: {id: "customer-form"}) do |form| %>
+         <%= form_for(@customer, html: {class: 'the_form'}) do |form| %>
             <div class="row">
                <div class="col-sm-12">
                   <div class="card">
@@ -37,7 +37,7 @@
                               <i class="icofont icofont-phone"></i>
                               </span>
                               <div class="md-input-wrapper">
-                                 <input type="tel" class="md-form-control md-static" id="txtPhone" name="phoneNumber" value="<%= @customer.phone %>">
+                                 <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" value="<%= @customer.phone %>">
                                  <label>Phone Number <span class="required">*</span></label>
                               </div>
                            </div>

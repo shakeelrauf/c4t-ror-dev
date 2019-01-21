@@ -42,3 +42,4 @@
 //= require datatables.net/js/jquery.dataTables.min.js
 //= require datedropper/datedropper.js
 //= require jquery-confirm/dist/jquery-confirm.min.js
+//= require jquery.validate-1.17.0.js
