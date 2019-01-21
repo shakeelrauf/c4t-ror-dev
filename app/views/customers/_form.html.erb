@@ -67,7 +67,7 @@
                               <i class="icofont icofont-smart-phone"></i>
                               </span>
                               <div class="md-input-wrapper">
-                                 <input type="tel" class="md-form-control md-static" name="phoneNumber2" id="txtCell" value="<%= @customer.cellPhone %>">
+                                 <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone) %>">
                                  <label>Cell Phone</label>
                               </div>
                            </div>
@@ -76,7 +76,7 @@
                               <i class="icofont icofont-phone"></i>
                               </span>
                               <div class="md-input-wrapper">
-                                 <input type="tel" class="md-form-control md-static" name="phoneNumber3" id="txtSecondPhone" value="<%= @customer.secondaryPhone %>">
+                                 <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%=  phone_number_display(@customer.secondaryPhone) %>">
                                  <label>Other Phone</label>
                               </div>
                            </div>
