@@ -37,7 +37,7 @@
                 <i class="icon-people"></i>  Return
               </a>
             </div>
-            <%= form_for(@user, html: {id: "customer-form", class: 'the_form'}) do |form| %>
+            <%= form_for(User.new, html: {id: "customer-form", class: 'the_form'}) do |form| %>
 
             <div class="card-block text-center">
                 <div class="row">
@@ -99,7 +99,7 @@
                                           <i class="icofont icofont-ui-cell-phone"></i>
                                       </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" value="<%= user["phone"] %>">
+                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" <%= ( user.is_a?(Hash) ? ' value=' + user["phone"] : "") %>>
                       <label>Phone Number</label>
                     </div>
                   </div>
