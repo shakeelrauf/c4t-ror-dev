@@ -51,7 +51,7 @@
 																									<td><%= charity["name"] %></td>
 											                                                        <td>
 																										<a href="tel:+<%= charity["phone"][0,12] %>">
-																											+<%= charity["phone"] %>
+																											<%= phone_number_display(charity["phone"]) if charity["phone"].present? %>
 																										</a>
 																									</td>
 											                                                        <td>

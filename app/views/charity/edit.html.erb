@@ -28,7 +28,7 @@
                                     Add charity
                                 </h5>
                             </div>
-                            <form method="GET" action="/update">
+                            <form method="GET" action="/update" class="the_form">
                               <% if (@charitie["idCharitie"]) %>
                                 <input type="hidden" name="id" value="<%= @charitie["idCharitie"] %>">
                                 <% end %>
@@ -47,7 +47,7 @@
                                             <i class="icofont icofont-phone"></i>
                                         </span>
                                         <div class="md-input-wrapper">
-                                            <input type="tel" name="phone" class="md-form-control md-static" value="<%= @charitie["phone"] %>">
+                                            <input type="tel" name="phone" class="md-form-control md-static phone" value="<%= phone_number_display(@charitie["phone"]) if @charitie["phone"].present? %>">
                                             <label>Phone <span class=""></span></label>
                                         </div>
                                     </div>
