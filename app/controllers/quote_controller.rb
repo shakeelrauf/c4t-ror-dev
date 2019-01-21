@@ -3,6 +3,7 @@ class QuoteController < ApplicationController
 
 	def all_quotes  
     @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
+    @pages = 0
     if @quotes.count % 15 > 0
       @pages = 1
     end
