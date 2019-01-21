@@ -7,7 +7,7 @@ class UsersController < DashboardController
   end
 
   def edit
-    @user = JSON.parse ApiCall.get('/users/'+params[:no],{}, headers).to_json
+    @user = User.find_by_id(params[:no])
     render :form, locals: {user: current_user, user: @user}
   end
 
