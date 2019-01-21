@@ -271,6 +271,9 @@ $(document).ready(function(){
      $("#saveCustomerButton").click(function(e){
          if($(".the_form").valid()) {
              if (valid_fields()) {
+                 $(".phone").rules("remove", "phoneNo")
+                 $(".phone").val($(".phone").val().replace(/-/g, ''));
+
                  $("#customer-form").submit();
              }
              else {

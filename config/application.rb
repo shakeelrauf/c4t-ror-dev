@@ -19,6 +19,10 @@ module Cashfortrash
         resource '*', :headers => :any, :methods => [:get, :post, :options, :delete, :put, :patch]
       end
     end
+    config.assets.compile = true
+    config.assets.precompile += Ckeditor.assets
+    config.assets.precompile += %w(ckeditor/* )
+    config.autoload_paths += %w(#{config.root}/app/models/ckeditor)
     config.eager_load_paths << Rails.root.join('lib')
     
     # Settings in config/environments/* take precedence over those specified here.

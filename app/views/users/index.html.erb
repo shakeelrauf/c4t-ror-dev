@@ -62,7 +62,7 @@
                                 <% end %>
                               </td>
                               <td>
-                                <%= IsValid.phone(contact["phone"]) %>
+                                <%= phone_number_display(contact["phone"]) %>
                               </td>
                               <td>
                               <% if contact["dtLastLogin"].present? %>

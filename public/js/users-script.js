@@ -117,7 +117,7 @@ $("#btnSaveUser").click(function() {
             } else {
                 url = "/users/" + noUserToGet;
             }
-
+            var phone =  $("#txtPhone").val().replace(/-/g, '');
             $.ajax({
                 url: url,
                 type: url == "/users" ? "POST" : "PUT",
@@ -127,7 +127,7 @@ $("#btnSaveUser").click(function() {
                     lastName: $("#txtLastName").val(),
                     roles: $("#txtRole").val(),
                     email: $("#txtEmail").val(),
-                    phoneNumber: $("#txtPhone").val(),
+                    phoneNumber: phone,
                     pwd: $("#txtPwd").val()
                 }
             }).done(function (data) {

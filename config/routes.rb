@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+	mount Ckeditor::Engine => '/ckeditor'
   scope  controller: :send_form do
     get 	:login
     post 	:login, 													action: :login_user

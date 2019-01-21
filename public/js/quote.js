@@ -483,7 +483,6 @@ function sumTotal() {
 
     showTotal();
 }
-
 // SAVE AND BOOK, save the form, navigate to booking
 function bookCars(quoteId) {
   saveCar(function() {

@@ -1,6 +1,6 @@
 PHONE_METHOD      = "phoneNo";
 PHONE_RE = "^([\\d][-]{1})?(\\d{3}[-]{1}){2}(\\d{4})$";
-PHONE_FORMAT = "[1-]514-888-9999";
+PHONE_FORMAT = "514-888-9999";
 RULES = {};
 
 $.validator.addMethod(PHONE_METHOD, function(value, element) {

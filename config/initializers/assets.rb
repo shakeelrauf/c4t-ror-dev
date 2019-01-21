@@ -10,6 +10,7 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 Rails.application.config.assets.paths << Rails.root.join('vendor/assets-libs')
 Rails.application.config.assets.paths << Rails.root.join('assets/plugins')
 Rails.application.config.assets.paths << Rails.root.join('assets/icon')
+Rails.application.config.assets.precompile += %w( ckeditor/*)
 Rails.application.config.assets.precompile += %w( login.css login.js dashboard.css dashboard.js)
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
