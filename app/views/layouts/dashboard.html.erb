@@ -22,7 +22,7 @@
     <%= render :partial => 'shared/header' %>
     <%= render :partial => 'shared/menu' %>
     <%= yield %>
-    <%= javascript_include_tag 'dashboard.js' %>
+    <%= javascript_include_tag 'dashboard.js' , 'data-turbolinks-track': 'reload' %>
     <%= render :partial => 'shared/head' %>
     <%= yield :js %>
   </body>
