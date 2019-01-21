@@ -526,7 +526,8 @@ function saveCar(callback) {
             "firstName": $("input[name=firstName]").val(),
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
-            "postal": $("input[name=postal]").val()
+            "postal": $("input[name=postal]").val(),
+            "note": $("#note_").val()
         }
     }).done(function(s) {
       if (callback) {

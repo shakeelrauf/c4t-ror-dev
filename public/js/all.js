@@ -38,6 +38,36 @@ function updatePhone(f) {
     f.val(v);
 }
 
+function formatPhone(v) {
+    if (v.length == 0)
+        return;
+
+    if (v.length >= 2) {
+        if (v.charAt(0) == '1') {
+            if (v.charAt(1) != '-') {
+                v = "1-" + v.substring(1, v.length);
+            }
+            if (v.length >= 6 && v.charAt(5) != '-') {
+                v = v.substring(0, 5) + "-" + v.substring(5, v.length);
+            }
+            if (v.length >= 10 && v.charAt(9) != '-') {
+                v = v.substring(0, 9) + "-" + v.substring(9, v.length);
+            }
+        } else if (v.length >= 9) {
+            // Abort after 9 chars
+            return v;
+        } else if (v.length >= 4) {
+            if (v.charAt(3) != '-') {
+                v = v.substring(0, 3) + "-" + v.substring(3, v.length);
+            }
+            if (v.length >= 8 && v.charAt(7) != '-') {
+                v = v.substring(0, 7) + "-" + v.substring(7, v.length);
+            }
+        }
+    }
+    return v;
+}
+
 function validPhone(str) {
     return validString(str, PHONE_RE);
 }
