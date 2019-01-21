@@ -1,46 +1,48 @@
 var tab = 0;
 
 //Update status of a particular quote.
-$(".quote-status-list").change(function() {
-    var mySelect = this;
-    $.ajax({
-        url: "/quote/"+$(this).data("quote-no")+"/status",
-        method: "POST",
-        data: {
-            status: $(this).val()
-        }
-    }).done(function(response) {
-        if(response.error) {
-            growling("An error occur: " + response.error, "danger");
-        } else {
-            //Reset timer.
-            $(mySelect).closest("tr").find(".timerFromLast").attr("data-timer", "0");
-            $(mySelect).closest("tr").find(".timerFromLastStatus" + response.idQuote).text("0m");
-            $(".timerFromLastStatus" + response.idQuote).text("0m");
-            //Remove badge-color.
-            $(mySelect).removeClass(mySelect.className.split(' ').pop());
-            //Set new color from type of status.
-            if($(mySelect).val() == "1") {
-                $(mySelect).addClass("badge-primary");
-            } else if($(mySelect).val() == "2") {
-                $(mySelect).addClass("badge-warning");
-            } else if($(mySelect).val() == "3") {
-                $(mySelect).addClass("badge-success");
-            } else if($(mySelect).val() == "4") {
-                $(mySelect).addClass("badge-info");
-            } else if($(mySelect).val() == "5") {
-                $(mySelect).addClass("badge-info");
-            } else if($(mySelect).val() == "6") {
-                $(mySelect).addClass("badge-success");
-            } else if($(mySelect).val() == "7") {
-                $(mySelect).addClass("badge-primary");
-            } else if($(mySelect).val() == "8") {
-                $(mySelect).addClass("badge-danger");
-            } else {
-                $(mySelect).addClass("badge-muted");
-            }
-        }
-    });
+$(document).ready(function() {
+	$("body").on("change", ".quote-status-list",function() {
+	    var mySelect = this;
+	    $.ajax({
+	        url: "/quote/"+$(this).data("quote-no")+"/status",
+	        method: "POST",
+	        data: {
+	            status: $(this).val()
+	        }
+	    }).done(function(response) {
+	        if(response.error) {
+	            growling("An error occur: " + response.error, "danger");
+	        } else {
+	            //Reset timer.
+	            $(mySelect).closest("tr").find(".timerFromLast").attr("data-timer", "0");
+	            $(mySelect).closest("tr").find(".timerFromLastStatus" + response.idQuote).text("0m");
+	            $(".timerFromLastStatus" + response.idQuote).text("0m");
+	            //Remove badge-color.
+	            $(mySelect).removeClass(mySelect.className.split(' ').pop());
+	            //Set new color from type of status.
+	            if($(mySelect).val() == "1") {
+	                $(mySelect).addClass("badge-primary");
+	            } else if($(mySelect).val() == "2") {
+	                $(mySelect).addClass("badge-warning");
+	            } else if($(mySelect).val() == "3") {
+	                $(mySelect).addClass("badge-success");
+	            } else if($(mySelect).val() == "4") {
+	                $(mySelect).addClass("badge-info");
+	            } else if($(mySelect).val() == "5") {
+	                $(mySelect).addClass("badge-info");
+	            } else if($(mySelect).val() == "6") {
+	                $(mySelect).addClass("badge-success");
+	            } else if($(mySelect).val() == "7") {
+	                $(mySelect).addClass("badge-primary");
+	            } else if($(mySelect).val() == "8") {
+	                $(mySelect).addClass("badge-danger");
+	            } else {
+	                $(mySelect).addClass("badge-muted");
+	            }
+	        }
+	    });
+	});
 });
 
 //On searching quote.
@@ -242,53 +244,60 @@ function resizePagination(total, res,type) {
       total = 1
       visiblePages = 1;
   }
-  $('.pagination-demo').twbsPagination('destroy');
-  $('.pagination-demo').twbsPagination({
-    totalPages: total,
-    // the current page that show on start
-    startPage: startPage,
+  if (total != 0 && res.length != 0){
+		$(".no-record").css({"display": "none"});
+	  $('.pagination-demo').twbsPagination('destroy');
+	  $('.pagination-demo').twbsPagination({
+	    totalPages: total,
+	    // the current page that show on start
+	    startPage: startPage,
 
-    // maximum visible pages
-    visiblePages: visiblePages,
+	    // maximum visible pages
+	    visiblePages: visiblePages,
 
 
-    // template for pagination linksa
-    href: false,
+	    // template for pagination linksa
+	    href: false,
 
-    // variable name in href template for page number
-    hrefVariable: '{{number}}',
+	    // variable name in href template for page number
+	    hrefVariable: '{{number}}',
 
-    // Text labels
-    first: 'First',
-    prev: '',
-    next: '',
-    last: 'Last',
+	    // Text labels
+	    first: 'First',
+	    prev: '',
+	    next: '',
+	    last: 'Last',
 
-    // carousel-style pagination
-    loop: false,
+	    // carousel-style pagination
+	    loop: false,
 
-    // callback function
-    onPageClick: function (event, page) {
-      if (type != false){
-				remove_active()
-        tab = page - 1
-        filtingQuotes();
-      }
-      else{
-          type = true
-      }
-    },
+	    // callback function
+	    onPageClick: function (event, page) {
+	      if (type != false){
+					remove_active()
+	        tab = page - 1
+	        filtingQuotes();
+	      }
+	      else{
+	          type = true
+	      }
+	    },
 
-    // pagination Classes
-    paginationClass: 'pagination',
-    nextClass: 'next',
-    prevClass: 'prev',
-    lastClass: 'last',
-    firstClass: 'first',
-    pageClass: 'page',
-    activeClass: 'active',
-    disabledClass: 'disabled'
-  });
-  remove_active();
-  set_active();
+	    // pagination Classes
+	    paginationClass: 'pagination',
+	    nextClass: 'next',
+	    prevClass: 'prev',
+	    lastClass: 'last',
+	    firstClass: 'first',
+	    pageClass: 'page',
+	    activeClass: 'active',
+	    disabledClass: 'disabled'
+	  });
+	  remove_active();
+	  set_active();
+	}
+	else{
+		$('.pagination-demo').twbsPagination('destroy');
+		$(".no-record").css({"display": "block"});
+	}
 }
