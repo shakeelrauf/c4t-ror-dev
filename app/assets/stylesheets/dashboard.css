@@ -29,3 +29,14 @@
  *= require datedropper/datedropper.css
  *= require jquery-confirm/dist/jquery-confirm.min.css
  */
+
+.error{
+    right: 0 !important;
+    bottom: -22px !important;
+    top: inherit  !important;
+    left: inherit !important;
+    color:  red;
+}
+.md-input-wrapper{
+    position: relative !important
+}
