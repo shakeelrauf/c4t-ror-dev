@@ -242,8 +242,8 @@ function resizePagination(total, res,type) {
       total = 1
       visiblePages = 1;
   }
-  $('#pagination-demo').twbsPagination('destroy');
-  $('#pagination-demo').twbsPagination({
+  $('.pagination-demo').twbsPagination('destroy');
+  $('.pagination-demo').twbsPagination({
     totalPages: total,
     // the current page that show on start
     startPage: startPage,
@@ -259,10 +259,10 @@ function resizePagination(total, res,type) {
     hrefVariable: '{{number}}',
 
     // Text labels
-    first: '«',
+    first: 'First',
     prev: '',
     next: '',
-    last: '»',
+    last: 'Last',
 
     // carousel-style pagination
     loop: false,

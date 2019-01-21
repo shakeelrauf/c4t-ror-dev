@@ -56,11 +56,17 @@ class Api::V1::QuoteController < ApiController
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}') AND ('dtCreated' >= '#{params[:beforeDate]+ ' 23:59:59'}'))" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
       @quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query)
-      all_count = (@quotes.count / limit.to_i).ceil
+      if @quotes.count % 15 > 0
+        all_count = 1
+      end
+      all_count += (@quotes.count / limit.to_i).ceil
       @quotes = @quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
     else
       @quotes =  Quote.includes(:dispatcher, :customer, :status)
-      all_count = (@quotes.count / limit.to_i).ceil
+      if @quotes.count % 15 > 0
+        all_count = 1
+      end
+      all_count += (@quotes.count / limit.to_i).ceil
       @quotes = @quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
     end
     render json: { quotes: JSON.parse(@quotes), count: all_count}
