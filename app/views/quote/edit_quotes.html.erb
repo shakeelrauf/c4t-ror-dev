@@ -153,40 +153,23 @@
                                     </div>
                         <% end %>
                       <%   end %>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-lg-9 font-weight-bold">
-                        <%= "Total" %>:
-                      </div>
-                      <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
-                    </div>
-                    <br>
-                    <div class="form-body">
-                        <div class="form-row">
-                            <div class="form-controls" style="width:100%">
-                                <div class="col form-col-size15">
-                                    <label class="form-label"><%= "Note" %>:</label>
-                                </div>
-                                <div class="col form-col-size16" style="width:87%;float:right">
-                                    <%#= raw @fields['note'] %>
-                                </div>
-                            </div>
-                        </div><!-- /.form-row -->
-                        <div class="form-row" id="div_note_decision" style="display:none">
-                            <div class="form-controls" style="width:100%">
-                                <div class="col form-col-size15">
-                                    <label class="form-label"><%= "Note Decision" %>:</label>
-                                </div>
-                                <div class="col form-col-size16" style="width:87%;float:right">
-                                <%#= raw @fields['note_decision'] %>
-                                </div>
-                            </div>
-                        </div><!-- /.form-row -->
-                    </div><!-- /.form-body -->
-                  </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                      <div class="col-lg-9 font-weight-bold">
+                                        <%= "Total" %>:
+                                      </div>
+                                      <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
+                                    </div>
+
+                              </div>
                 </div>
-                <!-- total end -->
+
+              <div class="col card col-lg-12" style="width:87%;float:right">
+              </div>
+              <%= cktext_area "note", quote.note, ckeditor: {toolbar: 'mini'} %>
+
+              <!-- total end -->
                 <div class="card col-lg-12">
                     <div class="card-block quick-quote-navigator d-flex pb-3">
                         <a href="javascript:saveCar();" class="btn btn-primary waves-effect d-inline-block">
