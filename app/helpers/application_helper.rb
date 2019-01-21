@@ -24,11 +24,10 @@ module ApplicationHelper
         end
       else
         if (val.length >= 6)
-
-            val = val[0, 3] + "-" + val[3, val.length]
+          val = val[0, 3] + "-" + val[3, val.length]
         end
         if (val.length >= 10 )
-            val = val[0, 4] + val[4,3] + "-" + val[7, val.length]
+          val = val[0, 4] + val[4,3] + "-" + val[7, val.length]
         end
       end
     end
