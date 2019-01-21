@@ -99,7 +99,7 @@
                                           <i class="icofont icofont-ui-cell-phone"></i>
                                       </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" <%= ( !user.new_record? ? ' value=' + user.phone : "") %>>
+                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" <%= ( !user.new_record? ? ' value=' + phone_number_display(user.phone) : "") %>>
                       <label>Phone Number</label>
                     </div>
                   </div>
