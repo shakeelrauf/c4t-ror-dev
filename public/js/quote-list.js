@@ -1,46 +1,48 @@
 var tab = 0;
 
 //Update status of a particular quote.
-$(".quote-status-list").change(function() {
-    var mySelect = this;
-    $.ajax({
-        url: "/quote/"+$(this).data("quote-no")+"/status",
-        method: "POST",
-        data: {
-            status: $(this).val()
-        }
-    }).done(function(response) {
-        if(response.error) {
-            growling("An error occur: " + response.error, "danger");
-        } else {
-            //Reset timer.
-            $(mySelect).closest("tr").find(".timerFromLast").attr("data-timer", "0");
-            $(mySelect).closest("tr").find(".timerFromLastStatus" + response.idQuote).text("0m");
-            $(".timerFromLastStatus" + response.idQuote).text("0m");
-            //Remove badge-color.
-            $(mySelect).removeClass(mySelect.className.split(' ').pop());
-            //Set new color from type of status.
-            if($(mySelect).val() == "1") {
-                $(mySelect).addClass("badge-primary");
-            } else if($(mySelect).val() == "2") {
-                $(mySelect).addClass("badge-warning");
-            } else if($(mySelect).val() == "3") {
-                $(mySelect).addClass("badge-success");
-            } else if($(mySelect).val() == "4") {
-                $(mySelect).addClass("badge-info");
-            } else if($(mySelect).val() == "5") {
-                $(mySelect).addClass("badge-info");
-            } else if($(mySelect).val() == "6") {
-                $(mySelect).addClass("badge-success");
-            } else if($(mySelect).val() == "7") {
-                $(mySelect).addClass("badge-primary");
-            } else if($(mySelect).val() == "8") {
-                $(mySelect).addClass("badge-danger");
-            } else {
-                $(mySelect).addClass("badge-muted");
-            }
-        }
-    });
+$(document).ready(function() {
+	$("body").on("change", ".quote-status-list",function() {
+	    var mySelect = this;
+	    $.ajax({
+	        url: "/quote/"+$(this).data("quote-no")+"/status",
+	        method: "POST",
+	        data: {
+	            status: $(this).val()
+	        }
+	    }).done(function(response) {
+	        if(response.error) {
+	            growling("An error occur: " + response.error, "danger");
+	        } else {
+	            //Reset timer.
+	            $(mySelect).closest("tr").find(".timerFromLast").attr("data-timer", "0");
+	            $(mySelect).closest("tr").find(".timerFromLastStatus" + response.idQuote).text("0m");
+	            $(".timerFromLastStatus" + response.idQuote).text("0m");
+	            //Remove badge-color.
+	            $(mySelect).removeClass(mySelect.className.split(' ').pop());
+	            //Set new color from type of status.
+	            if($(mySelect).val() == "1") {
+	                $(mySelect).addClass("badge-primary");
+	            } else if($(mySelect).val() == "2") {
+	                $(mySelect).addClass("badge-warning");
+	            } else if($(mySelect).val() == "3") {
+	                $(mySelect).addClass("badge-success");
+	            } else if($(mySelect).val() == "4") {
+	                $(mySelect).addClass("badge-info");
+	            } else if($(mySelect).val() == "5") {
+	                $(mySelect).addClass("badge-info");
+	            } else if($(mySelect).val() == "6") {
+	                $(mySelect).addClass("badge-success");
+	            } else if($(mySelect).val() == "7") {
+	                $(mySelect).addClass("badge-primary");
+	            } else if($(mySelect).val() == "8") {
+	                $(mySelect).addClass("badge-danger");
+	            } else {
+	                $(mySelect).addClass("badge-muted");
+	            }
+	        }
+	    });
+	});
 });
 
 //On searching quote.
