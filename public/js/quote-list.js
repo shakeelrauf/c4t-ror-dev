@@ -242,53 +242,60 @@ function resizePagination(total, res,type) {
       total = 1
       visiblePages = 1;
   }
-  $('.pagination-demo').twbsPagination('destroy');
-  $('.pagination-demo').twbsPagination({
-    totalPages: total,
-    // the current page that show on start
-    startPage: startPage,
+  if (total != 0 && res.length != 0){
+		$(".no-record").css({"display": "none"});
+	  $('.pagination-demo').twbsPagination('destroy');
+	  $('.pagination-demo').twbsPagination({
+	    totalPages: total,
+	    // the current page that show on start
+	    startPage: startPage,
 
-    // maximum visible pages
-    visiblePages: visiblePages,
+	    // maximum visible pages
+	    visiblePages: visiblePages,
 
 
-    // template for pagination linksa
-    href: false,
+	    // template for pagination linksa
+	    href: false,
 
-    // variable name in href template for page number
-    hrefVariable: '{{number}}',
+	    // variable name in href template for page number
+	    hrefVariable: '{{number}}',
 
-    // Text labels
-    first: 'First',
-    prev: '',
-    next: '',
-    last: 'Last',
+	    // Text labels
+	    first: 'First',
+	    prev: '',
+	    next: '',
+	    last: 'Last',
 
-    // carousel-style pagination
-    loop: false,
+	    // carousel-style pagination
+	    loop: false,
 
-    // callback function
-    onPageClick: function (event, page) {
-      if (type != false){
-				remove_active()
-        tab = page - 1
-        filtingQuotes();
-      }
-      else{
-          type = true
-      }
-    },
+	    // callback function
+	    onPageClick: function (event, page) {
+	      if (type != false){
+					remove_active()
+	        tab = page - 1
+	        filtingQuotes();
+	      }
+	      else{
+	          type = true
+	      }
+	    },
 
-    // pagination Classes
-    paginationClass: 'pagination',
-    nextClass: 'next',
-    prevClass: 'prev',
-    lastClass: 'last',
-    firstClass: 'first',
-    pageClass: 'page',
-    activeClass: 'active',
-    disabledClass: 'disabled'
-  });
-  remove_active();
-  set_active();
+	    // pagination Classes
+	    paginationClass: 'pagination',
+	    nextClass: 'next',
+	    prevClass: 'prev',
+	    lastClass: 'last',
+	    firstClass: 'first',
+	    pageClass: 'page',
+	    activeClass: 'active',
+	    disabledClass: 'disabled'
+	  });
+	  remove_active();
+	  set_active();
+	}
+	else{
+		$('.pagination-demo').twbsPagination('destroy');
+		$(".no-record").css({"display": "block"});
+	}
 }
