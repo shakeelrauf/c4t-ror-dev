@@ -1,3 +1,18 @@
+<script type="text/javascript">
+
+
+</script>
+<style type="text/css">
+  .container {
+  margin-top: 20px;
+}
+
+.page-active {
+  display: block;
+}
+
+</style>
+
 <div class="content-wrapper">
       <div class="container-fluid">
           <div >
@@ -90,24 +105,9 @@
                               </div>
                               <div class="row">
                                   <div class="table-content crm-table">
+
                                       <div class="project-table">
-                                            <ul class="pagination bootpag">
-                                                <li data-lp="prev" class="prev">
-                                                    <a href="javascript:void(0);">«</a>
-                                                </li>
-                                            <% pages = @pages %>
-                                            <% i = 1 %>
-                                              <% pages = 10 if pages > 10 %>
-                                            <% while i <= pages %>
-                                                <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
-                                                    <a href="javascript:void(0);"><%= i %></a>
-                                                </li>
-                                              <% i = i+1 %>
-                                            <% end %>
-                                                <li data-lp="next" class="next">
-                                                    <a href="javascript:void(0);">»</a>
-                                                </li>
-                                            </ul>
+                                          <ul id="pagination-demo" class="pagination bootpag"></ul>
                                           <table id="crm-contact" class="table table-striped nowrap table-responsive">
                                               <thead>
                                               <tr>
@@ -169,21 +169,6 @@
                                               </tr>
                                               </tfoot>
                                           </table>
-                                          <ul class="pagination bootpag">
-                                              <li data-lp="prev" class="prev">
-                                                  <a href="javascript:void(0);">«</a>
-                                              </li>
-                                          <% i = 1 %>
-                                          <% while i <= pages %>
-                                              <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
-                                                  <a href="javascript:void(0);"><%= i %></a>
-                                              </li>
-                                            <% i = i+1 %>
-                                          <% end %>
-                                              <li data-lp="next" class="next">
-                                                  <a href="javascript:void(0);">»</a>
-                                              </li>
-                                          </ul>
                                       </div>
                                   </div>
                               </div>
@@ -196,6 +181,9 @@
       <!-- Container-fluid ends -->
 </div>
 <% content_for :js do %>
+<%= public_js_path 'quote-list.js' %>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
 <script>
     var quote_ids = <%= raw @quotes.pluck(:idQuote, :dtStatusUpdated).as_json %>
     quote_ids.forEach(function(quote){
@@ -266,7 +254,7 @@
                 updateTimer(val)
             });
         }, 1000);
+        resizePagination(<%= @pages %>, false, false)
     });
 </script>
-<%= public_js_path 'quote-list.js' %>
 <% end %>
