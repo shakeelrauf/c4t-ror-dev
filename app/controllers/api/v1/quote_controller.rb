@@ -44,7 +44,7 @@ class Api::V1::QuoteController < ApiController
     limit = 15
     offset = 0
     limit  = params[:limit].delete(' ') if params[:limit].to_i > 0
-    offset  = params[:offset] if params[:offset].to_i > 0
+    offset = ((params[:offset].to_i) * limit.to_i) if params[:offset] != "-1"
     query =  ""
     if params[:filter]
       params[:filter] = "%" + params[:filter].gsub(/[\s]/, "% %").gsub('?','') + "%"
