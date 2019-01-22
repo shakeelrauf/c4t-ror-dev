@@ -61,7 +61,7 @@
                         <th scope="row">Mobile Number</th>
                         <td>
                           <a href="tel:+<%= customer["cellPhone"] %>">
-                            +<%= IsValid.phone( customer["cellPhone"]) %>
+                            <%= phone_number_display( customer["cellPhone"]) %>
                           </a>
                         </td>
                       </tr>
@@ -69,7 +69,7 @@
                         <th scope="row">Other Phone</th>
                         <td>
                           <a href="tel:+<%= customer["secondaryPhone"] %>">
-                            +<%= IsValid.phone( customer["secondaryPhone"]) %>
+                            <%= phone_number_display( customer["secondaryPhone"]) %>
                           </a>
                         </td>
                       </tr>
