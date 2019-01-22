@@ -167,7 +167,7 @@ class Api::V1::CustomerController < ApiController
                   province: a["province"].upcase,
                   distance: 361715
                 )
-              else
+              elsif a.present?
                 #prev
                 # Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
                 #                idAddress: address.idAddress,
