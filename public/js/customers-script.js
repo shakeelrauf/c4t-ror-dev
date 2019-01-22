@@ -268,23 +268,46 @@ $(document).ready(function(){
             return true;
         }
     }
-     $("#saveCustomerButton").click(function(e){
-         if($(".the_form").valid()) {
-             if (valid_fields()) {
-                 $(".phone").each(function(a){
-                     $(this).rules("remove", "phoneNo")
-                     $(this).val($(this).val().replace(/-/g, ''));
-                 });
 
-                 $("#customer-form").submit();
-             }
-             else {
-                 e.preventDefault();
-             }
-         }else{
-             e.preventDefault();
-         }
+    $("#customer-form").validate(RULES);
+      $("input[class*='phone']").each(function () {
+          $(this).rules('add', PHONE_METHOD);
+          $(this).keyup(function () {
+          updatePhone($(this));
+      });
     });
+
+    $("#saveCustomerButton").click(function(e){
+      if(valid_fields() && $("#customer-form").valid()){
+          $(".phone").each(function(a){
+               $(this).rules("remove", "phoneNo")
+               $(this).val($(this).val().replace(/-/g, ''));
+           });
+          $("#customer-form").submit()
+      }
+      else{
+        e.preventDefault();
+      }
+    });
+
+
+    //  $("#saveCustomerButton").click(function(e){
+    //      if($(".the_form").valid()) {
+    //          if (valid_fields()) {
+    //              $(".phone").each(function(a){
+    //                  $(this).rules("remove", "phoneNo")
+    //                  $(this).val($(this).val().replace(/-/g, ''));
+    //              });
+
+    //              $("#customer-form").submit();
+    //          }
+    //          else {
+    //              e.preventDefault();
+    //          }
+    //      }else{
+    //          e.preventDefault();
+    //      }
+    // });
     // $("#customer-form").submit(function(e){
     //     e.preventDefault();
     //     if (valid_fields()){
