@@ -148,10 +148,11 @@ class Api::V1::CustomerController < ApiController
               #               distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]).first
               # addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
                             # distance: 361715).first
+              prv = a["province"].present? ? a["province"].upcase : a["province"]
               if a["idAddress"].present?
                 addresses = Address.where(idAddress: a["idAddress"]).first
               else
-                addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,distance: 361715).first
+                addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: prv,distance: 361715).first
               end
               if addresses.present?
                 #prev
@@ -171,7 +172,7 @@ class Api::V1::CustomerController < ApiController
                 # Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
                 #                idAddress: address.idAddress,
                 #                distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
-                Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
+                Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: prv,
                                                distance: 361715)
               end
                 if !params[:type].eql?("Individual")

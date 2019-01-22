@@ -130,7 +130,7 @@ function addCusAddress(address) {
                            <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
                              address.address || "")+`" name="addresses[address][]">
                             <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
-                             address.id || "")+`">
+                             address.id || "")+`" name="addresses[idAddress][]">
                          <label>Address <span class="required">*</span></label>
                      </div>
                   </div>
