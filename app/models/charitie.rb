@@ -3,7 +3,7 @@ class Charitie < ApplicationRecord
 	# validates :phone, presence: true, format: { with: /[0-9]*/ }, length: { minimum: 10 } #prev
 	# validates :email, presence: true, format: { with: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/ } #prev
 	validates :email, format: { with: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/ }, if: Proc.new { |charity| charity.email.present?}
-	before_save :set_phone_format
+	# before_save :set_phone_format
 	
 	def set_phone_format
     if self.phone.present? && self.phone.length == 10

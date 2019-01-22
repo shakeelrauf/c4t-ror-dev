@@ -89,4 +89,16 @@ if ($(".the_form").length) {
             updatePhone($(this));
         });
     });
+
+    $(".the_form").submit(function(e){
+        e.preventDefault;
+        if($(".the_form").valid()){
+            $(".phone").each(function(a){
+                 $(this).rules("remove", "phoneNo")
+                 $(this).val($(this).val().replace(/-/g, ''));
+             });
+            $(this).submit()
+
+        }
+    })
 }

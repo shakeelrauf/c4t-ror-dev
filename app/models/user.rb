@@ -3,12 +3,12 @@ class User < ApplicationRecord
 	include Roles
 	validates :email,  presence: true
  	validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
- 	validates_length_of :password, minimum: 8
+ 	validates_length_of :password, minimum: 8, message: "Password is too short"
 	has_one :user_config
 	before_validation :validate_phone, :on => :create
 
 	def validate_phone
-		if attributes["phone"].length < 10
+		if attributes["phone"] != nil && attributes["phone"].length < 10
 			self.errors.add(:phone, :invalid, message: "Phone Number must be greater than 10")
 		end
 	end
