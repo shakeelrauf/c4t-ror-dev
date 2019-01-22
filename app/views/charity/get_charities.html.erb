@@ -48,14 +48,14 @@
                                                 <tbody class="table-quotes">
                                                 <% @charities.each do |charity| %>
 											                          <tr>
-																									<td><%= charity["name"] %></td>
-											                                                        <td>
-																										<a href="tel:+<%= charity["phone"][0,12] %>">
+												<td><%= charity["name"] %></td>
+											     <td>
+												<a href="tel:+<%= charity["phone"] %>">
 																											<%= phone_number_display(charity["phone"]) if charity["phone"].present? %>
-																										</a>
+								</a>
 																									</td>
-											                                                        <td>
-																										<a href="mailto:<%= charity["email"] %>">
+							<td>
+						<a href="mailto:<%= charity["email"] %>">
 																											<%= charity["email"] %>
 																										</a>
 																									</td>
