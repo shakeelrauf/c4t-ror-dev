@@ -130,7 +130,7 @@ function addCusAddress(address) {
                            <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
                              address.address || "")+`" name="addresses[address][]">
                             <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
-                             address.id || "")+`">
+                             address.id || "")+`" name="addresses[idAddress][]">
                          <label>Address <span class="required">*</span></label>
                      </div>
                   </div>
@@ -268,23 +268,46 @@ $(document).ready(function(){
             return true;
         }
     }
-     $("#saveCustomerButton").click(function(e){
-         if($(".the_form").valid()) {
-             if (valid_fields()) {
-                 $(".phone").each(function(a){
-                     $(this).rules("remove", "phoneNo")
-                     $(this).val($(this).val().replace(/-/g, ''));
-                 });
 
-                 $("#customer-form").submit();
-             }
-             else {
-                 e.preventDefault();
-             }
-         }else{
-             e.preventDefault();
-         }
+    $("#customer-form").validate(RULES);
+      $("input[class*='phone']").each(function () {
+          $(this).rules('add', PHONE_METHOD);
+          $(this).keyup(function () {
+          updatePhone($(this));
+      });
     });
+
+    $("#saveCustomerButton").click(function(e){
+      if(valid_fields() && $("#customer-form").valid()){
+          $(".phone").each(function(a){
+               $(this).rules("remove", "phoneNo")
+               $(this).val($(this).val().replace(/-/g, ''));
+           });
+          $("#customer-form").submit()
+      }
+      else{
+        e.preventDefault();
+      }
+    });
+
+
+    //  $("#saveCustomerButton").click(function(e){
+    //      if($(".the_form").valid()) {
+    //          if (valid_fields()) {
+    //              $(".phone").each(function(a){
+    //                  $(this).rules("remove", "phoneNo")
+    //                  $(this).val($(this).val().replace(/-/g, ''));
+    //              });
+
+    //              $("#customer-form").submit();
+    //          }
+    //          else {
+    //              e.preventDefault();
+    //          }
+    //      }else{
+    //          e.preventDefault();
+    //      }
+    // });
     // $("#customer-form").submit(function(e){
     //     e.preventDefault();
     //     if (valid_fields()){

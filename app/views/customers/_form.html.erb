@@ -23,7 +23,7 @@
             </div>
          </div>
          <!-- Row end -->
-         <%= form_for(@customer, html: {class: 'the_form'}) do |form| %>
+         <%= form_for(@customer, html: {class: '', id: "customer-form" }) do |form| %>
             <div class="row">
                <div class="col-sm-12">
                   <div class="card">
@@ -367,7 +367,7 @@
                      <div class="col-sm-12">
                         <div class="row">
                            <div class="col-lg-12 text-center">
-                              <button type="submit" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" id="saveCustomerButton" data-id-customer="new">Save</button>
+                              <span  class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" id="saveCustomerButton" data-id-customer="new">Save</span>
                               <a href="/customers" class="btn btn-primary waves-effect m-r-20 f-w-600 md-close d-inline-block">Return</a>
                               <br><br>
                            </div>
