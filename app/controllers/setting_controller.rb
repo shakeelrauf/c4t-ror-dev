@@ -1,5 +1,5 @@
 class SettingController < ApplicationController
-
+	include Settings
 	# before_action :authenticate_user
 	# before_action :authenticate_admin, only: [:all, :update]
 	 before_action :login_required
@@ -10,11 +10,11 @@ class SettingController < ApplicationController
 
 	def all
     @edited = false || params[:edited]
-		@settings = ApiCall.get("/settings",{}, headers)
+		@settings = Setting.all
 	end
 
 	def update
-		@settings = ApiCall.put("/settings", JSON.parse(params.to_json), headers)
+		update_settings
 		flash[:success] = 'Setting is successfully Updated!'
     redirect_to settings_path
 	end

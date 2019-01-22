@@ -32,11 +32,11 @@
                                     </div>
                                     <hr>
                                 <% @settings.each do |setting| %>
-                                  <% if (setting["grade"] == nil || setting["grade"] == "") %>
+                                  <% if (setting.grade == nil || setting.grade == "") %>
                                     <div class="form-group row">
-                                        <label class="col-sm-3  col-form-label form-control-label"><%= label(setting["name"]) %></label>
+                                        <label class="col-sm-3  col-form-label form-control-label"><%= label(setting.name) %></label>
                                         <div class="col-sm-9 ">
-                                            <input class="form-control" type="number" step="0.01" onchange="setTwoNumberDecimal" name="<%= setting["name"] %>" value="<%= setting["value"] %>">
+                                            <input class="form-control" type="number" step="0.01" onchange="setTwoNumberDecimal" name="<%= setting.name %>" value="<%= setting.value %>">
                                         </div>
                                     </div>
                                 	<% end %>
@@ -50,25 +50,25 @@
                                         <h6><%= group %> bonus</h6>
                                     </div>
                                     <% @settings.each do |setting| %>
-                                    <% if (setting["grade"] == group ) %>
-                                        <% if (setting["name"] == 'bonus') %>
+                                    <% if (setting.grade == group ) %>
+                                        <% if (setting.name == 'bonus') %>
                                         <div class="form-group row">
                                             <label class="col-sm-3  col-form-label form-control-label">Bonus</label>
                                             <div class="col-sm-9 ">
-                                                <input class="form-control" type="number" onchange="setTwoNumberDecimal" name="--<%= group %>--bonus" value="<%= setting["value"] %>">
+                                                <input class="form-control" type="number" onchange="setTwoNumberDecimal" name="--<%= group %>--bonus" value="<%= setting.value %>">
                                             </div>
                                         </div>
                                         <% end %>
-                                        <% if (setting["name"] == 'bonus-type') %>
+                                        <% if (setting.name == 'bonus-type') %>
                                         <div class="form-group row">
                                             <label class="col-sm-3  col-form-label form-control-label"></label>
                                             <div class="col-sm-9 ">
                                               <div class="md-input-wrapper">
                                                 <select name="--<%= group %>--bonus-type">
-                                                  <option value="steelp" <%= (setting["value"] == 'steelp' ? 'selected' : '') %>>% on the steel price</option>
-                                                  <option value="steeld" <%= (setting["value"] == 'steeld' ? 'selected' : '') %>>$ on the steel price</option>
-                                                  <option value="carp"   <%= (setting["value"] == 'carp' ? 'selected' : '') %>>% on the car price</option>
-                                                  <option value="card"   <%= (setting["value"] == 'card' ? 'selected' : '') %>>$ on the car price</option>
+                                                  <option value="steelp" <%= (setting.value == 'steelp' ? 'selected' : '') %>>% on the steel price</option>
+                                                  <option value="steeld" <%= (setting.value == 'steeld' ? 'selected' : '') %>>$ on the steel price</option>
+                                                  <option value="carp"   <%= (setting.value == 'carp' ? 'selected' : '') %>>% on the car price</option>
+                                                  <option value="card"   <%= (setting.value == 'card' ? 'selected' : '') %>>$ on the car price</option>
                                                 </select>
                                               </div>
                                             </div>
@@ -94,7 +94,6 @@
 </div>
 
 
-</script>
 <% content_for :js do %>
     <script type="text/javascript">
         function growlOfSuccess(message) {
