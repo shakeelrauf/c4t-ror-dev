@@ -31,14 +31,16 @@ class SendFormController < ApplicationController
       cfg =  user.cfg
       cfg.reinit_pw
       locals = {:key=>cfg.pw_reinit_key, :pid=>user.id.to_s}
+      reset_link = "#{root_url}/pw_init/#{locals[:pid]}/#{locals[:key]}"
       puts "#{root_url}/pw_init/#{locals[:pid]}/#{locals[:key]}"
+      PasswordMailer.forget_password(user, reset_link).deliver_now
       cfg.save!
       user.save!
       res = render_to_string partial: "send_form/forgot_reset", locals: locals
-      build_and_send_email_domain("Reset Password",
-                                    "send_form/pass_init_email",
-                                    user.email,
-                                    locals)
+      # build_and_send_email_domain("Reset Password",
+      #                               "send_form/pass_init_email",
+      #                               user.email,
+      #                               locals)
       respond_json({data: res})
     else
       respond_error("Username not found")

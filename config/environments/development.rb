@@ -36,7 +36,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
 
@@ -56,6 +56,7 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -63,4 +64,15 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'gmail.com',
+    user_name:            'talha.waseem@phaedrasolutions.com',
+    password:             'talha123',
+    authentication:       :plain,
+    enable_starttls_auto: true
+  }
 end
