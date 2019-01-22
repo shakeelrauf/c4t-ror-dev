@@ -1,3 +1,6 @@
 .card-block {
     padding: 1.25rem 0 0.25rem 0.25rem;
 }
+#cke_17, #cke_25, #cke_30, #cke_34, #cke_43, #cke_53, #cke_56{
+  display: none;
+}
