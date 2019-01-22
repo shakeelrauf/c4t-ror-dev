@@ -37,8 +37,8 @@
 						<ul>
 							<li class="faq-contact-card">
 								<i class="icofont icofont-phone"></i>
-								<a href="tel:+<%= @customer["phone"] %>">
-									+<%= IsValid.phone( @customer["phone"]) %>
+								<a href="tel:<%= @customer["phone"] %>">
+									<%= phone_number_display( @customer["phone"]) %>
 								</a>
 								<% if @customer["extension"] != "" %>
 									#<%= @customer["extension"] %>
