@@ -146,7 +146,7 @@ function filtingQuotes() {
                             <select class="quote-status-list form-control badge badge-`+backgroundType+`" data-quote-no="`+quote["idQuote"]+`">
                             </select>
                         </td>
-                        <td class="timerFromLastStatus" data-timer="` + (moment().diff(moment(quote["dtStatusUpdated"]), "s") || 0) + `">0m</td>
+                        <td class="timerFromLastStatus`+quote["idQuote"]+`"  data-timer="` + (moment().diff(moment(quote["dtStatusUpdated"]), "s") || 0) + `"></td>
                         <td class="faq-table-btn">
                             <a href="/quotes/`+quote["idQuote"]+`/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                 <i class="icofont icofont-ui-edit"></i>
@@ -159,6 +159,7 @@ function filtingQuotes() {
                                     `+stat["name"]+`
                                 </option>`);
                 });
+                date_quotes(quote["idQuote"], quote["dtStatusUpdated"]);
             });
         });
     });
