@@ -8,7 +8,7 @@ class User < ApplicationRecord
 	before_validation :validate_phone, :on => :create
 
 	def validate_phone
-		if attributes["phone"].length < 10
+		if attributes["phone"] != nil && attributes["phone"].length < 10
 			self.errors.add(:phone, :invalid, message: "Phone Number must be greater than 10")
 		end
 	end
