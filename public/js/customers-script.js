@@ -274,8 +274,6 @@ $(document).ready(function(){
                  $(".phone").each(function(a){
                      $(this).rules("remove", "phoneNo")
                      $(this).val($(this).val().replace(/-/g, ''));
-                     debugger
-
                  });
 
                  $("#customer-form").submit();
