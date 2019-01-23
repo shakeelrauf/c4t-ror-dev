@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  price_increase: 1
+  deduction_money_figure: 1
+  user: one
+
+two:
+  price_increase: 1
+  deduction_money_figure: 1
+  user: two
