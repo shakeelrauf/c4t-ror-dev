@@ -94,7 +94,7 @@ class SendFormController < ApplicationController
     u.password = u.encrypt_pw(pw)
     u.save!
     start_session u, u.accessToken
-    redirect_to "/dashboard"
+    return respond_ok
   end
 
   def pw_init
