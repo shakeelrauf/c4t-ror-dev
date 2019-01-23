@@ -6,6 +6,7 @@ class Api::V1::DistanceController < ApiController
 		return render_json_response(response, :ok)
   end
 
+	# This api will be used by the mobile
   def distance
   	origin = "7628 Flewellyn Rd Stittsville, ON, K2S1B6"
     destination = params[:postal] + " Canada"
