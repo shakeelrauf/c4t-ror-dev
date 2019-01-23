@@ -90,15 +90,13 @@ if ($(".the_form").length) {
         });
     });
 
-    $(".the_form").submit(function(e){
-        e.preventDefault;
+    $(".save-form").click(function(e){
         if($(".the_form").valid()){
             $(".phone").each(function(a){
                  $(this).rules("remove", "phoneNo")
                  $(this).val($(this).val().replace(/-/g, ''));
              });
-            $(this).submit()
-
+            $(".the_form").submit()
         }
     })
 }

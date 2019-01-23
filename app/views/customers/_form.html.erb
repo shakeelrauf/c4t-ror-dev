@@ -195,7 +195,7 @@
                              <% if action_name == "edit" && customer_address(@customer).present? %>
                                <%= render :partial => 'customers/edit_address', locals: { addresses: customer_address(@customer) } %>
                              <% elsif action_name == "new" %>
-                              <div class="col-lg-12 row address-edit" id="addressundefined">
+                              <div class="col-lg-12 row address-edit" id="mathaddress">
                                  <div class="col-lg-4 md-group-add-on">
                                     <span class="md-add-on">
                                     <i class="icofont icofont-address-book"></i>
@@ -246,7 +246,7 @@
                                        </div>
                                     </div>
                                     <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                                       <span onclick="removeAddress(undefined)" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
+                                       <span onclick="removeAddress('mathaddress')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
                                        <i class="icofont icofont-ui-remove"></i>
                                        </span>
                                     </div>
@@ -256,13 +256,8 @@
                               <% end %>
                            </div>
                            <div class="col-lg-12">
-                              <% if action_name == "edit" %>
-                                 <a href="javascript:addCusAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
-                                 </a>
-                              <% else %>
-                                 <span  class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
-                                 </span>
-                              <% end %>
+                              <a href="javascript:addCusAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
+                              </a>
                            </div>
                         </div>
                         <hr>
