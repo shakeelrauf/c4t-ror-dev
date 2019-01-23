@@ -262,6 +262,13 @@
        if(CKEDITOR.instances.note_ == undefined){
          CKEDITOR.replaceAll();
        }
+       $(".cke_toolbar").eq(0).hide();
+       $(".cke_toolbar").eq(1).hide();
+       $(".cke_toolbar").eq(2).hide();
+       $(".cke_toolbar").eq(3).hide();
+       $(".cke_toolbar").eq(4).hide();
+       $(".cke_toolbar").eq(5).hide();
+       $(".cke_toolbar").eq(6).hide();
      });
       $(".tab-pane").removeClass("active");
       var quoteNo = (<%= quote.idQuote || "null" %>);
