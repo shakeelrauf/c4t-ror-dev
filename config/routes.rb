@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     post '/charities',                          action: :create
     get '/update',                     					action: :update
   end
-  
+
   scope  controller: :heardofus do
     get '/heardofus',                           action: :get_heardsofus
     get '/heardofus/add',              	 				action: :new
@@ -85,12 +85,18 @@ Rails.application.routes.draw do
     get '/quotes',                       		 action: :all_quotes
     get '/create-quote',                     action: :create, 						 as: :create_quote
 	end
-	
+
   resources :customers
   scope controller: :customers do
     get '/customers/id/:no/json',             action: :get_customer
     get '/customers/:customerId/postal-select2', action: :postal_list
   end
+
+	scope controller: :distance do
+		get  "/distance/:postal",            action: :distance, defaults: { format: 'json' }
+		post :distancediff,                  action: :distancediff, defaults: { format: 'json' }
+	end
+
   namespace :api do
 		namespace :v1 do
 			scope controller: :address do
@@ -173,7 +179,7 @@ Rails.application.routes.draw do
     	end
 
 			scope controller: :schedules do
-				resources :schedules, :param => :no, :only => [:index,:create,:show,:destroy] 
+				resources :schedules, :param => :no, :only => [:index,:create,:show,:destroy]
 			end
 
 			scope controller: :sms do

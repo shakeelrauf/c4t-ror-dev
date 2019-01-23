@@ -13,9 +13,9 @@ class Api::V1::DistanceController < ApiController
 		return render_json_response(response, :ok)
   end
 
-  private 
+  private
   def get_distanc(origin, destination)
-  	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&key=#{ENV["GOOGLE_MAP_TOKEN"]}&origins=#{origin}&destinations=#{destination}" 
+  	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&key=#{ENV["GOOGLE_MAP_TOKEN"]}&origins=#{origin}&destinations=#{destination}"
 		response = get_request(url)
     response
   end
