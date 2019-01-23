@@ -258,6 +258,11 @@
 <% content_for :js do %>
 
   <script>
+    $(document).ready(function(){
+       if(CKEDITOR.instances.note_ == undefined){
+         CKEDITOR.replaceAll();
+       }
+     });
       $(".tab-pane").removeClass("active");
       var quoteNo = (<%= quote.idQuote || "null" %>);
   </script>
