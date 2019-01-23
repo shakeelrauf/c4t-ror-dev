@@ -11,12 +11,12 @@
         <td class="faq-table-btn">
             <%# if user.roles == "admin" || user.roles == "dispatcher"  %>
             <a href="/customers/<%= customer["idClient"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
-							<i class="icofont icofont-ui-edit"></i>
-						</a>
+				<i class="icofont icofont-ui-edit"></i>
+			</a>
             <%# end %>
-						<a href="/customers/<%= customer["idClient"] %>" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
-							<i class="icofont icofont-eye-alt"></i>
-						</a>
+			<a href="/customers/<%= customer["idClient"] %>" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+				<i class="icofont icofont-eye-alt"></i>
+			</a>
         </td>
     </tr>
   <% end %>

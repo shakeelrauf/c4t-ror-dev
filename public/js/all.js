@@ -85,7 +85,7 @@ if ($(".the_form").length) {
     $(".the_form").validate(RULES);
     $("input[class*='phone']").each(function () {
         $(this).rules('add', PHONE_METHOD);
-        $(this).keyup(function () {
+        $(this).keydown(function () {
             updatePhone($(this));
         });
     });
