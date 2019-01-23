@@ -130,8 +130,8 @@ Rails.application.routes.draw do
 			end
 
 			scope controller: :distance do
-				get  "/distance/:postal",            action: :distance
-				post :distancediff,                  action: :distancediff
+				get  "/distance/:postal",            action: :distance,     defaults: { format: 'json' }
+				post :distancediff,                  action: :distancediff, defaults: { format: 'json' }
       end
 
       scope controller: :heardofus do
