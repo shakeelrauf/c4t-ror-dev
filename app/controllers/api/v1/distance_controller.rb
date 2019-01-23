@@ -9,14 +9,15 @@ class Api::V1::DistanceController < ApiController
   def distance
   	origin = "7628 Flewellyn Rd Stittsville, ON, K2S1B6"
     destination = params[:postal] + " Canada"
-    response = getDistance(origin, destination)
+    response = get_distance(origin, destination)
 		return render_json_response(response, :ok)
   end
 
-  private 
-  def get_distanc(origin, destination)
-  	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&key=#{ENV["GOOGLE_MAP_TOKEN"]}&origins=#{origin}&destinations=#{destination}" 
+  private
+  def get_distance(origin, destination)
+  	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&key=#{ENV['GOOGLE_MAP_TOKEN']}&origins=#{origin}&destinations=#{destination}"
 		response = get_request(url)
-    response
+		puts response
+		response
   end
 end
