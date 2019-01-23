@@ -16,7 +16,6 @@
 //= require jquery-ui/js/jquery-ui.min.js
 //= require popper.js/js/popper.min.js
 //= require bootstrap/js/bootstrap.min.js
-//= require waves/js/waves.min.js
 //= require jquery-slimscroll/js/jquery.slimscroll.js
 //= require jquery.nicescroll/js/jquery.nicescroll.min.js
 //= require classie/js/classie.js
@@ -32,7 +31,6 @@
 //= require charts/flot/js/jquery.flot.js
 //= require charts/flot/js/jquery.flot.categories.js
 //= require charts/flot/js/jquery.flot.pie.js
-//= require main.min.js
 //= require menu.js
 //= require pages/calendar.js
 //= require pages/distance.js

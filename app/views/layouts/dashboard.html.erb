@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
     <%= stylesheet_link_tag 'dashboard.css' %>
+    <%= javascript_include_tag 'dashboard.js' %>
+
   </head>
   <body class="sidebar-mini fixed">
     <div class="loading hidden">
@@ -22,8 +24,10 @@
     <%= render :partial => 'shared/header' %>
     <%= render :partial => 'shared/menu' %>
     <%= yield %>
-    <%= javascript_include_tag 'dashboard.js' , 'data-turbolinks-track': 'reload' %>
-    <%= render :partial => 'shared/head' %>
+    <%= javascript_include_tag "waves/js/waves.min.js" %>
+    <%= javascript_include_tag "main.min.js" %>
+
     <%= yield :js %>
+    <%= render :partial => 'shared/head' %>
   </body>
 </html>

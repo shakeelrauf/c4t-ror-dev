@@ -87,29 +87,28 @@
 </div>
 <% content_for :js do %>
 <script>
-    var heardofus =<%= heardofus.to_json.to_s.html_safe %>;
-    function donutChart(){
-        $.plot("#heardOfUs", heardofus, {
-            series: {
-                pie: {
-                    innerRadius: 0.4,
-                    radius: 0.6,
-                    show: true,
-                    label: {
-                        show: true
+    $(document).ready(function() {
+        var heardofus =<%= heardofus.to_json.to_s.html_safe %>;
+        function donutChart(){
+            $.plot("#heardOfUs", heardofus, {
+                series: {
+                    pie: {
+                        innerRadius: 0.4,
+                        radius: 0.6,
+                        show: true,
+                        label: {
+                            show: true
+                        }
                     }
+                },
+                legend: {
+                    show: false
                 }
-            },
-            legend: {
-                show: false
-            }
-        });
-    };
-    donutChart();
-  $(document).ready(function(){
-     $(window).resize(function() { donutChart(); });
-     donutChart();
-   });
+            });
+        };
+        $(window).resize(function() { donutChart(); });
+        donutChart();
 
+    });
 </script>
 <% end %>
