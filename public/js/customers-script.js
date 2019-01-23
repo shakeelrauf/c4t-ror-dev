@@ -33,7 +33,7 @@ function growling(message) {
 }
 
 function removeAddress(addressId) {
-    if (confirm("Are you sure? We'll verify if there quotes associated with this address first.")) {
+    if (confirm("Are you sure?")) {
       if (!addressId.toString().includes("math")){
          $.ajax({
              method: "POST",

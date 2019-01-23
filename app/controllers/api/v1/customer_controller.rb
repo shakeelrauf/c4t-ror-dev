@@ -40,13 +40,16 @@ class Api::V1::CustomerController < ApiController
           client.customPercSteel = customPercSteel
           client.save!
           params[:addresses].each do |a|
-            puts "ADDRESS ADDING :: #{a["address"]}"
-            newAddress = client.address.new( address: a["address"],city: a["city"],postal: a["postal"],province: a["province"].upcase)
-            #need map api keys to get distance
-            distance = JSON.parse(get_distance(newAddress))
-            # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
-            newAddress.distance = (distance["rows"][0]["elements"][0]["distance"]["value"] + distance["rows"][0]["elements"][0]["distance"]["value"])
-            newAddress.save!
+            if a.present?
+              puts "ADDRESS ADDING :: #{a["address"]}"
+              prvc = a["province"].present? ? a["province"].upcase : a["province"]
+              newAddress = client.address.new( address: a["address"],city: a["city"],postal: a["postal"],province: prvc)
+              #need map api keys to get distance
+              distance = JSON.parse(get_distance(newAddress))
+              # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
+              newAddress.distance = (distance["rows"][0]["elements"][0]["distance"]["value"] + distance["rows"][0]["elements"][0]["distance"]["value"])
+              newAddress.save!
+            end
             # if params[:company].eql?("0") #prev
           end
           if !params[:type].eql?("Individual")
