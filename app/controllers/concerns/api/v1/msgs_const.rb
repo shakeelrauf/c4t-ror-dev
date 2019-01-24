@@ -5,7 +5,6 @@ module Api::V1::MsgsConst
 	NO_MORE_TOKEN_MSG  = "No more token!"
 	MISSING_PARAMS_MSG = "Missing parameters"
 	INVALID_CREDENTIALS = "Invalid Authentication"
-	INVALID_AUTH= 'Invalid Authentication'
 	BOOKING= 'Booking saved'
 	BOOKING_FAILED="Booking cannot be saved"
 	CHARITIE_NOT_FOUND="Charitie not found."
