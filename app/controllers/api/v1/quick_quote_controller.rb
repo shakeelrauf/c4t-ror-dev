@@ -12,7 +12,7 @@ class Api::V1::QuickQuoteController < ApiController
     if (!params[:firstName].present? || !params[:lastName].present? || !params[:postal].present? || !params[:heardofus].present? || !params[:phone].present?)
       return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
 		else
-      params[:postal] = IsValid.postal(params[:postal])
+      params[:postal] = Validations.postal(params[:postal])
       if (params[:postal].length != 7)
       	return render_json_response({:error => "The postal code seems invalid."}, :bad_request)
       end

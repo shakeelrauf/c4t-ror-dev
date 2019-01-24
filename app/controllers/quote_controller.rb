@@ -14,7 +14,10 @@ class QuoteController < ApplicationController
 
   def car_price
     return respond_json({"netPrice": nil}) if params[:missingWheel] == "" || params[:missingBattery] == "" || params[:missingCat] == ""
-    quote = ApiCall.get("/quotes/#{params[:quoteId]}", {}, headers)
+    quote = JSON.parse Quote.includes(:dispatcher,customer: [:address,:heardofus]).where(idQuote: params[:quoteId]).first.to_json(include: [:dispatcher,{:customer => {include: [:address, :heardofus]}}])
+    return respond_json({"netPrice": nil}) if quote.nil?
+    cars = JSON.parse QuoteCar.where(idQuote: params[:no]).to_json
+    quote["cars"] = cars
     car_distance =  params[:distance]
     car_distance = car_distance.to_i if car_distance.present?
     excessDistance = 0.0
@@ -70,30 +73,36 @@ class QuoteController < ApplicationController
   end
 
   def vehicle_json
-    vehicle = ApiCall.get("/vehicles/#{params[:no]}", {}, headers)
+    vehicle = VehicleInfo.where(idVehiculeInfo: params[:no]).first
     respond_json(vehicle)
   end
 
   def vehicle_list
-    vehicles = ApiCall.get("/vehicles?filter=#{params[:q]}&offset=#{params[:offset]}", {},headers)
+    vehicles = vehicles_search(params[:limit], params[:offset], params[:q])
     groups, item = [], {}
     vehicles.each do |vehicle|
-      if vehicle["make"] == "Other"
+      if vehicle.make == "Other"
         item["text"]= "Other"
       else
-        item["text"] = vehicle["make"] + " " + vehicle["year"] + " " + vehicle["model"] + " " + vehicle["body"] + " " + vehicle["trim"] + " " + vehicle["transmission"] + " " + vehicle["drive"] + " " + vehicle["doors"] + " doors and " + vehicle["seats"] + " seats."
-        item["id"] = vehicle["idVehiculeInfo"]
+        item["text"] = vehicle.make + " " + vehicle.year + " " + vehicle.model + " " + vehicle.body + " " + vehicle.trim + " " + vehicle.transmission + " " + vehicle.drive + " " + vehicle.doors + " doors and " + vehicle.seats + " seats."
+        item["id"] = vehicle.idVehiculeInfo
         created = false
         groups.length.times do |i|
-          if groups[i]["text"] == vehicle["make"]
+          if groups[i]["text"] == vehicle.make
             groups[i]["children"].push(item)
             created = true
             break
           end
         end
-        groups.push({text: vehicle["make"], children: [item]}) if !created
+        groups.push({text: vehicle.make, children: [item]}) if !created
       end
     end
+    # if !groups["#{vehicle.make}"]
+    #   groups["#{vehicle.make}"] = vehicle.make
+    #   groups["#{vehicle.make}"] = [item]
+    # else
+    #   groups["#{vehicle.make}"].push(item)
+    # end
     returned = {}
     returned[:results] = groups
     returned[:pagination] = {}
@@ -107,7 +116,8 @@ class QuoteController < ApplicationController
   end
 
   def phone_list
-    phones =  ApiCall.get("/client/phones?search=#{params[:search]}&limit=#{params[:limit]}&offset=#{params[:offset]}",{}, headers)
+    phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
+    #ApiCall.get("/client/phones?search=#{params[:search]}&limit=#{params[:limit]}&offset=#{params[:offset]}",{}, headers)
     returned = {
         results: [],
         pagination: {
@@ -116,8 +126,7 @@ class QuoteController < ApplicationController
     }
     returned[:pagination][:more] = false if phones.length < params[:limit].to_i
     phones.each do |phone|
-      client = JSON.parse ApiCall.get("/clients/#{phone["idClient"]}", {}, headers)
-
+      client = JSON.parse phone.to_json
       client["phone"] =  client["cellPhone"] if client["phone"].match(params[:search]) && client["cellPhone"].match(params[:search])
       client["phone"] =  client["secondaryPhone"] if client["phone"].match(params[:search]) && client["secondaryPhone"].match(params[:search])
       returned[:results].push({
@@ -139,13 +148,21 @@ class QuoteController < ApplicationController
   end
 
   def create
-    quickquote =  ApiCall.post("/quotes", {}, headers)
-    redirect_to edit_quote_path(id: quickquote["idQuote"])
+    quickquote =  create_quote
+    redirect_to edit_quote_path(id: quickquote.id)
   end
 
   def create_car
-    quote_car = ApiCall.post("/create-car",quote_car_params, headers)
-    respond_json(quote_car)
+    @car = QuoteCar.new(
+        idQuote: params[:quote],
+        idCar: params[:veh],
+        missingWheels: 0,
+        missingBattery: nil,
+        missingCat: nil,
+        gettingMethod: "pickup",
+        )
+    @car.save!
+    respond_json(@car)
   end
 
 	def edit_quotes
@@ -204,5 +221,52 @@ class QuoteController < ApplicationController
   private
   def quote_car_params
     {quote: params[:quote],veh: params[:veh]}
+  end
+
+
+  def create_quote
+    settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
+    settings_hash = {}
+    settings.each do |setting|
+      settings_hash[setting["name"]] = setting["value"]
+    end
+    count = Quote.where(dtCreated: DateTime.now.strftime("%Y-%m-01 00:00:00")).count
+    reference = DateTime.now.strftime("%Y%m") +("0000"+( count+1).to_s).last(4)
+    quote = Quote.create(
+        idUser: current_user.idUser,
+        referNo: reference,
+        smallCarPrice: settings_hash["smallCarPrice"] || "0",
+        midCarPrice: settings_hash["midCarPrice"] || "0",
+        largeCarPrice: settings_hash["largeCarPrice"] || "0",
+        steelPrice: settings_hash["steelPrice"] || "0",
+        wheelPrice: settings_hash["wheelPrice"] || "0",
+        catPrice: settings_hash["catalysorPrice"] || "0",
+        batteryPrice: settings_hash["batteryPrice"] || "0",
+        excessCost: settings_hash["excessPrice"] || "0",
+        freeDistance: settings_hash["freeDistance"] || "0",
+        pickup: settings_hash["pickup"] || "0",
+        dtCreated: DateTime.now,
+        dtStatusUpdated: DateTime.now
+    )
+    return quote
+  end
+
+  def vehicles_search(limit, offset, q)
+    limit = 30
+    offset = 0
+    limit = (limit.present? ? limit.to_i : 30)
+    offset = ((offset.to_i) * limit) if offset != "-1"
+    if q.present?
+      filter = + q.gsub(/[\s]/, "% %") + "%"
+      filters = filter.split(' ')
+      query = "Select * from VehiculesInfo where"
+      filters.each do |fil|
+        query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
+        query.concat(" AND ") if !fil.eql?(filters.last)
+      end
+      r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
+    end
+    r_vehicles = VehicleInfo.all.limit(limit).offset(offset) if !q.present?
+    return r_vehicles
   end
 end

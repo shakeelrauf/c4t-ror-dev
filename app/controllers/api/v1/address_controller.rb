@@ -6,9 +6,9 @@ class Api::V1::AddressController < ApiController
 
 	def client_address
 		return render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :not_found) if check_params
-		r_address = IsValid.address(params[:address] + " " + params[:city] + ", " + params[:province])
+		r_address = Validations.address(params[:address] + " " + params[:city] + ", " + params[:province])
 		return render_json_response({:error => ADDRESS_NOT_EXIST_MSG, :success => false}, :not_found) if r_address == false
-		address_components = IsValid.format_address_components(r_address["address_components"])
+		address_components = Validations.format_address_components(r_address["address_components"])
 		distance = get_distance(r_address)
     going, returning  =  0,0
     going , returning = distance["rows"][0]["elements"][1]["distance"]["value"],distance["rows"][1]["elements"][0]["distance"]["value"] if check_address(distance)

@@ -1,4 +1,4 @@
-class IsValid
+class Validations
 	def self.address item, callback=nil
 		url = "https://maps.googleapis.com/maps/api/geocode/json?key=#{ENV['GOOGLE_MAP_TOKEN']}&address=#{item}"
 		r_address = HTTParty.get(url)
