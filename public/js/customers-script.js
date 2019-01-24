@@ -384,13 +384,15 @@ $(".quote-status-list").change(function() {
   });
 });
 
+// $(document).on('turbolinks:load', function() {
 $(document).ready(function() {
   $("#quote-datatable").DataTable({
     "paging": false,
     "searching": true,
     "info":     false,
     "order": [],
-    "fixedHeader": true
+    "fixedHeader": true,
+    "destroy": true,
   });
   $("#quote-datatable_filter").css({"visibility": "hidden","height": "0px"});
   $("#quote-datatable_length").css({"visibility": "hidden","height": "0px"});

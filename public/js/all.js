@@ -100,3 +100,8 @@ if ($(".the_form").length) {
         }
     })
 }
+$(document).on('turbolinks:load', function() {
+   $(window).on('popstate', function() {
+      location.reload(true);
+   });
+});
