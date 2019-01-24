@@ -36,6 +36,18 @@ $(document).ready(function() {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
+                $(".car-location-select2").each(function(index) {
+                    if($(".hiddenaddress").html().trim().length > 0){
+                        var address = JSON.parse($(".hiddenaddress").html());
+                        $("#car-location"+car.idQuoteCars).append("<option value="+address.postal+" data-select2-tag='true' >"+address.postal+"</option>");
+                        getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
+                            $("#car-distance" + carId).val(distance);
+                            updateCarWithDistance(distance, car.idQuoteCars);
+                            showCarNewAddress(address.postal, car.idQuoteCars);
+                        });
+                    }
+                    createPostalSelect2($(this));
+                });
                 $(".tab-details").append(`
                 <li id="car-tab` + car.idQuoteCars + `" class="nav-item car"` + car.idQuoteCars + ` veh-`+ veh.idVehiculeInfo + `" style="display:block">
                     <a class="nav-link active" data-toggle="tab" href="#tab` + car.idQuoteCars + `" role="tab">
@@ -65,6 +77,7 @@ $(document).ready(function() {
                 // sumTotal();
                 calcPrice(car.idQuoteCars,car.idQuote);
                 $('#txtVehicleFilter').html("");
+                callModal();
                 $("#car-location" + car.idQuoteCars).val($(".hiddenaddress").data("customeraddress"))
                 $(".selectcashcar .select2-selection__rendered").html("");
                 // Make the car postal selecter a select2
@@ -555,8 +568,8 @@ function fillCustomer(data) {
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
-    $(".hiddenaddress").attr("data-customeraddress", data.address.address)
-    if (data.has_quote == true) {
+    $(".hiddenaddress").html(JSON.stringify(data.address[0]))
+    if (data.quotes.length >= 1) {
       $("select[name=heardOfUs]").val("Repeat Customer");
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);

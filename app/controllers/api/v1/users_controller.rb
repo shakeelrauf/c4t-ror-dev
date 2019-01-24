@@ -43,7 +43,7 @@ class Api::V1::UsersController < ApiController
     elsif (params[:firstName] == nil || params[:lastName == nil] || !params[:email] || !params[:username] || params[:roles] == nil)
       return render_json_response({:error => "Please send all require attributes."}, :ok)
     else
-      phoneNumber = IsValid.phone(params[:phoneNumber])
+      phoneNumber = Validations.phone(params[:phoneNumber])
       if (params[:phoneNumber] != "" && phoneNumber == false)
         return render_json_response({:error => "phoneNumber must contain a valid phone number."}, :bad_request)
       else

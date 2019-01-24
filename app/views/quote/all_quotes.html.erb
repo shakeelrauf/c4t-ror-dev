@@ -117,7 +117,7 @@
                                                     </td>
                                                     <td>
                                                       <% if (quote.customer) %>
-                                                        <%= IsValid.phone(quote.customer.phone) %>
+                                                        <%= Validations.phone(quote.customer.phone) %>
                                                       <% end %>
                                                     </td>
                                                       <td><%= !quote.dtCreated.nil? ? quote.dtCreated.to_datetime.strftime("%Y-%m-%d %H:%M") : "" %></td>

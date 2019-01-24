@@ -18,7 +18,8 @@ class CustomersController < ApplicationController
 
   def postal_list
     s = params[:search] || ""
-    addresses = ApiCall.get("/clients/#{params[:customerId]}/postal?search=#{s}", {}, headers)
+    addresses =  Address.select('idAddress AS id, idClient, address, city, province, distance, postal').where('postal LIKE ? and idClient = ?', s, params[:customer_id])
+
     returned = {
         results: [],
         pagination: {
@@ -27,10 +28,10 @@ class CustomersController < ApplicationController
     }
     addresses.each do |address|
       t = ""
-      t += address["address"] + ", " if address["address"] && address["address"] != ""
-      t += address["city"] + ", " if address["city"] && address["city"] != ""
-      t += address["province"] + ", " if address["province"] && address["province"] != ""
-      returned[:results].push({id: address["idAddress"], text: t+ address["postal"]})
+      t += address.address + ", " if address.address && address.address != ""
+      t += address.city + ", " if address.city && address.city != ""
+      t += address.province + ", " if address.province && address.province != ""
+      returned[:results].push({id: address.idAddress, text: t+ address.postal})
     end
     respond_json(returned)
   end
@@ -54,14 +55,10 @@ class CustomersController < ApplicationController
   end
 
   def get_customer
-    res = ApiCall.get("/clients/#{params[:no]}", {}, headers)
-    cus = JSON.parse(res)
-    customer = Customer.where(phone: cus["phone"])
-    if customer.first.quotes.present?
-      cus["has_quote"] = true
-      res = cus.to_json
-    end
-    respond_json(res)
+    customer = Customer.includes(:address,:heardofus,:quotes,business: [:contacts]).where(idClient: params[:no]).first
+    cus = JSON.parse(customer.to_json(include: [:address,:heardofus,:quotes, business: {include: :contacts}]))
+    cus["has_quote"] = true   if customer.quotes.present?
+    respond_json(cus)
   end
 
   private

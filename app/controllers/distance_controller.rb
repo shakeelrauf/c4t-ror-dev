@@ -1,10 +1,12 @@
 class DistanceController < ApplicationController
   before_action :login_required
+  include Api::V1::Request
+  include Distancemethods
 
 	def distance
     postal = params[:postal].gsub(/\s/,'')
     # This api will be used by the mobile
-    dist_res = ApiCall.get("/distance/#{postal}", {}, headers)
+    dist_res = calculate
     dist = JSON.parse(dist_res)
     puts dist_res
     if (dist.present? &&
