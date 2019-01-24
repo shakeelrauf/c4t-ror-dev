@@ -1,6 +1,7 @@
 class HeardofusController < ApplicationController
 	# before_action :authenticate_user
 	# before_action :authenticate_admin
+	 before_action :login_required
 	# before_action :check_type, only: [:heardsofus, :update]
 
 	def create

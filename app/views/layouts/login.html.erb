@@ -11,13 +11,13 @@
     <link rel="icon" href="<%= image_url 'favicon.ico' %>" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
     <%= stylesheet_link_tag 'login.css' %>
+    <%= javascript_include_tag 'login.js' %>
   </head>
   <body>
     <div class="loading hidden">
       <%= image_tag 'preloader.svg' %>
     </div>
     <%= yield %>
-    <%= javascript_include_tag 'login.js' %>
 
     <%= yield :js %>
   </body>
