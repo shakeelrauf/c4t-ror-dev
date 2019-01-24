@@ -13,7 +13,7 @@ class Api::V1::QuickQuoteController < ApiController
       return render_json_response({:error => "Please send all required customer attributes."}, :bad_request)
 		else
       params[:postal] = IsValid.postal(params[:postal])
-      if (params[:postal].length < 6 || params[:postal].length > 7)
+      if (params[:postal].length != 7)
       	return render_json_response({:error => "The postal code seems invalid."}, :bad_request)
       end
       phone = ""

@@ -29,7 +29,7 @@ class IsValid
 			end
 			return expression
 		elsif (!allow_negative_value && /^\d+(\.\d{1,2})?$/.match(expression))
-			if(!/^\.\d$/.match(expression.last(2)) && !/^\.\d{2}$/.match(expression.last(3))) 
+			if(!/^\.\d$/.match(expression.last(2)) && !/^\.\d{2}$/.match(expression.last(3)))
 				expression += ".00"
 			elsif (/^\.\d$/.match(expression.last(2)))
 				expression += "0"
@@ -103,15 +103,19 @@ class IsValid
   end
 
   def self.postal expression
-    if expression.match("^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}(\-| |){1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}$")
-      return ""
-    else
-      expression =  expression.upcase
-      if expression.length == 7
-        expression =  expression[0,3] +  expression[4,6]
-      end
-      return expression
-    end
+		e = expression.gsub(/\s/, '')
+		return "#{e[0,3]} #{e[3,6]}" if e.match("^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}$")
+		return ""
+
+    # if expression.match("^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}(\-| |){1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}$")
+    #   return ""
+    # else
+    #   expression =  expression.upcase
+    #   if expression.length == 7
+    #     expression =  expression[0,3] +  expression[4,6]
+    #   end
+    #   return expression
+    # end
   end
 
   def self.role expression
