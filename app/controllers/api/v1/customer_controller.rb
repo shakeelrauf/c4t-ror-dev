@@ -50,7 +50,6 @@ class Api::V1::CustomerController < ApiController
               newAddress.distance = (distance["rows"][0]["elements"][0]["distance"]["value"] + distance["rows"][0]["elements"][0]["distance"]["value"])
               newAddress.save!
             end
-            # if params[:company].eql?("0") #prev
           end
           if !params[:type].eql?("Individual")
             busi = client.build_business({
@@ -61,16 +60,7 @@ class Api::V1::CustomerController < ApiController
               gstTaxNo: params[:gstTaxNo]})
             if busi.save
               create_contacts(params, busi)
-              #prev
-              # client.business = {}; 
-              # comp = Business.where(params[:id]).first
-              # if comp.present?
-              #   client.business = comp
-                # return render_json_response(client, :ok) #prev
-              # end
             end
-          else
-            # return render_json_response(client, :ok) #prev
           end
           return render_json_response(client, :ok)
         else
@@ -139,18 +129,8 @@ class Api::V1::CustomerController < ApiController
           clientNote.update(idHeardOfUs: heardofus.id, firstName: params[:firstName], lastName: params[:lastName], email: params[:email],
               type: params[:type], phone: params[:phoneNumber], extension: params[:extension], cellPhone: params[:phoneNumber2], secondaryPhone: params[:phoneNumber3],
               note: params[:note], grade: params[:grade], customDollarCar: customDollarCar, customDollarSteel: customDollarSteel, customPercCar: customPercCar, customPercSteel: customPercSteel) if clientNote.present?
-          # params[:addresses].each do |a|
-          #   return render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request) if  !address.address || !address.city || !address.postal || !address.province
-          # end
           params[:addresses].each do |a|
-            # if address.idAddress.eql?('') #prev
             if address
-              #prev
-              # addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
-              #               idAddress: address.idAddress,
-              #               distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]).first
-              # addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
-                            # distance: 361715).first
               prv = a["province"].present? ? a["province"].upcase : a["province"]
               if a["idAddress"].present?
                 addresses = Address.where(idAddress: a["idAddress"]).first
@@ -158,23 +138,12 @@ class Api::V1::CustomerController < ApiController
                 addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: prv,distance: 361715).first
               end
               if addresses.present?
-                #prev
-                # addresses.update(address: a["address"],city: a["city"],
-                #   postal: a["postal"],
-                #   province: a["province"].upcase,
-                #   distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"]
-                # )
-
                 addresses.update(address: a["address"],city: a["city"],
                   postal: a["postal"],
                   province: a["province"].upcase,
                   distance: 361715
                 )
               elsif a.present?
-                #prev
-                # Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: a["province"].upcase,
-                #                idAddress: address.idAddress,
-                #                distance: distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
                 Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: prv,
                                                distance: 361715)
               end
@@ -196,16 +165,9 @@ class Api::V1::CustomerController < ApiController
                   end
                   busi.contacts.destroy_all
                   create_contacts(params, busi)
-                  #prev
-                  # updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first.to_json(:business, :address)
                   updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first
-                  # return render_json_response(updatedClient, :ok) #prev
                 else
-                  if Contact.where(idBusiness: params[:no]).destroy_all
-                    # if Business.where(id: params[:no]).destroy_all #prev
-                      # return render_json_response(clientNote, :ok) #prev
-                    # end
-                  end
+                  Contact.where(idBusiness: params[:no]).destroy_all
                 end
             else
               Address.where(idAddress: address["idAddress"]).update_all(idClient: params[:no], address: address["address"], city: address["city"], postal: address["postal"], province: address["province"].upcase)
@@ -227,12 +189,10 @@ class Api::V1::CustomerController < ApiController
                 busi.contacts.destroy_all
                 create_contacts(params, busi)
                 updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
-                # return render_json_response(updatedClient, :ok) if updatedClient #prev
               else
                 if Contact.where(idBusiness: params[:no]).destroy_all
                   if Business.where(id: params[:no]).destroy_all
                     updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
-                    # return render_json_response(updatedClient, :ok) if updatedClient.present? #prev
                   end
                 end
               end
