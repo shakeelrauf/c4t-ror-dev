@@ -394,8 +394,6 @@ $(document).ready(function() {
     "fixedHeader": true,
     "destroy": true,
   });
-  $("#quote-datatable_filter").css({"visibility": "hidden","height": "0px"});
-  $("#quote-datatable_length").css({"visibility": "hidden","height": "0px"});
   $("select").each(function(){
           var usedNames = {};
           $("option", this).each(function () {
