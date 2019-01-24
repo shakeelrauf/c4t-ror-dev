@@ -242,6 +242,8 @@
             });
         }, 1000);
     });
-    resizePagination(<%= @pages %>, false, false)
+    $(document).on('turbolinks:load', function() {
+      resizePagination(<%= @pages %>, false, false)
+    });
 </script>
 <% end %>
