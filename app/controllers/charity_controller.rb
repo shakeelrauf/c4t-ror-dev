@@ -1,6 +1,7 @@
 class CharityController < ApplicationController
 	# before_action :authenticate_user
 	# before_action :authenticate_admin
+   before_action :login_required
 
 	def create
     res = ApiCall.post("/charities", form_body(params), headers )
