@@ -148,7 +148,7 @@ class QuoteController < ApplicationController
   end
 
   def create
-    quickquote =  create_quote
+    quickquote = create_quote_through
     redirect_to edit_quote_path(id: quickquote.id)
   end
 
@@ -222,9 +222,8 @@ class QuoteController < ApplicationController
   def quote_car_params
     {quote: params[:quote],veh: params[:veh]}
   end
-
-
-  def create_quote
+  
+  def create_quote_through
     settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
     settings_hash = {}
     settings.each do |setting|
@@ -248,7 +247,7 @@ class QuoteController < ApplicationController
         dtCreated: DateTime.now,
         dtStatusUpdated: DateTime.now
     )
-    return quote
+    quote
   end
 
   def vehicles_search(limit, offset, q)
