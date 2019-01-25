@@ -518,7 +518,7 @@ function saveCar(callback) {
         if (price) {
           netPrice = price.netPrice;
         }
-        cars.push({
+        car = {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),
             "missingWheels":  ($(this).find("input[name=wheels"+carId+"]").val()),
@@ -533,7 +533,11 @@ function saveCar(callback) {
             "carPostal":      ($(this).find("input[name=car-postal"+carId+"]").val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
-        });
+        }
+        if(car["carAddressId"] == undefined){
+            car["carAddressId"] =$(this).find("select[name=car-location"+carId+"] option").val()
+        }
+        cars.push(car);
     });
     $.ajax({
         method: "POST",

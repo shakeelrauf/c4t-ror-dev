@@ -168,29 +168,29 @@
               <label style="top: -15px;">Select an address or enter a Postal Code for this car<span class="required">*</span></label>
               </div>
               </div>
-              <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+              <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" >
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
           </div>
-          <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+          <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" >
             <div class="md-input-wrapper">
               <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
               <label style="top: -15px;">Street<span class="required">*</span></label>
             </div>
           </div>
-          <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+          <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>" >
             <div class="md-input-wrapper">
               <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
               <label style="top: -15px;">City<span class="required">*</span></label>
             </div>
           </div>
-          <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+          <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" >
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
               </div>
-              <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+              <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" >
                 <div class="md-input-wrapper">
                   <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
                     <option value="ON" <%= car.address.present? ? car.address.province=="ON" ? 'selected' : '' : '' %>>Ontario</option>
