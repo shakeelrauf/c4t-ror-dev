@@ -233,10 +233,15 @@ $(document).ready(function(){
    }
 
    function is_valid_postal(){
-      var $postal = $("#txtPostal").val();
+      var type = true
       postal = new RegExp("^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}$")
-      expression = $postal.replace(/ /g, '')
-      return postal.test(expression)
+      $(".txtPostal").each(function(){
+          expression = $(this).val().replace(/ /g, '');
+          if(postal.test(expression) == false){
+            type = false
+          }
+      });
+      return type;
    }
 
     function valid_fields(){
