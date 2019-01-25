@@ -1,5 +1,6 @@
 class QuoteController < ApplicationController
   before_action :login_required
+  include Quotesmethods
 
 	def all_quotes  
     @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
@@ -67,9 +68,7 @@ class QuoteController < ApplicationController
   end
 
   def create_quote
-    quickquote =  ApiCall.post("/quickquotes", JSON.parse(params.to_json), headers)
-    return respond_json({error: quickquote["error"]}) if quickquote["error"].present?
-    return respond_json({message: "QuickQuote saved"})
+    quickquote =  save_quotes
   end
 
   def vehicle_json
@@ -217,55 +216,4 @@ class QuoteController < ApplicationController
     end
     respond_json(quotes)
   end
-
-  private
-  def quote_car_params
-    {quote: params[:quote],veh: params[:veh]}
-  end
-  
-  def create_quote_through
-    settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
-    settings_hash = {}
-    settings.each do |setting|
-      settings_hash[setting["name"]] = setting["value"]
-    end
-    count = Quote.where(dtCreated: DateTime.now.strftime("%Y-%m-01 00:00:00")).count
-    reference = DateTime.now.strftime("%Y%m") +("0000"+( count+1).to_s).last(4)
-    quote = Quote.create(
-        idUser: current_user.idUser,
-        referNo: reference,
-        smallCarPrice: settings_hash["smallCarPrice"] || "0",
-        midCarPrice: settings_hash["midCarPrice"] || "0",
-        largeCarPrice: settings_hash["largeCarPrice"] || "0",
-        steelPrice: settings_hash["steelPrice"] || "0",
-        wheelPrice: settings_hash["wheelPrice"] || "0",
-        catPrice: settings_hash["catalysorPrice"] || "0",
-        batteryPrice: settings_hash["batteryPrice"] || "0",
-        excessCost: settings_hash["excessPrice"] || "0",
-        freeDistance: settings_hash["freeDistance"] || "0",
-        pickup: settings_hash["pickup"] || "0",
-        dtCreated: DateTime.now,
-        dtStatusUpdated: DateTime.now
-    )
-    quote
-  end
-
-  def vehicles_search(limit, offset, q)
-    limit = 30
-    offset = 0
-    limit = (limit.present? ? limit.to_i : 30)
-    offset = ((offset.to_i) * limit) if offset != "-1"
-    if q.present?
-      filter = + q.gsub(/[\s]/, "% %") + "%"
-      filters = filter.split(' ')
-      query = "Select * from VehiculesInfo where"
-      filters.each do |fil|
-        query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
-        query.concat(" AND ") if !fil.eql?(filters.last)
-      end
-      r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
-    end
-    r_vehicles = VehicleInfo.all.limit(limit).offset(offset) if !q.present?
-    return r_vehicles
-  end
-end
+ end
