@@ -498,8 +498,12 @@ function sumTotal() {
 }
 // SAVE AND BOOK, save the form, navigate to booking
 function bookCars(quoteId) {
-  saveCar(function() {
-    document.location = "/quotes/" + quoteId + "/book";
+  saveCar(function(e) {
+      if(e.error){
+          doGrowlingDanger(e.error)
+      }else{
+          document.location = "/quotes/" + quoteId + "/book";
+      }
   });
 }
 
@@ -522,6 +526,7 @@ function saveCar(callback) {
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "carAddressId":   ($(this).find("select[name=car-location"+carId+"] option:selected").val()),
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
+            "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "0",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
             "carPostal":      ($(this).find("input[name=car-postal"+carId+"]").val()),
@@ -540,11 +545,11 @@ function saveCar(callback) {
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
-            "note": $("#note_").val()
+            "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
       if (callback) {
-        callback();
+        callback(s);
       } else {
           if(s.error){
               doGrowlingDanger(s.error);

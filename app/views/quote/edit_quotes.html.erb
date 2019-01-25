@@ -165,8 +165,7 @@
                 </div>
               <div class="col card col-lg-12" style="padding-top: 20px;" >
                 <label style="top: -15px;">Notes</label>
-                <%= cktext_area "note", quote.note, ckeditor: {toolbar: 'mini'} %>
-
+                <%= cktext_area "note", "", ckeditor: {toolbar: 'mini'} %>
               </div>
 
               <!-- total end -->
@@ -270,9 +269,14 @@
        $(".cke_toolbar").eq(4).hide();
        $(".cke_toolbar").eq(5).hide();
        $(".cke_toolbar").eq(6).hide();
+       var content =  `<%= quote.note.present? ? quote.note.html_safe : '' %>`;
+      for (instance in CKEDITOR.instances){
+          CKEDITOR.instances[instance].setData(content);
+      }
      });
       $(".tab-pane").removeClass("active");
       var quoteNo = (<%= quote.idQuote || "null" %>);
+
   </script>
   <%= public_js_path 'distance.js' %>
   <%= public_js_path 'common.js' %>
