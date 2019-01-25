@@ -15,17 +15,6 @@ module Customers
   end
 
   def create_customer(params, current_user)
-    customDollarCar = 0
-    customDollarSteel = 0
-    customPercCar = 0
-    customPercSteel = 0
-    if current_user.present? && current_user.roles.downcase.eql?("admin")
-      customDollarCar = params[:customDollarCar] if params[:customDollarCar]
-      customDollarSteel = params[:customDollarSteel] if params[:customDollarSteel]
-      customPercCar = params[:customPercCar] if params[:customPercCar]
-      customPercSteel = params[:customPercSteel] if params[:customPercSteel]
-    end
-
     heardofus = Heardofus.find_or_create_by(type: params[:heardOfUs])
       customDollarCar = 0
       customDollarSteel = 0
