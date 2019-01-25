@@ -20,7 +20,6 @@
     <div class="loading hidden">
       <%= image_tag 'preloader.svg' %>
     </div>
-    <%= render :partial => 'shared/flashes' %>
     <%= render :partial => 'shared/header' %>
     <%= render :partial => 'shared/menu' %>
     <%= yield %>
@@ -29,5 +28,6 @@
 
     <%= yield :js %>
     <%= render :partial => 'shared/head' %>
+    <%= render :partial => 'shared/flashes' %>
   </body>
 </html>

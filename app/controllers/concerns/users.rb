@@ -46,7 +46,7 @@ module Users
     user.roles=params[:roles] if current_user.roles == "admin"
     user.password = User.encrypt(params[:pwd]) if params[:pwd] !=nil
     user.save!
+    flash[:success] = "User has updated! "
     return respond_json(user)
   end
-
 end
