@@ -161,7 +161,7 @@
               <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
               <select class="md-form-control md-static car-location-select2" name="car-location<%= car.id %>" id="car-location<%= car.id %>">
                 <% if (car.address)  %>
-                <option value="<%= car.address.id %>" selected><%= car.address.label %></option>
+                  <option value="<%= car.address.id %>" selected><%= car.address.address %></option>
                 <% end %>
               </select>
             <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
