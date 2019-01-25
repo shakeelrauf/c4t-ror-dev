@@ -46,7 +46,7 @@ module Quotesmethods
       end
       r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
     end
-    r_vehicles = VehicleInfo.all.limit(limit).offset(offset) if !q.present?
+    r_vehicles = JSON.parse(VehicleInfo.all.limit(limit).offset(offset).to_json) if !q.present?
     return r_vehicles
   end
 
