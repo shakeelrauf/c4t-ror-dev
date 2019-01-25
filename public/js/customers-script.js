@@ -232,6 +232,13 @@ $(document).ready(function(){
      return flag;
    }
 
+   function is_valid_postal(){
+      var $postal = $("#txtPostal").val();
+      postal = new RegExp("^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}[0-9]{1}$")
+      expression = $postal.replace(/ /g, '')
+      return postal.test(expression)
+   }
+
     function valid_fields(){
         var $phone_num = $("#txtPhone").val();
         var $first_name = $("#txtFirstName").val();
@@ -263,6 +270,12 @@ $(document).ready(function(){
             growling("Phone number must be atleast 10 digits");
             return false;
         }
+        else if ($postal != "" &&
+                is_valid_postal() == false
+                )
+         {
+            growling("The postal code seems invalid.");
+         }
 
         else{
             return true;
