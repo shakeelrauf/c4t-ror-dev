@@ -1,5 +1,6 @@
 class CustomersController < ApplicationController
   before_action :login_required
+  include Growl
 
   def new
     @customer = Customer.new
@@ -8,7 +9,7 @@ class CustomersController < ApplicationController
 
   def create
     res = ApiCall.post("/clients", Customer.form_body(params), headers )
-    growl(response_msg(res), "create")
+    growl(response_msg(res, "idClient"), "create", "Customer")
     redirect_to customers_path
   end
 
@@ -50,7 +51,7 @@ class CustomersController < ApplicationController
 
   def update
     res = ApiCall.patch("/clients/"+params[:id], Customer.form_body(params), headers)
-    growl(response_msg(res), "update")
+    growl(response_msg(res, "idClient"), "update", "Customer")
     redirect_to customers_path
   end
 
@@ -65,28 +66,6 @@ class CustomersController < ApplicationController
 
   def all_heard_of_use
     Heardofus.all
-  end
-
-  def growl(res, action)
-    notice = "Customer is now edited!"
-    if action == "create"
-      notice = "Customer is created successfully!"
-    end
-    if res == true
-      flash[:success] = notice
-    else
-      flash[:alert] = res
-    end
-  end
-
-  def response_msg(res)
-    result = ""
-    if res["idClient"].present?
-      result = true
-    elsif res["error"].present?
-      result = res["error"]
-    end
-    result
   end
 
 end
