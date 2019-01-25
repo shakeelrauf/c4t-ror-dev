@@ -78,6 +78,7 @@ $(document).ready(function() {
                 calcPrice(car.idQuoteCars,car.idQuote);
                 $('#txtVehicleFilter').html("");
                 callModal();
+                $(".car-ex-address"+car.idQuoteCars).show()
                 $("#car-location" + car.idQuoteCars).val($(".hiddenaddress").data("customeraddress"))
                 $(".selectcashcar .select2-selection__rendered").html("");
                 // Make the car postal selecter a select2
@@ -254,7 +255,7 @@ function showCarExistingAddress(addressId, carId) {
 
 function showCarNewAddress(postal, carId) {
   $(".car-ex-address" + carId).each(function() {
-    $(this).show();
+    // $(this).show();
     $("input[name=car-postal" + carId +" ]").val(postal)
   });
 }
