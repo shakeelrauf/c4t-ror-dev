@@ -2,41 +2,40 @@ class CharityController < ApplicationController
 	# before_action :authenticate_user
 	# before_action :authenticate_admin
   before_action :login_required
+  before_action :set_charity , only: [:edit, :update]
   include Growl
 
 	def create
-    res = ApiCall.post("/charities", form_body(params), headers )
+    res = Charitie.new(charitie_params)
+    res.save
     growl(response_msg(res, "idCharitie"), "create", "Charity")
     redirect_to charities_path
 	end
 
 	def get_charities
-    @charities = ApiCall.get("/charities",{}, headers)
+    @charities = Charitie.all
 	end
 
 	def new
 	end
 
 	def edit
-		@charitie = ApiCall.get("/charities/#{params[:no]}", {}, headers)
+    @charitie = Charitie.find(params[:no])
 	end
 
 	def update
-    res = ApiCall.put("/charities/#{params[:id]}", form_body(params), headers)
-    growl(response_msg(res, "idCharitie"), "update", "Charity")
+    charitie = Charitie.find(params[:id])
+    res = charitie.update(charitie_params)
+    growl(res, "update", "Charity")
     redirect_to charities_path
   end
 
 	private
+  def set_charity
+  end
 
-	def form_body(params)
-    {
-      "name":      params[:name],
-      "phone": 		 params[:phone],
-      "email": 		 params[:email],
-      "address": 	 params[:address],
-      "info": 		 params[:info]
-    }
+  def charitie_params
+    params.permit(:name, :email, :address, :phone, :info)
   end
 
 end
