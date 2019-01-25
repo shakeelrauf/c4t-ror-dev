@@ -132,15 +132,23 @@
           "destroy": true,
       });
     });
-
-      $(".search-bar-client").keyup(function() {
+    function delay(callback, ms) {
+      var timer = 0;
+      return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          callback.apply(context, args);
+        }, ms || 0);
+      };
+    }
+      $(".search-bar-client").keyup(delay(function(e) {
         var filter = $(this).val();
-        $(".table-customers").html("");
             $.ajax({
                 url: "/api/v1/clients?filter="+filter,
                 method: "get",
-                async: false,
                 success: function(clients) {
+                    $(".table-customers").html("");
                     clients.forEach(function(customer) {
                         number  = ""
                         v =  customer.phone
@@ -197,8 +205,8 @@
                             </tr>`);
                     });
                 }
-           })
         });
+    }, 500));
 
     // var customersList = <%#= JSON.stringify(@customers.to_json) %>
     // var userRole = "<%#= user.roles %>"
