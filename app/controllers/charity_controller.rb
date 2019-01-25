@@ -1,11 +1,12 @@
 class CharityController < ApplicationController
 	# before_action :authenticate_user
 	# before_action :authenticate_admin
-   before_action :login_required
+  before_action :login_required
+  include Growl
 
 	def create
     res = ApiCall.post("/charities", form_body(params), headers )
-    growl(response_msg(res), "create")
+    growl(response_msg(res, "idCharitie"), "create", "Charity")
     redirect_to charities_path
 	end
 
@@ -22,7 +23,7 @@ class CharityController < ApplicationController
 
 	def update
     res = ApiCall.put("/charities/#{params[:id]}", form_body(params), headers)
-    growl(response_msg(res), "update")
+    growl(response_msg(res, "idCharitie"), "update", "Charity")
     redirect_to charities_path
   end
 
@@ -38,25 +39,4 @@ class CharityController < ApplicationController
     }
   end
 
-  def growl(res, action)
-    notice = "Charity edited!"
-    if action == "create"
-      notice = "Charity added."
-    end
-    if res == true
-      flash[:success] = notice
-    else
-      flash[:alert] = res
-    end
-  end
-
-  def response_msg(res)
-    result = ""
-    if res["idCharitie"].present?
-      result = true
-    elsif res["errors"].present?
-      result = res["errors"]
-    end
-    result
-  end
 end
