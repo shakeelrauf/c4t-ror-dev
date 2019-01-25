@@ -1,6 +1,7 @@
 class Api::V1::CustomerController < ApiController
   include ActionView::Helpers::NumberHelper
   before_action :authenticate_user
+  include Customers
 	# before_action :authenticate_admin
 
   def create
