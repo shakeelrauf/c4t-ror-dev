@@ -42,37 +42,37 @@
                       <% @users.each do |contact| %>
                         <tr>
                           <td>
-                            <% unless contact["avatar"].present?  %>
+                            <% unless contact.avatar.present?  %>
                              <img src="<%= image_path 'avatar-1.png' %>" class="d-inline-block rounded-circle " alt="avatar">
                             <%  else  %>
-                             <img src='<%= contact["avatar"].present? ? (image_path "avatars/#{contact['avatar']}" rescue "") : "" %>' class="d-inline-block rounded-circle " alt="avatar">
+                             <img src='<%= contact.avatar.present? ? (image_path "avatars/#{contact['avatar']}" rescue "") : "" %>' class="d-inline-block rounded-circle " alt="avatar">
                             <% end %>
                               </td>
-                              <!--<td id="usernameOf<%= contact["id"] %>" class="<%= (contact["isActive"] == 1 ? "":"notActive") %>"><%= contact["username"] %></td>-->
-                              <td><%= contact["firstName"] %></td>
-                              <td><%= contact["lastName"] %></td>
+                              <!--<td id="usernameOf<%= contact.id %>" class="<%= (contact.isActive == 1 ? "":"notActive") %>"><%= contact.username %></td>-->
+                              <td><%= contact.firstName %></td>
+                              <td><%= contact.lastName %></td>
                               <td>
-                                <% if(contact["roles"] == "admin") %>
+                                <% if(contact.roles == "admin") %>
                                 Admin
-                                <%  elsif(contact["roles"] == "dispatcher") %>
+                                <%  elsif(contact.roles == "dispatcher") %>
                                 Dispatcher
-                                <% elsif(contact["roles"] == "customerCare")  %>
+                                <% elsif(contact.roles == "customerCare")  %>
                                 Customer Care
                                 <% end %>
                               </td>
                               <td>
-                                <%= phone_number_display(contact["phone"]) %>
+                                <%= phone_number_display(contact.phone) %>
                               </td>
                               <td>
-                              <% if contact["dtLastLogin"].present? %>
-                                <%= contact["dtLastLogin"][0,10] + " " + contact["dtLastLogin"][11,2] + " h " + contact["dtLastLogin"][14,2] + " min"%></td>
+                              <% if contact.dtLastLogin.present? %>
+<!--                                <%#= contact.dtLastLogin + " " + contact.dtLastLogin + " h " + contact.dtLastLogin + " min"%></td>-->
                               <% end %>
-                              <td><%= (contact["isActive"] == 1 ? "No":"Yes" ) %></td>
+                              <td><%= (contact.isActive == 1 ? "No":"Yes" ) %></td>
                               <td class="faq-table-btn">
-                                <a data-contact-no="<%= contact["idUser"] %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-status="<%= contact["isActive"] %>" data-placement="top" data-original-title="Blacklist user">
+                                <a data-contact-no="<%= contact.idUser %>" class="crm-action-delete btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-status="<%= contact.isActive %>" data-placement="top" data-original-title="Blacklist user">
                                   <i class="icofont icofont-not-allowed"></i>
                                 </a>
-                                <a href="/users/<%= contact["idUser"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+                                <a href="/users/<%= contact.idUser %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
                                   <i class="icofont icofont-ui-edit"></i>
                                 </a>
                               </td>
