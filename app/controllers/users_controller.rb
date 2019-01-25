@@ -1,8 +1,9 @@
 class UsersController < DashboardController
+  include Users
   before_action :login_required
 
   def index
-    @users = JSON.parse ApiCall.get('/users', {}, headers).to_json
+    @users = User.all
     render locals: {user: current_user, users: @users, isAdded: params[:isAdded], isEdited: params[:isEdited], statechanged: params[:statechanged]}
   end
 
@@ -14,20 +15,19 @@ class UsersController < DashboardController
   def create
     params[:avatar] = ""
     params[:isSuperadmin] = "0"
-    res = ApiCall.post("/users",JSON.parse(params.to_json), headers)
-    return respond_error(res["error"]) if res["error"]
-    return respond_ok
+    create_user(current_user, params)
   end
 
   def update
-    res = ApiCall.patch("/users/"+params[:no], JSON.parse(params.to_json), headers)
-    return respond_error(res["error"]) if res["error"]
-    return respond_ok
+    update_user
   end
 
   def blacklist
-    res = ApiCall.put("/users/"+params[:no], JSON.parse(params.to_json), headers)
-    return respond_error(res["error"]) if res["error"]
+    return respond_json({:error => "You are not allowed to change state of this user."}) if (current_user && current_user.roles != "admin")
+    user = User.find_by_id(params[:no])
+    return respond_json({:error => "User not found"}) if user.nil?
+    return respond_json({:error => "You can not change state of a super admin."}) if (user.isSuperadmin == 1)
+    user.update(isActive: params[:isActive])
     return respond_ok
   end
 

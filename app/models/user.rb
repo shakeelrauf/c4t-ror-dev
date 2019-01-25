@@ -5,6 +5,7 @@ class User < ApplicationRecord
  	validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
  	validates_length_of :password, minimum: 8, message: "Password is too short"
 	has_one :user_config
+	has_many :authentications
 	before_validation :validate_phone, :on => :create
 
 	def validate_phone

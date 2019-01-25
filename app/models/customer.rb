@@ -5,7 +5,7 @@ class Customer < ApplicationRecord
 	has_one :business, class_name: 'Business',inverse_of: :client ,foreign_key: 'idClient'
 	belongs_to :heardofus, class_name: 'Heardofus', foreign_key: 'idHeardOfUs'
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
-	has_many :quotes, class_name: 'Quote', foreign_key: "idClient"
+	has_many :quotes, class_name: 'Quote', foreign_key: "idQuote"
 
 	def name
 		return self.firstName + ' ' + self.lastName

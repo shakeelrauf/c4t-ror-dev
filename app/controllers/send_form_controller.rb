@@ -9,9 +9,9 @@ class SendFormController < ApplicationController
     return respond_error("Authentication failed!") if !params[:username].present? || !params[:password].present?
     user =  User.where(username: params[:username]).first
     return respond_error("Authentication failed!") if (user.nil? and (user.present? ? !user.is_valid_password?(params[:password]) : true))
-    token =  User.encrypt_token(SecureRandom.random_bytes(128)).gsub('=','').gsub('+','')
-    user.update(accessToken: token )
-    successful_login(user,token)
+    auth_token   = user.authentications.build
+    auth_token.save!
+    successful_login(user,auth_token.token)
     return respond_ok
   end
 
@@ -92,8 +92,10 @@ class SendFormController < ApplicationController
     cfg.save!
     u.salt = u.make_salt if (u.salt.nil? || u.salt.blank?)
     u.password = u.encrypt_pw(pw)
+    auth_token =  u.authentications.build
+    auth_token.save!
     u.save!
-    start_session u, u.accessToken
+    start_session u, auth_token.token
     return respond_ok
   end
 

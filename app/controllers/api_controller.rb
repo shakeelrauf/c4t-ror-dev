@@ -3,13 +3,13 @@ class ApiController < ApplicationController
   include Response
   include Api::V1::Request
   include API::V1::Validations
-  before_action :validate_token
+  # before_action :validate_token
   helper_method :current_user
   # helper_method :authenticate_user
 
   def validate_token
     if request.authorization.present?
-      return true if User.find_by_accessToken(request.authorization).present?
+      return true if Authentication.find_by_token(request.authorization).present?
       return false
     end
     return true
@@ -38,8 +38,9 @@ class ApiController < ApplicationController
   end
 
   def current_user
-    user = User.where("accessToken = ?", request.authorization).first
-    if user.present?
+    auth = Authentication.where("token = ?", request.authorization).first
+    if auth.present?
+      user =  auth.user
       user.phone = "" if user.phone.nil?
       return user
     else
