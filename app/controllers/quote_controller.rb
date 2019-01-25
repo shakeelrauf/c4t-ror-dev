@@ -23,7 +23,7 @@ class QuoteController < ApplicationController
     car_distance = car_distance.to_i if car_distance.present?
     excessDistance = 0.0
     excessDistance = [car_distance- quote["freeDistance"].to_i, 0.0 ].max if car_distance.present? && car_distance != "NOT_FOUND" && car_distance != "ZERO_RESULTS"
-    pickupCost    = quote["pickup"]
+    pickupCost    = quote["pickup"].to_f
     isPickup      = (params[:gettingMethod] == "pickup")
     excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
     distanceCost  = excessDistance * excessCost
@@ -147,7 +147,7 @@ class QuoteController < ApplicationController
   end
 
   def create
-    quickquote = create_quote_through
+    quickquote = create_default_quote
     redirect_to edit_quote_path(id: quickquote.id)
   end
 

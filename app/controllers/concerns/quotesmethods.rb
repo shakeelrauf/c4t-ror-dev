@@ -4,7 +4,7 @@ module Quotesmethods
     {quote: params[:quote],veh: params[:veh]}
   end
 
-  def create_quote_through
+  def create_default_quote
     settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
     settings_hash = {}
     settings.each do |setting|
