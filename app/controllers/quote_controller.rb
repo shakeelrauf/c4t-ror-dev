@@ -126,19 +126,24 @@ class QuoteController < ApplicationController
     returned[:pagination][:more] = false if phones.length < params[:limit].to_i
     phones.each do |phone|
       client = JSON.parse phone.to_json
-      client["phone"] =  client["cellPhone"] if client["phone"].match(params[:search]) && client["cellPhone"].match(params[:search])
-      client["phone"] =  client["secondaryPhone"] if client["phone"].match(params[:search]) && client["secondaryPhone"].match(params[:search])
+      client["phone"] =  client["cellPhone"] if client["phone"].to_s.match(params[:search]) && client["cellPhone"].to_s.match(params[:search])
+      client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
+      text = ""
+      if client["phone"].present? && client["phone"].length >= 10
+        text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
+                  " " + client["firstName"].to_s + " " + client["lastName"].to_s
+      elsif client["phone"].present?
+        text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s  
+      end
       returned[:results].push({
                                  id: phone["idClient"],
-                                 text: client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
-                                     " " + client["firstName"].to_s + " " + client["lastName"].to_s
+                                 text: text
                              })
       if client["business"]
         client["business"]["contacts"].each do |contact|
           returned[:results].push({
                                       id: phone["idClient"],
-                                      text: client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
-                                          " " + contact["firstName"].to_s + " " + contact["lastName"].to_s
+                                      text: text
                                   })
         end
       end
