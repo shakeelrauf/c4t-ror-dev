@@ -66,7 +66,6 @@ module Quotesmethods
     client = Customer.customUpsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
     quote = Quote.customUpsert({note: "",idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
     carList.each do |car, val|
-      debugger
       return respond_json({:error => "The type of vehicle was not selected"}) if (carList[car]["car"] == "")
       return respond_json({:error => "The missing wheels was not selected"}) if (carList[car]["missingWheels"] == "")
       return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]"}) if (carList[car]["missingBattery"] == "")

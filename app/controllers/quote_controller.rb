@@ -1,6 +1,7 @@
 class QuoteController < ApplicationController
   before_action :login_required
   include Quotesmethods
+
 	def all_quotes  
     @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
     @pages = 0
@@ -215,5 +216,4 @@ class QuoteController < ApplicationController
     end
     respond_json(quotes)
   end
-
  end
