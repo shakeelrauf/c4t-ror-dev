@@ -80,20 +80,20 @@ class QuoteController < ApplicationController
     vehicles = vehicles_search(params[:limit], params[:offset], params[:q])
     groups, item = [], {}
     vehicles.each do |vehicle|
-      if vehicle.make == "Other"
+      if vehicle["make"] == "Other"
         item["text"]= "Other"
       else
-        item["text"] = vehicle.make + " " + vehicle.year + " " + vehicle.model + " " + vehicle.body + " " + vehicle.trim + " " + vehicle.transmission + " " + vehicle.drive + " " + vehicle.doors + " doors and " + vehicle.seats + " seats."
-        item["id"] = vehicle.idVehiculeInfo
+        item["text"] = vehicle["make"] + " " + vehicle["year"] + " " + vehicle["model"] + " " + vehicle["body"] + " " + vehicle["trim"] + " " + vehicle["transmission"] + " " + vehicle["drive"] + " " + vehicle["doors"] + " doors and " + vehicle["seats"] + " seats."
+        item["id"] = vehicle["idVehiculeInfo"]
         created = false
         groups.length.times do |i|
-          if groups[i]["text"] == vehicle.make
+          if groups[i]["text"] == vehicle["make"]
             groups[i]["children"].push(item)
             created = true
             break
           end
         end
-        groups.push({text: vehicle.make, children: [item]}) if !created
+        groups.push({text: vehicle["make"], children: [item]}) if !created
       end
     end
     # if !groups["#{vehicle.make}"]
