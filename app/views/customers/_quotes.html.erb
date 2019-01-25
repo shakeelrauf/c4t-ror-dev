@@ -22,7 +22,6 @@
                             <thead>
                                 <tr>
                                     <th>Reference number</th>
-                                    <th>Note</th>
                                     <th>Date Added</th>
                                     <th>Dispatcher</th>
                                     <th>Status</th>
@@ -34,9 +33,6 @@
                                     <tr>
                                         <td>
                                             <%= quote["referNo"] %>
-                                        </td>
-                                        <td>
-                                            <%= quote["note"] %>
                                         </td>
                                         <td>
                                             <%= quote_created_at(quote["dtCreated"]) %>

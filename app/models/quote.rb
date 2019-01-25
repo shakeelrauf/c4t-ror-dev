@@ -5,9 +5,6 @@ class Quote < ApplicationRecord
 	belongs_to :customer,   class_name: 'Customer', foreign_key: 'idClient', optional: true
 	belongs_to :status,    class_name: 'Status',   foreign_key: 'idStatus'
 
-
-
-
 # quotes.customUpsert = function (options, next) {
 #     var onUpdate = options.defaults;
 #     options.defaults = Object.assign(options.defaults, options.oncreate);
@@ -27,7 +24,6 @@ class Quote < ApplicationRecord
 #         }
 #     });
 # };
-
 
 	def self.customUpsert(options, where)
 		@quote = where(where).first
