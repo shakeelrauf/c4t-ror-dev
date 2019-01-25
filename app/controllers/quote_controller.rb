@@ -128,10 +128,11 @@ class QuoteController < ApplicationController
       client = JSON.parse phone.to_json
       client["phone"] =  client["cellPhone"] if client["phone"].to_s.match(params[:search]) && client["cellPhone"].to_s.match(params[:search])
       client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
-      if client["phone"].length >= 10
+      text = ""
+      if client["phone"].present? && client["phone"].length >= 10
         text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
                   " " + client["firstName"].to_s + " " + client["lastName"].to_s
-      else
+      elsif client["phone"].present?
         text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s  
       end
       returned[:results].push({
