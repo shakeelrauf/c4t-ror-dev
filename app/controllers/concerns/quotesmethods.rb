@@ -56,6 +56,7 @@ module Quotesmethods
     return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
     return respond_json({:error => "phone number length must be at least 10 digits."}) if (phone.to_s.length < 10)
+    carList = []
     begin
       carList = JSON.parse(params[:cars].to_json)
     rescue
@@ -65,14 +66,19 @@ module Quotesmethods
     heard_of_us.save! if heard_of_us.new_record?
     client = Customer.customUpsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
     quote = Quote.customUpsert({note: "",idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
-    carList.each do |car, val|
-      return respond_json({:error => "The type of vehicle was not selected"}) if (carList[car]["car"] == "")
-      return respond_json({:error => "The missing wheels was not selected"}) if (carList[car]["missingWheels"] == "")
-      return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]"}) if (carList[car]["missingBattery"] == "")
-      return respond_json({:error => "The address was not selected properly"}) if (carList[car]["addressId"] == "" && carList[car]["carPostal"] == "")
-      updateCarForAddress(carList[car], client)
-    end
-    return respond_json({message: "QuickQuote saved"})
+     if !carList.nil?
+      carList.each do |car, val|
+        return respond_json({:error => "The type of vehicle was not selected"}) if (carList[car]["car"] == "")
+        return respond_json({:error => "The missing wheels was not selected"}) if (carList[car]["missingWheels"] == "")
+        return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]"}) if (carList[car]["missingBattery"] == "")
+        return respond_json({:error => "The address was not selected properly"}) if (carList[car]["addressId"] == "" && carList[car]["carPostal"] == "")
+        updateCarForAddress(carList[car], client)
+      end
+      return respond_json({message: "QuickQuote saved"})
+     else
+       return respond_json({error: "Please select atleast one car"})
+     end
+
   end
 
   def updateCarForAddress(car, client)

@@ -498,8 +498,12 @@ function sumTotal() {
 }
 // SAVE AND BOOK, save the form, navigate to booking
 function bookCars(quoteId) {
-  saveCar(function() {
-    document.location = "/quotes/" + quoteId + "/book";
+  saveCar(function(e) {
+      if(e.error){
+          doGrowlingDanger(e.error)
+      }else{
+          document.location = "/quotes/" + quoteId + "/book";
+      }
   });
 }
 
@@ -544,7 +548,7 @@ function saveCar(callback) {
         }
     }).done(function(s) {
       if (callback) {
-        callback();
+        callback(s);
       } else {
           if(s.error){
               doGrowlingDanger(s.error);
