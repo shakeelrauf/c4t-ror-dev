@@ -1,4 +1,4 @@
-<div class="card col-lg-12 tab-pane active" id="tabpanel-<%= car["idQuoteCars"] %>" role="tabpanel" style="display: <%= index == 0 ? 'block' : 'none' %>">
+<div id="tabpanel-<%=vehicle["idVehiculeInfo"]  %>" class="card col-lg-12 tab-pane car-pane active car-<%= vehicle["idVehiculeInfo"]  %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-weight="<%= (vehicle['weight']).to_f %>">
   <div class="card-header">
     <h5 class="card-header-text"><%= vehicle["make"] + " " + vehicle["model"] + " " + vehicle["year"] %></h5>
   </div>
