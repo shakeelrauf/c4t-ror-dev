@@ -70,7 +70,10 @@ module Customers
   def client_address(a, client)
     a = a.as_json
     prvc = a["province"].present? ? a["province"].upcase : a["province"]
-    newAddress = client.address.new( address: a["address"],city: a["city"],postal: a["postal"],province: prvc)
+    newAddress = client.address.new( address: a["address"],
+                                      city: a["city"],
+                                      postal: a["postal"],
+                                      province: prvc)
     distance = JSON.parse(get_distance(newAddress))
     newAddress.distance = (distance["rows"][0]["elements"][0]["distance"]["value"] + distance["rows"][0]["elements"][0]["distance"]["value"])
     newAddress.save!
@@ -118,11 +121,11 @@ module Customers
   end
 
   def update_business(busi)
-    busi.update(name: params[:name],
-    description: params[:description],
-    contactPosition: params[:contactPosition],
-    pstTaxNo: params[:pstTaxNo],
-    gstTaxNo: params[:gstTaxNo])
+    busi.update(  name: params[:name],
+                  description: params[:description],
+                  contactPosition: params[:contactPosition],
+                  pstTaxNo: params[:pstTaxNo],
+                  gstTaxNo: params[:gstTaxNo])
   end
 
   def find_address(a, id)
@@ -131,18 +134,23 @@ module Customers
     if a["idAddress"].present?
       addresses = Address.where(idAddress: a["idAddress"]).first
     else
-      addresses = Address.where(idClient: id, address: a["address"], city: a["city"], postal: a["postal"], province: prv,distance: 361715).first
+      addresses = Address.where(  idClient: id,
+                                  address: a["address"],
+                                  city: a["city"],
+                                  postal: a["postal"],
+                                  province: prv,
+                                  distance: 361715).first
     end
     update_address(addresses, id, prv, a)
   end
 
   def create_business(id)
-    busi = Business.create(idClient: id,
-                name: params[:name],
-                description: params[:description],
-                contactPosition: params[:contactPosition],
-                pstTaxNo: params[:pstTaxNo],
-                gstTaxNo: params[:gstTaxNo])
+    busi = Business.create( idClient: id,
+                            name: params[:name],
+                            description: params[:description],
+                            contactPosition: params[:contactPosition],
+                            pstTaxNo: params[:pstTaxNo],
+                            gstTaxNo: params[:gstTaxNo])
     busi
   end
 
@@ -154,8 +162,11 @@ module Customers
         distance: 361715
       )
     elsif a.present?
-      Address.create(idClient: id, address: a["address"], city: a["city"], postal: a["postal"], province: prv,
-                                     distance: 361715)
+      Address.create( idClient: id,
+                      address: a["address"],
+                      city: a["city"],
+                      postal: a["postal"],
+                      province: prv,distance: 361715)
     end
   end
 
@@ -164,7 +175,9 @@ module Customers
     unless params[:contacts].include?("")
       params[:contacts].each do |contact|
         contact = contact.as_json
-        cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
+        cont = busi.contacts.new( firstName: contact["firstName"],
+                                  lastName: contact["lastName"],
+                                  paymentMethod: contact["paymentMethod"])
         cont.save!
       end
     end
