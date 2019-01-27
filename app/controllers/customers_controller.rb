@@ -1,7 +1,8 @@
 class CustomersController < ApplicationController
   before_action :login_required
-  include Growl
   include Customers
+  include Api::V1::MsgsConst
+  include Api::V1::Request
 
   def new
     @customer = Customer.new
@@ -9,9 +10,18 @@ class CustomersController < ApplicationController
   end
 
   def create
-    res = ApiCall.post("/clients", Customer.form_body(params), headers )
-    growl(response_msg(res, "idClient"), "create", "Customer")
-    redirect_to customers_path
+    if check_params
+      required_params_error(false)
+    elsif required_params
+      required_params_error(false)
+    else
+      client = create_customer(Customer.form_body(params), current_user)
+      if client != false
+        growl("create")
+      else
+        required_params_error(true)
+      end
+    end
   end
 
   def index
@@ -50,10 +60,21 @@ class CustomersController < ApplicationController
     @heard_of_us = all_heard_of_use
   end
 
+
   def update
-    res = ApiCall.patch("/clients/"+params[:id], Customer.form_body(params), headers)
-    growl(response_msg(res, "idClient"), "update", "Customer")
-    redirect_to customers_path
+    if check_params
+      required_params_error(false)
+    elsif required_params
+      required_params_error(false)
+    else
+      response = update_customer(Customer.form_body(params), current_user, params[:id])
+      if response != false
+        growl("update")
+      else
+        flash[:alert] = CLIENT_NOT_FOUND
+        redirect_to customers_path
+      end
+    end
   end
 
   def get_customer
@@ -64,6 +85,24 @@ class CustomersController < ApplicationController
   end
 
   private
+
+  def growl(action)
+    notice = "Customer is now edited!"
+    if action == "create"
+      notice = "Customer is created successfully!"
+    end
+    flash[:success] = notice
+    redirect_to customers_path 
+  end
+
+  def required_params_error(type)
+    notice = REQUIRED_ATTRIBUTES
+    if type == true
+      notice = ALREADY_EXISTS
+    end
+    flash[:alert] = notice
+    redirect_to customers_path
+  end
 
   def all_heard_of_use
     Heardofus.all

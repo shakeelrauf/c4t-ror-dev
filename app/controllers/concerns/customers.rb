@@ -48,12 +48,10 @@ module Customers
           client.save!
           params[:addresses].each do |a|
             if a.present?
-              puts "ADDRESS ADDING :: #{a["address"]}"
+              a = a.as_json
               prvc = a["province"].present? ? a["province"].upcase : a["province"]
               newAddress = client.address.new( address: a["address"],city: a["city"],postal: a["postal"],province: prvc)
-              #need map api keys to get distance
               distance = JSON.parse(get_distance(newAddress))
-              # newAddress.distance = (distance["rows"][0]["elements"][1]["distance"]["value"] + distance["rows"][1]["elements"][0]["distance"]["value"])
               newAddress.distance = (distance["rows"][0]["elements"][0]["distance"]["value"] + distance["rows"][0]["elements"][0]["distance"]["value"])
               newAddress.save!
             end
@@ -76,14 +74,12 @@ module Customers
     client
   end
 
-  def update_customer(params, current_user)
+  def update_customer(params, current_user, id)
     response = false
-    clientNote = Customer.where(idClient: params[:no]).first
+    clientNote = Customer.where(idClient: id).first
     if !clientNote
       response = false
     else
-      formatted_address = params[:address] + " " + params[:city] + ", " + params[:province].upcase + ", " + params[:postal]
-      puts "formatted_address:---------#{formatted_address}"
       address = "address"
 
       if address.present?
@@ -106,11 +102,12 @@ module Customers
             note: params[:note], grade: params[:grade], customDollarCar: customDollarCar, customDollarSteel: customDollarSteel, customPercCar: customPercCar, customPercSteel: customPercSteel) if clientNote.present?
         params[:addresses].each do |a|
           if address
+            a = a.as_json
             prv = a["province"].present? ? a["province"].upcase : a["province"]
             if a["idAddress"].present?
               addresses = Address.where(idAddress: a["idAddress"]).first
             else
-              addresses = Address.where(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: prv,distance: 361715).first
+              addresses = Address.where(idClient: id, address: a["address"], city: a["city"], postal: a["postal"], province: prv,distance: 361715).first
             end
             if addresses.present?
               addresses.update(address: a["address"],city: a["city"],
@@ -119,11 +116,11 @@ module Customers
                 distance: 361715
               )
             elsif a.present?
-              Address.create(idClient: params[:no], address: a["address"], city: a["city"], postal: a["postal"], province: prv,
+              Address.create(idClient: id, address: a["address"], city: a["city"], postal: a["postal"], province: prv,
                                              distance: 361715)
             end
               if !params[:type].eql?("Individual")
-                busi = Business.where(idClient: params[:no]).first
+                busi = Business.where(idClient: id).first
                 if busi.present?
                   busi.update(name: params[:name],
                     description: params[:description],
@@ -131,7 +128,7 @@ module Customers
                     pstTaxNo: params[:pstTaxNo],
                     gstTaxNo: params[:gstTaxNo])
                 else
-                  busi = Business.create(idClient: params[:no],
+                  busi = Business.create(idClient: id,
                                   name: params[:name],
                                   description: params[:description],
                                   contactPosition: params[:contactPosition],
@@ -140,14 +137,14 @@ module Customers
                 end
                 busi.contacts.destroy_all
                 create_contacts(params, busi)
-                updatedClient = Customer.includes(:business, :address).where(idClient: params[:no]).first
+                updatedClient = Customer.includes(:business, :address).where(idClient: id).first
               else
-                Contact.where(idBusiness: params[:no]).destroy_all
+                Contact.where(idBusiness: id).destroy_all
               end
           else
-            Address.where(idAddress: address["idAddress"]).update_all(idClient: params[:no], address: address["address"], city: address["city"], postal: address["postal"], province: address["province"].upcase)
+            Address.where(idAddress: address["idAddress"]).update_all(idClient: id, address: address["address"], city: address["city"], postal: address["postal"], province: address["province"].upcase)
             if params[:type].eql?("Individual")
-              busi = Business.where(idClient:  params[:no]).first
+              busi = Business.where(idClient:  id).first
               if busi.present?
                 busi.update(name: params[:name],
                             description: params[:description],
@@ -163,11 +160,11 @@ module Customers
               end
               busi.contacts.destroy_all
               create_contacts(params, busi)
-              updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
+              updatedClient = Customer.includes(:address, :business).where(idClient: id).to_json(:address,:business)
             else
-              if Contact.where(idBusiness: params[:no]).destroy_all
-                if Business.where(id: params[:no]).destroy_all
-                  updatedClient = Customer.includes(:address, :business).where(idClient: params[:no]).to_json(:address,:business)
+              if Contact.where(idBusiness: id).destroy_all
+                if Business.where(id: id).destroy_all
+                  updatedClient = Customer.includes(:address, :business).where(idClient: id).to_json(:address,:business)
                 end
               end
             end
@@ -187,6 +184,7 @@ module Customers
   def create_contacts(params, busi)
     unless params[:contacts].include?("")
       params[:contacts].each do |contact|
+        contact = contact.as_json
         cont = busi.contacts.new(firstName: contact["firstName"], lastName: contact["lastName"], paymentMethod: contact["paymentMethod"])
         cont.save!
       end
@@ -194,8 +192,7 @@ module Customers
   end
 
   def check_params
-    !params[:firstName] || !params[:lastName] || !params[:email] || !params[:type] || !params[:address] || !params[:city] || 
-      !params[:postal] || !params[:province] || !params[:phoneNumber] || !params[:grade] || !params[:note] || !params[:heardOfUs]
+    !params[:firstName] || !params[:lastName] || !params[:email] || !params[:type] || !params[:phoneNumber] || !params[:grade] || !params[:note] || !params[:heardOfUs]
   end
 
   def required_params

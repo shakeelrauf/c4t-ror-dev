@@ -44,7 +44,7 @@ class Api::V1::CustomerController < ApiController
     elsif required_params
       render_json_response({:error => REQUIRED_ATTRIBUTES, :success => false}, :bad_request)
     else
-      response = update_customer(params, current_user)
+      response = update_customer(params, current_user, params[:no])
       if response != false
           return render_json_response(response, :ok)
       else
