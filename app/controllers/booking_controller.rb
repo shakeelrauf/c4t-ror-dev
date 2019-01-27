@@ -1,7 +1,6 @@
 class BookingController < ApplicationController
   before_action :login_required
 
-
   def book
     quote =  ApiCall.get("/quotes/#{params[:no]}", {}, headers)
     cars =  ApiCall.get("/quotes/#{params[:no]}/cars",{},headers)

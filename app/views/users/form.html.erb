@@ -2,7 +2,7 @@
   <!-- Container-fluid starts -->
   <div class="container-fluid">
     <!-- Main content starts -->
-    <div >
+    <div>
       <!-- Row Starts -->
       <div class="row">
         <div class="col-sm-12 p-0">
@@ -17,7 +17,7 @@
               <li class="breadcrumb-item">Administration</li>
               <li class="breadcrumb-item"><a href="/users">Users</a></li>
               <li class="breadcrumb-item">
-                <a href="/users/<%= (!user.new_record? ? user["idUser"].to_s+"/edit" : "new") %>">
+                <a href="/users/<%= (!user.new_record? ? user["idUser"].to_s + "/edit" : "new") %>">
                   <%= (!user.new_record? ? "Edit" : "Create") %> User
                 </a>
               </li>
@@ -33,13 +33,13 @@
               <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
                 <%= (!user.new_record? ? "Edit" : "Create") %> User
               </h5>
-              <a href="<%= (user.roles == "admin" ? "/users":"/profil") %>" class="btn btn-primary waves-effect waves-light f-right md-trigger">
-                <i class="icon-people"></i>  Return
+              <a href="<%= (user.roles == "admin" ? "/users" : "/profil") %>" class="btn btn-primary waves-effect waves-light f-right md-trigger">
+                <i class="icon-people"></i> Return
               </a>
             </div>
             <%= form_for(@user, html: {id: "customer-form", class: 'the_form'}) do |form| %>
 
-            <div class="card-block text-center">
+              <div class="card-block text-center">
                 <div class="row">
                   <div class="md-group-add-on col-lg-6">
                   <span class="md-add-on">
@@ -47,59 +47,61 @@
                   </span>
                     <div class="md-input-wrapper">
                       <input type="text" class="md-form-control md-static" id="txtUsername"<%=
-                        ( !user.new_record? ? ' value=' + user.username : "") %>>
+                        (!user.new_record? ? ' value=' + user.username : "") %>>
                       <label>Username <span class="required">*</span></label>
                     </div>
                   </div>
                   <div class="md-group-add-on col-lg-6">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-company"></i>
-                                      </span>
+                    <span class="md-add-on">
+                        <i class="icofont icofont-company"></i>
+                    </span>
                     <div class="md-input-wrapper">
                       <select class="md-form-control md-static selectcash" id="txtRole">
-                        <option value="customerCare" <%= (  user.roles == "customerCare" ? " selected" : "") %>>Customer Care</option>
-                        <option value="dispatcher" <%= (  user.roles == "dispatcher" ? " selected" : "") %>>Dispatcher</option>
-                        <option value="admin" <%= ( user.roles == "admin" ? " selected" : "") %>>Admin</option>
+                        <option value="customerCare" <%= (user.roles == "customerCare" ? " selected" : "") %>>Customer
+                          Care
+                        </option>
+                        <option value="dispatcher" <%= (user.roles == "dispatcher" ? " selected" : "") %>>Dispatcher</option>
+                        <option value="admin" <%= (user.roles == "admin" ? " selected" : "") %>>Admin</option>
                       </select>
                       <label>Role</label>
                     </div>
                   </div>
                   <div class="md-group-add-on col-lg-6">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-user"></i>
-                                      </span>
+                      <span class="md-add-on">
+                          <i class="icofont icofont-ui-user"></i>
+                      </span>
                     <div class="md-input-wrapper">
                       <input type="text" class="md-form-control md-static" id="txtFirstName"<%=
-                        ( !user.new_record? ? ' value=' + user.firstName : "") %>>
+                        (!user.new_record? ? ' value=' + user.firstName : "") %>>
                       <label>First Name</label>
                     </div>
                   </div>
                   <div class="md-group-add-on col-lg-6">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-user"></i>
-                                      </span>
+                      <span class="md-add-on">
+                          <i class="icofont icofont-ui-user"></i>
+                      </span>
                     <div class="md-input-wrapper">
                       <input type="text" class="md-form-control md-static" id="txtLastName"<%=
-                        ( !user.new_record? ? ' value=' + user.lastName : "") %>>
+                        (!user.new_record? ? ' value=' + user.lastName : "") %>>
                       <label>Last Name</label>
                     </div>
                   </div>
                   <div class="md-group-add-on col-lg-6">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-email"></i>
-                                      </span>
+                      <span class="md-add-on">
+                          <i class="icofont icofont-ui-email"></i>
+                      </span>
                     <div class="md-input-wrapper">
                       <input type="email" class="md-form-control md-static" id="txtEmail"<%=
-                        ( !user.new_record? ? ' value=' + user.email : "") %>>
+                        (!user.new_record? ? ' value=' + user.email : "") %>>
                       <label>Email <span class="required">*</span></label>
                     </div>
                   </div>
                   <div class="md-group-add-on col-lg-6">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-cell-phone"></i>
-                                      </span>
+                      <span class="md-add-on">
+                          <i class="icofont icofont-ui-cell-phone"></i>
+                      </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" <%= ( !user.new_record? ? ' value=' + phone_number_display(user.phone).to_s : "") %>>
+                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" <%= (!user.new_record? ? ' value=' + phone_number_display(user.phone).to_s : "") %>>
                       <label>Phone Number</label>
                     </div>
                   </div>
@@ -107,18 +109,18 @@
                 <hr>
                 <div class="row">
                   <div class="md-group-add-on col-lg-12">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-password"></i>
-                                      </span>
+                      <span class="md-add-on">
+                          <i class="icofont icofont-ui-password"></i>
+                      </span>
                     <div class="md-input-wrapper">
                       <input type="password" class="md-form-control md-static" id="txtPwd">
                       <label>New Password</label>
                     </div>
                   </div>
                   <div class="md-group-add-on col-lg-12">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-password"></i>
-                                      </span>
+                    <span class="md-add-on">
+                        <i class="icofont icofont-ui-password"></i>
+                    </span>
                     <div class="md-input-wrapper">
                       <input type="password" class="md-form-control md-static" id="txtPwdValidation">
                       <label>Validation</label>
@@ -128,16 +130,16 @@
               </div>
               <div class="card-footer">
                 <div class="text-center">
-                  <button type="button" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block userSave" id="btnSaveUser" data-id-user="<%= ( !user.new_record? ? user["idUser"] : "new" ) %>">Save</button>
+                  <button type="button" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block userSave" id="btnSaveUser" data-id-user="<%= (!user.new_record? ? user["idUser"] : "new") %>">Save</button>
                   <a href="/users" class="btn btn-primary waves-effect m-r-20 f-w-600 md-close d-inline-block">
                     <i class="icon-people"></i> Return
                   </a>
                 </div>
               </div>
-            </div>
+              </div>
             <% end %>
             <!-- Edit Contact Ends Model-->
-          </div>
+            </div>
       </div>
     </div>
   </div>

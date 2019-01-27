@@ -16,6 +16,7 @@ class UsersController < DashboardController
     params[:avatar] = ""
     params[:isSuperadmin] = "0"
     create_user(current_user, params)
+    flash[:success] = 'User is successfully Created!'
   end
 
   def update

@@ -11,9 +11,9 @@
                 Dispatching
               </h5>
               <% if params[:quoteNo] %>
-              <a href="/quotes/<%= params[:quoteNo] %>/edit" class="btn btn-primary waves-effect waves-light f-right md-trigger">
-                <i class="icofont icofont-law-document"></i>  View Quote
-              </a>
+                <a href="/quotes/<%= params[:quoteNo] %>/edit" class="btn btn-primary waves-effect waves-light f-right md-trigger">
+                  <i class="icofont icofont-law-document"></i> View Quote
+                </a>
               <% end %>
             </div>
             <div class="card-block">
@@ -24,13 +24,13 @@
                   <h6 class="m-b-30 m-t-20">Last Scheduled Address</h6>
                   <label id="last-address">-</label>
                   <h6 class="m-b-30 m-t-20">Unscheduled Cars</h6>
-                  <div id="external-events" >
+                  <div id="external-events">
                     <% unscheduledCars.each do |key, val| %>
-                      <% car =  unscheduledCars[key]
-                        is_car_can_roll =  false
-                        is_car_can_roll =  true if car["flatBedTruckRequired"]
+                      <% car = unscheduledCars[key]
+                         is_car_can_roll = false
+                         is_car_can_roll = true if car["flatBedTruckRequired"]
                       %>
-                      <%= render partial: 'dashboard/unsched_car',locals: {car: car} %>
+                      <%= render partial: 'dashboard/unsched_car', locals: {car: car} %>
                     <% end %>
                   </div>
                 </div>
@@ -50,7 +50,7 @@
       function growling(message, type) {
           $.growl({
               message: message
-          },{
+          }, {
               type: type,
               allow_dismiss: true,
               label: 'Cancel',
@@ -60,9 +60,10 @@
                   from: 'bottom',
                   align: 'right'
               },
-              animate: { enter: 'animated fadeInUp' }
+              animate: {enter: 'animated fadeInUp'}
           });
       }
+
       var events = <%= @schedules.to_json.to_s.html_safe %>;
       var nonEvents = JSON.stringify(<%= (unscheduledCars) %>);
       // Keep the address of the last scheduled car
