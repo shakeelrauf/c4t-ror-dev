@@ -323,7 +323,7 @@ $(document).ready(function(){
       $.ajax({
           method: "get",
           url: "/number_exist",
-          data: { phone: $phone_num },
+          data: { phone: $phone_num.replace(/-/g, '') },
           dataType: "json",
           success: function(res){
             if(res.client == 0){
