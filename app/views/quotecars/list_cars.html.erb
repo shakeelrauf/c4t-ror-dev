@@ -37,27 +37,27 @@
               <h6>Add new car</h6>
               <form class="row" id="myForm" action="/cars" method="POST">
                 <div class="md-group-add-on col-lg-2">
-                    <span class="md-add-on">
-                        <i class="icofont icofont-ui-calendar"></i>
-                    </span>
+                  <span class="md-add-on">
+                      <i class="icofont icofont-ui-calendar"></i>
+                  </span>
                   <div class="md-input-wrapper">
                     <input type="number" name="year" class="md-static md-form-control" required>
                     <label>Year <span class="required">*</span></label>
                   </div>
                 </div>
                 <div class="md-group-add-on col-lg-2">
-                  <span class="md-add-on">
-                      <i class="icofont icofont-industries-alt-2"></i>
-                  </span>
+                    <span class="md-add-on">
+                        <i class="icofont icofont-industries-alt-2"></i>
+                    </span>
                   <div class="md-input-wrapper">
                     <input type="text" name="make" class="md-static md-form-control" required>
                     <label>Maker <span class="required">*</span></label>
                   </div>
                 </div>
                 <div class="md-group-add-on col-lg-2">
-                  <span class="md-add-on">
-                      <i class="icofont icofont-auto-mobile"></i>
-                  </span>
+                    <span class="md-add-on">
+                        <i class="icofont icofont-auto-mobile"></i>
+                    </span>
                   <div class="md-input-wrapper">
                     <input type="text" name="model" class="md-static md-form-control" required>
                     <label>Model <span class="required">*</span></label>
@@ -96,9 +96,9 @@
                   </div>
                 </div>
                 <div class="md-group-add-on col-lg-2">
-                  <span class="md-add-on">
-                      <i class="icofont icofont-settings-alt"></i>
-                  </span>
+                    <span class="md-add-on">
+                        <i class="icofont icofont-settings-alt"></i>
+                    </span>
                   <div class="md-input-wrapper">
                     <select name="transmission" class="md-static md-form-control selectcash">
                       <option></option>
@@ -112,9 +112,9 @@
                   </div>
                 </div>
                 <div class="md-group-add-on col-lg-2">
-                  <span class="md-add-on">
-                      <i class="icofont icofont-chair"></i>
-                  </span>
+                    <span class="md-add-on">
+                        <i class="icofont icofont-chair"></i>
+                    </span>
                   <div class="md-input-wrapper">
                     <input type="number" name="seats" min="1" class="md-static md-form-control">
                     <label>Nb. Seats</label>
@@ -146,231 +146,94 @@
               <div class="row">
                 <h6>Search in list</h6>
                 <div class="md-group-add-on col-lg-12">
-                    <span class="md-add-on">
-                        <i class="icofont icofont-ui-search"></i>
-                    </span>
+                  <span class="md-add-on">
+                      <i class="icofont icofont-ui-search"></i>
+                  </span>
                   <div class="md-input-wrapper">
                     <input type="text" class="md-static md-form-control search-bar-car">
                     <label>Search</label>
                   </div>
                 </div>
-                <% a = params["weight"] if params["weight"].present? %>
-                <input type="hidden" name="oid" id="oid" value="<%= a %>" >
-                <!-- Row end -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
-                                    Cars
-                                </h5>
-                            </div>
-                            <div class="card-block">
-                                <h6>Add new car</h6>
-                                <form class="row" id="myForm" action="/cars" method="POST">
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-ui-calendar"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="number" name="year" class="md-static md-form-control" required>
-                                            <label>Year <span class="required">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-industries-alt-2"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="make" class="md-static md-form-control" required>
-                                            <label>Maker <span class="required">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-auto-mobile"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="model" class="md-static md-form-control" required>
-                                            <label>Model <span class="required">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-auto-mobile"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="trim" class="md-static md-form-control">
-                                            <label>Trim</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-auto-mobile"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="body" class="md-static md-form-control">
-                                            <label>Body</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-wheel"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <select name="drive" class="md-static md-form-control selectcash">
-                                                <option></option>
-                                                <option>Front</option>
-                                                <option>Rear</option>
-                                                <option>AWD</option>
-                                            </select>
-                                            <label>Drive</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-settings-alt"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <select name="transmission" class="md-static md-form-control selectcash">
-                                                <option></option>
-                                                <option>Automatic</option>
-                                                <option>Manual</option>
-                                                <option>Automatic/Manual</option>
-                                                <option>Single Speed</option>
-                                                <option>CVT</option>
-                                            </select>
-                                            <label>Transmission</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-chair"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="number" name="seats" min="1" class="md-static md-form-control">
-                                            <label>Nb. Seats</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-car-alt-2"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="number" name="doors" min="1" class="md-static md-form-control">
-                                            <label>Nb. Doors</label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-2">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-vehicle-crane"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="number" name="weight" class="md-static md-form-control" required>
-                                            <label>Weight (Kg) <span class="required">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="md-group-add-on col-lg-4">
-                                        <input type="submit" class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" value="Add vehicle to database">
-                                    </div>
-                                </form>
-                                <hr>
-                                <div class="row">
-                                    <h6>Search in list</h6>
-                                    <div class="md-group-add-on col-lg-12">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-ui-search"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" class="md-static md-form-control search-bar-car">
-                                            <label>Search</label>
-                                        </div>
-                                    </div>
-                                    <div class="table-content crm-table">
-                                        <div class="project-table">
-                                            <ul class="pagination bootpag">
-                                                <li data-lp="prev" class="prev">
-                                                    <a href="javascript:void(0);">«</a>
-                                                </li>
-                                            <% i = 1 %>
-                                              <% pages = 10 if pages > 10 %>
-                                            <% while i <= pages %>
-                                                <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
-                                                    <a href="javascript:void(0);"><%= i %></a>
-                                                </li>
-                                              <% i = i+1 %>
-                                            <% end %>
-                                                <li data-lp="next" class="next">
-                                                    <a href="javascript:void(0);">»</a>
-                                                </li>
-                                            </ul>
-                                            <table id="crm-contact" class="table table-striped nowrap table-responsive">
-                                                <thead>
-                                                <tr>
-                                                    <td>Year</td>
-                                                    <td>Maker</td>
-                                                    <td>Model</td>
-                                                    <td>Trim</td>
-                                                    <td>Body</td>
-                                                    <td>Drive</td>
-                                                    <td>Transmission</td>
-                                                    <td>Nb. Seats</td>
-                                                    <td>Nb. Doors</td>
-                                                    <td>Weight (Kg)</td>
-                                                </tr>
-                                                </thead>
-                                                <tbody class="table-list">
-                                                <% cars.each do |car| %>
-                                                    <tr data-car="<%= car.idVehiculeInfo %>">
-                                                        <td><%= car.year %></td>
-                                                        <td><%= car.make %></td>
-                                                        <td><%= car.model %></td>
-                                                        <td><%= car.trim %></td>
-                                                        <td><%= car.body %></td>
-                                                        <td><%= car.drive %></td>
-                                                        <td><%= car.transmission %></td>
-                                                        <td><%= car.seats %></td>
-                                                        <td><%= car.doors %></td>
-                                                        <td><%= car.weight %></td>
-                                                    </tr>
-                                                <% end %>
-                                                </tbody>
-                                                <tfoot>
-                                                <tr>
-                                                    <td>Year</td>
-                                                    <td>Maker</td>
-                                                    <td>Model</td>
-                                                    <td>Trim</td>
-                                                    <td>Body</td>
-                                                    <td>Drive</td>
-                                                    <td>Transmission</td>
-                                                    <td>Nb. Seats</td>
-                                                    <td>Nb. Doors</td>
-                                                    <td>Weight (Kg)</td>
-                                                </tr>
-                                                </tfoot>
-                                            </table>
-                                            <ul class="pagination bootpag">
-                                                <li data-lp="prev" class="prev">
-                                                    <a href="javascript:void(0);">«</a>
-                                                </li>
-                                            <% i = 1 %>
-                                            <% while i <= pages %>
-                                                <li data-lp="<%= i %>" class="<%= (i == 1? "active" : "") %>">
-                                                    <a href="javascript:void(0);"><%= i %></a>
-                                                </li>
-                                              <% i = i+1 %>
-                                            <% end %>
-                                                <li data-lp="next" class="next">
-                                                    <a href="javascript:void(0);">»</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="table-content crm-table">
+                  <div class="project-table">
+                    <ul class="pagination bootpag">
+                      <li data-lp="prev" class="prev">
+                        <a href="javascript:void(0);">«</a>
+                      </li>
+                      <% i = 1 %>
+                      <% pages = 10 if pages > 10 %>
+                      <% while i <= pages %>
+                        <li data-lp="<%= i %>" class="<%= (i == 1 ? "active" : "") %>">
+                          <a href="javascript:void(0);"><%= i %></a>
+                        </li>
+                        <% i = i + 1 %>
+                      <% end %>
+                      <li data-lp="next" class="next">
+                        <a href="javascript:void(0);">»</a>
+                      </li>
+                    </ul>
+                    <table id="crm-contact" class="table table-striped nowrap table-responsive">
+                      <thead>
+                      <tr>
+                        <td>Year</td>
+                        <td>Maker</td>
+                        <td>Model</td>
+                        <td>Trim</td>
+                        <td>Body</td>
+                        <td>Drive</td>
+                        <td>Transmission</td>
+                        <td>Nb. Seats</td>
+                        <td>Nb. Doors</td>
+                        <td>Weight (Kg)</td>
+                      </tr>
+                      </thead>
+                      <tbody class="table-list">
+                      <% cars.each do |car| %>
+                        <tr data-car="<%= car.idVehiculeInfo %>">
+                          <td><%= car.year %></td>
+                          <td><%= car.make %></td>
+                          <td><%= car.model %></td>
+                          <td><%= car.trim %></td>
+                          <td><%= car.body %></td>
+                          <td><%= car.drive %></td>
+                          <td><%= car.transmission %></td>
+                          <td><%= car.seats %></td>
+                          <td><%= car.doors %></td>
+                          <td><%= car.weight %></td>
+                        </tr>
+                      <% end %>
+                      </tbody>
+                      <tfoot>
+                      <tr>
+                        <td>Year</td>
+                        <td>Maker</td>
+                        <td>Model</td>
+                        <td>Trim</td>
+                        <td>Body</td>
+                        <td>Drive</td>
+                        <td>Transmission</td>
+                        <td>Nb. Seats</td>
+                        <td>Nb. Doors</td>
+                        <td>Weight (Kg)</td>
+                      </tr>
+                      </tfoot>
+                    </table>
+                    <ul class="pagination bootpag">
+                      <li data-lp="prev" class="prev">
+                        <a href="javascript:void(0);">«</a>
+                      </li>
+                      <% i = 1 %>
+                      <% while i <= pages %>
+                        <li data-lp="<%= i %>" class="<%= (i == 1 ? "active" : "") %>">
+                          <a href="javascript:void(0);"><%= i %></a>
+                        </li>
+                        <% i = i + 1 %>
+                      <% end %>
+                      <li data-lp="next" class="next">
+                        <a href="javascript:void(0);">»</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -381,5 +244,39 @@
   </div>
   <!-- Container-fluid ends -->
 </div>
-<%= public_js_path('cars.js') %>
-<%= public_js_path('common.js') %>
+</div>
+<% content_for :js do %>
+  <script>
+      $(document).ready(function () {
+          var value = $("#oid").val();
+          if (value) {
+              doGrowlingSuccess("The car is now added.");
+          }
+      });
+
+      function growling(message, type) {
+          $.growl({
+              message: message
+          }, {
+              type: type,
+              allow_dismiss: true,
+              label: 'Cancel',
+              className: 'btn-xs btn-inverse',
+              delay: 0,
+              placement: {
+                  from: 'top',
+                  align: 'center'
+              },
+              animate: {enter: 'animated fadeInDown'}
+          });
+      }
+
+      $(document).ready(function () {
+          <% if (params[:isAdded] != nil) %>
+          growling("The car is now added.", "success");
+          <% end %>
+      });
+  </script>
+  <%= public_js_path('cars.js') %>
+  <%= public_js_path('common.js') %>
+<% end %>
