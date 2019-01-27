@@ -54,7 +54,7 @@ module Quotesmethods
   def save_quotes
     return respond_json({:error => "Please send all required customer attributes."}) if (!params[:firstName].present? || !params[:lastName].present? || !params[:postal].present? || !params[:heardofus].present? || !params[:phone].present?)
     postal_code = Validations.postal(params[:postal])
-    return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)
+    return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 6)
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
     return respond_json({:error => "phone number length must be at least 10 digits."}) if (phone.to_s.length < 10)
     carList = []
