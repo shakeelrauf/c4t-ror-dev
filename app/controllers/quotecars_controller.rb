@@ -11,7 +11,8 @@ class QuotecarsController < ApplicationController
  	end
 
  	def create
-    car = VehicleInfo.create form_body(params)
+    car = VehicleInfo.create(car_params)
+    flash[:success] = 'Car is successfully Created!'
     redirect_to cars_path
  	end
 
