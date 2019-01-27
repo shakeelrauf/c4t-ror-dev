@@ -1,5 +1,6 @@
 class QuotecarsController < ApplicationController
-  	before_action :login_required
+  before_action :login_required
+	include Quotecarsmethods
 
 	def quotescars
 		list = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]])
@@ -10,14 +11,13 @@ class QuotecarsController < ApplicationController
  	end
 
  	def create_car
-    @car = ApiCall.post("/vehicles", form_body(params), headers )
-    redirect_to carz_path(params: {weight: @car["weight"]})
+    car = VehicleInfo.create form_body(params)
+    redirect_to carz_path(params: {weight: car["weight"]})
  	end
 
  	def list_cars
- 		@cars = ApiCall.get("/vehicles?limit=15",{}, headers)
-		count =  ApiCall.get("/vehicles/count?limit=15",{}, headers)
-		render locals: {pages: count}
+		cars, count = vehicles_search 15
+		render locals: {pages: count, cars: cars}
  	end
 
  	def car_count
@@ -29,14 +29,8 @@ class QuotecarsController < ApplicationController
 		params[:filter] = params[:filter].gsub("?","")
 		params[:limt] = params[:limit].gsub("?","")
 		params[:offset] = params[:offset].gsub("?","")
-		vehicles = ApiCall.get("/vehicles?filter=#{params[:filter]}&offset=#{params[:offset]}&limit=#{params[:limit]}", {},headers)
-		count =  ApiCall.get("/vehicles/count?filter=#{params[:filter]}&limit=#{params[:limit]}",{}, headers)
-		result = {
-				count: count,
-				results: vehicles
-		}
-		puts "-----------------------------------------------------------------------#{vehicles.length}"
-
+		vehicles, count = vehicles_search params[:limit], params[:offset], params[:filter]
+		result = {count: count, results: vehicles}
 		respond_json(result)
  	end
 

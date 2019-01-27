@@ -188,18 +188,18 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody class="table-list">
-                                                <% @cars.each do |car| %>
-                                                    <tr data-car="<%= car["id"] %>">
-                                                        <td><%= car["year"] %></td>
-                                                        <td><%= car["make"] %></td>
-                                                        <td><%= car["model"] %></td>
-                                                        <td><%= car["trim"] %></td>
-                                                        <td><%= car["body"] %></td>
-                                                        <td><%= car["drive"] %></td>
-                                                        <td><%= car["transmission"] %></td>
-                                                        <td><%= car["seats"] %></td>
-                                                        <td><%= car["doors"] %></td>
-                                                        <td><%= car["weight"] %></td>
+                                                <% cars.each do |car| %>
+                                                    <tr data-car="<%= car.idVehiculeInfo %>">
+                                                        <td><%= car.year %></td>
+                                                        <td><%= car.make %></td>
+                                                        <td><%= car.model %></td>
+                                                        <td><%= car.trim %></td>
+                                                        <td><%= car.body %></td>
+                                                        <td><%= car.drive %></td>
+                                                        <td><%= car.transmission %></td>
+                                                        <td><%= car.seats %></td>
+                                                        <td><%= car.doors %></td>
+                                                        <td><%= car.weight %></td>
                                                     </tr>
                                                 <% end %>
                                                 </tbody>
