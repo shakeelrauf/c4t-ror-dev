@@ -25,7 +25,8 @@
               <h5>Settings</h5>
             </div>
             <div class="card-block">
-              <form method="PUT" action="/settings">
+              <form method="post" action="/settings/<%=@settings.first.id %>">
+                <input type="hidden" name="_method" value="put" />
                 <br>
                 <div class="row">
                   <h6>Values</h6>
