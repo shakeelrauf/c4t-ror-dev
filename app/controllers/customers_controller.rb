@@ -84,6 +84,11 @@ class CustomersController < ApplicationController
     respond_json(cus)
   end
 
+  def number_exist
+    client = Customer.find_or_initialize_by(phone: params[:phone])
+    render json: { client: client }
+  end
+
   private
 
   def growl(action)

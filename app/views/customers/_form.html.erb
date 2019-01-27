@@ -17,7 +17,7 @@
                 </a>
               </li>
               <li class="breadcrumb-item">Clients</li>
-              <li class="breadcrumb-item"><a href="/customers/add">New Customer</a></li>
+              <li class="breadcrumb-item"><a href="/customers/add"><%= params[:action] == "new" ? "New Customer" : "Edit Customer" %></a></li>
             </ol>
           </div>
         </div>
@@ -28,7 +28,7 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="f-26"><%= action_name == "new" ? "New Customer" : "Edit Customer" %></h3>
+                <h3 class="f-26" id="page_type"><%= action_name == "new" ? "New Customer" : "Edit Customer" %></h3>
               </div>
               <div class="card-block text-center">
                 <div class="row">

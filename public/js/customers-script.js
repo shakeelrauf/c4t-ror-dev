@@ -301,52 +301,37 @@ $(document).ready(function(){
                $(this).rules("remove", "phoneNo")
                $(this).val($(this).val().replace(/-/g, ''));
            });
-          $("#customer-form").submit()
+          if($("#page_type").text().trim() == "New Customer"){
+            number_exist();
+          }
+          else{
+            $("#customer-form").submit()
+          }
       }
       else{
         e.preventDefault();
       }
     });
 
+    function number_exist()
+    {
+      var $phone_num = $("#txtPhone").val();
+      $.ajax({
+          method: "get",
+          url: "/number_exist",
+          data: { phone: $phone_num },
+          dataType: "json",
+          success: function(res){
+            if(res.client.idClient == null){
+              $("#customer-form").submit()
+            }
+            else{
+              growling("Phone Number already exist.");
+            }
+          }
+      });
+    }
 
-    //  $("#saveCustomerButton").click(function(e){
-    //      if($(".the_form").valid()) {
-    //          if (valid_fields()) {
-    //              $(".phone").each(function(a){
-    //                  $(this).rules("remove", "phoneNo")
-    //                  $(this).val($(this).val().replace(/-/g, ''));
-    //              });
-
-    //              $("#customer-form").submit();
-    //          }
-    //          else {
-    //              e.preventDefault();
-    //          }
-    //      }else{
-    //          e.preventDefault();
-    //      }
-    // });
-    // $("#customer-form").submit(function(e){
-    //     e.preventDefault();
-    //     if (valid_fields()){
-    //         $('#saveCustomerButton').attr('disabled','disabled')
-    //         $.ajax({
-    //             method: $(this).attr("method"),
-    //             url: $(this).attr("action"),
-    //             data: $(this).serialize(),
-    //             dataType: "json",
-    //             success: function(res){
-    //                 $('#saveCustomerButton').removeAttr('disabled');
-    //                 if(res.response.idClient != undefined){
-    //                     growlOfSuccess(success_response);
-    //                 }
-    //                 else{
-    //                     growling(res.response.error)
-    //                 }
-    //             }
-    //         });
-    //     }
-    // });
     $("#txtType").change(function() {
         changeViewType();
     });
@@ -402,7 +387,6 @@ $(".quote-status-list").change(function() {
   });
 });
 
-// $(document).on('turbolinks:load', function() {
 $(document).ready(function() {
   $("#quote-datatable").DataTable({
     "paging": false,
