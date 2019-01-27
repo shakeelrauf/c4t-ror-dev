@@ -14,8 +14,9 @@ Rails.application.routes.draw do
 	resources :customers
 
   scope controller: :customers do
-    get '/customers/id/:no/json',             action: :get_customer
-    get '/customers/:customerId/postal-select2', action: :postal_list
+		get '/customers/id/:no/json',             action: :get_customer
+		get '/customers/:customerId/postal-select2', action: :postal_list
+		get '/number_exist', action: :number_exist
   end
 
 	scope  controller: :dashboard do

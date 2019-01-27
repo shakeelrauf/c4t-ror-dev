@@ -34,18 +34,7 @@ class QuotecarsController < ApplicationController
 		respond_json(result)
  	end
 
-	def form_body(params)
-    {
-      "year":      					params[:year],
-      "make": 		 					params[:make],
-      "model": 		 					params[:model],
-      "trim": 	 	 					params[:trim],
-      "body": 		 					params[:body],
-      "drive": 		 					params[:drive],
-      "transmission": 	 	  params[:transmission],
-      "seats": 		 					params[:seats],
-      "doors": 	 	  				params[:doors],
-      "weight": 		 				params[:weight]
-    }
+	def car_params
+    params.permit(:year, :make, :model, :trim, :body, :drive, :transmission, :seats, :doors, :weight)
   end
 end

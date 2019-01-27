@@ -297,56 +297,46 @@ $(document).ready(function(){
 
     $("#saveCustomerButton").click(function(e){
       if(valid_fields() && $("#customer-form").valid()){
-          $(".phone").each(function(a){
-               $(this).rules("remove", "phoneNo")
-               $(this).val($(this).val().replace(/-/g, ''));
-           });
-          $("#customer-form").submit()
+          if($("#page_type").text().trim() == "New Customer"){
+            number_exist();
+          }
+          else{
+            all_number_validate();
+            $("#customer-form").submit()
+          }
       }
       else{
         e.preventDefault();
       }
     });
 
+    function all_number_validate(){
+      $(".phone").each(function(a){
+        $(this).rules("remove", "phoneNo")
+        $(this).val($(this).val().replace(/-/g, ''));
+      });
+    }
 
-    //  $("#saveCustomerButton").click(function(e){
-    //      if($(".the_form").valid()) {
-    //          if (valid_fields()) {
-    //              $(".phone").each(function(a){
-    //                  $(this).rules("remove", "phoneNo")
-    //                  $(this).val($(this).val().replace(/-/g, ''));
-    //              });
+    function number_exist()
+    {
+      var $phone_num = $("#txtPhone").val();
+      $.ajax({
+          method: "get",
+          url: "/number_exist",
+          data: { phone: $phone_num.replace(/-/g, '') },
+          dataType: "json",
+          success: function(res){
+            if(res.client == 0){
+              all_number_validate();
+              $("#customer-form").submit()
+            }
+            else{
+              growling("Phone Number already exist.");
+            }
+          }
+      });
+    }
 
-    //              $("#customer-form").submit();
-    //          }
-    //          else {
-    //              e.preventDefault();
-    //          }
-    //      }else{
-    //          e.preventDefault();
-    //      }
-    // });
-    // $("#customer-form").submit(function(e){
-    //     e.preventDefault();
-    //     if (valid_fields()){
-    //         $('#saveCustomerButton').attr('disabled','disabled')
-    //         $.ajax({
-    //             method: $(this).attr("method"),
-    //             url: $(this).attr("action"),
-    //             data: $(this).serialize(),
-    //             dataType: "json",
-    //             success: function(res){
-    //                 $('#saveCustomerButton').removeAttr('disabled');
-    //                 if(res.response.idClient != undefined){
-    //                     growlOfSuccess(success_response);
-    //                 }
-    //                 else{
-    //                     growling(res.response.error)
-    //                 }
-    //             }
-    //         });
-    //     }
-    // });
     $("#txtType").change(function() {
         changeViewType();
     });
@@ -402,7 +392,6 @@ $(".quote-status-list").change(function() {
   });
 });
 
-// $(document).on('turbolinks:load', function() {
 $(document).ready(function() {
   $("#quote-datatable").DataTable({
     "paging": false,
