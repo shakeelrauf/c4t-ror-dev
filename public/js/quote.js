@@ -535,10 +535,10 @@ function saveCar(callback) {
             "price":          netPrice
         }
         if(car["carAddressId"] == undefined){
-            car["carAddressId"] =$(this).find("select[name=car-location"+carId+"] option").val()
+            car["carAddressId"] =$(this).find("select[name=car-location"+carId+"] option").text()
         }
         if(car["carAddressId"] == undefined){
-            car["carAddressId"] = ""
+            car["carAddressId"] = " "
         }
         cars.push(car);
     });
