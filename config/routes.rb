@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 		member do
 			post :create_car
 			post :remove_car
+			post :status, action: :update_status
 		end
 	end
 

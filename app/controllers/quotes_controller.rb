@@ -129,6 +129,45 @@ class QuotesController < ApplicationController
     respond_json(returned)
   end
 
+  def update_status
+    if (!params[:status] && !params[:id])
+      return respond_json({"msg": "Failure!!", "success": false,:error => "please send attribute status."})
+    else
+      @quote = Quote.includes(:status).where(idQuote: params[:id])
+      if !@quote.present?
+        return respond_json({"msg": "Failure!!", "success": false,:error => "Quote not found"})
+      else
+        stats = Status.where(idStatus: params[:status])
+        if params[:status] && stats.present?
+          @quote.first.idStatus = params[:status]
+          @quote.first.dtStatusUpdated = Time.now
+          @quote.first.save(:validate => false)
+          result = @quote
+        else
+          return respond_json({"msg": "Failure!!", "success": false,:error => "Status not found"})
+        end
+        r_quote = Quote.includes(:customer).find_by_id(id: params[:no])
+        # If status is «in Yard», send sms to customer for know his appreciation.
+        if (params[:status] == 6)
+          # Check if sms already sent.
+          if (!r_quote.isSatisfactionSMSQuoteSent && r_quote.customer.cellPhone)
+            sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
+            sms.call
+            quotes.update(isSatisfactionSMSQuoteSent: 1)
+          end
+        end
+
+        quotez = {
+            "msg": "Success!!",
+            "success": true,
+            "data": result
+        }
+        return respond_json(quotez)
+      end
+    end
+  end
+
+
   def create_car
     car = QuoteCar.new(idQuote: params[:quote], idCar: params[:veh], missingWheels: 0, missingBattery: nil, missingCat: nil, gettingMethod: "pickup")
     car.save!
@@ -145,7 +184,7 @@ class QuotesController < ApplicationController
   def remove_car
     @quote_car = QuoteCar.where(idQuoteCars: params[:car])
     @quote_car.destroy_all
-    return render_json_response({:msg => "ok"}, :ok)
+    return respond_json({:msg => "ok"})
   end
 
   def status
