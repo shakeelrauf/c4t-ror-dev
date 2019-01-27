@@ -5,9 +5,9 @@
   <div class="card-block">
     <div class="row">
       <div class="col-lg-1">
-              <span class="md-add-on">
-                <i class="icofont icofont-disc"></i>
-              </span>
+        <span class="md-add-on">
+          <i class="icofont icofont-disc"></i>
+        </span>
       </div>
 
       <div class="col-lg-5">
@@ -30,19 +30,21 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="md-input-wrapper cashradio">
-                <input type="radio" name="cat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1" <%
-                  if(car != nil && car.missingCat == true) %>
-                    checked="checked"
-                  <% end %> class="handlingOptionRadio">
-                  <label>Yes</label><br>
+                <input type="radio" name="cat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1"
+                       <%
+                         if (car != nil && car.missingCat == true) %>
+                       checked="checked"
+                       <% end %> class="handlingOptionRadio">
+                <label>Yes</label><br>
               </div>
             </div>
             <div class="col-lg-4">
               <div class="md-input-wrapper cashradio">
-                <input type="radio" name="cat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"<%
-                        if(car == nil || car.missingCat == false) %>
-                          checked="checked"
-                        <% end %> class="handlingOptionRadio">
+                <input type="radio" name="cat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"
+                <%
+                  if (car == nil || car.missingCat == false) %>
+                       checked="checked"
+                       <% end %> class="handlingOptionRadio">
                 <label>No</label>
               </div>
             </div>
@@ -60,24 +62,26 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="md-input-wrapper cashradio">
-                <input type="radio" name="pickup<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="pickup"<%
-                  if(car == nil || car.gettingMethod == "pickup")
+                <input type="radio" name="pickup<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="pickup"
+                <%
+                  if (car == nil || car.gettingMethod == "pickup")
                 %>
-                 checked="checked"
-                 <% end %>
-                 class="handlingOptionRadio">
-                  <label>Pickup</label><br>
-                </div>
-                </div>
-                  <div class="col-lg-8">
-                    <div class="md-input-wrapper cashradio">
-                      <input type="radio" name="pickup<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="dropoff"<%
-                        if(car != nil && car.gettingMethod == "dropoff") %>
-                          checked="checked"
-                         <% end %> class="handlingOptionRadio">
-                        <label>Drop Off</label>
-                    </div>
-                  </div>
+                       checked="checked"
+                       <% end %>
+                       class="handlingOptionRadio">
+                <label>Pickup</label><br>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="pickup<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="dropoff"
+                <%
+                  if (car != nil && car.gettingMethod == "dropoff") %>
+                       checked="checked"
+                       <% end %> class="handlingOptionRadio">
+                <label>Drop Off</label>
+              </div>
+            </div>
           </div>
           <label style="top: -15px;font-size: 13px">Transport<span class="required">*</span></label>
         </div>
@@ -92,24 +96,26 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="md-input-wrapper cashradio">
-                <input type="radio" name="bat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1" <%
-                  if(car != nil && car.missingBattery == true)%>
-                  checked="checked"
-                  <%end%>
-                  class="handlingOptionRadio">
-                  <label>Yes</label><br>
-                </div>
-                </div>
-                  <div class="col-lg-4">
-                    <div class="md-input-wrapper cashradio">
-                      <input type="radio" name="bat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"<%
-                        if(car == nil || car.missingBattery == false )%>
-                          checked="checked"
-                        <%end%>
-                        class="handlingOptionRadio">
-                        <label>No</label>
-                    </div>
-                  </div>
+                <input type="radio" name="bat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1"
+                       <%
+                         if (car != nil && car.missingBattery == true) %>
+                       checked="checked"
+                       <% end %>
+                       class="handlingOptionRadio">
+                <label>Yes</label><br>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="bat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"
+                <%
+                  if (car == nil || car.missingBattery == false) %>
+                       checked="checked"
+                       <% end %>
+                       class="handlingOptionRadio">
+                <label>No</label>
+              </div>
+            </div>
           </div>
           <label style="top: -15px;font-size: 13px">Battery Missing<span class="required">*</span></label>
         </div>
@@ -125,24 +131,26 @@
           <div class="row">
             <div class="col-lg-2">
               <div class="md-input-wrapper cashradio">
-                <input type="radio" name="still_driving<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1" <%
-                  if(car != nil && car.still_driving == true)%>
-                  checked="checked"
-                  <%end%>
-                  class="handlingOptionRadio">
-                  <label>Yes</label><br>
-                </div>
-                </div>
-                  <div class="col-lg-2">
-                    <div class="md-input-wrapper cashradio">
-                      <input type="radio" name="still_driving<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"<%
-                        if(car == nil || car.still_driving == false)%>
-                          checked="checked"
-                        <%end%>
-                        class="handlingOptionRadio">
-                        <label>No</label>
-                    </div>
-                  </div>
+                <input type="radio" name="still_driving<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1"
+                       <%
+                         if (car != nil && car.still_driving == true) %>
+                       checked="checked"
+                       <% end %>
+                       class="handlingOptionRadio">
+                <label>Yes</label><br>
+              </div>
+            </div>
+            <div class="col-lg-2">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="still_driving<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"
+                <%
+                  if (car == nil || car.still_driving == false) %>
+                       checked="checked"
+                       <% end %>
+                       class="handlingOptionRadio">
+                <label>No</label>
+              </div>
+            </div>
 
           </div>
           <label style="top: -15px;font-size: 13px">Still driving the vehicule?<span class="required">*</span></label>
@@ -150,70 +158,83 @@
       </div>
       <br>
       <div class="col-lg-1">
-        <span class="md-add-on map"  data-id="<%= car.idQuoteCars %>">
+        <span class="md-add-on map" data-id="<%= car.idQuoteCars %>">
             <i class="icofont icofont-map"></i>
         </span>
       </div>
 
       <div class="col-lg-11">
-          <div class="md-input-wrapper">
-              <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
-              <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
-              <select class="md-form-control md-static car-location-select2" data-id="<%=car.idQuoteCars %>" name="car-location<%= car.idQuoteCars %>" id="car-location<%= car.id %>">
-                <% if (car.address.present?)  %>
-                  <option value="<%= car.address.postal  %>"  data-select2-tag='true'><%= car.address.postal %></option>
-                <% end %>
-              </select>
-            <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
-              <label style="top: -15px;">Select an address or enter a Postal Code for this car<span class="required">*</span></label>
-              </div>
-              </div>
-              <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" >
+        <div class="md-input-wrapper">
+          <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
+          <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
+          <select class="md-form-control md-static car-location-select2" data-id="<%= car.idQuoteCars %>" name="car-location<%= car.idQuoteCars %>" id="car-location<%= car.id %>">
+            <% if (car.address.present?) %>
+              <option value="<%= car.address.postal %>" data-select2-tag='true'><%= car.address.postal %></option>
+            <% end %>
+          </select>
+          <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
+          <label style="top: -15px;">Select an address or enter a Postal Code for this
+            car<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>">
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
-          </div>
-          <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" >
-            <div class="md-input-wrapper">
-              <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
-              <label style="top: -15px;">Street<span class="required">*</span></label>
-            </div>
-          </div>
-          <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>" >
-            <div class="md-input-wrapper">
-              <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
-              <label style="top: -15px;">City<span class="required">*</span></label>
-            </div>
-          </div>
-          <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" >
+      </div>
+      <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>">
+        <div class="md-input-wrapper">
+          <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
+          <label style="top: -15px;">Street<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>">
+        <div class="md-input-wrapper">
+          <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
+          <label style="top: -15px;">City<span class="required">*</span></label>
+        </div>
+      </div>
+      <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>">
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
-              </div>
-              <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" >
-                <div class="md-input-wrapper">
-                  <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
-                    <option value="ON" <%= car.address.present? ? car.address.province=="ON" ? 'selected' : '' : '' %>>Ontario</option>
-                    <option value="BC" <%= car.address.present? ? car.address.province=="BC" ? 'selected' : '' : '' %>>British Columbia</option>
-                    <option value="QC" <%= car.address.present? ? car.address.province=="QC" ? 'selected' : '' : '' %>>Quebec</option>
-                    <option value="AL" <%= car.address.present? ? car.address.province=="AL" ? 'selected' : '' : '' %>>Alberta</option>
-                    <option value="NS" <%= car.address.present? ? car.address.province=="NS" ? 'selected' : '' : '' %>>Nova Scotia</option>
-                    <option value="NL" <%= car.address.present? ? car.address.province=="NL" ? 'selected' : '' : '' %>>Newfoundland and Labrador</option>
-                    <option value="SA" <%= car.address.present? ? car.address.province=="SA" ? 'selected' : '' : '' %>>Saskatchewan</option>
-                    <option value="MA" <%= car.address.present? ? car.address.province=="MA" ? 'selected' : '' : '' %>>Manitoba</option>
-                    <option value="NB" <%= car.address.present? ? car.address.province=="NB" ? 'selected' : '' : '' %>>New Brunswick</option>
-                    <option value="PE" <%= car.address.present? ? car.address.province=="PE" ? 'selected' : '' : '' %>>Prince Edward Island</option>
-                  </select>
-                  <label style="top: -15px;">Province<span class="required">*</span></label>
-                </div>
-              </div>
+      </div>
+      <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>">
+        <div class="md-input-wrapper">
+          <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
+            <option value="ON" <%= car.address.present? ? car.address.province == "ON" ? 'selected' : '' : '' %>>Ontario</option>
+            <option value="BC" <%= car.address.present? ? car.address.province == "BC" ? 'selected' : '' : '' %>>British
+              Columbia
+            </option>
+            <option value="QC" <%= car.address.present? ? car.address.province == "QC" ? 'selected' : '' : '' %>>Quebec</option>
+            <option value="AL" <%= car.address.present? ? car.address.province == "AL" ? 'selected' : '' : '' %>>Alberta</option>
+            <option value="NS" <%= car.address.present? ? car.address.province == "NS" ? 'selected' : '' : '' %>>Nova
+              Scotia
+            </option>
+            <option value="NL" <%= car.address.present? ? car.address.province == "NL" ? 'selected' : '' : '' %>>Newfoundland
+              and Labrador
+            </option>
+            <option value="SA" <%= car.address.present? ? car.address.province == "SA" ? 'selected' : '' : '' %>>Saskatchewan</option>
+            <option value="MA" <%= car.address.present? ? car.address.province == "MA" ? 'selected' : '' : '' %>>Manitoba</option>
+            <option value="NB" <%= car.address.present? ? car.address.province == "NB" ? 'selected' : '' : '' %>>New
+              Brunswick
+            </option>
+            <option value="PE" <%= car.address.present? ? car.address.province == "PE" ? 'selected' : '' : '' %>>Prince
+              Edward Island
+            </option>
+          </select>
+          <label style="top: -15px;">Province<span class="required">*</span></label>
+        </div>
+      </div>
 
     </div><!--row-->
     <div class="card-header">
       <h6 class="card-header-text">Price calculation</h6>
     </div>
     <style>
-      .n {text-align: right}
+      .n {
+        text-align: right
+      }
     </style>
     <div class="card-block">
       <div class="row">
@@ -354,10 +375,10 @@
 </div>
 
 <script !src="">
-  $(".car-location-select2").each(function(a){
-    if(($(this).children("option") != undefined) && (($(this).children("option").val() != undefined) && $(this).children("option").val().length > 0)){
-        var id = $(this).data("id");
-        $(".car-ex-address"+id).show()
-    }
-  })
+    $(".car-location-select2").each(function (a) {
+        if (($(this).children("option") != undefined) && (($(this).children("option").val() != undefined) && $(this).children("option").val().length > 0)) {
+            var id = $(this).data("id");
+            $(".car-ex-address" + id).show()
+        }
+    })
 </script>

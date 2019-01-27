@@ -1,249 +1,251 @@
 <div class="content-wrapper">
-      <div class="container-fluid">
-          <div >
-              <div class="row">
-                  <div class="col-sm-12 p-0">
-                      <div class="main-header">
-                          <h4>Quotes</h4>
-                          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                              <li class="breadcrumb-item">
-                                  <a href="/dashboard">
-                                      <i class="icofont icofont-home"></i>
-                                  </a>
-                              </li>
-                              <li class="breadcrumb-item">Clients</li>
-                              <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
-                          </ol>
-                      </div>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-sm-12">
-                      <div class="card">
-                          <div class="card-header">
-                              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
-                                  Quotes
-                              </h5>
-                              <a href="/create-quote" class="btn btn-primary waves-effect waves-light f-right md-trigger">
-                                  <i class="icofont icofont-law-document"></i>  Create Quote
-                              </a>
-                          </div>
-                          <div class="card-block">
-                              <div class="row">
-                                  <div class="md-group-add-on col-lg-5">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-ui-search"></i>
-                                      </span>
-                                      <div class="md-input-wrapper">
-                                          <input type="text" class="md-form-control md-static search-bar-quote">
-                                          <label>Search</label>
-                                      </div>
-                                  </div>
-                                  <div class="md-group-add-on col-lg-3">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-filter"></i>
-                                      </span>
-                                      <div class="md-input-wrapper">
-                                          <select class="md-form-control md-static filter-quote selectcash">
-                                              <option value="">All</option>
-                                          <% @status.each do |stat| %>
-                                              <option value="<%= stat.name %>"><%= stat.name %></option>
-                                          <% end %>
-                                          </select>
-                                          <label>Status</label>
-                                      </div>
-                                  </div>
-                                  <div class="md-group-add-on col-lg-2">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-calendar"></i>
-                                      </span>
-                                      <div class="md-input-wrapper">
-                                          <input type="date" name="dtStart" value="2000-01-01" class="md-form-control md-static">
-                                          <label>From</label>
-                                      </div>
-                                  </div>
-                                  <div class="md-group-add-on col-lg-2">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-calendar"></i>
-                                      </span>
-                                      <div class="md-input-wrapper">
-                                          <input type="date" name="dtEnd"  class="md-form-control md-static">
-                                          <label>To</label>
-                                      </div>
-                                  </div>
-                                  <div class="col-lg-10"></div>
-                                  <div class="md-group-add-on col-lg-2">
-                                      <span class="md-add-on">
-                                          <i class="icofont icofont-calculator"></i>
-                                      </span>
-                                      <div class="md-input-wrapper">
-                                          <select class="md-form-control md-static shortcut-date-quotes selectcash">
-                                              <option selected style="display:none;"></option>
-                                              <option>Today</option>
-                                              <option>Yesterday</option>
-                                              <option>Last week</option>
-                                              <option>Last month</option>
-                                          </select>
-                                          <label>Preset</label>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="row">
-                                  <div class="table-content crm-table">
-                                      <h2 class="text-center hide no-record" style="display: none;">No Record Found</h2>
-                                      <div class="project-table">
-                                          <ul id="pagination-demo" class="pagination-demo pagination bootpag"></ul>
-                                          <table id="crm-contact" class="table table-striped nowrap table-responsive">
-                                              <thead>
-                                              <tr>
-                                                <th>Reference number</th>
-                                                <th>Client Name</th>
-                                                <th>Client Phone</th>
-                                                <th>Date Added</th>
-                                                <th>Dispatcher</th>
-                                                <th>Status</th>
-                                                <th>Time from last status</th>
-                                                <th>Action</th>
-                                              </tr>
-                                              </thead>
-                                              <tbody class="table-quotes">
-                                              <% @quotes.each do |quote| %>
-                                                  <tr>
-                                                    <td><%= quote.referNo %></td>
-                                                    <td>
-                                                      <% if (quote.customer) %>
-                                                      <%= quote.customer.firstName %> <%= quote.customer.lastName %>
-                                                      <% end %>
-                                                    </td>
-                                                    <td>
-                                                      <% if (quote.customer) %>
-                                                        <%= Validations.phone(quote.customer.phone) %>
-                                                      <% end %>
-                                                    </td>
-                                                      <td><%= !quote.dtCreated.nil? ? quote.dtCreated.to_datetime.strftime("%Y-%m-%d %H:%M") : "" %></td>
-                                                      <td><%= quote.dispatcher.firstName %> <%= quote.dispatcher.lastName %></td>
-                                                      <td>
-                                                          <select class="quote-status-list selectcash form-control badge badge-<%= background_color(quote.status.color) %>" data-quote-no="<%= quote.id %>">
-                                                                                        <% @status.each do |stat| %>
-                                                            <option value="<%= stat.id %>"<% if (stat.id == quote.status.id) %> selected<% end %>>
-                                                                                                <%= stat.name %>
-                                                                                            </option>
-                                                                                        <% end %>
-                                                          </select>
-                                                      </td>
-                                                      <td class="timerFromLast timerFromLastStatus<%= quote.idQuote %>" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
-                                                      </td>
-                                                      <td class="faq-table-btn">
-                                                        <a href="/quotes/<%= quote.idQuote %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
-                                                          <i class="icofont icofont-ui-edit"></i>
-                                                        </a>
-                                                      </td>
-                                                  </tr>
-                                              <% end %>
-                                              </tbody>
-                                              <tfoot>
-                                              <tr>
-                                                  <th>Reference number</th>
-                                                  <th>Client Name</th>
-                                                  <th>Client Phone</th>
-                                                  <th>Date Added</th>
-                                                  <th>Dispatcher</th>
-                                                  <th>Status</th>
-                                                  <th>Time from last status</th>
-                                                  <th>Action</th>
-                                              </tr>
-                                              </tfoot>
-                                          </table>
-                                          <ul class="pagination-demo pagination bootpag"></ul>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+  <div class="container-fluid">
+    <div>
+      <div class="row">
+        <div class="col-sm-12 p-0">
+          <div class="main-header">
+            <h4>Quotes</h4>
+            <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+              <li class="breadcrumb-item">
+                <a href="/dashboard">
+                  <i class="icofont icofont-home"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">Clients</li>
+              <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
+            </ol>
           </div>
+        </div>
       </div>
-      <!-- Container-fluid ends -->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                Quotes
+              </h5>
+              <a href="/create-quote" class="btn btn-primary waves-effect waves-light f-right md-trigger">
+                <i class="icofont icofont-law-document"></i> Create Quote
+              </a>
+            </div>
+            <div class="card-block">
+              <div class="row">
+                <div class="md-group-add-on col-lg-5">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-ui-search"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="text" class="md-form-control md-static search-bar-quote">
+                    <label>Search</label>
+                  </div>
+                </div>
+                <div class="md-group-add-on col-lg-3">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-filter"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <select class="md-form-control md-static filter-quote selectcash">
+                      <option value="">All</option>
+                      <% @status.each do |stat| %>
+                        <option value="<%= stat.name %>"><%= stat.name %></option>
+                      <% end %>
+                    </select>
+                    <label>Status</label>
+                  </div>
+                </div>
+                <div class="md-group-add-on col-lg-2">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-calendar"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="date" name="dtStart" value="2000-01-01" class="md-form-control md-static">
+                    <label>From</label>
+                  </div>
+                </div>
+                <div class="md-group-add-on col-lg-2">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-calendar"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="date" name="dtEnd" class="md-form-control md-static">
+                    <label>To</label>
+                  </div>
+                </div>
+                <div class="col-lg-10"></div>
+                <div class="md-group-add-on col-lg-2">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-calculator"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <select class="md-form-control md-static shortcut-date-quotes selectcash">
+                      <option selected style="display:none;"></option>
+                      <option>Today</option>
+                      <option>Yesterday</option>
+                      <option>Last week</option>
+                      <option>Last month</option>
+                    </select>
+                    <label>Preset</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="table-content crm-table">
+                  <h2 class="text-center hide no-record" style="display: none;">No Record Found</h2>
+                  <div class="project-table">
+                    <ul id="pagination-demo" class="pagination-demo pagination bootpag"></ul>
+                    <table id="crm-contact" class="table table-striped nowrap table-responsive">
+                      <thead>
+                      <tr>
+                        <th>Reference number</th>
+                        <th>Client Name</th>
+                        <th>Client Phone</th>
+                        <th>Date Added</th>
+                        <th>Dispatcher</th>
+                        <th>Status</th>
+                        <th>Time from last status</th>
+                        <th>Action</th>
+                      </tr>
+                      </thead>
+                      <tbody class="table-quotes">
+                      <% @quotes.each do |quote| %>
+                        <tr>
+                          <td><%= quote.referNo %></td>
+                          <td>
+                            <% if (quote.customer) %>
+                              <%= quote.customer.firstName %> <%= quote.customer.lastName %>
+                            <% end %>
+                          </td>
+                          <td>
+                            <% if (quote.customer) %>
+                              <%= Validations.phone(quote.customer.phone) %>
+                            <% end %>
+                          </td>
+                          <td><%= !quote.dtCreated.nil? ? quote.dtCreated.to_datetime.strftime("%Y-%m-%d %H:%M") : "" %></td>
+                          <td><%= quote.dispatcher.firstName %> <%= quote.dispatcher.lastName %></td>
+                          <td>
+                            <select class="quote-status-list selectcash form-control badge badge-<%= background_color(quote.status.color) %>" data-quote-no="<%= quote.id %>">
+                              <% @status.each do |stat| %>
+                                <option value="<%= stat.id %>"
+                                        <% if (stat.id == quote.status.id) %> selected
+                                        <% end %>>
+                                  <%= stat.name %>
+                                </option>
+                              <% end %>
+                            </select>
+                          </td>
+                          <td class="timerFromLast timerFromLastStatus<%= quote.idQuote %>" data-timer="(moment().diff(moment(#{quote['dtStatusUpdated']}), 's') || 0)">
+                          </td>
+                          <td class="faq-table-btn">
+                            <a href="/quotes/<%= quote.idQuote %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                              <i class="icofont icofont-ui-edit"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      <% end %>
+                      </tbody>
+                      <tfoot>
+                      <tr>
+                        <th>Reference number</th>
+                        <th>Client Name</th>
+                        <th>Client Phone</th>
+                        <th>Date Added</th>
+                        <th>Dispatcher</th>
+                        <th>Status</th>
+                        <th>Time from last status</th>
+                        <th>Action</th>
+                      </tr>
+                      </tfoot>
+                    </table>
+                    <ul class="pagination-demo pagination bootpag"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid ends -->
 </div>
 <% content_for :js do %>
-<%= public_js_path 'quote-list.js' %>
+  <%= public_js_path 'quote-list.js' %>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-<script>
-    var quote_ids = <%= raw @quotes.pluck(:idQuote, :dtStatusUpdated).as_json %>
-    quote_ids.forEach(function(quote){
-      date_quotes(quote[0], quote[1])
-    });
-    function date_quotes(id, date){
-      var val = ""
-      var diff = moment().diff(moment(date), "s") || 0;
-      if(diff < 3600) { // Less than 1 hour.
-       val =  Math.floor(diff/60).toString() + "m"
-      }
-      else if(diff < 3600 * 48) { /* Between 1 hour and 48 hours */
-        val = Math.floor(diff/3600).toString() + "h"
-      }
-      else { /* After 48 hours */
-        val = Math.floor(diff/(3600*24)).toString() + "d"
-       }
-       $(".timerFromLastStatus" + id).text(val);
-    }
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+  <script>
+      var quote_ids = <%= raw @quotes.pluck(:idQuote, :dtStatusUpdated).as_json %>
+          quote_ids.forEach(function (quote) {
+              date_quotes(quote[0], quote[1])
+          });
 
-    function growling(message, type) {
-        $.growl({
-            message: message
-        },{
-            type: "success",
-            allow_dismiss: true,
-            label: 'Cancel',
-            className: 'btn-xs btn-inverse',
-            delay: 0,
-            placement: {
-                from: 'top',
-                align: 'center'
-            },
-            animate: { enter: 'animated fadeInDown' }
-        });
-    }
-
-    $(document).ready(function() {
-        $("#crm-contact").DataTable({
-            "paging": false,
-            "searching": false,
-            "info":     false,
-            "order": [],
-            "fixedHeader": true,
-            "destroy": true,
-        });
-        <% if (params[:isAdded] && params[:isAdded] == "true") %>
-          growling("The quote is maked and customer [added/edited]!", "success");
-        <% elsif (params[:isAdded] && params[:isAdded] == "false" && params[:reason]) %>
-          growling("An error occur: " + reason, "danger");
-        <% end %>
-        function updateTimer(val) {
-            var myTime = Number($(val).attr("data-timer"))+1;
-            $(val).attr("data-timer", myTime);
-            // Less than 1 hour.
-            if(myTime < 3600) {
-                $(val).text(Math.floor(myTime/60) + "m");
-                // Between 1 hour and 48 hours
-            } else if(myTime < 3600 * 48) {
-                $(val).text(Math.floor(myTime/3600) + "h");
-                // After 48 hours
-            } else {
-                $(val).text(Math.floor(myTime/(3600*24)) + "d");
+      function date_quotes(id, date) {
+          var val = ""
+          var diff = moment().diff(moment(date), "s") || 0;
+          if (diff < 3600) { // Less than 1 hour.
+              val = Math.floor(diff / 60).toString() + "m"
+          } else if (diff < 3600 * 48) { /* Between 1 hour and 48 hours */
+              val = Math.floor(diff / 3600).toString() + "h"
+          } else { /* After 48 hours */
+              val = Math.floor(diff / (3600 * 24)).toString() + "d"
           }
-        }
+          $(".timerFromLastStatus" + id).text(val);
+      }
 
-        setInterval(() => {
-            $.each($('.timerFromLastStatus'), function(i, val){
-                updateTimer(val)
-            });
-        }, 1000);
-    });
-    // $(document).on('turbolinks:load', function() {
+      function growling(message, type) {
+          $.growl({
+              message: message
+          }, {
+              type: "success",
+              allow_dismiss: true,
+              label: 'Cancel',
+              className: 'btn-xs btn-inverse',
+              delay: 0,
+              placement: {
+                  from: 'top',
+                  align: 'center'
+              },
+              animate: {enter: 'animated fadeInDown'}
+          });
+      }
+
+      $(document).ready(function () {
+          $("#crm-contact").DataTable({
+              "paging": false,
+              "searching": false,
+              "info": false,
+              "order": [],
+              "fixedHeader": true,
+              "destroy": true,
+          });
+          <% if (params[:isAdded] && params[:isAdded] == "true") %>
+          growling("The quote is maked and customer [added/edited]!", "success");
+          <% elsif (params[:isAdded] && params[:isAdded] == "false" && params[:reason]) %>
+          growling("An error occur: " + reason, "danger");
+          <% end %>
+
+          function updateTimer(val) {
+              var myTime = Number($(val).attr("data-timer")) + 1;
+              $(val).attr("data-timer", myTime);
+              // Less than 1 hour.
+              if (myTime < 3600) {
+                  $(val).text(Math.floor(myTime / 60) + "m");
+                  // Between 1 hour and 48 hours
+              } else if (myTime < 3600 * 48) {
+                  $(val).text(Math.floor(myTime / 3600) + "h");
+                  // After 48 hours
+              } else {
+                  $(val).text(Math.floor(myTime / (3600 * 24)) + "d");
+              }
+          }
+
+          setInterval(function () {
+              $.each($('.timerFromLastStatus'), function (i, val) {
+                  updateTimer(val)
+              });
+          }, 1000);
+      });
+      // $(document).on('turbolinks:load', function() {
       resizePagination(<%= @pages %>, false, false)
-    // });
-</script>
+      // });
+  </script>
 <% end %>
