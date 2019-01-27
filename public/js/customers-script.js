@@ -297,14 +297,11 @@ $(document).ready(function(){
 
     $("#saveCustomerButton").click(function(e){
       if(valid_fields() && $("#customer-form").valid()){
-          $(".phone").each(function(a){
-               $(this).rules("remove", "phoneNo")
-               $(this).val($(this).val().replace(/-/g, ''));
-           });
           if($("#page_type").text().trim() == "New Customer"){
             number_exist();
           }
           else{
+            all_number_validate();
             $("#customer-form").submit()
           }
       }
@@ -312,6 +309,13 @@ $(document).ready(function(){
         e.preventDefault();
       }
     });
+
+    function all_number_validate(){
+      $(".phone").each(function(a){
+        $(this).rules("remove", "phoneNo")
+        $(this).val($(this).val().replace(/-/g, ''));
+      });
+    }
 
     function number_exist()
     {
@@ -322,7 +326,8 @@ $(document).ready(function(){
           data: { phone: $phone_num },
           dataType: "json",
           success: function(res){
-            if(res.client.idClient == null){
+            if(res.client == 0){
+              all_number_validate();
               $("#customer-form").submit()
             }
             else{

@@ -85,7 +85,7 @@ class CustomersController < ApplicationController
   end
 
   def number_exist
-    client = Customer.find_or_initialize_by(phone: params[:phone])
+    client = Customer.where(phone: params[:phone]).count
     render json: { client: client }
   end
 
