@@ -1,0 +1,51 @@
+<div class="row company-data force-hidden">
+  <div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+      <i class="icofont icofont-company"></i>
+    </span>
+    <div class="md-input-wrapper">
+      <input type="text" class="md-form-control md-static" id="txtContactPosition" value="<%= business_contact_position(@customer) %>" name="contactPosition">
+      <label>Position <span class="required">*</span></label>
+    </div>
+  </div>
+  <div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+      <i class="icofont icofont-bank"></i>
+    </span>
+    <div class="md-input-wrapper">
+      <input type="text" class="md-form-control md-static" id="txtCompanyName" value="<%= business_name(@customer) %>" name="name">
+      <label>Company Name <span class="required">*</span></label>
+    </div>
+  </div>
+</div>
+<div class="row company-data force-hidden">
+  <div class="col-lg-12 md-group-add-on">
+    <span class="md-add-on">
+     <i class="icofont icofont-bank"></i>
+    </span>
+    <div class="md-input-wrapper">
+      <input type="text" class="md-form-control md-static" id="txtDescription" value="<%= business_desc(@customer) %>" name="description">
+      <label>Company Description</label>
+    </div>
+  </div>
+</div>
+<div class="row company-data force-hidden">
+  <div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+      <i class="icofont icofont-bank"></i>
+    </span>
+    <div class="md-input-wrapper">
+      <input type="text" class="md-form-control md-static" id="txtPST" value="<%= business_pstax(@customer) %>" name="pstTaxNo">
+      <label>PST Tax Reference Number <span class="required">*</span></label>
+    </div>
+  </div>
+  <div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+      <i class="icofont icofont-bank"></i>
+    </span>
+    <div class="md-input-wrapper">
+      <input type="text" class="md-form-control md-static" id="txtGST" value="<%= business_gstax(@customer) %>" name="gstTaxNo">
+      <label>GST Tax Reference Number <span class="required">*</span></label>
+    </div>
+  </div>
+</div>
