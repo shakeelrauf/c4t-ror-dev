@@ -1,0 +1,93 @@
+<div class="row">
+	<h6>Search in list</h6>
+	<div class="md-group-add-on col-lg-12">
+	  <span class="md-add-on">
+	      <i class="icofont icofont-ui-search"></i>
+	  </span>
+	  <div class="md-input-wrapper">
+	    <input type="text" class="md-static md-form-control search-bar-car">
+	    <label>Search</label>
+	  </div>
+	</div>
+	<div class="table-content crm-table">
+	  <div class="project-table">
+	    <ul class="pagination bootpag">
+	      <li data-lp="prev" class="prev">
+	        <a href="javascript:void(0);">«</a>
+	      </li>
+	      <% i = 1 %>
+	      <% pages = 10 if pages > 10 %>
+	      <% while i <= pages %>
+	        <li data-lp="<%= i %>" class="<%= (i == 1 ? "active" : "") %>">
+	          <a href="javascript:void(0);"><%= i %></a>
+	        </li>
+	        <% i = i + 1 %>
+	      <% end %>
+	      <li data-lp="next" class="next">
+	        <a href="javascript:void(0);">»</a>
+	      </li>
+	    </ul>
+	    <table id="crm-contact" class="table table-striped nowrap table-responsive">
+	      <thead>
+	      <tr>
+	        <td>Year</td>
+	        <td>Maker</td>
+	        <td>Model</td>
+	        <td>Trim</td>
+	        <td>Body</td>
+	        <td>Drive</td>
+	        <td>Transmission</td>
+	        <td>Nb. Seats</td>
+	        <td>Nb. Doors</td>
+	        <td>Weight (Kg)</td>
+	      </tr>
+	      </thead>
+	      <tbody class="table-list">
+	      <% cars.each do |car| %>
+	        <tr data-car="<%= car.idVehiculeInfo %>">
+	          <td><%= car.year %></td>
+	          <td><%= car.make %></td>
+	          <td><%= car.model %></td>
+	          <td><%= car.trim %></td>
+	          <td><%= car.body %></td>
+	          <td><%= car.drive %></td>
+	          <td><%= car.transmission %></td>
+	          <td><%= car.seats %></td>
+	          <td><%= car.doors %></td>
+	          <td><%= car.weight %></td>
+	        </tr>
+	      <% end %>
+	      </tbody>
+	      <tfoot>
+	      <tr>
+	        <td>Year</td>
+	        <td>Maker</td>
+	        <td>Model</td>
+	        <td>Trim</td>
+	        <td>Body</td>
+	        <td>Drive</td>
+	        <td>Transmission</td>
+	        <td>Nb. Seats</td>
+	        <td>Nb. Doors</td>
+	        <td>Weight (Kg)</td>
+	      </tr>
+	      </tfoot>
+	    </table>
+	    <ul class="pagination bootpag">
+	      <li data-lp="prev" class="prev">
+	        <a href="javascript:void(0);">«</a>
+	      </li>
+	      <% i = 1 %>
+	      <% while i <= pages %>
+	        <li data-lp="<%= i %>" class="<%= (i == 1 ? "active" : "") %>">
+	          <a href="javascript:void(0);"><%= i %></a>
+	        </li>
+	        <% i = i + 1 %>
+	      <% end %>
+	      <li data-lp="next" class="next">
+	        <a href="javascript:void(0);">»</a>
+	      </li>
+	    </ul>
+	  </div>
+	</div>
+</div>
