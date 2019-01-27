@@ -537,6 +537,9 @@ function saveCar(callback) {
         if(car["carAddressId"] == undefined){
             car["carAddressId"] =$(this).find("select[name=car-location"+carId+"] option").val()
         }
+        if(car["carAddressId"] == undefined){
+            car["carAddressId"] = ""
+        }
         cars.push(car);
     });
     $.ajax({

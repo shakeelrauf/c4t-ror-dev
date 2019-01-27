@@ -77,7 +77,7 @@ module Quotesmethods
         return respond_json({:error => "Missing Car city"}) if  (!carList[car]["carCity"].present?)
         return respond_json({:error => "Missing Car Street"}) if  (!carList[car]["carStreet"].present?)
         return respond_json({:error => "Missing Car Province"}) if  (!carList[car]["carProvince"].present?)
-        return respond_json({:error => "Invalid Postal Code"}) if  (carList[car]["carAddressId"].length != 6)
+        return respond_json({:error => "Invalid Car Postal Code"}) if  (carList[car]["carAddressId"].length != 6)
         distance = calculate_by_postal_code(carList[car]["carAddressId"])
         return respond_json({:error => "Invalid Postal Code"}) if  (distance == 0)
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
