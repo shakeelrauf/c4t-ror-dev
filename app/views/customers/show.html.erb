@@ -15,7 +15,7 @@
 					</li>
 					<li class="breadcrumb-item">Clients</li>
 					<li class="breadcrumb-item"><a href="/customers">Customers</a></li>
-					<li class="breadcrumb-item"><a href="/customers/<%= @customer["idClient"] %>">Customer Profile</a></li>
+					<li class="breadcrumb-item"><a href="/customers/<%= @customer.idClient %>">Customer Profile</a></li>
 				</ol>
 			</div>
 		</div>
@@ -25,34 +25,34 @@
 		<div class="col-xl-3 col-lg-4">
 			<div class="card faq-left">
 				<div class="card-block">
-					<h4 class="f-18 f-normal m-b-10 txt-primary"><%= @customer["firstName"] + " " + @customer["lastName"] %></h4>
-					<% if @customer["type"] != "Individual" %>
-					<p class="m-b-15"><%= @customer["business"]["contactPosition"] if @customer["business"] %></p>
-					<p class="m-b-15"><%= @customer["type"] %></p>
-						<% if @customer["business"] %>
-							<h5 class="f-14"><%= @customer["business"]["name"] %></h5>
-							<p class="m-b-15"><%= @customer["business"]["description"]%></p>
+					<h4 class="f-18 f-normal m-b-10 txt-primary"><%= @customer.firstName + " " + @customer.lastName %></h4>
+					<% if @customer.type != "Individual" %>
+					<p class="m-b-15"><%= @customer.business.contactPosition if @customer.business %></p>
+					<p class="m-b-15"><%= @customer.type %></p>
+						<% if @customer.business %>
+							<h5 class="f-14"><%= @customer.business.name %></h5>
+							<p class="m-b-15"><%= @customer.business.description%></p>
 						<% end %>
 					<% end %>
 						<ul>
 							<li class="faq-contact-card">
 								<i class="icofont icofont-phone"></i>
-								<a href="tel:<%= @customer["phone"] %>">
-									<%= phone_number_display( @customer["phone"]) %>
+								<a href="tel:<%= @customer.phone %>">
+									<%= phone_number_display( @customer.phone) %>
 								</a>
-								<% if @customer["extension"] != "" %>
-									#<%= @customer["extension"] %>
+								<% if @customer.extension != "" %>
+									#<%= @customer.extension %>
 								<% end %>
 							</li>
 							<li class="faq-contact-card">
 								<i class="icofont icofont-ui-email"></i>
-								<a href="mailto:<%= @customer["email"] %>"><%= @customer["email"] %></a>
+								<a href="mailto:<%= @customer.email %>"><%= @customer.email %></a>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<!-- end of card-block -->
-				<% if @customer["note"] != "" %>
+				<% if @customer.note != "" %>
 				<div class="card">
 					<div class="card-block">
 						<div class="panel panel-warning">
@@ -60,7 +60,7 @@
 								Information
 							</div>
 							<div class="panel-body">
-								<p id="customerWarningInfo"><%= @customer["note"] %></p>
+								<p id="customerWarningInfo"><%= @customer.note %></p>
 							</div>
 						</div>
 					</div>
