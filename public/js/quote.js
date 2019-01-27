@@ -535,7 +535,7 @@ function saveCar(callback) {
             "price":          netPrice
         }
         if(car["carAddressId"] == undefined){
-            car["carAddressId"] =$(this).find("select[name=car-location"+carId+"] option").text()
+            car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
         }
         if(car["carAddressId"] == undefined){
             car["carAddressId"] = " "
