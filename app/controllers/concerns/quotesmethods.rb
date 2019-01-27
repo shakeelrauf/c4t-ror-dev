@@ -64,11 +64,9 @@ module Quotesmethods
     end
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
-    client = Customer.customUpsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
-
+    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
     client.address.first.update(postal: params[:postal])
-    Quote.customUpsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
-
+    Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
     if !carList.nil?
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
@@ -79,25 +77,11 @@ module Quotesmethods
         return respond_json({:error => "Missing Car Street"}) if  (!carList[car]["carStreet"].present?)
         return respond_json({:error => "Missing Car Province"}) if  (!carList[car]["carProvince"].present?)
         return respond_json({:error => "Invalid Postal Code"}) if  (carList[car]["carAddressId"].length != 6)
-        valid = calculate_by_postal_code(carList[car]["carAddressId"])
-        return respond_json({:error => "Invalid Postal Code"}) if  (valid == 0)
+        distance = calculate_by_postal_code(carList[car]["carAddressId"])
+        return respond_json({:error => "Invalid Postal Code"}) if  (distance == 0)
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
-        if carList[car]["carAddressId"].present?
-          ad = Address.new
-          res = carList[car]["distance"]
-          res = calculate_by_postal_code(carList[car]["carAddressId"]) if !res.present?
-          ad.postal = carList[car]["carAddressId"]
-          ad.city = carList[car]["carCity"]
-          ad.province = carList[car]["carProvince"]
-          ad.address = carList[car]["carStreet"]
-          ad.idClient = client.id
-          ad.distance = res
-          ad.save!
-          quote_car.idAddress = ad.idAddress
-          quote_car.save!
-        end
-        # updateCarForAddress(carList[car], ad.idAddress)
+        update_quote_car_address carList[car], quote_car, distance, client if carList[car]["carAddressId"].present?
       end
       return respond_json({message: "QuickQuote saved"})
      else
@@ -105,28 +89,55 @@ module Quotesmethods
      end
   end
 
-  def updateCarForAddress(car,address_id)
-    addressId = car["idAddress"].nil? ? car["idAddress"] : car["idAddress"].to_i
-
-    if addressId.kind_of? Integer
-      updateQuoteCar(car, addressId.to_i)
-    elsif (!car["carPostal"])
-      updateQuoteCar(car, nil)
-    elsif (car["carPostal"] && car["carPostal"] != "")
-      updateQuoteCar(car, address_id)
+  def search_quotes limit_p, offset_p, filter,after_date, before_date
+    limit = 15
+    offset = 0
+    all_count = 0
+    limit  = limit_p.delete(' ') if limit_p.to_i > 0
+    offset = ((offset_p.to_i) * limit.to_i) if offset_p != "-1"
+    query =  ""
+    if filter
+      filter = "%" + filter.gsub(/[\s]/, "% %").gsub('?','') + "%"
+      filters =  filter.split(' ')
+      length =  filters.length
+      filters.each.with_index do |fil,i|
+        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR Clients.firstName like '#{fil}' OR Clients.lastName like '#{fil}' OR Clients.phone like '#{fil}' OR Clients.cellPhone like '#{fil}' OR Clients.secondaryPhone like '#{fil}' OR Users.firstName like '#{fil}' OR Users.lastName like '#{fil}' OR Status.name like '#{fil}')"
+        query+= " AND " if i < (length -1)
+      end
+      # query = "(#{query}) AND (('dtCreated' <= '#{after_date+ ' 00:00:00'}') AND ('dtCreated' >= '#{before_date+ ' 23:59:59'}'))" if after_date && after_date.to_s.length == 10 && DateTime.parse(after_date, "YYYY-MM-DD")
+      @quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query)
+      if @quotes.count % 15 > 0
+        all_count = 1
+      end
+      all_count += (@quotes.count / limit.to_i).ceil
+      @quotes = @quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
+    else
+      @quotes =  Quote.includes(:dispatcher, :customer, :status)
+      if @quotes.count % 15 > 0
+        all_count = 1
+      end
+      all_count += (@quotes.count / limit.to_i).ceil
+      @quotes = @quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
     end
+    return @quotes, all_count
   end
 
-  def updateQuoteCar(car, addressId)
-    @quote_car = QuoteCar.find_by_id(car["car"])
-    @quote_car.update(
-        idAddress: addressId,
-        missingWheels: car["missingWheels"].present? ? car["missingWheels"].to_i : 0,
-        missingBattery: (car["missingBattery"] && car["missingBattery"] == 1),
-        missingCat: (car["missingCat"] && car["missingCat"] == 1),
-        gettingMethod: car["gettingMethod"],
-        distance: (car["distance"].present? ? car["distance"].to_f : nil),
-        price: (car["price"].present? ? car["price"].to_f : nil)
-    )
+  def update_quote_car_address car, quote_car, distance, client
+    if quote_car.address.present?
+      ad = quote_car.address
+    else
+      ad = Address.new
+    end
+    res = car["distance"]
+    res = distance if !res.present?
+    ad.postal = car["carAddressId"]
+    ad.city = car["carCity"]
+    ad.province = car["carProvince"]
+    ad.address = car["carStreet"]
+    ad.idClient = client.id
+    ad.distance = res
+    ad.save!
+    quote_car.idAddress = ad.idAddress
+    quote_car.save!
   end
 end

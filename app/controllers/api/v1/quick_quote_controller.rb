@@ -37,10 +37,10 @@ class Api::V1::QuickQuoteController < ApiController
       if @heard_of_us.new_record?
         Heardofus.create(type: params[:heardofus])
       end
-      @client = Customer.customUpsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
+      @client = Customer.custom_upsert({idHeardOfUs: @heard_of_us.id,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
       @quote = Quote.where("dtCreated <= ?" , DateTime.now.strftime("YYYY-MM-DD 00:00:00"))
       counter = @quote.count
-      quote = Quote.customUpsert({note: "",idUser: current_user.present? ? current_user.idUser : nil ,idClient: @client.id},{idQuote: params[:quote]})
+      quote = Quote.custom_upsert({note: "",idUser: current_user.present? ? current_user.idUser : nil ,idClient: @client.id},{idQuote: params[:quote]})
       carList.each do |car, val|
         if (carList[car]["car"] == "")
           return respond400Message({:error => "The type of vehicle was not selected"}, :bad_request)

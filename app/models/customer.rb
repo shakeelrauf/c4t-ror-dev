@@ -11,22 +11,7 @@ class Customer < ApplicationRecord
 		return self.firstName + ' ' + self.lastName
 	end
 
-	# def self.customUpsert(options, row)
-	# 	this.findOrCreate(options).spread((row, created) => {
- #        if (created) {
- #            next(created, row);
- #        } else {
- #            this.update(options.defaults, {
- #                where: options.where
- #            }).then(updated => {
- #                this.findById(row.id).then(r_client => {
- #                    next(created, r_client);
- #                })
- #            });
- #        }
- #    });
-	# end
-	def self.customUpsert(options={},where={})
+	def self.custom_upsert(options={},where={})
 		@custom = where(where).first
 		if @custom.present?
 			@custom.update(options)
