@@ -8,7 +8,7 @@ class SettingController < ApplicationController
     last_settings = Setting.where("dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
   end
 
-  def all
+  def index
     @edited = false || params[:edited]
     @settings = Setting.all
   end

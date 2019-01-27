@@ -5,9 +5,7 @@ class DashboardController < ApplicationController
   def dashboard
     heardofus = get_heard_of_us
     countClients =  heardofus.count
-    render locals: {user: current_user,
-                      heardofus: heardofus,
-                      countClients: countClients}
+    render locals: {user: current_user,heardofus: heardofus, countClients: countClients}
   end
 
   def dispatched

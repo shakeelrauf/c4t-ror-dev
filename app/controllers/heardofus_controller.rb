@@ -18,6 +18,7 @@ class HeardofusController < ApplicationController
 
   def get_heardsofus
     @heardsOfUs = Heardofus.all
+    render :index
   end
 
   def new
@@ -33,7 +34,6 @@ class HeardofusController < ApplicationController
   end
 
   private
-
   def check_heardofus
     @heardofus = Heardofus.find_by_id(params[:no])
   end

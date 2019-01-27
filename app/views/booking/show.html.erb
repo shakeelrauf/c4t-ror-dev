@@ -12,8 +12,8 @@
             </li>
             <li class="breadcrumb-item">Clients</li>
             <li class="breadcrumb-item"><a href="/quotes"><%= "QUOTE" %></a></li>
-            <li class="breadcrumb-item"><a href="/quotes/<%= quote["idQuote"] %>/edit"><%= "EDIT QUOTE" %></a></li>
-            <li class="breadcrumb-item"><a href="/quotes/<%= quote["idQuote"] %>/book"><%= "BOOK QUOTE" %></a></li>
+            <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/edit"><%= "EDIT QUOTE" %></a></li>
+            <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/book"><%= "BOOK QUOTE" %></a></li>
           </ol>
         </div>
       </div>
@@ -25,20 +25,20 @@
         </div>
         <div class="card col-lg-12">
           <div class="card-header">
-            <a href="/quotes/<%= quote["idQuote"] %>/pdf" target="_blank" class="btn btn-danger waves-effect d-inline-block f-right">
+            <a href="/quotes/<%= quote.idQuote %>/pdf" target="_blank" class="btn btn-danger waves-effect d-inline-block f-right">
               <i class="icofont icofont-file-pdf"></i>
               Envelop
             </a>
-            <h5><%= quote["refNo"] %></h5>
+<!--            <h5><%#= quote.refNo %></h5>-->
           </div>
           <div class="card-block row">
             <!-- Nav tabs -->
             <div class="col-lg-12 tab-header">
               <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
-                <%if(quote["idQuote"] != nil)
+                <%if(quote.idQuote != nil)
                     cars.each do |car, index| %>
-                      <li class="nav-item car<%= car["id"] %>" style="display:block" id="cartab-<%= car["id"] %>">
-                        <a class="nav-link<%= index == 0 ? " active" : "" %>" data-toggle="tab" href="#tab<%= car["id"] %>" role="tab"><%= car["make"] + " " + car["model"] + " " + car["year"] %></a>
+                      <li class="nav-item car<%= car["idVehiculeInfo"] %>" style="display:block" id="cartab-<%= car["idVehiculeInfo"] %>">
+                        <a class="nav-link<%= index == 0 ? " active" : "" %>" data-toggle="tab" href="#tab<%= car["idVehiculeInfo"] %>" role="tab"><%= car["make"] + " " + car["model"] + " " + car["year"] %></a>
                         <div class="slide"></div>
                       </li>
                     <% end
@@ -46,8 +46,8 @@
                   </ul>
                   </div>
                   <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
-                    <% if(quote["idQuote"] != nil)
-                        quote["cars"].each.with_index do |car, index| %>
+                    <% if(quote.idQuote != nil)
+                        quote.quote_car.each.with_index do |car, index| %>
                         <%= render partial: "vehicle_booking",locals: {
                             vehicle: cars[index],
                             car: car,
@@ -67,7 +67,7 @@
               <i class="icofont icofont-cur-dollar"></i>
               <%= "SAVE AND SCHEDULE" %>
             </a><br>
-            <a href="javascript:gotoEditQuote(<%= quote["idQuote"] %>);" class="btn btn-danger waves-effect d-inline-block">
+            <a href="javascript:gotoEditQuote(<%= quote.idQuote %>);" class="btn btn-danger waves-effect d-inline-block">
               <%= "RETURN" %>
             </a>
           </div>
@@ -78,7 +78,7 @@
 </div>
 <% content_for :js do %>
   <script>
-      var quoteNo = "<%= quote["idQuote"] || nil %>";
+      var quoteNo = "<%= quote.idQuote || nil %>";
   </script>
   <%= public_js_path("book-quote.js") %>
   <%= public_js_path("common.js") %>

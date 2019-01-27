@@ -15,9 +15,9 @@ class QuotecarsController < ApplicationController
     redirect_to carz_path(params: {weight: car["weight"]})
  	end
 
- 	def list_cars
+ 	def index
 		cars, count = vehicles_search 15
-		render locals: {pages: count, cars: cars}
+		render :index, locals: {pages: count, cars: cars}
  	end
 
  	def car_count

@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 		get :quotescars
 		get '/quotescar/:carNo',              action: :show
 		post '/cars',         								action: :create_car
-		get '/cars',         									action: :list_cars,         as: :carz
+		get '/cars',         									action: :index,         as: :carz
 		get '/cars-select2',         					action: :search_cars
 		get 'vehicles/count', 								action: :car_count
 	end
@@ -29,12 +29,12 @@ Rails.application.routes.draw do
   root "dashboard#dashboard"
 
   scope  controller: :setting do
-    get '/settings',                           action: :all
+    get '/settings',                           action: :index
     post '/settings',                          action: :update
   end
 
   scope  controller: :charity do
-    get '/charities',                           action: :get_charities
+    get '/charities',                           action: :index
     get '/charities/add',              	 				action: :new
     get '/charities/:no',              	 				action: :edit
     post '/charities',                          action: :create
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   end
 
   scope  controller: :heardofus do
-    get '/heardofus',                           action: :get_heardsofus
+    get '/heardofus',                           action: :index
     get '/heardofus/add',              	 				action: :new
     get '/heardofus/:no',              	 				action: :edit
     post '/heardofus',                          action: :create
@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     get '/quotes/json',                      action: :quote_with_filter
 		get '/status/json', 										 action: :status_json
     get '/vehicles/:no/json', 							 action: :vehicle_json
-		get '/quotes/:id/edit',             	 	 action: :edit_quotes, 								as: :edit_quote
+		get '/quotes/:id/edit',             	 	 action: :edit, 								as: :edit_quote
     get '/phone-numbers-select2', 					 action: :phone_list
     get '/vehicles-select2', 					       action: :vehicle_list
 		post '/car-create',                      action: :create_car
@@ -82,7 +82,7 @@ Rails.application.routes.draw do
     get '/clients/:no/quotes',               action: :particular_customer_quotes
     get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
     get '/status',                           action: :all_status
-    get '/quotes',                       		 action: :all_quotes
+    get '/quotes',                       		 action: :index
     get '/create-quote',                     action: :create, 						 as: :create_quote
 	end
 

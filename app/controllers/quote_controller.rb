@@ -2,7 +2,7 @@ class QuoteController < ApplicationController
   before_action :login_required
   include Quotesmethods
 
-  def all_quotes
+  def index
     @quotes = Quote.includes(:customer, :dispatcher,:status).all
     @pages = 0
     if @quotes.count % 15 > 0
@@ -11,6 +11,7 @@ class QuoteController < ApplicationController
     @pages += (@quotes.count / 15).ceil
     @quotes = @quotes.limit(15).offset(0)
     @status = Status.all
+    render :index
   end
 
   def car_price
@@ -139,11 +140,11 @@ class QuoteController < ApplicationController
     respond_json(car)
   end
 
-  def edit_quotes
+  def edit
     @quote = Quote.includes(customer: [:address]).where(idQuote: params[:id]).first
     cars =  QuoteCar.includes([:information, :address]).where(idQuote: params[:id])
     @heardsofus = Heardofus.all
-    render  locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
+    render :edit, locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
   end
 
   def render_vehicle
