@@ -1,7 +1,8 @@
 class HeardofusController < ApplicationController
 	# before_action :authenticate_admin
 	before_action :login_required
-	before_action :check_heardofus, only: [:heardsofus, :update]
+	before_action :check_heardofus, only: [:heardsofus, :update, :edit]
+	include Api::V1::MsgsConst
 
 	def create
 		hou = Heardofus.find_by_type(params[:type])
@@ -27,22 +28,12 @@ class HeardofusController < ApplicationController
 	end
 
 	def update
-		return  respond_json({:error => HEARDOFUS_NOT_FOUND_MSG, :success => false}) if @heardofus.present?
 		@heardofus.update(type: params[:type])
-		return respond_json(@heardofus)
+		flash[:success] = "Edited"
+		redirect_to "/heardofus"
 	end
-
-	def form_body(params)
-    {
-      "type":      params[:type]
-    }
-  end
 
 	private
-	def check_type 
-		# return render_json_response({:error => TYPE_ERROR_MSG, :success => false}, :bad_request) if !params[:type].present?
-	end
-
 	def check_heardofus
 		@heardofus = Heardofus.find_by_id(params[:no])
 	end
