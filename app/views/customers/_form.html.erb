@@ -122,57 +122,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row company-data force-hidden">
-                  <div class="col-lg-6 md-group-add-on">
-                    <span class="md-add-on">
-                      <i class="icofont icofont-company"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="text" class="md-form-control md-static" id="txtContactPosition" value="<%= business_contact_position(@customer) %>" name="contactPosition">
-                      <label>Position <span class="required">*</span></label>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 md-group-add-on">
-                    <span class="md-add-on">
-                      <i class="icofont icofont-bank"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="text" class="md-form-control md-static" id="txtCompanyName" value="<%= business_name(@customer) %>" name="name">
-                      <label>Company Name <span class="required">*</span></label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row company-data force-hidden">
-                  <div class="col-lg-12 md-group-add-on">
-                    <span class="md-add-on">
-                     <i class="icofont icofont-bank"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="text" class="md-form-control md-static" id="txtDescription" value="<%= business_desc(@customer) %>" name="description">
-                      <label>Company Description</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row company-data force-hidden">
-                  <div class="col-lg-6 md-group-add-on">
-                    <span class="md-add-on">
-                      <i class="icofont icofont-bank"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="text" class="md-form-control md-static" id="txtPST" value="<%= business_pstax(@customer) %>" name="pstTaxNo">
-                      <label>PST Tax Reference Number <span class="required">*</span></label>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 md-group-add-on">
-                    <span class="md-add-on">
-                      <i class="icofont icofont-bank"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="text" class="md-form-control md-static" id="txtGST" value="<%= business_gstax(@customer) %>" name="gstTaxNo">
-                      <label>GST Tax Reference Number <span class="required">*</span></label>
-                    </div>
-                  </div>
-                </div>
+                <%= render :partial => 'customers/business_details' %>
                 <hr class="company-data force-hidden">
                 <div class="row company-data force-hidden">
                   <h6>Contact List</h6>
@@ -320,44 +270,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row custom-grade-data force-hidden">
-                  <div class="col-lg-6 md-group-add-on">
-                      <span class="md-add-on">
-                        <i class="icofont icofont-coins"></i>
-                      </span>
-                    <div class="md-input-wrapper">
-                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarCar" value="<%= @customer.customDollarCar %>" name="customDollarCar">
-                      <label>($) Car Bonus</label>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 md-group-add-on">
-                      <span class="md-add-on">
-                       <i class="icofont icofont-coins"></i>
-                      </span>
-                    <div class="md-input-wrapper">
-                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercCar" value="<%= @customer.customPercCar %>" name="customPercCar">
-                      <label>(%) Car Bonus</label>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 md-group-add-on">
-                    <span class="md-add-on">
-                     <i class="icofont icofont-coins"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarSteel" value="<%= @customer.customDollarSteel %>" name="customDollarSteel">
-                      <label>($) Steel Bonus</label>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 md-group-add-on">
-                    <span class="md-add-on">
-                     <i class="icofont icofont-coins"></i>
-                    </span>
-                    <div class="md-input-wrapper">
-                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercSteel" value="<%= @customer.customPercSteel %>" name="customPercSteel">
-                      <label>(%) Steel Bonus</label>
-                    </div>
-                  </div>
-                </div>
+                <%= render :partial => 'customers/custom_grade' %>
               </div>
               <hr>
               <div class="col-sm-12">
