@@ -1,241 +1,217 @@
 <%= public_css_path('quote.css') %>
-
 <div class="content-wrapper">
-    <!-- Container-fluid starts -->
-    <div class="container-fluid">
-        <!-- Row Starts -->
-        <div class="row">
-            <div class="col-sm-12 p-0">
-                <div class="main-header">
-                    <h4>QUICK QUOTE</h4>
-                    <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                        <li class="breadcrumb-item">
-                            <a href="/dashboard">
-                                <i class="icofont icofont-home"></i>
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">Clients</li>
-                    <% if (quote.idQuote != nil) %>
-                        <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
-                        <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/edit">Edit Quotes</a></li>
-                    <% else %>
-                        <li class="breadcrumb-item"><a href="/create-quote">Create Quote</a></li>
-                    <% end %>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <!-- Row end -->
-        <div class="row" id="quote" data-id="<%= quote.idQuote %>">
-            <div class="col-lg-12">
-            <%
-              if (quote.idQuote != nil) %>
-                <h2>Edit Quote</h2>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 p-0">
+        <div class="main-header">
+          <h4>QUICK QUOTE</h4>
+          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+            <li class="breadcrumb-item">
+              <a href="/dashboard">
+                <i class="icofont icofont-home"></i>
+              </a>
+            </li>
+            <li class="breadcrumb-item">Clients</li>
+            <% if (quote.idQuote != nil) %>
+              <li class="breadcrumb-item"><a href="/quotes">Quotes</a></li>
+              <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/edit">Edit Quotes</a></li>
             <% else %>
-                <h2>Create Quote</h2>
+              <li class="breadcrumb-item"><a href="/create-quote">Create Quote</a></li>
             <% end %>
-            </div>
-            <div class="col-lg-6">
-                <div class="card col-lg-12">
-                    <div class="card-header">
-                        <button class="btn btn-primary waves-effect d-inline-block f-right btn-edit-customer">Edit Customer</button>
-                        <h5>Customer</h5>
-                    </div>
-                    <div class="card-block row">
-                        <div class="col-lg-12 md-group-add-on">
-                            <span class="md-add-on">
-                                <i class="icofont icofont-phone"></i>
-                            </span>
-                            <div class="md-input-wrapper">
-                                <select class="md-form-control md-static" name="phone"><%
-                                if (quote.idQuote != nil && quote.customer != nil) %>
-                                    <option value="<%= quote.customer.idClient %>" selected><%=
-                                        quote.customer.phone[0,3] + "-" + quote.customer.phone[3,3] + "-" + quote.customer.phone[6,10] +
-                                        " " + quote.customer.firstName + " " + quote.customer.lastName
-                                    %></option>
-                                <% end %>
-                                </select>
-                                <label style="top: -15px;">Phone Number<span class="required">*</span></label>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 md-group-add-on">
-                            <span class="md-add-on">
-                                <i class="icofont icofont-ui-user"></i>
-                            </span>
-                            <div class="md-input-wrapper">
-                                <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote.idQuote && quote.customer ? quote.customer.firstName : "" %>">
-                                <label style="top: -15px;">First Name <span class="required">*</span></label>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 md-group-add-on">
-                            <span class="md-add-on">
-                                <i class="icofont icofont-ui-user"></i>
-                            </span>
-                            <div class="md-input-wrapper">
-                            <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
-                            <label style="top: -15px;">Last Name<span class="required">*</span></label>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 md-group-add-on">
-                            <span class="md-add-on">
-                                <i class="icofont icofont-ui-user"></i>
-                            </span>
-                            <div class="md-input-wrapper">
-                                <input type="text" class="md-form-control md-static" name="postal" value="<%= quote.idQuote && quote.customer && quote.customer.address.first ? quote.customer.address.first.postal : "" %>">
-                                <label style="top: -15px;">Postal Code<span class="required">*</span></label>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 md-group-add-on">
-                            <span class="md-add-on">
-                                <i class="icofont icofont-ui-user"></i>
-                            </span>
-                            <div class="md-input-wrapper">
-                                <select class="md-form-control md-static has_quote" name="heardOfUs">
-                                  <option value="">Select an option</option>
-                                    <option>Repeat Customer</option>
-                                    <%  heardOfUsFound = false %>
-                                    <% heardsofus.each do |heardofus| %>
-                                      <% if (quote.idQuote != nil && quote.customer != nil) %>
-                                        <option<%= heardofus.idHeardOfUs == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
-                                        <%  if(heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
-                                            <% heardOfUsFound = true %>
-                                        <% else %>
-                                          <option><%= heardofus.type %></option>
-                                        <% end %>
-                                      <% elsif (quote.idQuote != nil && !heardOfUsFound ) %>
-                                          <option><%= heardofus.type %></option>
-                                      <% end %>
-                                  <% end %>
-                                </select>
-                         <!--        <input type="text" class="md-form-control has_quote_1 hidden" name="heardOfUs" value="Repeat Customer" disabled="disabled"> -->
-                                <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card col-lg-12">
-                    <div class="card-header">
-                        <h5>Price</h5>
-                    </div>
-                  <div class="card-block">
-                    <div class="cars-total-list">
-                      <div class="hiddenaddress">
-                        <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.first.to_json.to_s : "" %>
-                      </div>
-                      <div class="row font-weight-bold" style="">
-                                    <div class="col-lg-6"></div>
-                                    <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Pickup</div>
-                                    <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Drop Off</div>
-                                  </div>
-                      <% if (quote.idQuote != nil)
-                           cars.each.with_index do |car, index|
-                             bonusCarsBasePrice = 0
-                            if((car.information.weight).to_i <= 1500)
-                                bonusCarsBasePrice += quote.smallCarPrice.to_i
-                            elsif((car.information.weight).to_i > 3000)
-                                bonusCarsBasePrice += quote.midCarPrice.to_i
-                            else
-                                bonusCarsBasePrice += quote.largeCarPrice.to_i
-                            end
-                            carPrice = ((car.information.weight.to_i/1000 * car.quote.steelPrice.to_i) - ( car.quote.wheelPrice.to_i))
-
-%>
-
-                                    <div class="row car<%= car.idQuoteCars %> index<%= index %>" id="car-price<%= car.idQuoteCars %>">
-                                      <div class="col-lg-6">
-                                        <%= car.information.make + " " + car.information.model + " " + car.information.year %>
-                                      </div>
-                                      <div id="car-price-pickup-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
-                                      </div>
-                                      <div id="car-price-dropoff-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
-                                      </div>
-                                    </div>
-                        <% end %>
-                      <%   end %>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                      <div class="col-lg-9 font-weight-bold">
-                                        <%= "Total" %>:
-                                      </div>
-                                      <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
-                                    </div>
-
-                              </div>
-                </div>
-              <div class="col card col-lg-12" style="padding-top: 20px; padding-bottom: 15px; margin-left: 5px;" >
-                <label style="top: -15px;"><b>Notes</b></label>
-                <%= cktext_area "note", "", ckeditor: {toolbar: 'mini'} %>
-              </div>
-
-              <!-- total end -->
-                <div class="card col-lg-12">
-                    <div class="card-block quick-quote-navigator d-flex pb-3">
-                        <a href="javascript:saveCar();" class="btn btn-primary waves-effect d-inline-block">
-                            <i class="icofont icofont-cur-dollar"></i>
-                            Save
-                        </a><br>
-                        <a href="javascript:bookCars(<%= quote.idQuote %>);" class="btn btn-green waves-effect d-inline-block">
-                            <i class="icofont icofont-cur-dollar"></i>
-                            Save and Book
-                        </a><br>
-                        <a href="javascript:gotoListOfQuotes();" class="btn btn-danger waves-effect d-inline-block">
-                            Return
-                        </a>
-                    </div>
-                </div>
-                <!-- Navigation end -->
-            </div>
-            <!-- left view end -->
-            <div class="card col-lg-6">
-                <div class="card-header">
-                    <h3 class="card-header-text d-inline-block m-b-0 f-w-600">Cars</h3>
-                </div>
-                <div class="card-block row">
-                    <div class="col-lg-12 md-group-add-on">
-                        <span class="md-add-on">
-                            <i class="icofont icofont-car"></i>
-                        </span>
-                        <div class="md-input-wrapper selectcashcar">
-                            <select class="md-form-control md-static selectcash" id="txtVehicleFilter" multiple="multiple">
-                            </select>
-                            <label style="top: -15px;">Search <span class="required">*</span></label>
-                        </div>
-                    </div>
-                    <!-- Nav tabs -->
-                    <div class="col-lg-12 tab-header">
-                        <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
-                        <% if (quote.idQuote != nil) %>
-                              <% cars.each.with_index do |car, index| %>
-                            <li id="car-tab<%= car.idQuoteCars %>" class="nav-item car<%= car.idQuoteCars %> index<%= index %>" style="display:block">
-                                <a class="nav-link" data-toggle="tab" href="#tab<%= car.idQuoteCars %>" role="tab" id="tab-a-<%= index %>">
-                                    <button onclick="removeCar(<%= car.idQuoteCars %>);">x</button>
-                                    <%= car.information.make + " " + car.information.year %>
-                                </a>
-                                <div class="slide"></div>
-                            </li>
-                        <% end %>
-                    <% end %>
-                        </ul>
-                    </div>
-                  <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
-                    <%if(@quote.idQuote != nil) %>
-                        <%  cars.each.with_index do |car, index| %>
-                          <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car.information} %>
-                        <% end %>
-                    <% end %>
-                  </div>
-                </div>
-            </div>
-            <!-- Add car end -->
-        <!-- Container-fluid ends -->
+          </ol>
         </div>
+      </div>
     </div>
+    <!-- Row end -->
+    <div class="row" id="quote" data-id="<%= quote.idQuote %>">
+      <div class="col-lg-12">
+        <%
+          if (quote.idQuote != nil) %>
+          <h2>Edit Quote</h2>
+        <% else %>
+          <h2>Create Quote</h2>
+        <% end %>
+      </div>
+      <div class="col-lg-6">
+        <div class="card col-lg-12">
+          <div class="card-header">
+            <button class="btn btn-primary waves-effect d-inline-block f-right btn-edit-customer">Edit Customer</button>
+            <h5>Customer</h5>
+          </div>
+          <div class="card-block row">
+            <div class="col-lg-12 md-group-add-on">
+              <span class="md-add-on">
+                  <i class="icofont icofont-phone"></i>
+              </span>
+              <div class="md-input-wrapper">
+                <select class="md-form-control md-static" name="phone">
+                  <%
+                    if (quote.idQuote != nil && quote.customer != nil) %>
+                    <option value="<%= quote.customer.idClient %>" selected><%=
+                      quote.customer.phone[0, 3] + "-" + quote.customer.phone[3, 3] + "-" + quote.customer.phone[6, 10] +
+                          " " + quote.customer.firstName + " " + quote.customer.lastName
+                    %></option>
+                  <% end %>
+                </select>
+                <label style="top: -15px;">Phone Number<span class="required">*</span></label>
+              </div>
+            </div>
+            <div class="col-lg-6 md-group-add-on">
+              <span class="md-add-on">
+                  <i class="icofont icofont-ui-user"></i>
+              </span>
+              <div class="md-input-wrapper">
+                <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote.idQuote && quote.customer ? quote.customer.firstName : "" %>">
+                <label style="top: -15px;">First Name <span class="required">*</span></label>
+              </div>
+            </div>
+            <div class="col-lg-6 md-group-add-on">
+              <span class="md-add-on">
+                  <i class="icofont icofont-ui-user"></i>
+              </span>
+              <div class="md-input-wrapper">
+                <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
+                <label style="top: -15px;">Last Name<span class="required">*</span></label>
+              </div>
+            </div>
+            <div class="col-lg-6 md-group-add-on">
+              <span class="md-add-on">
+                  <i class="icofont icofont-ui-user"></i>
+              </span>
+              <div class="md-input-wrapper">
+                <input type="text" class="md-form-control md-static" name="postal" value="<%= quote.idQuote && quote.customer && quote.customer.address.first ? quote.customer.address.first.postal : "" %>">
+                <label style="top: -15px;">Postal Code<span class="required">*</span></label>
+              </div>
+            </div>
+            <div class="col-lg-6 md-group-add-on">
+              <span class="md-add-on">
+                  <i class="icofont icofont-ui-user"></i>
+              </span>
+              <div class="md-input-wrapper">
+                <select class="md-form-control md-static has_quote" name="heardOfUs">
+                  <option value="">Select an option</option>
+                  <option>Repeat Customer</option>
+                  <% heardOfUsFound = false %>
+                  <% heardsofus.each do |heardofus| %>
+                    <% if (quote.idQuote != nil && quote.customer != nil) %>
+                      <option<%= heardofus.idHeardOfUs == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
+                      <% if (heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
+                        <% heardOfUsFound = true %>
+                      <% else %>
+                        <option><%= heardofus.type %></option>
+                      <% end %>
+                    <% elsif (quote.idQuote != nil && !heardOfUsFound) %>
+                      <option><%= heardofus.type %></option>
+                    <% end %>
+                  <% end %>
+                </select>
+                <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card col-lg-12">
+          <div class="card-header">
+            <h5>Price</h5>
+          </div>
+          <div class="card-block">
+            <div class="cars-total-list">
+              <div class="hiddenaddress">
+                <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.first.to_json.to_s : "" %>
+              </div>
+              <div class="row font-weight-bold" style="">
+                <div class="col-lg-6"></div>
+                <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Pickup</div>
+                <div class="col-lg-3 text-right" style="display: inline-flex;padding: 0 5px;">Drop Off</div>
+              </div>
+              <% if (quote.idQuote != nil) %>
+                <% cars.each.with_index do |car, index| %>
+                  <% cal_car_price car, quote %>
+                  <div class="row car<%= car.idQuoteCars %> index<%= index %>" id="car-price<%= car.idQuoteCars %>">
+                    <div class="col-lg-6">
+                      <%= car.information.make + " " + car.information.model + " " + car.information.year %>
+                    </div>
+                    <div id="car-price-pickup-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
+                    </div>
+                    <div id="car-price-dropoff-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-dropoff" style="display: inline-flex;padding: 0 5px;">
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-lg-9 font-weight-bold">
+                <%= "Total" %>:
+              </div>
+              <div class="col-lg-3 totalPriceRounded font-weight-bold">0.00 $</div>
+            </div>
+          </div>
+        </div>
+        <div class="col card col-lg-12" style="padding-top: 20px; padding-bottom: 15px; margin-left: 5px;">
+          <label style="top: -15px;"><b>Notes</b></label>
+          <%= cktext_area "note", "", ckeditor: {toolbar: 'mini'} %>
+        </div>
+        <div class="card col-lg-12">
+          <div class="card-block quick-quote-navigator d-flex pb-3">
+            <a href="javascript:saveCar();" class="btn btn-primary waves-effect d-inline-block">
+              <i class="icofont icofont-cur-dollar"></i>
+              Save
+            </a><br>
+            <a href="javascript:bookCars(<%= quote.idQuote %>);" class="btn btn-green waves-effect d-inline-block">
+              <i class="icofont icofont-cur-dollar"></i>
+              Save and Book
+            </a><br>
+            <a href="javascript:gotoListOfQuotes();" class="btn btn-danger waves-effect d-inline-block">
+              Return
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="card col-lg-6">
+        <div class="card-header">
+          <h3 class="card-header-text d-inline-block m-b-0 f-w-600">Cars</h3>
+        </div>
+        <div class="card-block row">
+          <div class="col-lg-12 md-group-add-on">
+            <span class="md-add-on">
+              <i class="icofont icofont-car"></i>
+            </span>
+            <div class="md-input-wrapper selectcashcar">
+              <select class="md-form-control md-static selectcash" id="txtVehicleFilter" multiple="multiple">
+              </select>
+              <label style="top: -15px;">Search <span class="required">*</span></label>
+            </div>
+          </div>
+          <div class="col-lg-12 tab-header">
+            <ul class="nav nav-tabs md-tabs tab-timeline tab-details" role="tablist">
+              <% if (quote.idQuote != nil) %>
+                <% cars.each.with_index do |car, index| %>
+                  <li id="car-tab<%= car.idQuoteCars %>" class="nav-item car<%= car.idQuoteCars %> index<%= index %>" style="display:block">
+                    <a class="nav-link" data-toggle="tab" href="#tab<%= car.idQuoteCars %>" role="tab" id="tab-a-<%= index %>">
+                      <button onclick="removeCar(<%= car.idQuoteCars %>);">x</button>
+                      <%= car.information.make + " " + car.information.year %>
+                    </a>
+                    <div class="slide"></div>
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+          <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
+            <% if (@quote.idQuote != nil) %>
+              <% cars.each.with_index do |car, index| %>
+                <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car.information} %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div id="modalMap" class="modal fade" role="dialog">
   <div class="modal-dialog">
-
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -243,37 +219,34 @@
       </div>
       <div class="modal-body">
         <div id="google_map" style="width:450px;height:400px;"></div>
-        <input type="hidden" id="us2-lat" >
-        <input type="hidden" id="us2-lon" >
-        <input type="hidden" id="us2-lon" >
+        <input type="hidden" id="us2-lat">
+        <input type="hidden" id="us2-lon">
+        <input type="hidden" id="us2-lon">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-
   </div>
 </div>
-
-
 <% content_for :js do %>
   <script>
-    $(document).ready(function(){
-       if(CKEDITOR.instances.note_ == undefined){
-         CKEDITOR.replaceAll();
-       }
-       $(".cke_toolbar").eq(0).hide();
-       $(".cke_toolbar").eq(1).hide();
-       $(".cke_toolbar").eq(2).hide();
-       $(".cke_toolbar").eq(3).hide();
-       $(".cke_toolbar").eq(4).hide();
-       $(".cke_toolbar").eq(5).hide();
-       $(".cke_toolbar").eq(6).hide();
-       var content =  `<%= quote.note.present? ? quote.note.html_safe : '' %>`;
-      for (instance in CKEDITOR.instances){
-          CKEDITOR.instances[instance].setData(content);
-      }
-     });
+      $(document).ready(function () {
+          if (CKEDITOR.instances.note_ == undefined) {
+              CKEDITOR.replaceAll();
+          }
+          $(".cke_toolbar").eq(0).hide();
+          $(".cke_toolbar").eq(1).hide();
+          $(".cke_toolbar").eq(2).hide();
+          $(".cke_toolbar").eq(3).hide();
+          $(".cke_toolbar").eq(4).hide();
+          $(".cke_toolbar").eq(5).hide();
+          $(".cke_toolbar").eq(6).hide();
+          var content = `<%= quote.note.present? ? quote.note.html_safe : '' %>`;
+          for (instance in CKEDITOR.instances) {
+              CKEDITOR.instances[instance].setData(content);
+          }
+      });
       $(".tab-pane").removeClass("active");
       var quoteNo = (<%= quote.idQuote || "null" %>);
 
@@ -282,44 +255,5 @@
   <%= public_js_path 'common.js' %>
   <%= public_js_path 'quote.js' %>
   <script async defer type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>'></script>
-  <script type="text/javascript">
-      function callModal(){
-          $(".map").on("click", function () {
-              var $this  = $(this),
-                  id = $this.data("id");
-              callMap(id);
-          })
-      }
-      callModal();
-      var getLatLang = function(postal){
-          var address = postal + " canada";
-          geocoder = new google.maps.Geocoder()
-          geocoder.geocode( { 'address' : address }, function( results, status ) {
-              if( status == google.maps.GeocoderStatus.OK ) {
-                  var latlng = new google.maps.LatLng(39.305, -76.617);
-                  map = new google.maps.Map(document.getElementById('google_map'), {
-                      center: latlng,
-                      zoom: 12
-                  });
-                  //In this case it creates a marker, but you can get the lat and lng from the location.LatLng
-                  map.setCenter( results[0].geometry.location );
-                  var marker = new google.maps.Marker( {
-                      map     : map,
-                      position: results[0].geometry.location
-                  } );
-              } else {
-                  alert( 'Geocode was not successful for the following reason: ' + status );
-              }
-          } );
-      }
-      function callMap(id){
-          if(($("#car-location"+id).children("option") != undefined) && ($("#car-location"+id).children("option").val() != undefined) && ($("#car-location"+id).children("option").val().length > 0)) {
-              var last = $("#car-location"+id).children("option").length - 1
-              var option =  $("#car-location"+id).children("option")[last]
-              var postal = $(option).val()
-              getLatLang(postal);
-              $("#modalMap").attr("data-id", id).modal("toggle");
-          }
-      }
-</script>
+  <%= public_js_path 'edit_quote_map.js' %>
 <% end %>
