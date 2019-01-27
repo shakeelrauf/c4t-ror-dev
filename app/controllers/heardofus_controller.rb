@@ -16,7 +16,7 @@ class HeardofusController < ApplicationController
     end
   end
 
-  def get_heardsofus
+  def index
     @heardsOfUs = Heardofus.all
     render :index
   end
