@@ -159,60 +159,55 @@
           <div class="md-input-wrapper">
               <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
               <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
-              <select class="md-form-control md-static car-location-select2" name="car-location<%= car.id %>" id="car-location<%= car.id %>">
-                <% if (car.address)  %>
-                  <option value="<%= car.address.id %>"  data-select2-tag='true'><%= car.address.postal %></option>
+              <select class="md-form-control md-static car-location-select2" data-id="<%=car.idQuoteCars %>" name="car-location<%= car.idQuoteCars %>" id="car-location<%= car.id %>">
+                <% if (car.address.present?)  %>
+                  <option value="<%= car.address.postal  %>"  data-select2-tag='true'><%= car.address.postal %></option>
                 <% end %>
               </select>
             <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
               <label style="top: -15px;">Select an address or enter a Postal Code for this car<span class="required">*</span></label>
               </div>
               </div>
-              <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+              <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" >
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
           </div>
-          <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+          <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" >
             <div class="md-input-wrapper">
-              <input type="text" name="car-street<%= car.idQuoteCars %>" value="" class="md-form-control md-static"/>
+              <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
               <label style="top: -15px;">Street<span class="required">*</span></label>
             </div>
           </div>
-          <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+          <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>" >
             <div class="md-input-wrapper">
-              <input type="text" name="car-city<%= car.idQuoteCars %>" value="" class="md-form-control md-static"/>
+              <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
               <label style="top: -15px;">City<span class="required">*</span></label>
             </div>
           </div>
-          <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+          <div class="col-lg-1 car-ex-address<%= car.idQuoteCars %>" >
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
               </div>
-              <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
+              <div class="col-lg-5 car-ex-address<%= car.idQuoteCars %>" >
                 <div class="md-input-wrapper">
                   <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
-                    <option value="ON">Ontario</option>
-                    <option value="BC">British Columbia</option>
-                    <option value="QC">Quebec</option>
-                    <option value="AL">Alberta</option>
-                    <option value="NS">Nova Scotia</option>
-                    <option value="NL">Newfoundland and Labrador</option>
-                    <option value="SA">Saskatchewan</option>
-                    <option value="MA">Manitoba</option>
-                    <option value="NB">New Brunswick</option>
-                    <option value="PE">Prince Edward Island</option>
+                    <option value="ON" <%= car.address.present? ? car.address.province=="ON" ? 'selected' : '' : '' %>>Ontario</option>
+                    <option value="BC" <%= car.address.present? ? car.address.province=="BC" ? 'selected' : '' : '' %>>British Columbia</option>
+                    <option value="QC" <%= car.address.present? ? car.address.province=="QC" ? 'selected' : '' : '' %>>Quebec</option>
+                    <option value="AL" <%= car.address.present? ? car.address.province=="AL" ? 'selected' : '' : '' %>>Alberta</option>
+                    <option value="NS" <%= car.address.present? ? car.address.province=="NS" ? 'selected' : '' : '' %>>Nova Scotia</option>
+                    <option value="NL" <%= car.address.present? ? car.address.province=="NL" ? 'selected' : '' : '' %>>Newfoundland and Labrador</option>
+                    <option value="SA" <%= car.address.present? ? car.address.province=="SA" ? 'selected' : '' : '' %>>Saskatchewan</option>
+                    <option value="MA" <%= car.address.present? ? car.address.province=="MA" ? 'selected' : '' : '' %>>Manitoba</option>
+                    <option value="NB" <%= car.address.present? ? car.address.province=="NB" ? 'selected' : '' : '' %>>New Brunswick</option>
+                    <option value="PE" <%= car.address.present? ? car.address.province=="PE" ? 'selected' : '' : '' %>>Prince Edward Island</option>
                   </select>
                   <label style="top: -15px;">Province<span class="required">*</span></label>
                 </div>
               </div>
-              <div class="col-lg-6 car-ex-address<%= car.idQuoteCars %>" style="display:none;">
-                <div class="md-input-wrapper">
-                  <input type="text" name="car-postal<%= car.idQuoteCars %>" value="" class="md-form-control md-static"/>
-                  <label style="top: -15px;">Postal<span class="required">*</span></label>
-                </div>
-              </div>
+
     </div><!--row-->
     <div class="card-header">
       <h6 class="card-header-text">Price calculation</h6>
@@ -357,3 +352,12 @@
     </div>
   </div>
 </div>
+
+<script !src="">
+  $(".car-location-select2").each(function(a){
+    if(($(this).children("option") != undefined) && (($(this).children("option").val() != undefined) && $(this).children("option").val().length > 0)){
+        var id = $(this).data("id");
+        $(".car-ex-address"+id).show()
+    }
+  })
+</script>

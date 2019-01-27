@@ -120,7 +120,7 @@
                   <div class="card-block">
                     <div class="cars-total-list">
                       <div class="hiddenaddress">
-                        <%= (quote.customer.present? &&quote.customer.address.present?) ? quote.customer.address.first.address.to_json : "" %>
+                        <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.first.to_json.to_s : "" %>
                       </div>
                       <div class="row font-weight-bold" style="">
                                     <div class="col-lg-6"></div>

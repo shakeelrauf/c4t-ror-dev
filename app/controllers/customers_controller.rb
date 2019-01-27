@@ -1,6 +1,7 @@
 class CustomersController < ApplicationController
   before_action :login_required
   include Growl
+  include Customers
 
   def new
     @customer = Customer.new
@@ -14,7 +15,7 @@ class CustomersController < ApplicationController
   end
 
   def index
-    @customers = ApiCall.get("/clients",{}, headers)
+    @customers = Customer.includes(:address, :heardofus).order("firstName ASC, LastName ASC").limit(30)
   end
 
   def postal_list
@@ -38,9 +39,9 @@ class CustomersController < ApplicationController
   end
 
   def show
-    @customer = JSON.parse(ApiCall.get("/clients/#{params[:id]}", { no: params[:id] }, headers))
-    @quotes = JSON.parse(ApiCall.get("/clients/#{params[:id]}/quotes", {}, headers))
-    @status = ApiCall.get("/status", {}, headers)
+    @customer = Customer.includes(:address,:heardofus,business: [:contacts]).where(idClient: params[:id]).first
+    @quotes = Quote.includes(:dispatcher, :customer, :status).where(idClient: params[:id]).order('dtCreated DESC').limit(30)
+    @status = Status.all
   end
 
   def edit
