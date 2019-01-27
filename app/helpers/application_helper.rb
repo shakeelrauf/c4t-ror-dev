@@ -33,4 +33,16 @@ module ApplicationHelper
     end
     return val
   end
+
+  def cal_car_price car, quote
+    @bonus_car_price = 0
+    if((car.information.weight).to_i <= 1500)
+      @bonus_car_price += quote.smallCarPrice.to_i
+    elsif((car.information.weight).to_i > 3000)
+      @bonus_car_price += quote.midCarPrice.to_i
+    else
+      @bonus_car_price += quote.largeCarPrice.to_i
+    end
+    @car_price = ((car.information.weight.to_i/1000 * car.quote.steelPrice.to_i) - ( car.quote.wheelPrice.to_i))
+  end
 end

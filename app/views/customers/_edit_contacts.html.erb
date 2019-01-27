@@ -23,22 +23,22 @@
         <span class="md-add-on">
         <i class="icofont icofont-ui-user"></i>
         </span>
-      <div class="md-input-wrapper">
-        <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
-          <!-- <option disabled selected style="display:none"></option> -->
-          <option selected="selected"><%= contact.paymentMethod %></option>
-          <option>By Check</option>
-          <option>Cash</option>
-          <option>Electronic Transfer</option>
-          <!-- <option selected="<%#= contact.paymentMethod == "Electronic Transfer" ? ' true' : "false" %>">Electronic Transfer</option> -->
-        </select>
-        <label>Contact Prefered Payment Method <span class="required">*</span></label>
-      </div>
-    </div>
-    <div class="col-lg-1 md-group-add-on">
-      <span onclick="checkContactToRemove($(this));" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(contactData.id || "")+`">
-      <i class="icofont icofont-ui-remove"></i>
-      </span>
-    </div>
+        <div class="md-input-wrapper">
+           <select class="md-form-control payment-method md-static selectcash" name="contacts[paymentMethod][]">
+              <!-- <option disabled selected style="display:none"></option> -->
+              <option selected="selected"><%= contact.paymentMethod %></option>
+              <option>By Check</option>
+              <option>Cash</option>
+              <option>Electronic Transfer</option>
+              <!-- <option selected="<%#= contact.paymentMethod == "Electronic Transfer" ? ' true' : "false" %>">Electronic Transfer</option> -->
+           </select>
+           <label>Contact Prefered Payment Method <span class="required">*</span></label>
+        </div>
+     </div>
+     <div class="col-lg-1 md-group-add-on">                     
+        <span onclick="checkContactToRemove($(this));" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(contactData.id || '' )+`">
+        <i class="icofont icofont-ui-remove"></i>
+        </span>
+     </div>
   </div>
 <% end %> 

@@ -2,8 +2,8 @@ class QuoteController < ApplicationController
   before_action :login_required
   include Quotesmethods
 
-	def all_quotes  
-    @quotes = Quote.eager_load(:customer, :dispatcher,:status).all
+  def all_quotes
+    @quotes = Quote.includes(:customer, :dispatcher,:status).all
     @pages = 0
     if @quotes.count % 15 > 0
       @pages = 1
@@ -15,10 +15,8 @@ class QuoteController < ApplicationController
 
   def car_price
     return respond_json({"netPrice": nil}) if params[:missingWheel] == "" || params[:missingBattery] == "" || params[:missingCat] == ""
-    quote = JSON.parse Quote.includes(:dispatcher,customer: [:address,:heardofus]).where(idQuote: params[:quoteId]).first.to_json(include: [:dispatcher,{:customer => {include: [:address, :heardofus]}}])
+    quote = JSON.parse Quote.where(idQuote: params[:quoteId]).first.to_json
     return respond_json({"netPrice": nil}) if quote.nil?
-    cars = JSON.parse QuoteCar.where(idQuote: params[:no]).to_json
-    quote["cars"] = cars
     car_distance =  params[:distance]
     car_distance = car_distance.to_i if car_distance.present?
     excessDistance = 0.0
@@ -62,13 +60,12 @@ class QuoteController < ApplicationController
   end
 
   def quote_with_filter
-    res = ApiCall.get("/quotes/json?limit=#{params[:limit]}
-      &offset=#{params[:offset]}&afterDate=#{params[:afterDate]}&beforeDate=#{params[:beforeDate]}&filter=#{params[:filter]}",{} , headers )
-    respond_json(res)
+    quotes, all_count = search_quotes params[:limit], params[:offset], params[:filter], params[:afterDate], params[:beforeDate]
+    render json: { quotes: JSON.parse(quotes), count: all_count}
   end
 
   def create_quote
-    quickquote =  save_quotes
+    save_quotes
   end
 
   def vehicle_json
@@ -96,12 +93,6 @@ class QuoteController < ApplicationController
         groups.push({text: vehicle["make"], children: [item]}) if !created
       end
     end
-    # if !groups["#{vehicle.make}"]
-    #   groups["#{vehicle.make}"] = vehicle.make
-    #   groups["#{vehicle.make}"] = [item]
-    # else
-    #   groups["#{vehicle.make}"].push(item)
-    # end
     returned = {}
     returned[:results] = groups
     returned[:pagination] = {}
@@ -110,19 +101,12 @@ class QuoteController < ApplicationController
     else
       returned[:pagination][:more] = true
     end
-
     respond_json(returned)
   end
 
   def phone_list
     phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
-    #ApiCall.get("/client/phones?search=#{params[:search]}&limit=#{params[:limit]}&offset=#{params[:offset]}",{}, headers)
-    returned = {
-        results: [],
-        pagination: {
-            more: true
-        }
-    }
+    returned = {results: [], pagination: {more: true}}
     returned[:pagination][:more] = false if phones.length < params[:limit].to_i
     phones.each do |phone|
       client = JSON.parse phone.to_json
@@ -130,21 +114,14 @@ class QuoteController < ApplicationController
       client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
       text = ""
       if client["phone"].present? && client["phone"].length >= 10
-        text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s +
-                  " " + client["firstName"].to_s + " " + client["lastName"].to_s
+        text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s + " " + client["firstName"].to_s + " " + client["lastName"].to_s
       elsif client["phone"].present?
-        text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s  
+        text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s
       end
-      returned[:results].push({
-                                 id: phone["idClient"],
-                                 text: text
-                             })
+      returned[:results].push({id: phone["idClient"], text: text})
       if client["business"]
         client["business"]["contacts"].each do |contact|
-          returned[:results].push({
-                                      id: phone["idClient"],
-                                      text: text
-                                  })
+          returned[:results].push({id: phone["idClient"],text: text})
         end
       end
     end
@@ -157,37 +134,21 @@ class QuoteController < ApplicationController
   end
 
   def create_car
-    @car = QuoteCar.new(
-        idQuote: params[:quote],
-        idCar: params[:veh],
-        missingWheels: 0,
-        missingBattery: nil,
-        missingCat: nil,
-        gettingMethod: "pickup",
-        )
-    @car.save!
-    respond_json(@car)
+    car = QuoteCar.new(idQuote: params[:quote], idCar: params[:veh], missingWheels: 0, missingBattery: nil, missingCat: nil, gettingMethod: "pickup")
+    car.save!
+    respond_json(car)
   end
 
-	def edit_quotes
-    @quote = Quote.includes(:dispatcher,customer: [:address,:heardofus]).where(idQuote: params[:id]).first
-    cars =  QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:id])
+  def edit_quotes
+    @quote = Quote.includes(customer: [:address]).where(idQuote: params[:id]).first
+    cars =  QuoteCar.includes([:information, :address]).where(idQuote: params[:id])
     @heardsofus = Heardofus.all
-    render  locals: {
-                       user: current_user,
-                       quote: @quote,
-                       cars: cars,
-                       heardsofus: @heardsofus
-                     }
+    render  locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
   end
 
   def render_vehicle
-    vehicle = VehicleInfo.where(idVehiculeInfo: params[:vehicle]).first
-    car = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuoteCars: params[:car]).first
-    render partial: 'quote/vehicle_parameters', locals: {
-        car: car,
-        vehicle: vehicle,
-    }
+    car = QuoteCar.includes([:information, :address]).where(idQuoteCars: params[:car]).first
+    render partial: 'quote/vehicle_parameters', locals: {car: car, vehicle: car.information}
   end
 
   def remove_car
@@ -196,10 +157,9 @@ class QuoteController < ApplicationController
     return render_json_response({:msg => "ok"}, :ok)
   end
 
-
   def status_json
-    res = ApiCall.get("/status", {}, headers)
-    respond_json(res)
+    status = Status.all
+    respond_json(status)
   end
 
   def update_quote_status
@@ -209,16 +169,15 @@ class QuoteController < ApplicationController
         quotes.idStatus = params[:status]
         quotes.dtStatusUpdated = Time.now
         quotes.save!
-      end
-      if (params[:status] == 6)
-        # Check if sms already sent.
-        if (!quotes.isSatisfactionSMSQuoteSent && quotes.customer.cellPhone)
-          sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
-          sms.call
-          quotes.update(isSatisfactionSMSQuoteSent: 1)
+        if (params[:status] == 6)
+          if (!quotes.isSatisfactionSMSQuoteSent && quotes.customer.cellPhone)
+            sms = TwilioTextMessenger.new "Hello. This is CashForTrash. We recently bought your car. We want to know your satisfaction. On a scale of 1 to 10, how much did you appreciate our service? Please respond with a number.", "4388241370"
+            sms.call
+            quotes.update(isSatisfactionSMSQuoteSent: 1)
+          end
         end
       end
     end
     respond_json(quotes)
   end
- end
+end

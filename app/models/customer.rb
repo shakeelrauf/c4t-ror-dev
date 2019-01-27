@@ -11,7 +11,7 @@ class Customer < ApplicationRecord
 		return self.firstName + ' ' + self.lastName
 	end
 
-	def self.customUpsert(options={},where={})
+	def self.custom_upsert(options={},where={})
 		@custom = where(where).first
 		if @custom.present?
 			@custom.update(options)
