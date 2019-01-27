@@ -28,7 +28,8 @@
                 Edit Heard Of Us
               </h5>
             </div>
-            <form method="PUT" action="/update_hou">
+            <form method="post" action="/heardofus/<%= @heardofus.idHeardOfUs %>">
+              <input type="hidden" name="_method" value="put" />
               <% if (@heardofus.idHeardOfUs) %>
                 <input type="hidden" name="no" value="<%= @heardofus.idHeardOfUs %>">
               <% end %>

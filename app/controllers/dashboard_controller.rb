@@ -15,6 +15,8 @@ class DashboardController < ApplicationController
     render :dispatch , locals: {cars:  cars,unscheduledCars: un_schedule_cars}
   end
 
+
+  private
   def list_unscheduled_cars(schedules, cars)
     un_scheduled_cars = {}
     return un_scheduled_cars if !(cars.present?)

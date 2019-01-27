@@ -31,7 +31,7 @@ $(".blacklistDialogYes").click(function() {
     }
     $(".blacklistContactDialog").dialog("close");
     $.ajax({
-      url: "/users/blacklist/" + userNo,
+      url: "/users/"+ userNo + "/blacklist/",
       type: "POST",
       data: {
           isActive: isActive

@@ -7,12 +7,12 @@ class QuotecarsController < ApplicationController
  	end
 
  	def show
- 		qc = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuoteCars: params[:carNo]).first
+ 		qc = QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuoteCars: params[:id]).first
  	end
 
- 	def create_car
+ 	def create
     car = VehicleInfo.create form_body(params)
-    redirect_to carz_path(params: {weight: car["weight"]})
+    redirect_to cars_path
  	end
 
  	def index

@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <h5 class="card-header-text">Quotes for this customer</h5>
-            <a href="/create-quote?no=<%= customer.idClient %>" class="btn btn-primary waves-effect waves-light f-right">+ ADD Quote</a>
+            <a href="<%= initialize_quote_quotes_url(no: customer.idClient) %>" class="btn btn-primary waves-effect waves-light f-right">+ ADD Quote</a>
         </div>
         <!-- end of card-header  -->
         <div class="row">

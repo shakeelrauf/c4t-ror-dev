@@ -1,101 +1,80 @@
 Rails.application.routes.draw do
 	mount Ckeditor::Engine => '/ckeditor'
-  scope  controller: :send_form do
-    get 	:login
-    post 	:login, 													action: :login_user
-    get 	:logout,													action: :logout
-    get   :forget_pw
-    post	:change_pw_save
-    get		:invalid_key
-		get		"/pw_init/:id/:key",							action: :pw_init
-		get		"/pw_init/",							action: :pw_init
-    post 	:forgot_pw, 											action: :forgot_reset
-  end
-
-  scope controller: :quotecars do
-		get :quotescars
-		get '/quotescar/:carNo',              action: :show
-		post '/cars',         								action: :create_car
-		get '/cars',         									action: :index,         as: :carz
-		get '/cars-select2',         					action: :search_cars
-		get 'vehicles/count', 								action: :car_count
-	end
-
-  scope  controller: :dashboard do
-    get 	:dashboard,												action: :dashboard
-    get   :dispatch, 												action: :dispatched
-  end
-
   root "dashboard#dashboard"
 
-  scope  controller: :setting do
-    get '/settings',                           action: :index
-    post '/settings',                          action: :update
+	resources :bookings, only: [:index] do
+		member do
+			get :quotes, action: :book
+		end
   end
 
-  scope  controller: :charity do
-    get '/charities',                           action: :index
-    get '/charities/add',              	 				action: :new
-    get '/charities/:no',              	 				action: :edit
-    post '/charities',                          action: :create
-    get '/update',                     					action: :update
-  end
+	resources :cars, controller: :quotecars, :only => [:index, :show, :create]
+	get :car_search, controller: :quotecars, action: :search_cars
+	resources :charities
+	resources :customers
 
-  scope  controller: :heardofus do
-    get '/heardofus',                           action: :index
-    get '/heardofus/add',              	 				action: :new
-    get '/heardofus/:no',              	 				action: :edit
-    post '/heardofus',                          action: :create
-    get '/update_hou',                     			action: :update
-  end
-
-	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
-	  collection do
-	    post '/blacklist/:no', 								action: :blacklist
-	  end
-  end
-  scope controller: :booking do
-    get '/quotes/:no/book', 								action: :book
-    post '/booking', 												action: :booking
-  end
-
-
-	scope controller: :quote do
-		post '/quotes',                          action: :create
-		post '/quote',                           action: :create_quote
-    get '/quotes/json',                      action: :quote_with_filter
-		get '/status/json', 										 action: :status_json
-    get '/vehicles/:no/json', 							 action: :vehicle_json
-		get '/quotes/:id/edit',             	 	 action: :edit, 								as: :edit_quote
-    get '/phone-numbers-select2', 					 action: :phone_list
-    get '/vehicles-select2', 					       action: :vehicle_list
-		post '/car-create',                      action: :create_car
-    post '/car-remove',                      action: :remove_car
-    get '/quotecar/:carNo',                  action: :retrive_car
-		get '/render-vehicle-parameters', 			 action: :render_vehicle
-		get '/car-price', 											 action: :car_price
-		post '/car-price', 											 action: :car_price
-		# get '/quotes',                           action: :get_quotes_by_filters
-    patch '/quotes/:no',                     action: :quote
-    post '/quote/:no/status',              	 action: :update_quote_status
-    delete '/quotecar/:carNo',               action: :destroy
-    get '/clients/:no/quotes',               action: :particular_customer_quotes
-    get '/users/:no/quotes',                 action: :particular_customer_quotes_by_filters
-    get '/status',                           action: :all_status
-    get '/quotes',                       		 action: :index
-    get '/create-quote',                     action: :create, 						 as: :create_quote
-	end
-
-  resources :customers
   scope controller: :customers do
     get '/customers/id/:no/json',             action: :get_customer
     get '/customers/:customerId/postal-select2', action: :postal_list
   end
 
-	scope controller: :distance do
+	scope  controller: :dashboard do
+		get 	:dashboard
+		get   :dispatched
+	end
+
+  scope controller: :distance do
 		get  "/distance/:postal",            action: :distance, defaults: { format: 'json' }
 		post :distancediff,                  action: :distancediff, defaults: { format: 'json' }
+  end
+
+  resources :heardofus
+	resources :quotes do
+		collection  do
+			get :search
+			get :status
+			get :car_price
+			get :phone_numbers
+			post :car_price
+			get :vehicle_search
+			get :initialize_quote
+		end
+		member do
+			post :create_car
+			post :remove_car
+		end
 	end
+
+  resources :quotecars, :only => [:index, :show]
+	resources :settings, only: [:index, :update]
+
+	scope  controller: :send_form do
+		get 	:login
+		post 	:login, 													action: :login_user
+		get 	:logout,													action: :logout
+		get   :forget_pw
+		post	:change_pw_save
+		get		:invalid_key
+		get		"/pw_init/:id/:key",							action: :pw_init
+		get		"/pw_init/",							action: :pw_init
+		post 	:forgot_pw, 											action: :forgot_reset
+	end
+
+	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
+		member do
+			post :blacklist
+		end
+	end
+
+	resources :vehicles, param: :no do
+		member do
+			get :show
+			get :partial
+		end
+		collection do
+			get :search
+		end
+  end
 
   namespace :api do
 		namespace :v1 do

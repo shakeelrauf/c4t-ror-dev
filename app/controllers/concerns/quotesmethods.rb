@@ -12,8 +12,8 @@ module Quotesmethods
     end
     count = Quote.where(dtCreated: DateTime.now.strftime("%Y-%m-01 00:00:00")).count
     reference = DateTime.now.strftime("%Y%m") +("0000"+( count+1).to_s).last(4)
-    quote = Quote.create(
-        idUser: current_user.idUser,
+    quote = Quote.new(
+        idUser:  current_user.idUser,
         referNo: reference,
         smallCarPrice: settings_hash["smallCarPrice"] || "0",
         midCarPrice: settings_hash["midCarPrice"] || "0",
@@ -28,6 +28,7 @@ module Quotesmethods
         dtCreated: DateTime.now,
         dtStatusUpdated: DateTime.now
     )
+    quote.save!
     quote
   end
 

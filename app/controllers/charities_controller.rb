@@ -1,4 +1,4 @@
-class CharityController < ApplicationController
+class CharitiesController < ApplicationController
 	# before_action :authenticate_user
 	# before_action :authenticate_admin
   before_action :login_required
@@ -20,7 +20,7 @@ class CharityController < ApplicationController
 	end
 
 	def edit
-    @charitie = Charitie.find(params[:no])
+    @charitie = Charitie.find(params[:id])
 	end
 
 	def update

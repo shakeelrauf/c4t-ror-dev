@@ -5,7 +5,7 @@ $(document).ready(function() {
         ajax: {
             // Select2 error handling
             transport: function (params, success, failure) {
-              var $request = $.ajax('/vehicles-select2', {
+              var $request = $.ajax('/quotes/vehicle_search', {
                 data: params.data,
               });
               $request.then(function(data, textStatus, jqXHR) {
@@ -28,11 +28,11 @@ $(document).ready(function() {
     });
 
     $('#txtVehicleFilter').on('select2:select', function (e) {
-      $.ajax("/vehicles/" + $("#txtVehicleFilter option:selected:last").val() + "/json").done(function(veh) {
-        $.ajax({method: "POST", url: "/car-create",
+      $.ajax("/vehicles/" + $("#txtVehicleFilter option:selected:last").val()).done(function(veh) {
+        $.ajax({method: "POST", url: "/quotes/"+ quoteNo+"/create_car",
                data: { "quote": quoteNo,
                        "veh": veh.idVehiculeInfo}}).done(function(car) {
-            $.ajax("/render-vehicle-parameters?vehicle=" + veh.idVehiculeInfo + "&car=" + car.idQuoteCars).done(function(html) {
+            $.ajax("/vehicles/"+veh.idVehiculeInfo+"/partial?vehicle=" + veh.idVehiculeInfo + "&car=" + car.idQuoteCars).done(function(html) {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
@@ -104,7 +104,7 @@ $(document).ready(function() {
         },
         dataType: 'json',
         ajax: {
-            url: '/phone-numbers-select2',
+            url: '/quotes/phone_numbers',
             data: function (params) {
                 var query = {
                     search: unformatPhone(params.term||""),
@@ -261,7 +261,7 @@ function showCarNewAddress(postal, carId) {
 }
 
 function removeCar(quoteCarId) {
-  $.ajax({method: "POST", url: "/car-remove", data: { "car": quoteCarId }}).done(function(car) {
+  $.ajax({method: "POST", url: "/quotes/"+quoteCarId+"/remove_car", data: { "car": quoteCarId }}).done(function(car) {
     $("#tab" + quoteCarId).remove();
     $("#car-price" + quoteCarId).remove();
     $("#car-tab" + quoteCarId).remove();
@@ -314,7 +314,7 @@ function calcPrice(carId,quote_id) {
     }
     $.ajax({
         method: "POST",
-        url: "/car-price",
+        url: "/quotes/car_price",
         data: data
     }).done(function(json) {
         if (json.trim && json.trim().startsWith("<!DOCTYPE html>")) {
@@ -395,7 +395,7 @@ function calcPrice(carId) {
     }
     $.ajax({
         method: "POST",
-        url: "/car-price",
+        url: "/quotes/car_price",
         data: data
     }).done(function(json) {
         if (json.trim && json.trim().startsWith("<!DOCTYPE html>")) {
@@ -503,7 +503,7 @@ function bookCars(quoteId) {
       if(e.error){
           doGrowlingDanger(e.error)
       }else{
-          document.location = "/quotes/" + quoteId + "/book";
+          document.location = "/bookings/" + quoteId + "/quotes";
       }
   });
 }
@@ -541,7 +541,7 @@ function saveCar(callback) {
     });
     $.ajax({
         method: "POST",
-        url: "/quote",
+        url: "/quotes",
         data: {
             "quote": quoteNo,
             "cars": cars,

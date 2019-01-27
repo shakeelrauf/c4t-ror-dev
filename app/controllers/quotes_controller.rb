@@ -1,4 +1,4 @@
-class QuoteController < ApplicationController
+class QuotesController < ApplicationController
   before_action :login_required
   include Quotesmethods
 
@@ -60,21 +60,21 @@ class QuoteController < ApplicationController
     respond_json(r)
   end
 
-  def quote_with_filter
+  def search
     quotes, all_count = search_quotes params[:limit], params[:offset], params[:filter], params[:afterDate], params[:beforeDate]
     render json: { quotes: JSON.parse(quotes), count: all_count}
   end
 
-  def create_quote
+  def initialize_quote
+    quickquote = create_default_quote
+    redirect_to edit_quote_path(id: quickquote.id)
+  end
+
+  def create
     save_quotes
   end
 
-  def vehicle_json
-    vehicle = VehicleInfo.where(idVehiculeInfo: params[:no]).first
-    respond_json(vehicle)
-  end
-
-  def vehicle_list
+  def vehicle_search
     vehicles = vehicles_search(params[:limit], params[:offset], params[:q])
     groups, item = [], {}
     vehicles.each do |vehicle|
@@ -105,7 +105,7 @@ class QuoteController < ApplicationController
     respond_json(returned)
   end
 
-  def phone_list
+  def phone_numbers
     phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
     returned = {results: [], pagination: {more: true}}
     returned[:pagination][:more] = false if phones.length < params[:limit].to_i
@@ -129,11 +129,6 @@ class QuoteController < ApplicationController
     respond_json(returned)
   end
 
-  def create
-    quickquote = create_default_quote
-    redirect_to edit_quote_path(id: quickquote.id)
-  end
-
   def create_car
     car = QuoteCar.new(idQuote: params[:quote], idCar: params[:veh], missingWheels: 0, missingBattery: nil, missingCat: nil, gettingMethod: "pickup")
     car.save!
@@ -147,18 +142,13 @@ class QuoteController < ApplicationController
     render :edit, locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
   end
 
-  def render_vehicle
-    car = QuoteCar.includes([:information, :address]).where(idQuoteCars: params[:car]).first
-    render partial: 'quote/vehicle_parameters', locals: {car: car, vehicle: car.information}
-  end
-
   def remove_car
     @quote_car = QuoteCar.where(idQuoteCars: params[:car])
     @quote_car.destroy_all
     return render_json_response({:msg => "ok"}, :ok)
   end
 
-  def status_json
+  def status
     status = Status.all
     respond_json(status)
   end

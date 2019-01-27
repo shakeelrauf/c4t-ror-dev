@@ -10,7 +10,7 @@ $(document).ready(() => {
 });
 
 function updateList() {
-    $.ajax("/cars-select2?filter="+$(".search-bar-car").val()+"&limit=15&offset="+tab).done(list => {
+    $.ajax("/car_search?filter="+$(".search-bar-car").val()+"&limit=15&offset="+tab).done(list => {
         showList(list.results);
         resizePagination(list.count, list.results.length);
     });

@@ -92,14 +92,14 @@ function filtingQuotes() {
     if(moment($("input[name=dtEnd]").val(), "YYYY-MM-DD").isValid()) {
         beforeDate = $("input[name=dtEnd]").val();
     }
-    var quotesUrl = "/quotes/json?beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=15&offset="+tab+"&filter="+filter;
+    var quotesUrl = "/quotes/search?beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=15&offset="+tab+"&filter="+filter;
     if($(".table-quotes").first().hasClass("user-profile")) {
         quotesUrl = "/quotes/user/json?limit=15&offset="+tab+"&filter="+filter;
     } else if($(".table-quotes").first().hasClass("client-profile")) {
         quotesUrl = "/quotes/client/json?limit=15&offset="+tab+"&filter="+filter;
     }
 
-    $.ajax("/status/json").done(function(status) {
+    $.ajax("/quotes/status").done(function(status) {
         $.ajax(quotesUrl).done(function(res) {
             resizePagination(res.count,res.quotes, false);
             // set_active();

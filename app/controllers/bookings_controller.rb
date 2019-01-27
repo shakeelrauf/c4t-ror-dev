@@ -1,8 +1,9 @@
-class BookingController < ApplicationController
+class BookingsController < ApplicationController
   before_action :login_required
   include Bookingmethods
+
   def book
-    quote =  Quote.where(idQuote:  params[:no]).first
+    quote =  Quote.where(idQuote:  params[:id]).first
     respond_json({error: "Car list is empty please select a car"}) if quote.nil?
     cars =  quote.quote_car
     respond_json({error: "Car list is empty please select a car"}) if cars.empty?

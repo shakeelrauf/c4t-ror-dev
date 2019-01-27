@@ -1,4 +1,4 @@
-class SettingController < ApplicationController
+class SettingsController < ApplicationController
   include Settings
   # before_action :authenticate_user
   # before_action :authenticate_admin, only: [:all, :update]

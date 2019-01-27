@@ -28,7 +28,8 @@
                 Edit charity
               </h5>
             </div>
-            <form method="GET" action="/update" class="the_form">
+            <form method="post" action="<%=charity_path(@charitie["idCharitie"]) %>" class="the_form">
+              <input type="hidden" name="_method" value="put" />
               <% if (@charitie["idCharitie"]) %>
                 <input type="hidden" name="id" value="<%= @charitie["idCharitie"] %>">
               <% end %>
