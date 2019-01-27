@@ -98,7 +98,7 @@ module Customers
       end
       if !params[:type].eql?("Individual")
         busi = Business.where(idClient: id).first
-        busi = business_type(busi)
+        busi = business_type(busi, id)
         busi.contacts.destroy_all
         create_contacts(params, busi)
       else
@@ -108,7 +108,7 @@ module Customers
     end
   end
 
-  def business_type(busi)
+  def business_type(busi, id)
     if busi.present?
       update_business(busi)
     else
