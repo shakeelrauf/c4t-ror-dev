@@ -2,10 +2,10 @@ Rails.application.routes.draw do
 	mount Ckeditor::Engine => '/ckeditor'
   root "dashboard#dashboard"
 
-	resources :bookings, only: [:index] do
+	resources :bookings, only: [:index, :create] do
 		member do
 			get :quotes, action: :book
-		end
+    end
   end
 
 	resources :cars, controller: :quotecars, :only => [:index, :show, :create]
