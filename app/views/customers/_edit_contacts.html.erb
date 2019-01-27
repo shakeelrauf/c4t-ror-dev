@@ -1,25 +1,25 @@
 <% contacts.each do |contact| %>
   <div class="col-lg-12 row contact-edit">
-     <div class="col-lg-4 md-group-add-on">
+    <div class="col-lg-4 md-group-add-on">
         <span class="md-add-on">
         <i class="icofont icofont-ui-user"></i>
         </span>
-        <div class="md-input-wrapper">
-           <input type="text" class="md-form-control first-name md-static" value="<%= contact.firstName %>" name="contacts[firstName][]">
-           <input type="hidden" class="md-form-control idContact md-static" value="<%= contact.idContact %>">
-           <label>Contact First Name <span class="required">*</span></label>
-        </div>
-     </div>
-     <div class="col-lg-4 md-group-add-on">
+      <div class="md-input-wrapper">
+        <input type="text" class="md-form-control first-name md-static" value="<%= contact.firstName %>" name="contacts[firstName][]">
+        <input type="hidden" class="md-form-control idContact md-static" value="<%= contact.idContact %>">
+        <label>Contact First Name <span class="required">*</span></label>
+      </div>
+    </div>
+    <div class="col-lg-4 md-group-add-on">
         <span class="md-add-on">
         <i class="icofont icofont-ui-user"></i>
         </span>
-        <div class="md-input-wrapper">
-           <input type="text" class="md-form-control last-name md-static" value="<%= contact.lastName %>" name="contacts[lastName][]">
-           <label>Contact Last Name <span class="required">*</span></label>
-        </div>
-     </div>
-     <div class="col-lg-3 md-group-add-on">
+      <div class="md-input-wrapper">
+        <input type="text" class="md-form-control last-name md-static" value="<%= contact.lastName %>" name="contacts[lastName][]">
+        <label>Contact Last Name <span class="required">*</span></label>
+      </div>
+    </div>
+    <div class="col-lg-3 md-group-add-on">
         <span class="md-add-on">
         <i class="icofont icofont-ui-user"></i>
         </span>

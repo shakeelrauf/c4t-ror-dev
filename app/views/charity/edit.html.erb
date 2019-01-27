@@ -1,111 +1,91 @@
 <%= render :partial => 'shared/header' %>
 <%= render :partial => 'shared/menu' %>
 <div class="content-wrapper">
-        <!-- Container-fluid starts -->
-        <div class="container-fluid">
-            <!-- Row Starts -->
-            <div class="row">
-                <div class="col-sm-12 p-0">
-                    <div class="main-header">
-                        <h4>Add charity</h4>
-                        <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                            <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
-                            <li class="breadcrumb-item">Administration</li>
-                            <li class="breadcrumb-item"><a href="/charities">Charities</a></li>
-                            <li class="breadcrumb-item"><a href="">Edit charity</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-            <!-- Row end -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-sm-12">
-                        <!-- Shopping cart start -->
-                        <div class="card">
-                            <div class="card-header">
-	                            <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
-                                    Edit charity
-                                </h5>
-                            </div>
-                            <form method="GET" action="/update" class="the_form">
-                              <% if (@charitie["idCharitie"]) %>
-                                <input type="hidden" name="id" value="<%= @charitie["idCharitie"] %>">
-                                <% end %>
-                                <div class="card-block row">
-                                    <div class="col-lg-10 md-group-add-on">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-group-students"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="name" class="md-form-control md-static" required value="<%= @charitie["name"] %>">
-                                            <label>Name <span class="required">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-10 md-group-add-on">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-phone"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="tel" name="phone" class="md-form-control md-static phone" value="<%= phone_number_display(@charitie["phone"]) if @charitie["phone"].present? %>">
-                                            <label>Phone <span class=""></span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-10 md-group-add-on">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-ui-email"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="email" name="email" class="md-form-control md-static" value="<%= @charitie["email"] %>">
-                                            <label>Email <span class=""></span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-10 md-group-add-on">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-address-book"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="address" class="md-form-control md-static" value="<%= @charitie["address"] %>">
-                                            <label>Address <span class=""></span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-10 md-group-add-on">
-                                        <span class="md-add-on">
-                                            <i class="icofont icofont-info"></i>
-                                        </span>
-                                        <div class="md-input-wrapper">
-                                            <input type="text" name="info" class="md-form-control md-static" value="<%= @charitie["info"] %>">
-                                            <label>Info <span class=""></span></label>
-                                        </div>
-                                    </div>
-                                    <span class="col-lg-3 btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block save-form" >Save</span>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <!-- Row Starts -->
+    <div class="row">
+      <div class="col-sm-12 p-0">
+        <div class="main-header">
+          <h4>Add charity</h4>
+          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+            <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
+            <li class="breadcrumb-item">Administration</li>
+            <li class="breadcrumb-item"><a href="/charities">Charities</a></li>
+            <li class="breadcrumb-item"><a href="">Edit charity</a></li>
+          </ol>
         </div>
-        <!-- Container-fluid ends -->
+      </div>
     </div>
-</div>
+    <!-- Row end -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-sm-12">
+          <!-- Shopping cart start -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                Edit charity
+              </h5>
+            </div>
+            <form method="GET" action="/update" class="the_form">
+              <% if (@charitie["idCharitie"]) %>
+                <input type="hidden" name="id" value="<%= @charitie["idCharitie"] %>">
+              <% end %>
+              <div class="card-block row">
+                <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-group-students"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="text" name="name" class="md-form-control md-static" required value="<%= @charitie["name"] %>">
+                    <label>Name <span class="required">*</span></label>
+                  </div>
+                </div>
+                <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-phone"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="tel" name="phone" class="md-form-control md-static phone" value="<%= phone_number_display(@charitie["phone"]) if @charitie["phone"].present? %>">
+                    <label>Phone <span class=""></span></label>
+                  </div>
+                </div>
+                <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-ui-email"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="email" name="email" class="md-form-control md-static" value="<%= @charitie["email"] %>">
+                    <label>Email <span class=""></span></label>
+                  </div>
+                </div>
+                <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-address-book"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="text" name="address" class="md-form-control md-static" value="<%= @charitie["address"] %>">
+                    <label>Address <span class=""></span></label>
+                  </div>
+                </div>
+                <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-info"></i>
+                    </span>
+                  <div class="md-input-wrapper">
+                    <input type="text" name="info" class="md-form-control md-static" value="<%= @charitie["info"] %>">
+                    <label>Info <span class=""></span></label>
+                  </div>
+                </div>
+                <span class="col-lg-3 btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block save-form">Save</span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid ends -->
 </div>
 <!-- end save dialog-->
-<script>
-function growling(message, type) {
-    $.growl({
-        message: message
-    },{
-        type: type,
-        allow_dismiss: true,
-        label: 'Cancel',
-        className: 'btn-xs btn-inverse',
-        delay: 0,
-        placement: {
-            from: 'bottom',
-            align: 'right'
-        },
-        animate: { enter: 'animated fadeInUp' }
-    });
-}
-</script>
