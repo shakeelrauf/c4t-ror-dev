@@ -5,7 +5,6 @@ class Quote < ApplicationRecord
 	belongs_to :customer,   class_name: 'Customer', foreign_key: 'idClient', optional: true
 	belongs_to :status,    class_name: 'Status',   foreign_key: 'idStatus'
 
-
 	def self.custom_upsert(options, where)
 		@quote = where(where).first
 		if @quote.present?

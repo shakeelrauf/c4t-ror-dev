@@ -1,23 +1,25 @@
 <tbody class="table-customers">
+
   <% @customers.each do |customer| %>
     <tr>
-        <td><%= customer["firstName"] %></td>
-        <td><%= customer["lastName"] %></td>
-        <td><%= customer["type"] %></td>
-        <td><%= customer["phone"].present? ? phone_number_display(customer["phone"]) : "" %></td>
-        <td><%= customer["extension"] %></td>
-        <td><%= customer["heardofus"]["type"] %></td>
-        <td><%= customer["grade"] %></td>
+        <td><%= customer.firstName %></td>
+        <td><%= customer.lastName %></td>
+        <td><%= customer.type %></td>
+        <td><%= customer.phone.present? ? phone_number_display(customer.phone) : "" %></td>
+        <td><%= customer.extension %></td>
+        <td><%= customer.heardofus.type %></td>
+        <td><%= customer.grade %></td>
         <td class="faq-table-btn">
             <%# if user.roles == "admin" || user.roles == "dispatcher"  %>
-            <a href="/customers/<%= customer["idClient"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+            <a href="/customers/<%= customer.idClient %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
 				<i class="icofont icofont-ui-edit"></i>
 			</a>
             <%# end %>
-			<a href="/customers/<%= customer["idClient"] %>" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+			<a href="/customers/<%= customer.idClient %>" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-origina  sl-title="View">
 				<i class="icofont icofont-eye-alt"></i>
 			</a>
         </td>
     </tr>
   <% end %>
+
 </tbody>

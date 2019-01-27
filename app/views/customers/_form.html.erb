@@ -1,393 +1,394 @@
 <%= render :partial => 'shared/header' %>
 <%= render :partial => 'shared/menu' %>
 <div class="content-wrapper">
-   <!-- Container-fluid starts -->
-   <div class="container-fluid">
-      <!-- Main content starts -->
-      <div>
-         <!-- Row Starts -->
-         <div class="row">
-            <div class="col-sm-12 p-0">
-               <div class="main-header" style="margin-top: 0px;">
-                  <h4>New Customer</h4>
-                  <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                     <li class="breadcrumb-item">
-                        <a href="/dashboard">
-                        <i class="icofont icofont-home"></i>
-                        </a>
-                     </li>
-                     <li class="breadcrumb-item">Clients</li>
-                     <li class="breadcrumb-item"><a href="/customers/add">New Customer</a></li>
-                  </ol>
-               </div>
-            </div>
-         </div>
-         <!-- Row end -->
-         <%= form_for(@customer, html: {class: '', id: "customer-form" }) do |form| %>
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="card">
-                     <div class="card-header">
-                        <h3 class="f-26"><%= action_name == "new" ? "New Customer" : "Edit Customer" %></h3>
-                     </div>
-                     <div class="card-block text-center">
-                        <div class="row">
-                           <div class="col-lg-4 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-phone"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" value="<%= phone_number_display(@customer.phone) %>">
-                                 <label>Phone Number <span class="required">*</span></label>
-                              </div>
-                           </div>
-                           <div class="col-lg-2 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-headphone-alt"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="number" class="md-form-control md-static" id="txtExtension" name=
-                                 "extension" value="<%= @customer.extension%>">
-                                 <label>Extension</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-ui-email"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="email" class="md-form-control md-static" name="email" id="txtEmail" value="<%=  @customer.email %>">
-                                 <label>Email</label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-smart-phone"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone) %>">
-                                 <label>Cell Phone</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-phone"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%=  phone_number_display(@customer.secondaryPhone) %>">
-                                 <label>Other Phone</label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-ui-user"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" name="firstName" id="txtFirstName" value="<%= @customer.firstName %>">
-                                 <label>First Name <span class="required">*</span></label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-ui-user"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtLastName" name="lastName" value="<%= @customer.lastName %>">
-                                 <label>Last Name</label>
-                              </div>
-                           </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                           <div class="col-lg-3 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-bank-alt"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <select class="md-form-control md-static selectcash" id="txtType" name="type">
-                                    <% if action_name == "edit" %>
-                                       <option selected="selected"><%= @customer.type.delete("<br>") %></option>
-                                    <% end %>
-                                    <option>Individual</option>
-                                    <option>Business</option>
-                                    <option>Garage</option>
-                                    <option>Dealership</option>
-                                    <option>Tow Truck</option>
-                                 </select>
-                                 <label>Type</label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row company-data force-hidden">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-company"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtContactPosition" value="<%=  business_contact_position(@customer) %>" name="contactPosition">
-                                 <label>Position <span class="required">*</span></label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-bank"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtCompanyName" value="<%= business_name(@customer) %>" name="name">
-                                 <label>Company Name <span class="required">*</span></label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row company-data force-hidden">
-                           <div class="col-lg-12 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-bank"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtDescription" value="<%=  business_desc(@customer) %>" name="description">
-                                 <label>Company Description</label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row company-data force-hidden">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-bank"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtPST" value="<%= business_pstax(@customer) %>" name="pstTaxNo">
-                                 <label>PST Tax Reference Number <span class="required">*</span></label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-bank"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtGST" value="<%= business_gstax(@customer) %>" name="gstTaxNo">
-                                 <label>GST Tax Reference Number <span class="required">*</span></label>
-                              </div>
-                           </div>
-                        </div>
-                        <hr class="company-data force-hidden">
-                        <div class="row company-data force-hidden">
-                           <h6>Contact List</h6>
-                           <div class="col-lg-12 row contact-edit-list">
-                             <% if action_name == "edit" && has_business_contacts?(action_name, @customer).present? %>
-                               <%= render :partial => 'customers/edit_contacts', locals: { contacts: has_business_contacts?(action_name, @customer) } %>
-                             <% end %>
-                           </div>
-                           <div class="col-lg-12">
-                              <a href="javascript:addContact({});" class="btn btn-primary f-right md-trigger">
-                              <i class="icofont icofont-ui-add"></i> Add contact
-                              </a>
-                           </div>
-
-                        </div>
-                        <hr>
-                        <div class="row">
-                           <h6>Address List</h6>
-                           <div class="col-lg-12 row address-edit-list">
-                             <% if action_name == "edit" && customer_address(@customer).present? %>
-                               <%= render :partial => 'customers/edit_address', locals: { addresses: customer_address(@customer) } %>
-                             <% elsif action_name == "new" %>
-                              <div class="col-lg-12 row address-edit" id="mathaddress">
-                                 <div class="col-lg-4 md-group-add-on">
-                                    <span class="md-add-on">
-                                    <i class="icofont icofont-address-book"></i>
-                                    </span>
-                                    <div class="md-input-wrapper">
-                                       <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress"  value="">
-                                        <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" name="addresses[idAddress][]" value="1">
-                                       <label>Address <span class="required">*</span></label>
-                                    </div>
-                                 </div>
-                                 <div class="row">
-                                    <div class="col-lg-4 md-group-add-on">
-                                       <span class="md-add-on">
-                                       <i class="icofont icofont-address-book"></i>
-                                       </span>
-                                       <div class="md-input-wrapper">
-                                          <input type="text" class="md-form-control txtCity md-static" name="addresses[city][]" id="txtCity" value="">
-                                          <label>City <span class="required">*</span></label>
-                                       </div>
-                                    </div>
-                                    <div class="col-lg-4 md-group-add-on">
-                                       <span class="md-add-on">
-                                       <i class="icofont icofont-address-book"></i>
-                                       </span>
-                                       <div class="md-input-wrapper">
-                                          <select class="md-form-control province txtProvince md-static selectcash" name="addresses[province][]" id="txtProvince">
-                                             <option value="ON">Ontario</option>
-                                             <option value="BC">British Columbia</option>
-                                             <option value="QC">Quebec</option>
-                                             <option value="AL">Alberta</option>
-                                             <option value="NS">Nova Scotia</option>
-                                             <option value="NL">Newfoundland and Labrador</option>
-                                             <option value="SA">Saskatchewan</option>
-                                             <option value="MA">Manitoba</option>
-                                             <option value="NB">New Brunswick</option>
-                                             <option value="PE">Prince Edward Island</option>
-                                          </select>
-                                          <label>Province <span class="required">*</span></label>
-                                       </div>
-                                    </div>
-                                    <div class="col-lg-3 md-group-add-on">
-                                       <span class="md-add-on">
-                                       <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
-                                       </span>
-                                       <div class="md-input-wrapper">
-                                          <input type="text" class="md-form-control txtPostal md-static" name="addresses[postal][]" id="txtPostal" value="">
-                                          <label>Postal Code <span class="required">*</span></label>
-                                       </div>
-                                    </div>
-                                    <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                                       <span onclick="removeAddress('mathaddress')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
-                                       <i class="icofont icofont-ui-remove"></i>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 <!-- row -->
-                              </div>
-                              <% end %>
-                           </div>
-                           <div class="col-lg-12">
-                              <a href="javascript:addCusAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i> Add Address
-                              </a>
-                           </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-social-google-talk"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <select class="md-form-control md-static selectcash" id="txtHeardOfUs" name="heardOfUs">
-                                   <% if action_name == "edit" %>
-                                    <option selected="selected"><%= @heard.type %></option>
-                                   <% end %>
-                                   <% @heard_of_us.each do |heard| %>
-                                       <option><%= heard.type %></option>
-                                   <% end %>
-                                 </select>
-                                 <label>Heard of Us <span class="required">*</span></label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-coins"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <select class="md-form-control md-static selectcash" id="txtGrade" name="grade">
-                                    <% if action_name == "edit" %>
-                                       <option selected="selected"><%= @customer.grade %></option>
-                                    <% end %>
-                                    <option>None</option>
-                                    <option>Bronze</option>
-                                    <option>Silver</option>
-                                    <option>Gold</option>
-                                    <option>Custom</option>
-                                 </select>
-                                 <label>Grade</label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row inputFieldsHidden hidden" style="height:0px;">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-question-circle"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="text" class="md-form-control md-static" id="txtHow">
-                                 <label>How did he hear about us <span class="required">*</span></label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-lg-12 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-info"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <textarea class="md-form-control md-static" name="note" id="txtNote"><%= @customer.note %></textarea>
-                                 <label>Note</label>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row custom-grade-data force-hidden">
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-coins"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarCar" value="<%= @customer.customDollarCar %>" name="customDollarCar">
-                                 <label>($) Car Bonus</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-coins"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercCar" value="<%= @customer.customPercCar %>" name="customPercCar">
-                                 <label>(%) Car Bonus</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-coins"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarSteel" value="<%= @customer.customDollarSteel %>" name="customDollarSteel">
-                                 <label>($) Steel Bonus</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 md-group-add-on">
-                              <span class="md-add-on">
-                              <i class="icofont icofont-coins"></i>
-                              </span>
-                              <div class="md-input-wrapper">
-                                 <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercSteel" value="<%= @customer.customPercSteel %>" name="customPercSteel">
-                                 <label>(%) Steel Bonus</label>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <hr>
-                     <div class="col-sm-12">
-                        <div class="row">
-                           <div class="col-lg-12 text-center">
-                              <span  class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" id="saveCustomerButton" data-id-customer="new">Save</span>
-                              <a href="/customers" class="btn btn-primary waves-effect m-r-20 f-w-600 md-close d-inline-block">Return</a>
-                              <br><br>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         <% end %>
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <!-- Main content starts -->
+    <div>
+      <!-- Row Starts -->
+      <div class="row">
+        <div class="col-sm-12 p-0">
+          <div class="main-header" style="margin-top: 0px;">
+            <h4>New Customer</h4>
+            <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+              <li class="breadcrumb-item">
+                <a href="/dashboard">
+                  <i class="icofont icofont-home"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">Clients</li>
+              <li class="breadcrumb-item"><a href="/customers/add">New Customer</a></li>
+            </ol>
+          </div>
+        </div>
       </div>
-   </div>
-   <!-- Container-fluid ends -->
+      <!-- Row end -->
+      <%= form_for(@customer, html: {class: '', id: "customer-form"}) do |form| %>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="f-26"><%= action_name == "new" ? "New Customer" : "Edit Customer" %></h3>
+              </div>
+              <div class="card-block text-center">
+                <div class="row">
+                  <div class="col-lg-4 md-group-add-on">
+                    <span class="md-add-on">
+                     <i class="icofont icofont-phone"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="tel" class="md-form-control md-static phone" id="txtPhone" name="phoneNumber" value="<%= phone_number_display(@customer.phone) %>">
+                      <label>Phone Number <span class="required">*</span></label>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-headphone-alt"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="number" class="md-form-control md-static" id="txtExtension" name=
+                          "extension" value="<%= @customer.extension %>">
+                      <label>Extension</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-ui-email"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="email" class="md-form-control md-static" name="email" id="txtEmail" value="<%= @customer.email %>">
+                      <label>Email</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-smart-phone"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone) %>">
+                      <label>Cell Phone</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-phone"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%= phone_number_display(@customer.secondaryPhone) %>">
+                      <label>Other Phone</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-ui-user"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" name="firstName" id="txtFirstName" value="<%= @customer.firstName %>">
+                      <label>First Name <span class="required">*</span></label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-ui-user"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtLastName" name="lastName" value="<%= @customer.lastName %>">
+                      <label>Last Name</label>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-lg-3 md-group-add-on">
+                    <span class="md-add-on">
+                     <i class="icofont icofont-bank-alt"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <select class="md-form-control md-static selectcash" id="txtType" name="type">
+                        <% if action_name == "edit" %>
+                          <option selected="selected"><%= @customer.type.delete("<br>") %></option>
+                        <% end %>
+                        <option>Individual</option>
+                        <option>Business</option>
+                        <option>Garage</option>
+                        <option>Dealership</option>
+                        <option>Tow Truck</option>
+                      </select>
+                      <label>Type</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row company-data force-hidden">
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-company"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtContactPosition" value="<%= business_contact_position(@customer) %>" name="contactPosition">
+                      <label>Position <span class="required">*</span></label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-bank"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtCompanyName" value="<%= business_name(@customer) %>" name="name">
+                      <label>Company Name <span class="required">*</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row company-data force-hidden">
+                  <div class="col-lg-12 md-group-add-on">
+                    <span class="md-add-on">
+                     <i class="icofont icofont-bank"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtDescription" value="<%= business_desc(@customer) %>" name="description">
+                      <label>Company Description</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row company-data force-hidden">
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-bank"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtPST" value="<%= business_pstax(@customer) %>" name="pstTaxNo">
+                      <label>PST Tax Reference Number <span class="required">*</span></label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-bank"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtGST" value="<%= business_gstax(@customer) %>" name="gstTaxNo">
+                      <label>GST Tax Reference Number <span class="required">*</span></label>
+                    </div>
+                  </div>
+                </div>
+                <hr class="company-data force-hidden">
+                <div class="row company-data force-hidden">
+                  <h6>Contact List</h6>
+                  <div class="col-lg-12 row contact-edit-list">
+                    <% if action_name == "edit" && has_business_contacts?(action_name, @customer).present? %>
+                      <%= render :partial => 'customers/edit_contacts', locals: {contacts: has_business_contacts?(action_name, @customer)} %>
+                    <% end %>
+                  </div>
+                  <div class="col-lg-12">
+                    <a href="javascript:addContact({});" class="btn btn-primary f-right md-trigger">
+                      <i class="icofont icofont-ui-add"></i> Add contact
+                    </a>
+                  </div>
+
+                </div>
+                <hr>
+                <div class="row">
+                  <h6>Address List</h6>
+                  <div class="col-lg-12 row address-edit-list">
+                    <% if action_name == "edit" && customer_address(@customer).present? %>
+                      <%= render :partial => 'customers/edit_address', locals: {addresses: customer_address(@customer)} %>
+                    <% elsif action_name == "new" %>
+                      <div class="col-lg-12 row address-edit" id="mathaddress">
+                        <div class="col-lg-4 md-group-add-on">
+                          <span class="md-add-on">
+                            <i class="icofont icofont-address-book"></i>
+                          </span>
+                          <div class="md-input-wrapper">
+                            <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress" value="">
+                            <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" name="addresses[idAddress][]" value="1">
+                            <label>Address <span class="required">*</span></label>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-4 md-group-add-on">
+                             <span class="md-add-on">
+                              <i class="icofont icofont-address-book"></i>
+                             </span>
+                            <div class="md-input-wrapper">
+                              <input type="text" class="md-form-control txtCity md-static" name="addresses[city][]" id="txtCity" value="">
+                              <label>City <span class="required">*</span></label>
+                            </div>
+                          </div>
+                          <div class="col-lg-4 md-group-add-on">
+                             <span class="md-add-on">
+                              <i class="icofont icofont-address-book"></i>
+                             </span>
+                            <div class="md-input-wrapper">
+                              <select class="md-form-control province txtProvince md-static selectcash" name="addresses[province][]" id="txtProvince">
+                                <option value="ON">Ontario</option>
+                                <option value="BC">British Columbia</option>
+                                <option value="QC">Quebec</option>
+                                <option value="AL">Alberta</option>
+                                <option value="NS">Nova Scotia</option>
+                                <option value="NL">Newfoundland and Labrador</option>
+                                <option value="SA">Saskatchewan</option>
+                                <option value="MA">Manitoba</option>
+                                <option value="NB">New Brunswick</option>
+                                <option value="PE">Prince Edward Island</option>
+                              </select>
+                              <label>Province <span class="required">*</span></label>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 md-group-add-on">
+                             <span class="md-add-on">
+                              <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
+                             </span>
+                            <div class="md-input-wrapper">
+                              <input type="text" class="md-form-control txtPostal md-static" name="addresses[postal][]" id="txtPostal" value="">
+                              <label>Postal Code <span class="required">*</span></label>
+                            </div>
+                          </div>
+                          <div class="col-lg-1 md-group-add-on" id="addressRemove">
+                           <span onclick="removeAddress('mathaddress')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
+                            <i class="icofont icofont-ui-remove"></i>
+                           </span>
+                          </div>
+                        </div>
+                        <!-- row -->
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="col-lg-12">
+                    <a href="javascript:addCusAddress({rand: rand()});" class="btn btn-primary f-right md-trigger"><i class="icofont icofont-ui-add"></i>
+                      Add Address
+                    </a>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-social-google-talk"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <select class="md-form-control md-static selectcash" id="txtHeardOfUs" name="heardOfUs">
+                        <% if action_name == "edit" %>
+                          <option selected="selected"><%= @heard.type %></option>
+                        <% end %>
+                        <% @heard_of_us.each do |heard| %>
+                          <option><%= heard.type %></option>
+                        <% end %>
+                      </select>
+                      <label>Heard of Us <span class="required">*</span></label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                      <span class="md-add-on">
+                        <i class="icofont icofont-coins"></i>
+                      </span>
+                    <div class="md-input-wrapper">
+                      <select class="md-form-control md-static selectcash" id="txtGrade" name="grade">
+                        <% if action_name == "edit" %>
+                          <option selected="selected"><%= @customer.grade %></option>
+                        <% end %>
+                        <option>None</option>
+                        <option>Bronze</option>
+                        <option>Silver</option>
+                        <option>Gold</option>
+                        <option>Custom</option>
+                      </select>
+                      <label>Grade</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row inputFieldsHidden hidden" style="height:0px;">
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                      <i class="icofont icofont-question-circle"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="text" class="md-form-control md-static" id="txtHow">
+                      <label>How did he hear about us <span class="required">*</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 md-group-add-on">
+                      <span class="md-add-on">
+                        <i class="icofont icofont-info"></i>
+                      </span>
+                    <div class="md-input-wrapper">
+                      <textarea class="md-form-control md-static" name="note" id="txtNote"><%= @customer.note %></textarea>
+                      <label>Note</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row custom-grade-data force-hidden">
+                  <div class="col-lg-6 md-group-add-on">
+                      <span class="md-add-on">
+                        <i class="icofont icofont-coins"></i>
+                      </span>
+                    <div class="md-input-wrapper">
+                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarCar" value="<%= @customer.customDollarCar %>" name="customDollarCar">
+                      <label>($) Car Bonus</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                      <span class="md-add-on">
+                       <i class="icofont icofont-coins"></i>
+                      </span>
+                    <div class="md-input-wrapper">
+                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercCar" value="<%= @customer.customPercCar %>" name="customPercCar">
+                      <label>(%) Car Bonus</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                     <i class="icofont icofont-coins"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomDollarSteel" value="<%= @customer.customDollarSteel %>" name="customDollarSteel">
+                      <label>($) Steel Bonus</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 md-group-add-on">
+                    <span class="md-add-on">
+                     <i class="icofont icofont-coins"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <input type="number" step="0.01" class="md-form-control md-static" id="txtCustomPercSteel" value="<%= @customer.customPercSteel %>" name="customPercSteel">
+                      <label>(%) Steel Bonus</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-lg-12 text-center">
+                    <span class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" id="saveCustomerButton" data-id-customer="new">Save</span>
+                    <a href="/customers" class="btn btn-primary waves-effect m-r-20 f-w-600 md-close d-inline-block">Return</a>
+                    <br><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <!-- Container-fluid ends -->
 </div>
 <% content_for :js do %>
   <script type="text/javascript">
 
       var success_response = "Customer created successfully";
       <% if action_name == "edit" %>
-          success_response = "Customer is now edited!"
-          changeViewType();
-          custom_grade();
+      success_response = "Customer is now edited!"
+      changeViewType();
+      custom_grade();
       <% end %>
 
       function changeViewType() {
-          if($("#txtType").val() != "Individual") {
+          if ($("#txtType").val() != "Individual") {
               $(".company-data").removeClass("force-hidden");
           } else {
               $(".company-data").addClass("force-hidden");
@@ -395,14 +396,14 @@
       }
 
 
-      function custom_grade(){
-         if($("#txtGrade").val() != "Custom") {
-            $(".custom-grade-data").css("height", "0px");
-            $(".custom-grade-data").addClass("force-hidden");
-         } else {
-            $(".custom-grade-data").css("height", "");
-            $(".custom-grade-data").removeClass("force-hidden");
-         }
+      function custom_grade() {
+          if ($("#txtGrade").val() != "Custom") {
+              $(".custom-grade-data").css("height", "0px");
+              $(".custom-grade-data").addClass("force-hidden");
+          } else {
+              $(".custom-grade-data").css("height", "");
+              $(".custom-grade-data").removeClass("force-hidden");
+          }
       }
   </script>
   <%= public_js_path('customers-script.js') %>

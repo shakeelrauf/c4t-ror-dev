@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <h5 class="card-header-text">Quotes for this customer</h5>
-            <a href="/create-quote?no=<%= customer["idClient"] %>" class="btn btn-primary waves-effect waves-light f-right">+ ADD Quote</a>
+            <a href="/create-quote?no=<%= customer.idClient %>" class="btn btn-primary waves-effect waves-light f-right">+ ADD Quote</a>
         </div>
         <!-- end of card-header  -->
         <div class="row">
@@ -32,32 +32,32 @@
                                 <% quotes.each do |quote| %>
                                     <tr>
                                         <td>
-                                            <%= quote["referNo"] %>
+                                            <%= quote.referNo %>
                                         </td>
                                         <td>
-                                            <%= quote_created_at(quote["dtCreated"]) %>
+                                            <%= quote_created_at(quote.dtCreated.to_s) %>
                                         </td>
                                         <td>
-                                            <%= quote["dispatcher"]["firstName"] %>
-                                                <%= quote["dispatcher"]["lastName"] %>
+                                            <%= quote.dispatcher.firstName %>
+                                                <%= quote.dispatcher.lastName %>
                                         </td>
                                         <td>
 
-                                            <select class="quote-status-list selectcash form-control badge badge-<%= background_color(quote["status"]["color"]) %>" data-quote-no="<%= quote["idQuote"] %>">
+                                            <select class="quote-status-list selectcash form-control badge badge-<%= background_color(quote.status.color) %>" data-quote-no="<%= quote.idQuote %>">
                                                 <% status.each do |stat| %>
-                                                  <% if stat["idStatus"] == quote["status"]["idStatus"] %>
-                                                      <option value="<%= stat["idStatus"] %>" selected>
-                                                          <%= stat["name"] %>
+                                                  <% if stat.idStatus == quote.status.idStatus %>
+                                                      <option value="<%= stat.idStatus %>" selected>
+                                                          <%= stat.name %>
                                                       </option>
                                                   <% end %>
-                                                      <option value="<%= stat["idStatus"] %>">
-                                                          <%= stat["name"] %>
+                                                      <option value="<%= stat.idStatus %>">
+                                                          <%= stat.name %>
                                                       </option>
                                                 <% end %>
                                             </select>
                                         </td>
                                         <td class="faq-table-btn">
-                                            <a href="/quotes/<%= quote["idQuote"] %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
+                                            <a href="/quotes/<%= quote.idQuote %>/edit" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                                 <i class="icofont icofont-ui-edit"></i>
                                             </a>
 
