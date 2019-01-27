@@ -1,0 +1,58 @@
+<div class="col-lg-12 row address-edit" id="mathaddress">
+  <div class="col-lg-4 md-group-add-on">
+    <span class="md-add-on">
+      <i class="icofont icofont-address-book"></i>
+    </span>
+    <div class="md-input-wrapper">
+      <input type="text" class="md-form-control txtAddress md-static" name="addresses[address][]" id="txtAddress" value="">
+      <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" name="addresses[idAddress][]" value="1">
+      <label>Address <span class="required">*</span></label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 md-group-add-on">
+       <span class="md-add-on">
+        <i class="icofont icofont-address-book"></i>
+       </span>
+      <div class="md-input-wrapper">
+        <input type="text" class="md-form-control txtCity md-static" name="addresses[city][]" id="txtCity" value="">
+        <label>City <span class="required">*</span></label>
+      </div>
+    </div>
+    <div class="col-lg-4 md-group-add-on">
+       <span class="md-add-on">
+        <i class="icofont icofont-address-book"></i>
+       </span>
+      <div class="md-input-wrapper">
+        <select class="md-form-control province txtProvince md-static selectcash" name="addresses[province][]" id="txtProvince">
+          <option value="ON">Ontario</option>
+          <option value="BC">British Columbia</option>
+          <option value="QC">Quebec</option>
+          <option value="AL">Alberta</option>
+          <option value="NS">Nova Scotia</option>
+          <option value="NL">Newfoundland and Labrador</option>
+          <option value="SA">Saskatchewan</option>
+          <option value="MA">Manitoba</option>
+          <option value="NB">New Brunswick</option>
+          <option value="PE">Prince Edward Island</option>
+        </select>
+        <label>Province <span class="required">*</span></label>
+      </div>
+    </div>
+    <div class="col-lg-3 md-group-add-on">
+       <span class="md-add-on">
+        <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
+       </span>
+      <div class="md-input-wrapper">
+        <input type="text" class="md-form-control txtPostal md-static" name="addresses[postal][]" id="txtPostal" value="">
+        <label>Postal Code <span class="required">*</span></label>
+      </div>
+    </div>
+    <div class="col-lg-1 md-group-add-on" id="addressRemove">
+     <span onclick="removeAddress('mathaddress')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="">
+      <i class="icofont icofont-ui-remove"></i>
+     </span>
+    </div>
+  </div>
+  <!-- row -->
+</div>
