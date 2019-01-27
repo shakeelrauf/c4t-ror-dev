@@ -1,0 +1,136 @@
+<%= render :partial => 'shared/header' %>
+<%= render :partial => 'shared/menu' %>
+<div class="content-wrapper">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <!-- Row Starts -->
+    <div class="row">
+      <div class="col-sm-12 p-0">
+        <div class="main-header">
+          <h4>Create Quote</h4>
+          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+            <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
+            <li class="breadcrumb-item">Clients</li>
+            <li class="breadcrumb-item"><a href="/create-quote">Create Quote</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!-- Row end -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-sm-12">
+          <!-- Shopping cart start -->
+          <div class="card">
+            <div class="card-header">
+              <a class="btn btn-primary waves-effect waves-light f-right md-trigger saveDraft" style="color:white;">
+                <i class="icofont icofont-save"></i>
+                Save as Draft
+              </a>
+              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                Create Quote
+              </h5>
+            </div>
+            <div class="card-block">
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="wizard">
+                    <section>
+                      <form class="wizard-form" id="basic-forms" action="#">
+                        <!-- Step 1 -->
+                        <h3 class="steps-header">Customer Information</h3>
+                        <fieldset class="steps">
+                          <%= render :partial => 'partials/quote/select-client' %>
+                        </fieldset>
+                        <!-- Step 2 -->
+                        <h3 class="steps-header force-hidden">Vehicle Information</h3>
+                        <fieldset class="steps">
+                          <%= render :partial => 'partials/quote/select-vehicle' %>
+                        </fieldset>
+                        <!-- Step 3 -->
+                        <h3 class="steps-header force-hidden">Details</h3>
+                        <fieldset class="steps">
+                          <%= render :partial => 'partials/quote/select-details' %>
+                        </fieldset>
+                        <!-- Step 4 -->
+                        <h3 class="steps-header force-hidden">Confirmation</h3>
+                        <fieldset class="steps">
+                          <%= render :partial => 'partials/quote/confirmation' %>
+                        </fieldset>
+                      </form>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid ends -->
+</div>
+</div>
+<!-- Add save dialog -->
+<div class="card draftSavedDialog" style="z-index:2001;">
+  <div class="card-header">
+    <h3 class="f-26">Draft Saved</h3>
+  </div>
+  <div class="card-block text-center">
+    <div class="row">
+      <p>Your draft is now saved!</p>
+      <p>Your reference number is <b><u class="refererNo"></u></b></p>
+    </div>
+  </div>
+  <div class="card-footer">
+    <a class="btn btn-primary waves-effect waves-light f-right md-trigger returnToList" style="color:white;">
+      <i class="icon-docs"></i>
+      Return to list of quotes
+    </a>
+    <a class="btn btn-primary waves-effect waves-light f-right md-trigger closeDraftSavedDialog" style="color:white;">
+      <i class="icofont icofont-save"></i>
+      OK
+    </a>
+  </div>
+</div>
+<div class="card finishingDialog" style="z-index:2001;">
+  <div class="card-header">
+    <h3 class="f-26">Finishing and save</h3>
+  </div>
+  <div class="card-block text-center">
+    <div class="row">
+      <p>Quote succesfully created!</p>
+      <p>Your reference number is <b><u class="refererNo"></u></b></p>
+      <p>Which status do you want to set this quote?</p>
+      <select class="quote-status-selection selectcash form-control">
+        <% @status.each do |stat| %>
+          <% backgroundType = "muted" %>
+          <% if (stat.color == "yellow") %>
+            <% backgroundType = "warning" %>
+          <% elsif (stat.color == "blue") %>
+            <% backgroundType = "info" %>
+          <% elsif (stat.color == "green") %>
+            <% backgroundType = "success" %>
+          <% elsif (stat.color == "red") %>
+            <% backgroundType = "danger" %>
+          <% elsif (stat.color == "orange") %>
+            <% backgroundType = "primary" %>
+          <% end %>
+          <option value="<%= stat.id %>" class="badge badge-<%= backgroundType %>"><%= stat.name %></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+  <div class="card-footer">
+    <a class="btn btn-primary waves-effect waves-light f-right md-trigger returnToList ended" style="color:white;">
+      <i class="icon-docs"></i>
+      Return to list of quotes
+    </a>
+    <a class="btn btn-primary waves-effect waves-light f-right md-trigger closeFinishingDialog" style="color:white;">
+      <i class="icofont icofont-law-document"></i>
+      Wait!
+    </a>
+  </div>
+</div>
+<!-- end save dialog-->
+<script type="text/javascript" src="/js/quote-steps-script.js"></script>
