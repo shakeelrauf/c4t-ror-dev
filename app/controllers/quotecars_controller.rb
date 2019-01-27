@@ -11,13 +11,13 @@ class QuotecarsController < ApplicationController
  	end
 
  	def create_car
-    car = VehicleInfo.create form_body(params)
+    car = VehicleInfo.create(car_params)
     redirect_to carz_path(params: {weight: car["weight"]})
  	end
 
- 	def list_cars
+ 	def index
 		cars, count = vehicles_search 15
-		render locals: {pages: count, cars: cars}
+		render :index, locals: {pages: count, cars: cars}
  	end
 
  	def car_count
@@ -34,18 +34,7 @@ class QuotecarsController < ApplicationController
 		respond_json(result)
  	end
 
-	def form_body(params)
-    {
-      "year":      					params[:year],
-      "make": 		 					params[:make],
-      "model": 		 					params[:model],
-      "trim": 	 	 					params[:trim],
-      "body": 		 					params[:body],
-      "drive": 		 					params[:drive],
-      "transmission": 	 	  params[:transmission],
-      "seats": 		 					params[:seats],
-      "doors": 	 	  				params[:doors],
-      "weight": 		 				params[:weight]
-    }
+	def car_params
+    params.permit(:year, :make, :model, :trim, :body, :drive, :transmission, :seats, :doors, :weight)
   end
 end

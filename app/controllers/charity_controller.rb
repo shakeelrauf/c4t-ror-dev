@@ -12,7 +12,7 @@ class CharityController < ApplicationController
     redirect_to charities_path
 	end
 
-	def get_charities
+	def index
     @charities = Charitie.all
 	end
 
