@@ -69,6 +69,10 @@ module Quotesmethods
     address = client.address.first
     address = client.address.build if !address.present?
     address.postal = params[:postal]
+    address.city =  " " if address.new_record?
+    address.address = " " if address.new_record?
+    address.province = " " if address.new_record?
+    address.distance = " " if address.new_record?
     address.save!
     Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
     if !carList.nil?
