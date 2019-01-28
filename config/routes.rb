@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 	mount Ckeditor::Engine => '/ckeditor'
   root "dashboard#dashboard"
 
-	resources :bookings, only: [:index, :create] do
+	resources :bookings, :only => [:index, :create] do
 		member do
 			get :quotes, action: :book
     end
@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
 	resources :cars, controller: :quotecars, :only => [:index, :show, :create]
 	get :car_search, controller: :quotecars, action: :search_cars
-	resources :charities
+
+  resources :charities
 	resources :customers
 
   scope controller: :customers do
@@ -48,7 +49,7 @@ Rails.application.routes.draw do
 	end
 
   resources :quotecars, :only => [:index, :show]
-	resources :settings, only: [:index, :update]
+	resources :settings, :only => [:index, :update]
 
 	scope  controller: :send_form do
 		get 	:login
@@ -62,7 +63,7 @@ Rails.application.routes.draw do
 		post 	:forgot_pw, 											action: :forgot_reset
 	end
 
-	resources :users,param: :no, only: [:index, :edit,  :new, :create, :update] do
+	resources :users,param: :no, :only => [:index, :edit,  :new, :create, :update] do
 		member do
 			post :blacklist
 		end
@@ -77,6 +78,8 @@ Rails.application.routes.draw do
 			get :search
 		end
   end
+
+  # Api routes
 
   namespace :api do
 		namespace :v1 do
