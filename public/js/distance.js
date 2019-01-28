@@ -13,9 +13,18 @@ function getDistanceForAddress(addressId, carId, callback) {
         type: "GET",
         url: "/address/" + addressId + "/json",
     }).done(function(json) {
-      getDistanceForCar(JSON.parse(json).postal, carId, function(txt, carId) {
-        callback(txt, carId);
-      });
+
+      data = json
+      try {
+        getDistanceForCar(JSON.parse(json).postal, carId, function(txt, carId) {
+          callback(txt, carId);
+        });
+      } catch (e) {  
+        getDistanceForCar(json.postal, carId, function(txt, carId) {
+          callback(txt, carId);
+        });
+      }
+      
     });
     // callback("0", carId);
 }

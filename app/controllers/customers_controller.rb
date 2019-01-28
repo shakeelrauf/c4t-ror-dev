@@ -30,12 +30,11 @@ class CustomersController < ApplicationController
 
   def postal_list
     s = params[:search] || ""
-    addresses =  Address.select('idAddress AS id, idClient, address, city, province, distance, postal').where('postal LIKE ? and idClient = ?', s, params[:customer_id])
-
+    addresses =  Address.where('idClient = ?', params[:customerId])
     returned = {
         results: [],
         pagination: {
-            more: true
+            more: false
         }
     }
     addresses.each do |address|

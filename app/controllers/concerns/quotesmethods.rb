@@ -81,11 +81,11 @@ module Quotesmethods
         return respond_json({:error => "The missing wheels was not selected"}) if (!carList[car]["missingWheels"].present?)
         return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]"}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly"}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
-        return respond_json({:error => "Missing Car city"}) if  (!carList[car]["carCity"].present?)
-        return respond_json({:error => "Missing Car Street"}) if  (!carList[car]["carStreet"].present?)
-        return respond_json({:error => "Missing Car Province"}) if  (!carList[car]["carProvince"].present?)
-        car_postal_code = Validations.postal(carList[car]["carAddressId"])
+        car_postal_code = Validations.postal(carList[car]["carAddressId"].split(", ").last)
         return respond_json({:error => "Invalid Car Postal Code"}) if  (car_postal_code.length != 7)
+        return respond_json({:error => "Missing Car city"}) if  (carList[car]["carAddressId"].present? && !carList[car]["carCity"].present?)
+        return respond_json({:error => "Missing Car Street"}) if  ( carList[car]["carAddressId"].present? && !carList[car]["carStreet"].present?)
+        return respond_json({:error => "Missing Car Province"}) if  (carList[car]["carAddressId"].present? && !carList[car]["carProvince"].present?)
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
         update_quote_car_address carList[car], quote_car, client if carList[car]["carAddressId"].present?

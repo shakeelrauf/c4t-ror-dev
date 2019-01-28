@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
 	mount Ckeditor::Engine => '/ckeditor'
   root "dashboard#dashboard"
-
+  resources :address, only: [] do
+  	member do
+	  	get :json
+	  end
+  end
 	resources :bookings, :only => [:index, :create] do
 		member do
 			get :quotes, action: :book
