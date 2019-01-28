@@ -186,6 +186,12 @@ function addCusAddress(address) {
  }
 
 $(document).ready(function(){
+      $(this).removeClass("hidden");
+
+    $('.loading').click(function(){
+      $(this).addClass("hidden");
+    });
+
    $("select").each(function(){
       var usedNames = {};
       $("option", this).each(function () {
