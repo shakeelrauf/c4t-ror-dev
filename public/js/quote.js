@@ -48,7 +48,7 @@ $(document).ready(function() {
                           getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
                             $("#car-distance" + carId).val(distance);
                             updateCarWithDistance(distance, car.idQuoteCars);
-                            showCarNewAddress(address.postal, car.idQuoteCars);
+                            showCarExistingAddress(address.idAddress, carId) 
                           });
                         });
                   
