@@ -158,8 +158,8 @@ class QuotesController < ApplicationController
     cars =  QuoteCar.includes([:information, :address]).where(idQuote: params[:id])
     @heardsofus = Heardofus.all
     if params[:customer_id].present?
-      @customer = Customer.find(params[:customer_id])
-      @address = @customer.address
+      @customer = Customer.where(idClient: params[:customer_id]).first
+      @address = @customer.try(:address)
     end
     render :edit, locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
   end

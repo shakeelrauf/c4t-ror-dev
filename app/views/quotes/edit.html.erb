@@ -240,7 +240,7 @@
 </div>
 <% content_for :js do %>
   <script>
-      <% if @customer.present? && @customer.try(:quotes).count > 0 || @quote.try(:customer).try(:heardofus).present? %>
+      <% if preselected_quotes(@customer, @quote) %>
         $('.has_quote option:eq(1)').prop('selected', true);
         $(".has_quote").attr('disabled',true);
         $(".has_quote").val("Repeat Customer");
