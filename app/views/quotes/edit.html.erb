@@ -197,7 +197,7 @@
               <% if (quote.idQuote != nil) %>
                 <% cars.each.with_index do |car, index| %>
                   <li id="car-tab<%= car.idQuoteCars %>" class="nav-item car<%= car.idQuoteCars %> index<%= index %>" style="display:block">
-                    <a class="nav-link" data-toggle="tab" href="#tab<%= car.idQuoteCars %>" role="tab" id="tab-a-<%= index %>">
+                    <a class="nav-link" data-toggle="tab" href="#tab<%= car.idQuoteCars %>" role="tab" id="tab-a-<%= car.idQuoteCars %>">
                       <button onclick="removeCar(<%= car.idQuoteCars %>);">x</button>
                       <%= car.information.make + " " + car.information.year %>
                     </a>

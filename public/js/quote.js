@@ -189,14 +189,6 @@ function createPostalSelect2(s) {
               }
               return query;
           }
-          ,
-           processResults: function (data) {
-            debugger
-      // Tranforms the top-level key of the response object from 'items' to 'results'
-      return {
-        results: data.results
-      };
-    }
       }
   });
 
@@ -567,7 +559,12 @@ function saveCar(callback) {
         callback(s);
       } else {
           if(s.error){
+            if(s.car){
+              $("#tab-a-"+s.car).click();
               doGrowlingDanger(s.error);
+            }else{
+              doGrowlingDanger(s.error);
+            }
           }else{
               doGrowlingMessage("Saved");
           }
