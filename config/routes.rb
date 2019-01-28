@@ -53,8 +53,9 @@ Rails.application.routes.draw do
 
 	scope  controller: :send_form do
 		get 	:login
-		post 	:login, 													action: :login_user
-		get 	:logout,													action: :logout
+		post 	:login, 																		action: :login_user
+		delete 	:logout,																	action: :logout
+		delete 	'logout_by_auth_token/:token',						action: :logout, as: :logout_by_token
 		get   :forget_pw
 		post	:change_pw_save
 		get		:invalid_key

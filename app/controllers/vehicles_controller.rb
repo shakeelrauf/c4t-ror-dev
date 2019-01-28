@@ -1,6 +1,6 @@
 class VehiclesController < ApplicationController
   before_action :login_required
-  
+
   def show
     vehicle = VehicleInfo.where(idVehiculeInfo: params[:no]).first
     respond_json(vehicle)

@@ -37,7 +37,7 @@ gem 'active_model_serializers'
 gem "httparty"
 gem 'twilio-ruby'
 gem 'whenever'
-
+gem 'jquery-rails'
 gem 'postmark', '1.10.0'
 gem 'griddler'
 gem 'griddler-postmark'

@@ -70,7 +70,8 @@
                   <li class="p-0">
                      <div class="dropdown-divider m-0"></div>
                   </li>
-                  <li><a href="/logout"><i class="icon-logout"></i>Logout</a></li>
+                  <li>
+                    <%= link_to "<i class='icon-logout'></i>Logout".html_safe, logout_by_token_path(session[:token]), method: "delete" %>
                </ul>
             </li>
          </ul>
