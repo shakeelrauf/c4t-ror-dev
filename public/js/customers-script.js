@@ -188,9 +188,11 @@ function addCusAddress(address) {
 $(document).ready(function(){
       $(this).removeClass("hidden");
 
-    $('.loading').click(function(){
-      $(this).addClass("hidden");
-    });
+    // $('.loading-remove').click(function(){
+    //    $('.loading').click(function(){
+    //       $(this).addClass("hidden");
+    //    });
+    // });
 
    $("select").each(function(){
       var usedNames = {};
