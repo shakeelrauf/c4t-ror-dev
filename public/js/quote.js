@@ -535,7 +535,7 @@ function saveCar(callback) {
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
-        // car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
+        car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
         if(car["carAddressId"] == undefined){
             car["carAddressId"] = " "
         }
