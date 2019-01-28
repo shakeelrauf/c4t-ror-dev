@@ -587,6 +587,7 @@ function fillCustomer(data) {
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);
     } else {
+      $(".has_quote").attr('disabled',false);
       $("select[name=heardOfUs]").val(data.heardofus.type);
     }
     if (data.address.length > 0) {
