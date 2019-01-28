@@ -583,10 +583,11 @@ function fillCustomer(data) {
     $("input[name=lastName]").val(data.lastName);
     $(".hiddenaddress").html(JSON.stringify(data.address[0]))
     if (data.quotes.length >= 1) {
-      $("select[name=heardOfUs]").val("Repeat Customer");
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);
+      $("select[name=heardOfUs]").val("Repeat Customer");
     } else {
+      $(".has_quote").attr('disabled',false);
       $("select[name=heardOfUs]").val(data.heardofus.type);
     }
     if (data.address.length > 0) {

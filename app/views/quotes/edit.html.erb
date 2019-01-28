@@ -240,6 +240,12 @@
 </div>
 <% content_for :js do %>
   <script>
+      <% if preselected_quotes(@customer, @quote) %>
+        $('.has_quote option:eq(1)').prop('selected', true);
+        $(".has_quote").attr('disabled',true);
+        $(".has_quote").val("Repeat Customer");
+      <% end %>
+
       $(document).ready(function () {
           if (CKEDITOR.instances.note_ == undefined) {
               CKEDITOR.replaceAll();

@@ -186,6 +186,14 @@ function addCusAddress(address) {
  }
 
 $(document).ready(function(){
+      $(this).removeClass("hidden");
+
+    // $('.loading-remove').click(function(){
+    //    $('.loading').click(function(){
+    //       $(this).addClass("hidden");
+    //    });
+    // });
+
    $("select").each(function(){
       var usedNames = {};
       $("option", this).each(function () {

@@ -55,6 +55,7 @@ module Customers
     client.email= params[:email]
     client.type = params[:type]
     client.extension = params[:extension]
+    client.phone = params[:phoneNumber]
     client.cellPhone = params[:phoneNumber2]
     client.secondaryPhone = params[:phoneNumber3]
     client.note = params[:note]
