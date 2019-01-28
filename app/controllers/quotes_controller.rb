@@ -67,7 +67,11 @@ class QuotesController < ApplicationController
 
   def initialize_quote
     quickquote = create_default_quote
-    redirect_to edit_quote_path(id: quickquote.id)
+    if params[:no].present?
+      redirect_to edit_quote_path(id: quickquote.id, customer_id: params[:no])
+    else
+      redirect_to edit_quote_path(id: quickquote.id)
+    end
   end
 
   def create
@@ -153,6 +157,10 @@ class QuotesController < ApplicationController
     @quote = Quote.includes(customer: [:address]).where(idQuote: params[:id]).first
     cars =  QuoteCar.includes([:information, :address]).where(idQuote: params[:id])
     @heardsofus = Heardofus.all
+    if params[:customer_id].present?
+      @customer = Customer.find(params[:customer_id])
+      @address = @customer.address
+    end
     render :edit, locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
   end
 
