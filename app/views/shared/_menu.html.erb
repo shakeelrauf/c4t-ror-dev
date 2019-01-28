@@ -29,10 +29,13 @@
             </a>
          </li>
          <li>
-            <a class="waves-effect waves-dark" href="/logout">
-            <i class="icon-logout"></i>
-            <span class="menu-text"> Logout </span>
-            <span class="selected"></span>
+           <%= link_to "<i class='icon-logout'></i>
+                        <span class='menu-text'> Logout </span>
+                        <span class='selected'></span>".html_safe,
+                        logout_by_token_path(session[:token]), method: "delete" %>
+
+           <a class="waves-effect waves-dark" href="/logout">
+
             </a>
          </li>
       </ul>
@@ -58,11 +61,6 @@
          <li>
            <%= link_to "<i class='icofont icofont-law-document'></i><span> Create Quote </span>".html_safe, initialize_quote_quotes_path %>
          </li>
-         <!--<li>
-            <a href="/quick-quote">
-                <i class="icofont icofont-cur-dollar"></i><span> Quote Note </span>
-            </a>
-            </li>-->
          <li>
             <a href="/dispatched">
             <i class="icofont icofont-ui-calendar"></i><span> Dispatching </span>

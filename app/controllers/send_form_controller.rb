@@ -16,6 +16,8 @@ class SendFormController < ApplicationController
   end
 
   def logout
+    token = Authentication.find_by_token(params[:token])
+    token.destroy if token.present?
     reset_session
     redirect_to login_path
   end
