@@ -44,7 +44,7 @@ $(document).ready(function() {
                           if(index==1){
                             selected = true;
                           }
-                          $("#car-location"+car.idQuoteCars).append("<option value="+address.postal+">"+address.postal+"</option>");
+                          $("#car-location"+car.idQuoteCars).append("<option value="+address.postal+">"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
                           getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
                             $("#car-distance" + carId).val(distance);
                             updateCarWithDistance(distance, car.idQuoteCars);
