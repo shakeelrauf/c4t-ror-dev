@@ -38,7 +38,7 @@ class BookingsController < ApplicationController
     render :show, locals: locals
   end
 
-  def booking
+  def create
     booking = update_booking(params)
   end
 end

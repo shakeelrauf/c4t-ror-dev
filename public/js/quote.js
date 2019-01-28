@@ -522,8 +522,8 @@ function saveCar(callback) {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),
             "missingWheels":  ($(this).find("input[name=wheels"+carId+"]").val()),
-            "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() == "1") ? "1" : "0",
-            "missingCat":     ($(this).find("input[name=cat"+carId+"]:checked").val() == "1") ? "1" : "0",
+            "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
+            "missingCat":     ($(this).find("input[name=cat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "carAddressId":   ($(this).find("select[name=car-location"+carId+"] option:selected").val()),
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
@@ -583,10 +583,11 @@ function fillCustomer(data) {
     $("input[name=lastName]").val(data.lastName);
     $(".hiddenaddress").html(JSON.stringify(data.address[0]))
     if (data.quotes.length >= 1) {
-      $("select[name=heardOfUs]").val("Repeat Customer");
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);
+      $("select[name=heardOfUs]").val("Repeat Customer");
     } else {
+      $(".has_quote").attr('disabled',false);
       $("select[name=heardOfUs]").val(data.heardofus.type);
     }
     if (data.address.length > 0) {

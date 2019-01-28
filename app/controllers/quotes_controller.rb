@@ -67,7 +67,11 @@ class QuotesController < ApplicationController
 
   def initialize_quote
     quickquote = create_default_quote
-    redirect_to edit_quote_path(id: quickquote.id)
+    if params[:no].present?
+      redirect_to edit_quote_path(id: quickquote.id, customer_id: params[:no])
+    else
+      redirect_to edit_quote_path(id: quickquote.id)
+    end
   end
 
   def create
@@ -106,13 +110,13 @@ class QuotesController < ApplicationController
   end
 
   def phone_numbers
-    phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%", params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
+    phones = Customer.where('phone LIKE ?', params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
     returned = {results: [], pagination: {more: true}}
     returned[:pagination][:more] = false if phones.length < params[:limit].to_i
     phones.each do |phone|
       client = JSON.parse phone.to_json
-      client["phone"] =  client["cellPhone"] if client["phone"].to_s.match(params[:search]) && client["cellPhone"].to_s.match(params[:search])
-      client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
+      # client["phone"] =  client["cellPhone"] if client["phone"].to_s.match(params[:search]) && client["cellPhone"].to_s.match(params[:search])
+      # client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
       text = ""
       if client["phone"].present? && client["phone"].length >= 10
         text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s + " " + client["firstName"].to_s + " " + client["lastName"].to_s
@@ -129,6 +133,20 @@ class QuotesController < ApplicationController
     respond_json(returned)
   end
 
+  def update_status
+    return respond_json({"msg": "Failure!!", "success": false,:error => "please send attribute status."}) if (!params[:status] && !params[:id])
+    @quote = Quote.includes(:status).where(idQuote: params[:id]).first
+    return respond_json({"msg": "Failure!!", "success": false,:error => "Quote not found"}) if !@quote.present?
+    stats = Status.where(idStatus: params[:status]).first
+    return respond_json({"msg": "Failure!!", "success": false,:error => "Status not found"}) if !(params[:status] && stats.present?)
+    @quote.idStatus = params[:status]
+    @quote.dtStatusUpdated = Time.now
+    @quote.save(:validate => false)
+    result = @quote
+    quotez = { "msg": "Success!!","success": true,"data": result}
+    return respond_json(quotez)
+  end
+
   def create_car
     car = QuoteCar.new(idQuote: params[:quote], idCar: params[:veh], missingWheels: 0, missingBattery: nil, missingCat: nil, gettingMethod: "pickup")
     car.save!
@@ -139,13 +157,17 @@ class QuotesController < ApplicationController
     @quote = Quote.includes(customer: [:address]).where(idQuote: params[:id]).first
     cars =  QuoteCar.includes([:information, :address]).where(idQuote: params[:id])
     @heardsofus = Heardofus.all
+    if params[:customer_id].present?
+      @customer = Customer.where(idClient: params[:customer_id]).first
+      @address = @customer.try(:address)
+    end
     render :edit, locals: {user: current_user, quote: @quote, cars: cars, heardsofus: @heardsofus}
   end
 
   def remove_car
     @quote_car = QuoteCar.where(idQuoteCars: params[:car])
     @quote_car.destroy_all
-    return render_json_response({:msg => "ok"}, :ok)
+    return respond_json({:msg => "ok"})
   end
 
   def status

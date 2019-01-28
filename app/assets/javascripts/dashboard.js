@@ -14,6 +14,7 @@
 //= require jquery/js/jquery.min.js
 //= require jquery-ui/js/jquery-ui.min.js
 //= require popper.js/js/popper.min.js
+//= require jquery_ujs
 //= require bootstrap/js/bootstrap.min.js
 //= require jquery-slimscroll/js/jquery.slimscroll.js
 //= require jquery.nicescroll/js/jquery.nicescroll.min.js

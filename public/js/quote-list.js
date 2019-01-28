@@ -5,7 +5,7 @@ $(document).ready(function() {
 	$("body").on("change", ".quote-status-list",function() {
 	    var mySelect = this;
 	    $.ajax({
-	        url: "/quote/"+$(this).data("quote-no")+"/status",
+	        url: "/quotes/"+$(this).data("quote-no")+"/status",
 	        method: "POST",
 	        data: {
 	            status: $(this).val()

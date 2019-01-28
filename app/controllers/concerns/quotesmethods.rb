@@ -66,13 +66,20 @@ module Quotesmethods
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
     client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
-    client.address.first.update(postal: params[:postal])
+    address = client.address.first
+    address = client.address.build if !address.present?
+    address.postal = params[:postal]
+    address.city =  " " if address.new_record?
+    address.address = " " if address.new_record?
+    address.province = " " if address.new_record?
+    address.distance = " " if address.new_record?
+    address.save!
     Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
     if !carList.nil?
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
-        return respond_json({:error => "The missing wheels was not selected"}) if (carList[car]["missingWheels"] == "")
-        return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]"}) if (carList[car]["missingBattery"] == "")
+        return respond_json({:error => "The missing wheels was not selected"}) if (!carList[car]["missingWheels"].present?)
+        return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]"}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly"}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
         return respond_json({:error => "Missing Car city"}) if  (!carList[car]["carCity"].present?)
         return respond_json({:error => "Missing Car Street"}) if  (!carList[car]["carStreet"].present?)
@@ -105,21 +112,21 @@ module Quotesmethods
         query+= " AND " if i < (length -1)
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{after_date+ ' 00:00:00'}') AND ('dtCreated' >= '#{before_date+ ' 23:59:59'}'))" if after_date && after_date.to_s.length == 10 && DateTime.parse(after_date, "YYYY-MM-DD")
-      @quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query)
-      if @quotes.count % 15 > 0
+      quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query)
+      if quotes.count % 15 > 0
         all_count = 1
       end
-      all_count += (@quotes.count / limit.to_i).ceil
-      @quotes = @quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
+      all_count += (quotes.count / limit.to_i).ceil
+      quotes = quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
     else
-      @quotes =  Quote.includes(:dispatcher, :customer, :status)
-      if @quotes.count % 15 > 0
+      quotes =  Quote.includes(:dispatcher, :customer, :status)
+      if quotes.count % 15 > 0
         all_count = 1
       end
-      all_count += (@quotes.count / limit.to_i).ceil
-      @quotes = @quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
+      all_count += (quotes.count / limit.to_i).ceil
+      quotes = quotes.limit(limit).offset(offset).to_json(include: [:dispatcher, :customer, :status])
     end
-    return @quotes, all_count
+    return quotes, all_count
   end
 
   def update_quote_car_address car, quote_car, client

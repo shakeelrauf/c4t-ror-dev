@@ -145,7 +145,7 @@ function saveBooking(callback) {
 
   apost({
     method: "POST",
-    url: "/booking",
+    url: "/bookings",
     data: serialized
   }, function(data) {
       if (callback) {
