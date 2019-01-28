@@ -1,0 +1,44 @@
+<div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+        <i class="icofont icofont-ui-user"></i>
+    </span>
+    <div class="md-input-wrapper">
+        <input type="text" class="md-form-control md-static" name="firstName" value="<%= @customer.firstName %>">
+        <label style="top: -15px;">First Name <span class="required">*</span></label>
+    </div>
+</div>
+<div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+        <i class="icofont icofont-ui-user"></i>
+    </span>
+    <div class="md-input-wrapper">
+    <input type="text" class="md-form-control md-static" name="lastName" value="<%= @customer.lastName %>">
+    <label style="top: -15px;">Last Name<span class="required">*</span></label>
+    </div>
+</div>
+<div class="col-lg-6 md-group-add-on">
+    <span class="md-add-on">
+        <i class="icofont icofont-ui-user"></i>
+    </span>
+    <div class="md-input-wrapper">
+        <input type="text" class="md-form-control md-static" name="postal" value="<%= @address.first.present? ? @address.first.postal : "" %>">
+        <label style="top: -15px;">Postal Code<span class="required">*</span></label>
+    </div>
+</div>
+<div class="col-lg-6 md-group-add-on">
+  <span class="md-add-on">
+  <i class="icofont icofont-social-google-talk"></i>
+  </span>
+  <div class="md-input-wrapper">
+     <select class="md-form-control md-static has_quote" id="txtHeardOfUs" name="heardOfUs">
+
+       <% @heardsofus.each do |heard| %>
+          <% if @customer.idHeardOfUs == heard.idHeardOfUs %>
+            <option selected="selected"><%= heard.type %></option>
+         <% end %>
+           <option><%= heard.type %></option>
+       <% end %>
+     </select>
+     <label style="top: -15px;">Heard of Us <span class="required">*</span></label>
+  </div>
+</div>

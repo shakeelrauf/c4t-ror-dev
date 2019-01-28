@@ -51,63 +51,72 @@
                       quote.customer.phone[0, 3] + "-" + quote.customer.phone[3, 3] + "-" + quote.customer.phone[6, 10] +
                           " " + quote.customer.firstName + " " + quote.customer.lastName
                     %></option>
+                    <% elsif @customer.present? %>
+                      <option value="<%= @customer.idClient %>" selected><%=
+                          phone_number_display(@customer.phone) +
+                          " " + @customer.firstName + " " + @customer.lastName
+                      %></option>
                   <% end %>
                 </select>
                 <label style="top: -15px;">Phone Number<span class="required">*</span></label>
               </div>
             </div>
-            <div class="col-lg-6 md-group-add-on">
-              <span class="md-add-on">
-                  <i class="icofont icofont-ui-user"></i>
-              </span>
-              <div class="md-input-wrapper">
-                <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote.idQuote && quote.customer ? quote.customer.firstName : "" %>">
-                <label style="top: -15px;">First Name <span class="required">*</span></label>
+            <% if @customer.present? %>
+                <%= render :partial => 'quotes/selected_customer' %>
+            <% else %>
+              <div class="col-lg-6 md-group-add-on">
+                <span class="md-add-on">
+                    <i class="icofont icofont-ui-user"></i>
+                </span>
+                <div class="md-input-wrapper">
+                  <input type="text" class="md-form-control md-static" name="firstName" value="<%= quote.idQuote && quote.customer ? quote.customer.firstName : "" %>">
+                  <label style="top: -15px;">First Name <span class="required">*</span></label>
+                </div>
               </div>
-            </div>
-            <div class="col-lg-6 md-group-add-on">
-              <span class="md-add-on">
-                  <i class="icofont icofont-ui-user"></i>
-              </span>
-              <div class="md-input-wrapper">
-                <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
-                <label style="top: -15px;">Last Name<span class="required">*</span></label>
+              <div class="col-lg-6 md-group-add-on">
+                <span class="md-add-on">
+                    <i class="icofont icofont-ui-user"></i>
+                </span>
+                <div class="md-input-wrapper">
+                  <input type="text" class="md-form-control md-static" name="lastName" value="<%= quote.idQuote && quote.customer ? quote.customer.lastName : "" %>">
+                  <label style="top: -15px;">Last Name<span class="required">*</span></label>
+                </div>
               </div>
-            </div>
-            <div class="col-lg-6 md-group-add-on">
-              <span class="md-add-on">
-                  <i class="icofont icofont-ui-user"></i>
-              </span>
-              <div class="md-input-wrapper">
-                <input type="text" class="md-form-control md-static" name="postal" value="<%= quote.idQuote && quote.customer && quote.customer.address.first ? quote.customer.address.first.postal : "" %>">
-                <label style="top: -15px;">Postal Code<span class="required">*</span></label>
+              <div class="col-lg-6 md-group-add-on">
+                <span class="md-add-on">
+                    <i class="icofont icofont-ui-user"></i>
+                </span>
+                <div class="md-input-wrapper">
+                  <input type="text" class="md-form-control md-static" name="postal" value="<%= quote.idQuote && quote.customer && quote.customer.address.first ? quote.customer.address.first.postal : "" %>">
+                  <label style="top: -15px;">Postal Code<span class="required">*</span></label>
+                </div>
               </div>
-            </div>
-            <div class="col-lg-6 md-group-add-on">
-              <span class="md-add-on">
-                  <i class="icofont icofont-ui-user"></i>
-              </span>
-              <div class="md-input-wrapper">
-                <select class="md-form-control md-static has_quote" name="heardOfUs">
-                  <option value="">Select an option</option>
-                  <option>Repeat Customer</option>
-                  <% heardOfUsFound = false %>
-                  <% heardsofus.each do |heardofus| %>
-                    <% if (quote.idQuote != nil && quote.customer != nil) %>
-                      <option<%= heardofus.idHeardOfUs == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
-                      <% if (heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
-                        <% heardOfUsFound = true %>
-                      <% else %>
+              <div class="col-lg-6 md-group-add-on">
+                <span class="md-add-on">
+                    <i class="icofont icofont-ui-user"></i>
+                </span>
+                <div class="md-input-wrapper">
+                  <select class="md-form-control md-static has_quote" name="heardOfUs">
+                    <option value="">Select an option</option>
+                    <option>Repeat Customer</option>
+                    <% heardOfUsFound = false %>
+                    <% heardsofus.each do |heardofus| %>
+                      <% if (quote.idQuote != nil && quote.customer != nil) %>
+                        <option<%= heardofus.idHeardOfUs == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
+                        <% if (heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
+                          <% heardOfUsFound = true %>
+                        <% else %>
+                          <option><%= heardofus.type %></option>
+                        <% end %>
+                      <% elsif (quote.idQuote != nil && !heardOfUsFound) %>
                         <option><%= heardofus.type %></option>
                       <% end %>
-                    <% elsif (quote.idQuote != nil && !heardOfUsFound) %>
-                      <option><%= heardofus.type %></option>
                     <% end %>
-                  <% end %>
-                </select>
-                <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
+                  </select>
+                  <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
+                </div>
               </div>
-            </div>
+            <% end %>
           </div>
         </div>
         <div class="card col-lg-12">
