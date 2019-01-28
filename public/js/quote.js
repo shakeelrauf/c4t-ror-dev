@@ -38,20 +38,13 @@ $(document).ready(function() {
                 $(".vehicle-parameters").append(html);
                 $(".car-location-select2").each(function(index) {
                     if($(".hiddenaddress").html().trim().length > 0){
-                        var addresses = JSON.parse($(".hiddenaddress").html());
-                        addresses.forEach(function(address, index){
-                          var selected = false;
-                          if(index==1){
-                            selected = true;
-                          }
-                          $("#car-location"+car.idQuoteCars).append("<option value="+address.postal+">"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                        var address = JSON.parse($(".hiddenaddress").html())[0];
+                          $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
                           getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
                             $("#car-distance" + carId).val(distance);
                             updateCarWithDistance(distance, car.idQuoteCars);
                             showCarExistingAddress(address.idAddress, carId) 
                           });
-                        });
-                  
                     }
                     createPostalSelect2($(this));
                 });
@@ -550,7 +543,7 @@ function saveCar(callback) {
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
-        car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
+        // car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
         if(car["carAddressId"] == undefined){
             car["carAddressId"] = " "
         }
