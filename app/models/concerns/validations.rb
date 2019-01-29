@@ -132,4 +132,8 @@ class Validations
     return true if (/^[a-zA-Z0-9_.-]{6,}$/.match(item))
     return false
   end
+
+  def self.remove_dashes_from_phone(num)
+    num.gsub('-', '')
+  end
 end

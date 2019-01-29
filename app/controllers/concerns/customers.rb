@@ -17,7 +17,7 @@ module Customers
   def create_customer(params, current_user)
       heardofus = Heardofus.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
-        client = Customer.find_or_initialize_by(phone: params[:phoneNumber])
+        client = Customer.find_or_initialize_by(phone: Validations.remove_dashes_from_phone(params[:phoneNumber]))
         if client.new_record?
           client = client_data(client, heardofus)
           params[:addresses].each do |a|
@@ -55,9 +55,9 @@ module Customers
     client.email= params[:email]
     client.type = params[:type]
     client.extension = params[:extension]
-    client.phone = params[:phoneNumber]
-    client.cellPhone = params[:phoneNumber2]
-    client.secondaryPhone = params[:phoneNumber3]
+    client.phone = Validations.remove_dashes_from_phone(params[:phoneNumber])
+    client.cellPhone = Validations.remove_dashes_from_phone(params[:phoneNumber2])
+    client.secondaryPhone = Validations.remove_dashes_from_phone(params[:phoneNumber3])
     client.note = params[:note]
     client.grade = params[:grade]
     client.customDollarCar = customDollarCar

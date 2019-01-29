@@ -7,6 +7,11 @@ class User < ApplicationRecord
 	has_one :user_config
 	has_many :authentications
 	before_validation :validate_phone, :on => :create
+	before_save :validate_phone_dashes
+
+	def validate_phone_dashes
+		self.phone = Validations.remove_dashes_from_phone(phone)
+	end
 
 	def validate_phone
 		if attributes["phone"] != nil && attributes["phone"].length < 10
