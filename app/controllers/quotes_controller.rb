@@ -78,37 +78,6 @@ class QuotesController < ApplicationController
     save_quotes
   end
 
-  # vehicles.forEach(vehicle => {
-  #     item = {};
-  # if(vehicle.make == "Other") {
-  #     item.text = "Other";
-  # } else {
-  #     item.text = vehicle.make + " "
-  # + vehicle.year + " "
-  # + vehicle.model + " "
-  # + vehicle.body + " "
-  # + vehicle.trim + " "
-  # + vehicle.transmission + " "
-  # + vehicle.drive + " "
-  # + vehicle.doors + " doors and "
-  # + vehicle.seats + " seats.";
-  # }
-  # item.id = vehicle.id;
-  # var created = false;
-  # for(var i = 0; i < groups.length; i++) {
-  #     //Add to existant group.
-  #     if(groups[i].text == vehicle.make) {
-  #       groups[i].children.push(item);
-  #       created = true;
-  #       break;
-  #     }
-  # }
-  # //Create groups if not in list
-  # if(!created) {
-  #     groups.push({"text": vehicle.make, "children": [item]});
-  # }
-  # });
-
   def vehicle_search
     vehicles = vehicles_search(params[:limit], params[:offset], params[:q])
     groups, item = [], {}
