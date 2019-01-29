@@ -1,3 +1,3 @@
 class Setting < ApplicationRecord
-	self.table_name = sSettings'
+	self.table_name = 'settings'
 end
