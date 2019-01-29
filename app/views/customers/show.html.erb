@@ -37,7 +37,7 @@
 						<ul>
 							<li class="faq-contact-card">
 								<i class="icofont icofont-phone"></i>
-								<a href="tel:<%= @customer.phone %>">
+								<a href="tel:<%= @customer.phone %>" class= "loading-remove">
 									<%= phone_number_display( @customer.phone) %>
 								</a>
 								<% if @customer.extension != "" %>
@@ -46,7 +46,7 @@
 							</li>
 							<li class="faq-contact-card">
 								<i class="icofont icofont-ui-email"></i>
-								<a href="mailto:<%= @customer.email %>"><%= @customer.email %></a>
+								<a href="mailto:<%= @customer.email %>" class= "loading-remove"><%= @customer.email %></a>
 							</li>
 						</ul>
 					</div>
