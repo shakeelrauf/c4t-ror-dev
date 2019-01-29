@@ -202,7 +202,7 @@ function createPostalSelect2(s) {
       // It's an int (addressid)
       getDistanceForAddress(addressId, carId, function(distance, carId) {
         updateCarWithDistance(distance, carId);
-        // sumTotal();
+        hideCarExistingAddress(addressId, carId)
         showCarExistingAddress(addressId, carId);
       });
     } else {
@@ -261,6 +261,11 @@ function showCarExistingAddress(addressId, carId) {
   });
 }
 
+function hideCarExistingAddress(addressId, carId){
+    $(".car-ex-address" + carId).each(function() {
+      $(this).hide();
+    })
+}
 function showCarNewAddress(postal, carId) {
     $(".car-ex-address" + carId).each(function() {
         $(this).show();
