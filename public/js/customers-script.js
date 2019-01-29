@@ -186,17 +186,10 @@ function addCusAddress(address) {
   }
 
   $('.loading-remove').click(function(){
-     $('.loading').click(function(){
-        $(this).addClass("hidden");
-     });
-        $(this).removeClass("hidden");
+     $('.loading').hide();
   });
 
-  $('.loading').click(function(e){
-    e.preventDefault();
-  });
-
-$(document).ready(function(){
+  $(document).ready(function(){
 
    $("select").each(function(){
       var usedNames = {};
