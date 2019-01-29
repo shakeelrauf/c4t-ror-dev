@@ -178,29 +178,31 @@
         </div>
       </div>
        <% state = car.address.present? ? 'block' : 'none' %>
-      <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" <%= !car.address.present? ? "style=display:none;" : '' %>>
+      <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
               </span>
       </div>
-      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" <%= !car.address.present? ? "style=display:none;" : '' %>>
+      <%#= !car.address.present? ? "style=display:none;" : '' %>
+      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" style="display: none;" >
         <div class="md-input-wrapper">
           <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
+          <input type="hidden" name="car-postal<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.postal : '' %>" class="md-form-control md-static"/>
           <label style="top: -15px;">Street<span class="required">*</span></label>
         </div>
       </div>
-      <div class="col-lg-6 col-sm-6 car-ex-address<%= car.idQuoteCars %>" <%= !car.address.present? ? "style=display:none;" : '' %>>
+      <div class="col-lg-6 col-sm-6 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
         <div class="md-input-wrapper">
           <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
           <label style="top: -15px;">City<span class="required">*</span></label>
         </div>
       </div>
-      <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" <%= !car.address.present? ? "style=display:none;" : '' %>>
+      <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
               <span class="md-add-on sm-screen-card">
                   <i class="icofont icofont-disc"></i>
               </span>
       </div>
-      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" <%= !car.address.present? ? "style=display:none;" : '' %>>
+      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
         <div class="md-input-wrapper">
           <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
             <option value="ON" <%= car.address.present? ? car.address.province == "ON" ? 'selected' : '' : '' %>>Ontario</option>
