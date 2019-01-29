@@ -36,18 +36,18 @@ $(document).ready(function() {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
-                $(".car-location-select2").each(function(index) {
-                    if($(".hiddenaddress").html().trim().length > 0){
-                        var address = JSON.parse($(".hiddenaddress").html())[0];
-                          $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
-                          getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
-                            $("#car-distance" + carId).val(distance);
-                            updateCarWithDistance(distance, car.idQuoteCars);
-                            showCarExistingAddress(address.idAddress, carId) 
-                          });
-                    }
-                    createPostalSelect2($(this));
-                });
+                createPostalSelect2($("#car-location"+car.idQuoteCars));
+                if($(".hiddenaddress").html().trim().length > 0){
+                    var address = JSON.parse($(".hiddenaddress").html())[0];
+                    $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                    $("#car-location"+car.idQuoteCars).select2('data', {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal });
+                    $("#car-location"+car.idQuoteCars).val(address.idAddress).trigger("change");
+                    getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
+                        $("#car-distance" + carId).val(distance);
+                        updateCarWithDistance(distance, car.idQuoteCars);
+                        showCarExistingAddress(address.idAddress, carId)
+                    });
+                }
                 $(".tab-details").append(`
                 <li id="car-tab` + car.idQuoteCars + `" class="nav-item car"` + car.idQuoteCars + ` veh-`+ veh.idVehiculeInfo + `" style="display:block">
                     <a class="nav-link active" data-toggle="tab" href="#tab` + car.idQuoteCars + `" role="tab">
@@ -170,6 +170,7 @@ function createPostalSelect2(s) {
         getDistanceForCar(postal, carId, function(distance, carId) {
           $("#car-distance" + carId).val(distance);
           updateCarWithDistance(distance, carId);
+          resetAddress(carId)
           showCarNewAddress(postal, carId);
         });
         return {
@@ -208,7 +209,9 @@ function createPostalSelect2(s) {
         updateCarWithDistance(distance, carId);
         // sumTotal();
         // Here the addressId is a postal code
-        showCarNewAddress(postal, carId);
+          resetAddress(carId)
+
+          showCarNewAddress(postal, carId);
       });
     }
   });
@@ -244,21 +247,31 @@ function showCarExistingAddress(addressId, carId) {
     }catch(e){
       address =  address
     }
+
     $("input[name=car-street" + carId + "]").val(address.address)
     $("input[name=car-city" + carId + "]").val(address.city)
     $("#car-province" + carId).val(address.province); // Doesn't work by name
     $("input[name=car-postal" + carId + "]").val(address.postal)
-    $(".car-ex-address" + carId).each(function() {
-      $(this).show();
-    });
+    // $(".car-ex-address" + carId).each(function() {
+    //   $(this).show();
+    // });
   });
 }
 
 function showCarNewAddress(postal, carId) {
-  $(".car-ex-address" + carId).each(function() {
-    $(this).show();
-    $("input[name=car-postal" + carId +" ]").val(postal)
-  });
+    $(".car-ex-address" + carId).each(function() {
+        $(this).show();
+        $("input[name=car-postal" + carId +" ]").val(postal)
+    });
+}
+
+function resetAddress(carId) {
+    $(".car-ex-address" + carId).each(function() {
+        $("input[name=car-city" + carId +" ]").val("")
+        $("input[name=car-province" + carId +" ]").val("")
+        $("input[name=car-street" + carId +" ]").val("")
+        $("input[name=car-postal" + carId +" ]").val(" ")
+    });
 }
 
 function removeCar(quoteCarId) {
@@ -519,6 +532,12 @@ function saveCar(callback) {
         if (price) {
           netPrice = price.netPrice;
         }
+        var carAddressId = "";
+        if($(this).find("select[name=car-location"+carId+"] option").length > 1){
+            if($("#car-location"+carId).select2('data') != undefined){
+                carAddressId = $("select[name=car-location"+carId+"]").select2('data')[0].id
+            }
+        }
         car = {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),
@@ -526,7 +545,7 @@ function saveCar(callback) {
             "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
             "missingCat":     ($(this).find("input[name=cat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
-            "carAddressId":   ($(this).find("select[name=car-location"+carId+"] option:selected").val()),
+            "carAddressId":   (carAddressId),
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "0",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
@@ -535,7 +554,7 @@ function saveCar(callback) {
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
-        car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
+        // car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
         if(car["carAddressId"] == undefined){
             car["carAddressId"] = " "
         }
