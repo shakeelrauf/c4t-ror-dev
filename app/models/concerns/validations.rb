@@ -134,6 +134,6 @@ class Validations
   end
 
   def self.remove_dashes_from_phone(num)
-    num.gsub('-', '')
+    num.to_s.gsub('-', '')
   end
 end
