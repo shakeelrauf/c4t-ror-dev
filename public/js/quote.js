@@ -175,7 +175,7 @@ function createPostalSelect2(s) {
       createTag: function (params) {
         var postal = params.term.trim().replace(/\s/g, '');
         if(postal.length != 6) {
-            $("input[name=car-postal" + carId +" ]").val(postal)
+            $("input[name=car-postal" + carId +" ]").text(postal)
             return null;
         }
         // Get the distance to this postal code
@@ -552,7 +552,9 @@ function saveCar(callback) {
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length > 1){
             if($("#car-location"+carId).select2('data') != undefined){
-                carAddressId = $("select[name=car-location"+carId+"]").select2('data')[0].id
+                if(Number.isInteger(Number($("select[name=car-location"+carId+"]").select2('data')[0].id))){
+                    carAddressId = Number($("select[name=car-location"+carId+"]").select2('data')[0].id)
+                }
             }
         }
         car = {
@@ -570,10 +572,6 @@ function saveCar(callback) {
             "carPostal":      ($($(this).find("select[name=car-location"+carId+"] option")[0]).text()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
-        }
-        // car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
-        if(car["carAddressId"] == undefined){
-            car["carAddressId"] = " "
         }
         cars.push(car);
     });
