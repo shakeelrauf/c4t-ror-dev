@@ -210,7 +210,7 @@
           <div class="col-lg-12 row tab-content tab-content-details vehicle-parameters">
             <% if (@quote.idQuote != nil) %>
               <% cars.each.with_index do |car, index| %>
-                <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car.information} %>
+                <%= render partial: "vehicle_parameters", locals: {car: car, vehicle: car.information, index: index} %>
               <% end %>
             <% end %>
           </div>
@@ -265,10 +265,13 @@
       $(".tab-pane").removeClass("active");
       var quoteNo = (<%= quote.idQuote || "null" %>);
 
+      $("#tab-a-"+<%=cars.first.present? ? cars.first.idQuoteCars : " 0" %>).click()
+
   </script>
   <%= public_js_path 'distance.js' %>
   <%= public_js_path 'common.js' %>
   <%= public_js_path 'quote.js' %>
   <script async defer type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>'></script>
   <%= public_js_path 'edit_quote_map.js' %>
+
 <% end %>
