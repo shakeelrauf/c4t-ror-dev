@@ -108,7 +108,7 @@ $(document).ready(function() {
                 return null;
             }
             return {
-                id: null,
+                id: 0,
                 text:  updatePhoneNumber(params.term)+ " New Customer",
                 newTag: true
             }
