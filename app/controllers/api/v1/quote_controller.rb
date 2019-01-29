@@ -160,7 +160,6 @@ class Api::V1::QuoteController < ApiController
     return render json: quotez.to_json, status: :ok 
   end
 
-  # get one quote
   def quote
   	@quote = Quote.includes(:user, :status, :client => [:address, :heardofus]).find_by_id(id: params[:no]).to_json(include: [:dispatcher,:status, {customer: {:include => [:address, :heardofus]}}])
 	  if (!@quote)

@@ -7,8 +7,8 @@ function callModal() {
 }
 
 callModal();
-var getLatLang = function (postal) {
-    var address = postal + " canada";
+var getLatLang = function (address) {
+    address =address + " Canada";
     geocoder = new google.maps.Geocoder()
     geocoder.geocode({'address': address}, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
@@ -33,7 +33,7 @@ function callMap(id) {
     if (($("#car-location" + id).children("option") != undefined) && ($("#car-location" + id).children("option").val() != undefined) && ($("#car-location" + id).children("option").val().length > 0)) {
         var last = $("#car-location" + id).children("option").length - 1
         var option = $("#car-location" + id).children("option")[last]
-        var postal = $(option).val()
+        var postal = $(option).text()
         getLatLang(postal);
         $("#modalMap").attr("data-id", id).modal("toggle");
     }
