@@ -5,7 +5,7 @@
   <div class="card-block">
     <div class="row">
       <div class="col-lg-1 col-sm-1">
-        <span class="md-add-on">
+        <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-disc"></i>
         </span>
       </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="col-lg-1 col-sm-1">
-        <span class="md-add-on">
+        <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-disc"></i>
         </span>
       </div>
@@ -49,18 +49,18 @@
               </div>
             </div>
           </div>
-          <label style="top: -15px;font-size: 13px">Catalytic Converter Missing<span class="required">*</span></label>
+          <label style="top: -15px;font-size: 13px;width: 120%;">Catalytic Converter Missing<span class="required">*</span></label>
         </div>
       </div>
       <div class="col-lg-1 col-sm-1">
-        <span class="md-add-on">
+        <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-truck-loaded"></i>
         </span>
       </div>
       <div class="col-lg-5 col-sm-5">
         <div class="md-input-wrapper">
           <div class="row">
-            <div class="col-lg-4 col-sm-4">
+            <div class="col-lg-6 col-sm-6">
               <div class="md-input-wrapper cashradio">
                 <input type="radio" name="pickup<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="pickup"
                 <%
@@ -72,14 +72,14 @@
                 <label>Pickup</label><br>
               </div>
             </div>
-            <div class="col-lg-8 col-sm-8">
-              <div class="md-input-wrapper cashradio">
+            <div class="col-lg-6 col-sm-6">
+              <div class="md-input-wrapper cashradio" style="width: 80px;">
                 <input type="radio" name="pickup<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="dropoff"
                 <%
                   if (car != nil && car.gettingMethod == "dropoff") %>
                        checked="checked"
                        <% end %> class="handlingOptionRadio">
-                <label>Drop Off</label>
+                <label style="font-size: 13px;">Drop Off</label>
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@
         </div>
       </div>
       <div class="col-lg-1 col-sm-1">
-        <span class="md-add-on">
+        <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-truck"></i>
         </span>
       </div>
@@ -121,7 +121,7 @@
         </div>
       </div>
       <div class="col-lg-1 col-sm-1">
-        <span class="md-add-on">
+        <span class="md-add-on sm-screen-card">
             <i class="icofont icofont-disc"></i>
         </span>
       </div>
@@ -158,12 +158,12 @@
       </div>
       <br>
       <div class="col-lg-1 col-sm-1">
-        <span class="md-add-on map" data-id="<%= car.idQuoteCars %>">
+        <span class="md-add-on map sm-screen-card" data-id="<%= car.idQuoteCars %>">
             <i class="icofont icofont-map"></i>
         </span>
       </div>
 
-      <div class="col-lg-11 col-sm-11">
+      <div class="col-lg-11 col-sm-11 address-sm-screen">
         <div class="md-input-wrapper">
           <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
           <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
@@ -173,7 +173,7 @@
             <% end %>
           </select>
           <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
-          <label style="top: -15px;">Select an address or enter a Postal Code for this
+          <label class="addr-top">Select an address or enter a Postal Code for this
             car<span class="required">*</span></label>
         </div>
       </div>
@@ -196,7 +196,7 @@
         </div>
       </div>
       <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" <%= !car.address.present? ? "style=display:none;" : '' %>>
-              <span class="md-add-on">
+              <span class="md-add-on sm-screen-card">
                   <i class="icofont icofont-disc"></i>
               </span>
       </div>
@@ -239,135 +239,135 @@
     </style>
     <div class="card-block">
       <div class="row">
-        <div class="col-lg-6 col-sm-5">
+        <div class="col-lg-6">
           <h6>Details</h6>
         </div>
-        <div class="col-lg-6 col-sm-6">
+        <div class="col-lg-6">
           <h6>Amounts</h6>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Weight:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="weight<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-2">
+        <div class="col-lg-4">
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
         </div>
         <% if (current_user.roles == "admin") %>
 
-          <div class="col-lg-4 col-sm-4">
+          <div class="col-lg-4">
             Steel Price:
           </div>
-          <div class="col-lg-2 col-sm-4">
+          <div class="col-lg-2">
             <div class="n" id="steelPrice<%= car.idQuoteCars %>"></div>
           </div>
         <% end %>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Weight price:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="weightPrice<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Distance:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="distance<%= car.idQuoteCars %>"><%= (car.distance).to_i %></div>
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Free Distance:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="freeDistance<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Excess Distance:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="excessDistance<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Excess Distance cost:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="excessCost<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Distance cost:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="distanceCost<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Missing Cat cost:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="missingCatCost<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Missing Cat:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="missingCat<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Missing Battery cost:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="missingBatCost<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Missing Battery:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="missingBat<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Missing Wheels cost:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="missingWheelsCost<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Missing Wheels:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="missingWheels<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Pickup cost:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="pickupCost<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Pickup:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="pickup<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-3 col-sm-3">
+        <div class="col-lg-3">
         </div>
-        <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-4">
           Net:
         </div>
-        <div class="col-lg-2 col-sm-2">
+        <div class="col-lg-2">
           <div class="n" id="carPrice<%= car.idQuoteCars %>"></div>
         </div>
       </div>
