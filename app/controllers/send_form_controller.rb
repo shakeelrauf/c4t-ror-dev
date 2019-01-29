@@ -8,7 +8,8 @@ class SendFormController < ApplicationController
   def login_user
     return respond_error("Authentication failed!") if !params[:username].present? || !params[:password].present?
     user =  User.where(username: params[:username]).first
-    return respond_error("Authentication failed!") if (user.nil? and (user.present? ? !user.is_valid_password?(params[:password]) : true))
+    return respond_error("Authentication failed!") if (user.nil? )
+    return respond_error("Authentication failed!") if (!user.is_valid_password?(params[:password]))
     auth_token   = user.authentications.build
     auth_token.save!
     successful_login(user,auth_token.token)

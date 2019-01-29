@@ -38,13 +38,13 @@ $(document).ready(function() {
                 $(".vehicle-parameters").append(html);
                 $(".car-location-select2").each(function(index) {
                     if($(".hiddenaddress").html().trim().length > 0){
-                        var address = JSON.parse($(".hiddenaddress").html());
-                        $("#car-location"+car.idQuoteCars).append("<option value="+address.postal+" data-select2-tag='true' >"+address.postal+"</option>");
-                        getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
+                        var address = JSON.parse($(".hiddenaddress").html())[0];
+                          $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                          getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
                             $("#car-distance" + carId).val(distance);
                             updateCarWithDistance(distance, car.idQuoteCars);
-                            showCarNewAddress(address.postal, car.idQuoteCars);
-                        });
+                            showCarExistingAddress(address.idAddress, carId) 
+                          });
                     }
                     createPostalSelect2($(this));
                 });
@@ -78,7 +78,6 @@ $(document).ready(function() {
                 calcPrice(car.idQuoteCars,car.idQuote);
                 $('#txtVehicleFilter').html("");
                 callModal();
-                $(".car-ex-address"+car.idQuoteCars).show()
                 $("#car-location" + car.idQuoteCars).val($(".hiddenaddress").data("customeraddress"))
                 $(".selectcashcar .select2-selection__rendered").html("");
                 // Make the car postal selecter a select2
@@ -117,7 +116,7 @@ $(document).ready(function() {
     });
 
     $("select[name=phone]").on('select2:select', function (e) {
-        var clientId = $("select[name=phone] option:selected").val();
+        var clientId = $("select[name=phone]").select2('data')[0].id;
         $.ajax("/customers/id/" + clientId + "/json").done(client => {
             fillCustomer(client);
         })
@@ -151,10 +150,12 @@ $(document).ready(function() {
     calcPrices();
 });
 function createPostalSelect2(s) {
-  var clientId = $("select[name=phone] option:selected").val();
+  var clientId = $("select[name=phone]").select2('data')[0];
   if (!clientId) {
     // There's no client selected, make a "no results" client
     clientId = 0;
+  }else{
+    clientId = clientId.id
   }
   var carId = s.prop('id').substring("car-location".length, s.prop('id').length);
   s.select2({
@@ -169,12 +170,8 @@ function createPostalSelect2(s) {
         getDistanceForCar(postal, carId, function(distance, carId) {
           $("#car-distance" + carId).val(distance);
           updateCarWithDistance(distance, carId);
-          // sumTotal();
-
-          // Show the new address sub-form
           showCarNewAddress(postal, carId);
         });
-
         return {
             id: postal,
             text: postal,
@@ -242,7 +239,11 @@ function updateCarWithDistance(distance, carId) {
 
 function showCarExistingAddress(addressId, carId) {
   $.ajax({method: "GET", url: "/address/" + addressId + "/json"}).done(function(address) {
-    address = JSON.parse(address);
+    try{
+      address = JSON.parse(address);
+    }catch(e){
+      address =  address
+    }
     $("input[name=car-street" + carId + "]").val(address.address)
     $("input[name=car-city" + carId + "]").val(address.city)
     $("#car-province" + carId).val(address.province); // Doesn't work by name
@@ -255,7 +256,7 @@ function showCarExistingAddress(addressId, carId) {
 
 function showCarNewAddress(postal, carId) {
   $(".car-ex-address" + carId).each(function() {
-    // $(this).show();
+    $(this).show();
     $("input[name=car-postal" + carId +" ]").val(postal)
   });
 }
@@ -530,13 +531,11 @@ function saveCar(callback) {
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "0",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
-            "carPostal":      ($(this).find("input[name=car-postal"+carId+"]").val()),
+            "carPostal":      ($($(this).find("select[name=car-location"+carId+"] option")[0]).text()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
-        if(car["carAddressId"] == undefined){
-            car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
-        }
+        car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
         if(car["carAddressId"] == undefined){
             car["carAddressId"] = " "
         }
@@ -560,7 +559,12 @@ function saveCar(callback) {
         callback(s);
       } else {
           if(s.error){
+            if(s.car){
+              $("#tab-a-"+s.car).click();
               doGrowlingDanger(s.error);
+            }else{
+              doGrowlingDanger(s.error);
+            }
           }else{
               doGrowlingMessage("Saved");
           }
@@ -577,11 +581,14 @@ function gotoListOfQuotes() {
 }
 
 function fillCustomer(data) {
+    $(".car-location-select2").each(function(index) {
+      createPostalSelect2($(this));
+    });
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
-    $(".hiddenaddress").html(JSON.stringify(data.address[0]))
+    $(".hiddenaddress").html(JSON.stringify(data.address))
     if (data.quotes.length >= 1) {
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);
