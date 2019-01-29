@@ -15,7 +15,7 @@ class QuotesController < ApplicationController
   end
 
   def car_price
-    return respond_json({"netPrice": nil}) if params[:missingWheel] == "" || params[:missingBattery] == "" || params[:missingCat] == ""
+    return respond_json({"netPrice": nil}) if !params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?
     quote = JSON.parse Quote.where(idQuote: params[:quoteId]).first.to_json
     return respond_json({"netPrice": nil}) if quote.nil?
     car_distance =  params[:distance]
@@ -33,6 +33,8 @@ class QuotesController < ApplicationController
     dropoff -=  params[:missingBattery].to_i * quote["batteryPrice"].to_f
     dropoffPrice = [dropoff,0.0].max
     pickupPrice = 0.0
+    car =  QuoteCar.where(idQuoteCars: params[:car]).first
+    car.update(missingWheels: params[:missingWheels], missingBattery: params[:missingBattery], missingCat: params[:missingCat],still_driving: params[:still_driving], gettingMethod: params[:gettingMethod]) if car.present?
     if car_distance.present? && car_distance >  0.01 && excessDistance.present?
       pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
     end
@@ -88,12 +90,15 @@ class QuotesController < ApplicationController
         item["text"] = vehicle["make"] + " " + vehicle["year"] + " " + vehicle["model"] + " " + vehicle["body"] + " " + vehicle["trim"] + " " + vehicle["transmission"] + " " + vehicle["drive"] + " " + vehicle["doors"] + " doors and " + vehicle["seats"] + " seats."
         item["id"] = vehicle["idVehiculeInfo"]
         created = false
-        groups.length.times do |i|
-          if groups[i]["text"] == vehicle["make"]
-            groups[i]["children"].push(item)
+        i, length = 0, groups.length
+        while(i < length) do
+          if groups[i][:text] == vehicle["make"]
+            groups[i][:children].push(item)
             created = true
+            i+=1
             break
           end
+          i+=1
         end
         groups.push({text: vehicle["make"], children: [item]}) if !created
       end

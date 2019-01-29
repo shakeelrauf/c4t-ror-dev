@@ -14,6 +14,8 @@ module SettingHelper
 		  label = "Value Of A Wheel"
 		elsif name == "batteryPrice"
 		  label = "Value Of A Battery"
+		elsif name == "DealerFlatFee"
+			label = "Dealer Flat Fee"
 		end
     label
 	end
