@@ -94,7 +94,7 @@ if ($(".the_form").length) {
         if($(".the_form").valid()){
             $(".phone").each(function(a){
                  $(this).rules("remove", "phoneNo")
-                 $(this).val($(this).val().replace(/-/g, ''));
+                 // $(this).val($(this).val().replace(/-/g, ''));
              });
             $(".the_form").submit()
         }

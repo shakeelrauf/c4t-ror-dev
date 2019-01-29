@@ -318,7 +318,7 @@ function addCusAddress(address) {
     function all_number_validate(){
       $(".phone").each(function(a){
         $(this).rules("remove", "phoneNo")
-        $(this).val($(this).val().replace(/-/g, ''));
+        // $(this).val($(this).val().replace(/-/g, ''));
       });
     }
 
@@ -328,7 +328,7 @@ function addCusAddress(address) {
       $.ajax({
           method: "get",
           url: "/number_exist",
-          data: { phone: $phone_num.replace(/-/g, '') },
+          data: { phone: $phone_num },
           dataType: "json",
           success: function(res){
             if(res.client == 0){
