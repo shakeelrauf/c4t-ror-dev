@@ -36,6 +36,7 @@
     top: inherit  !important;
     left: inherit !important;
     color:  red;
+    border-color: red !important;
 }
 .md-input-wrapper{
     position: relative !important
@@ -43,4 +44,8 @@
 
 .hiddenaddress{
     display: none;
+}
+
+.md-form-control.error{
+	border-color: #ff0000 !important;
 }

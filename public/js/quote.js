@@ -89,6 +89,15 @@ $(document).ready(function() {
         });
       });
     });
+    function updatePhoneNumber(f) {
+        var v = f;
+        if (v.length == 0)
+            return;
+        if (v.length >= 10) {
+            v = v.substring(0, 3) + "-"+ v.substring(3, 6) + "-" + v.substring(6, 10)
+        }
+        return v;
+    }
 
     $("select[name=phone]").select2({
         tags: true,
@@ -100,7 +109,7 @@ $(document).ready(function() {
             }
             return {
                 id: null,
-                text: phone,
+                text:  updatePhoneNumber(params.term)+ " New Customer",
                 newTag: true
             }
         },
@@ -600,6 +609,7 @@ function saveCar(callback) {
         doGrowlingDanger(data.responseJSON.error);
     });
 }
+
 
 function gotoListOfQuotes() {
     if (confirm("Are you sure you want to leave this page? Current quote will be lost.")) {
