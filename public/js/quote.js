@@ -569,7 +569,7 @@ function saveCar(callback) {
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "0",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
-            "carPostal":      ($($(this).find("select[name=car-location"+carId+"] option")[0]).text()),
+            "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
