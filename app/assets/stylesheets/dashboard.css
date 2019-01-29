@@ -36,6 +36,7 @@
     top: inherit  !important;
     left: inherit !important;
     color:  red;
+    border-color: red !important;
 }
 .md-input-wrapper{
     position: relative !important
