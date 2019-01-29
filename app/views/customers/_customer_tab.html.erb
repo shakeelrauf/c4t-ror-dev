@@ -58,7 +58,7 @@
                     <tr>
                       <th scope="row">Mobile Number</th>
                       <td>
-                        <a href="tel:+<%= customer.cellPhone %>">
+                        <a href="tel:+<%= customer.cellPhone %>"  class= "loading-remove">
                           <%= phone_number_display( customer.cellPhone) %>
                         </a>
                       </td>
@@ -66,14 +66,14 @@
                     <tr>
                       <th scope="row">Other Phone</th>
                       <td>
-                        <a href="tel:+<%= customer.secondaryPhone %>">
+                        <a href="tel:+<%= customer.secondaryPhone %>" class= "loading-remove">
                           <%= phone_number_display( customer.secondaryPhone) %>
                         </a>
                       </td>
                     </tr>
                     <tr>
                       <th scope="row">Email</th>
-                      <td style="width:120%;word-break: break-all;display: block;"><a href="mailto:<%= customer.email %>"><%= customer.email %></a></td>
+                      <td style="width:120%;word-break: break-all;display: block;"><a href="mailto:<%= customer.email %>" class= "loading-remove"><%= customer.email %></a></td>
                     </tr>
                     <tr>
                       <th scope="row">Heard of Us</th>

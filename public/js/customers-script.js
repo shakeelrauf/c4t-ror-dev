@@ -120,79 +120,83 @@ function rand(){
 }
 
 function addCusAddress(address) {
-     $(".address-edit-list").append(`
-               <div class="col-lg-12 row address-edit" id="mathaddress`+(address.rand)+`" >
-                 <div class="col-lg-4 md-group-add-on">
-                     <span class="md-add-on">
-                         <i class="icofont icofont-address-book"></i>
-                     </span>
-                     <div class="md-input-wrapper">
-                           <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
-                             address.address || "")+`" name="addresses[address][]">
-                            <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
-                             address.id || "")+`" name="addresses[idAddress][]">
-                         <label>Address <span class="required">*</span></label>
-                     </div>
-                  </div>
- 
-                 <div class="row">
-                     <div class="col-lg-4 md-group-add-on">
-                         <span class="md-add-on">
-                             <i class="icofont icofont-address-book"></i>
-                         </span>
-                         <div class="md-input-wrapper">
-                              <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`" name="addresses[city][]">
-                             <label>City <span class="required">*</span></label>
-                         </div>
-                     </div>
-                     <div class="col-lg-4 md-group-add-on">
-                         <span class="md-add-on">
-                             <i class="icofont icofont-address-book"></i>
-                         </span>
-                         <div class="md-input-wrapper">
-                             <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince" name="addresses[province][]">
-                                 <option value="ON"`+(address.province == "ON" ? " selected" : "")+`>Ontario</option>
-                                 <option value="BC"`+(address.province == "BC" ? " selected" : "")+`>British Columbia</option>
-                                 <option value="QC"`+(address.province == "QC" ? " selected" : "")+`>Quebec</option>
-                                 <option value="AL"`+(address.province == "AL" ? " selected" : "")+`>Alberta</option>
-                                 <option value="NS"`+(address.province == "NS" ? " selected" : "")+`>Nova Scotia</option>
-                                 <option value="NL"`+(address.province == "NL" ? " selected" : "")+`>Newfoundland and Labrador</option>
-                                 <option value="SA"`+(address.province == "SA" ? " selected" : "")+`>Saskatchewan</option>
-                                 <option value="MA"`+(address.province == "MA" ? " selected" : "")+`>Manitoba</option>
-                                 <option value="NB"`+(address.province == "NB" ? " selected" : "")+`>New Brunswick</option>
-                                 <option value="PE"`+(address.province == "PE" ? " selected" : "")+`>Prince Edward Island</option>
-                             </select>
-                             <label>Province <span class="required">*</span></label>
-                         </div>
-                     </div>
-                     <div class="col-lg-3 md-group-add-on">
-                         <span class="md-add-on">
-                             <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
-                         </span>
-                         <div class="md-input-wrapper">
-                              <input type="text" class="md-form-control txtPostal md-static" id="txtPostal"
-                                    value="` + (address.postal ? (address.postal.substr(0,3) + " " + address.postal.substr(3)) : "") + `" name="addresses[postal][]">
-                             <label>Postal Code <span class="required">*</span></label>
-                         </div>
-                     </div>
- 
-                     <div class="col-lg-1 md-group-add-on" id="addressRemove">
-                         <span onclick="removeAddress('mathaddress`+(address.rand)+`')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
-                             <i class="icofont icofont-ui-remove"></i>
-                         </span>
-                     </div>
-                 </div><!-- row -->
-               </div>`);
- }
+  $(".address-edit-list").append(`
+     <div class="col-lg-12 row address-edit" id="mathaddress`+(address.rand)+`" >
+       <div class="col-lg-4 md-group-add-on">
+           <span class="md-add-on">
+               <i class="icofont icofont-address-book"></i>
+           </span>
+           <div class="md-input-wrapper">
+                 <input type="text" class="md-form-control txtAddress md-static" id="txtAddress" value="`+(
+                   address.address || "")+`" name="addresses[address][]">
+                  <input type="hidden" class="md-form-control idAddress md-static" id="txtAddress" value="`+(
+                   address.id || "")+`" name="addresses[idAddress][]">
+               <label>Address <span class="required">*</span></label>
+           </div>
+        </div>
+
+       <div class="row">
+         <div class="col-lg-4 md-group-add-on">
+             <span class="md-add-on">
+                 <i class="icofont icofont-address-book"></i>
+             </span>
+             <div class="md-input-wrapper">
+                  <input type="text" class="md-form-control txtCity md-static" id="txtCity" value="`+(address.city || "")+`" name="addresses[city][]">
+                 <label>City <span class="required">*</span></label>
+             </div>
+         </div>
+         <div class="col-lg-4 md-group-add-on">
+             <span class="md-add-on">
+                 <i class="icofont icofont-address-book"></i>
+             </span>
+             <div class="md-input-wrapper">
+                 <select class="md-form-control province txtProvince md-static selectcash" id="txtProvince" name="addresses[province][]">
+                     <option value="ON"`+(address.province == "ON" ? " selected" : "")+`>Ontario</option>
+                     <option value="BC"`+(address.province == "BC" ? " selected" : "")+`>British Columbia</option>
+                     <option value="QC"`+(address.province == "QC" ? " selected" : "")+`>Quebec</option>
+                     <option value="AL"`+(address.province == "AL" ? " selected" : "")+`>Alberta</option>
+                     <option value="NS"`+(address.province == "NS" ? " selected" : "")+`>Nova Scotia</option>
+                     <option value="NL"`+(address.province == "NL" ? " selected" : "")+`>Newfoundland and Labrador</option>
+                     <option value="SA"`+(address.province == "SA" ? " selected" : "")+`>Saskatchewan</option>
+                     <option value="MA"`+(address.province == "MA" ? " selected" : "")+`>Manitoba</option>
+                     <option value="NB"`+(address.province == "NB" ? " selected" : "")+`>New Brunswick</option>
+                     <option value="PE"`+(address.province == "PE" ? " selected" : "")+`>Prince Edward Island</option>
+                 </select>
+                 <label>Province <span class="required">*</span></label>
+             </div>
+         </div>
+         <div class="col-lg-3 md-group-add-on">
+             <span class="md-add-on">
+                 <i class="icofont icofont-ui-message" onclick="validateAddress()"></i>
+             </span>
+             <div class="md-input-wrapper">
+                  <input type="text" class="md-form-control txtPostal md-static" id="txtPostal"
+                        value="` + (address.postal ? (address.postal.substr(0,3) + " " + address.postal.substr(3)) : "") + `" name="addresses[postal][]">
+                 <label>Postal Code <span class="required">*</span></label>
+             </div>
+         </div>
+
+         <div class="col-lg-1 md-group-add-on" id="addressRemove">
+             <span onclick="removeAddress('mathaddress`+(address.rand)+`')" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove" value="`+(address.id || "")+`">
+                 <i class="icofont icofont-ui-remove"></i>
+             </span>
+         </div>
+     </div><!-- row -->
+   </div>`);
+  }
+
+  $('.loading-remove').click(function(){
+     $('.loading').click(function(){
+        $(this).addClass("hidden");
+     });
+        $(this).removeClass("hidden");
+  });
+
+  $('.loading').click(function(e){
+    e.preventDefault();
+  });
 
 $(document).ready(function(){
-      $(this).removeClass("hidden");
-
-    // $('.loading-remove').click(function(){
-    //    $('.loading').click(function(){
-    //       $(this).addClass("hidden");
-    //    });
-    // });
 
    $("select").each(function(){
       var usedNames = {};
