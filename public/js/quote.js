@@ -38,15 +38,18 @@ $(document).ready(function() {
                 $(".vehicle-parameters").append(html);
                 createPostalSelect2($("#car-location"+car.idQuoteCars));
                 if($(".hiddenaddress").html().trim().length > 0){
-                    var address = JSON.parse($(".hiddenaddress").html())[0];
-                    $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
-                    $("#car-location"+car.idQuoteCars).select2('data', {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal });
-                    $("#car-location"+car.idQuoteCars).val(address.idAddress).trigger("change");
-                    getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
-                        $("#car-distance" + carId).val(distance);
-                        updateCarWithDistance(distance, car.idQuoteCars);
-                        showCarExistingAddress(address.idAddress, carId)
-                    });
+                    var addresses = JSON.parse($(".hiddenaddress").html());
+                    if(addreses.length == 1){
+                        car address = addresses[0];
+                        $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                        $("#car-location"+car.idQuoteCars).select2('data', {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal });
+                        $("#car-location"+car.idQuoteCars).val(address.idAddress).trigger("change");
+                        getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
+                            $("#car-distance" + carId).val(distance);
+                            updateCarWithDistance(distance, car.idQuoteCars);
+                            // showCarExistingAddress(address.idAddress, carId)
+                        });
+                    }
                 }
                 $(".tab-details").append(`
                 <li id="car-tab` + car.idQuoteCars + `" class="nav-item car"` + car.idQuoteCars + ` veh-`+ veh.idVehiculeInfo + `" style="display:block">
