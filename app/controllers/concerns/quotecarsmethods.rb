@@ -7,8 +7,8 @@ module Quotecarsmethods
     if filter.present?
       filter = + filter.gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * from VehiculesInfo where"
-      count_query = "Select COUNT(*) from VehiculesInfo where"
+      query = "select * from vehiculesinfo where"
+      count_query = "select COUNT(*) from vehiculesinfo where"
       filters.each do |fil|
         query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
         query.concat(" AND ") if !fil.eql?(filters.last)
