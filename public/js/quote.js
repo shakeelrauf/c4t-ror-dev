@@ -101,19 +101,9 @@ $(document).ready(function() {
 
     $("select[name=phone]").select2({
         tags: true,
-        createTag: function (params) {
-            var phone = unformatPhone(params.term);
-            //Validate phone number.
-            if(phone.length < 10) {
-                return null;
-            }
-            resetCustomer()
-
-            return {
-                id: "new"+Math.floor(Math.random() * 1000000000),
-                text:  updatePhoneNumber(params.term)+ " New Customer",
-                newTag: true
-            }
+        createTag: function(params) {
+            var phone = unformatPhone(params.term)
+            return null
         },
         dataType: 'json',
         ajax: {
@@ -125,6 +115,40 @@ $(document).ready(function() {
                     limit: 10
                 }
                 return query;
+            },
+            processResults: function(data, params) {
+                if(params.term){
+                    var found = false;
+                    var phone = unformatPhone(params.term)
+                    if(phone.length == 10) {
+                        tag = {
+                            id: "new" + Math.floor(Math.random() * 1000000000),
+                            text: updatePhoneNumber(params.term) + " New Customer",
+                        }
+                        data.results.forEach(function (no) {
+                            if (parseInt(no.text.replace(/-/g,'')) == parseInt(params.term)) {
+                                found = true;
+                            } else {
+                                resetCustomer()
+                            }
+                        });
+                        if (!found) {
+                            data.results.push(tag)
+                            resetCustomer()
+                        }
+                        return {
+                            results: data.results
+                        }
+                    }else{
+                        return {
+                            results: data.results
+                        }
+                    }
+                }else{
+                    return {
+                        results: data.results
+                    }
+                }
             }
         }
     });
@@ -212,22 +236,17 @@ function createPostalSelect2(s) {
   s.on('select2:select', function (e) {
     var addressId = $(this).val();
     if (!isNaN(parseInt(addressId))) {
-      // It's an int (addressid)
       getDistanceForAddress(addressId, carId, function(distance, carId) {
         updateCarWithDistance(distance, carId);
         hideCarExistingAddress(addressId, carId)
         showCarExistingAddress(addressId, carId);
       });
     } else {
-      // A postal was filled up
       var postal = addressId;
       getDistanceForCar(postal, carId, function(distance, carId) {
         updateCarWithDistance(distance, carId);
-        // sumTotal();
-        // Here the addressId is a postal code
-          resetAddress(carId)
-
-          showCarNewAddress(postal, carId);
+        resetAddress(carId)
+        showCarNewAddress(postal, carId);
       });
     }
   });
