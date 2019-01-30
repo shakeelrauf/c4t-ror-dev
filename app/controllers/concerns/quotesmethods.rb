@@ -69,6 +69,7 @@ module Quotesmethods
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
         return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingWheels"].present?)
+        return respond_json({:error => "The Still driving was not selected" , car:  carList[car]["car"]}) if (!carList[car]["still_driving"].present?)
         return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
