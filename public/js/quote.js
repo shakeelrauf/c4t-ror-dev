@@ -137,16 +137,21 @@ $(document).ready(function() {
                             resetCustomer()
                         }
                         return {
-                            results: data.results
+                            results: data.results,
+                            pagination:  data.pagination
+
                         }
                     }else{
                         return {
-                            results: data.results
+                            results: data.results,
+                            pagination:  data.pagination
                         }
                     }
                 }else{
                     return {
-                        results: data.results
+
+                        results: data.results,
+                        pagination:  data.pagination
                     }
                 }
             }
