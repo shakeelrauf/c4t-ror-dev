@@ -153,7 +153,7 @@
             </div>
 
           </div>
-          <label style="top: -15px;font-size: 13px">Still driving the vehicule?<span class="required">*</span></label>
+          <label style="top: -15px;font-size: 13px" class="still-label">Still driving the vehicule?<span class="required">*</span></label>
         </div>
       </div>
       <br>
@@ -164,7 +164,7 @@
       </div>
 
       <div class="col-lg-11 col-sm-11 address-sm-screen">
-        <div class="md-input-wrapper">
+        <div class="md-input-wrapper quote-select">
           <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
           <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
           <select class="md-form-control md-static car-location-select2" data-id="<%= car.idQuoteCars %>" name="car-location<%= car.idQuoteCars %>" id="car-location<%= car.id %>">
@@ -179,19 +179,24 @@
       </div>
        <% state = car.address.present? ? 'block' : 'none' %>
       <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
-              <span class="md-add-on">
+              <span class="md-add-on sm-screen-card">
                   <i class="icofont icofont-disc"></i>
               </span>
       </div>
       <%#= !car.address.present? ? "style=display:none;" : '' %>
-      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" style="display: none;" >
+      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %> car-street" style="display: none;" >
         <div class="md-input-wrapper">
           <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
           <input type="hidden" name="car-postal<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.postal : '' %>" class="md-form-control md-static"/>
           <label style="top: -15px;">Street<span class="required">*</span></label>
         </div>
       </div>
-      <div class="col-lg-6 col-sm-6 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
+      <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
+        <span class="md-add-on sm-screen-card">
+            <i class="icofont icofont-disc"></i>
+        </span>
+      </div>
+      <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
         <div class="md-input-wrapper">
           <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
           <label style="top: -15px;">City<span class="required">*</span></label>
