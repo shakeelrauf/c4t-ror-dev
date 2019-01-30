@@ -79,7 +79,7 @@ module Quotesmethods
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
         return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingWheels"].present?)
-        return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
+        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
@@ -95,6 +95,7 @@ module Quotesmethods
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
+
       return respond_json({message: "QuickQuote saved"})
      else
        return respond_json({error: "Please select atleast one car"})
