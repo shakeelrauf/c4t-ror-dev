@@ -409,11 +409,15 @@ display: table!Important;
     .addr-top{
         top: -15px;
     }
+    .save-book a:link{
+    overflow: hidden;
+    font-size: 13px;
+  }
 }
-@media (max-width: 575px) and (min-width: 300px) {
+@media (max-width: 575px) and (min-width: 100px) {
   .sm-screen-card{
       position: absolute;
-      margin-left: -20px;
+      margin-left: -23px;
   }
   .address-sm-screen{
     margin-top: 24px;
@@ -421,5 +425,24 @@ display: table!Important;
   }
   .addr-top{
     top: -25px !important;
+  }
+
+}
+@media (max-width: 575px) and (min-width: 366px) {
+   .save-book a:link{
+    overflow: visible;
+    font-size: 10px;
+  }
+}
+@media (max-width: 1300px) and (min-width: 992px) {
+    .first_block, .second_block{
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+}
+@media (max-width: 365px) and (min-width: 100px) {
+  .save-book a:link{
+    overflow: hidden;
+    font-size: 10px;
   }
 }
