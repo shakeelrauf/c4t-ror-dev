@@ -107,8 +107,10 @@ $(document).ready(function() {
             if(phone.length < 10) {
                 return null;
             }
+            resetCustomer()
+
             return {
-                id: 0,
+                id: "new"+Math.floor(Math.random() * 1000000000),
                 text:  updatePhoneNumber(params.term)+ " New Customer",
                 newTag: true
             }
@@ -129,12 +131,14 @@ $(document).ready(function() {
 
     $("select[name=phone]").on('select2:select', function (e) {
         var clientId = $("select[name=phone]").select2('data')[0].id;
-        $.ajax("/customers/id/" + clientId + "/json").done(client => {
-            fillCustomer(client);
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert(textStatus);
-        });
+        if(Number.isInteger(Number(clientId))){
+            $.ajax("/customers/id/" + clientId + "/json").done(client => {
+                fillCustomer(client);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              alert(textStatus);
+            });
+        }
     });
 
     $(".btn-edit-customer").click(function() {
@@ -637,4 +641,12 @@ function fillCustomer(data) {
     } else {
       $("input[name=postal]").val("");
     }
+}
+function resetCustomer(){
+    $("input[name=postal]").val("");
+    $("input[name=firstName]").val("");
+    $("input[name=lastName]").val("");
+    $('.has_quote option:eq(1)').prop('selected', false);
+    $(".has_quote").attr('disabled',false);
+
 }
