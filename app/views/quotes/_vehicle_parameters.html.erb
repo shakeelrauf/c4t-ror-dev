@@ -162,7 +162,6 @@
             <i class="icofont icofont-map"></i>
         </span>
       </div>
-
       <div class="col-lg-11 col-sm-11 address-sm-screen">
         <div class="md-input-wrapper">
           <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
@@ -184,6 +183,7 @@
             car<span class="required">*</span></label>
         </div>
       </div>
+       <%# state = car.address.present? ? 'block' : 'none' %>
       <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
               <span class="md-add-on">
                   <i class="icofont icofont-disc"></i>
@@ -387,7 +387,6 @@
     $(".car-location-select2").each(function (a) {
         if (($(this).children("option") != undefined) && (($(this).children("option").val() != undefined) && $(this).children("option").val().length > 0)) {
             var id = $(this).data("id");
-            $(".car-ex-address" + id).show()
         }
     })
 </script>
