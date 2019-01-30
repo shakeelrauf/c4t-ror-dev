@@ -39,9 +39,9 @@ class CustomersController < ApplicationController
     }
     addresses.each do |address|
       t = ""
-      t += address.address + ", " if address.address && address.address != ""
-      t += address.city + ", " if address.city && address.city != ""
-      t += address.province + ", " if address.province && address.province != ""
+      t += address.address + ", " if address.address && address.address.present?
+      t += address.city + ", " if address.city && address.city.present?
+      t += address.province + ", " if address.province && address.province.present?
       returned[:results].push({id: address.idAddress, text: t+ address.postal})
     end
     respond_json(returned)

@@ -65,22 +65,17 @@ module Quotesmethods
     end
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
-    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
-    address = client.address.first
-    address = client.address.build if !address.present?
-    address.postal = params[:postal]
-    address.city =  " " if address.new_record?
-    address.address = " " if address.new_record?
-    address.province = " " if address.new_record?
-    address.distance = " " if address.new_record?
-    address.save!
-    Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
     if !carList.nil?
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
         return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingWheels"].present?)
-        return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
+        return respond_json({:error => "The Still driving was not selected" , car:  carList[car]["car"]}) if (!carList[car]["still_driving"].present?)
+        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
+      end
+      client = save_customer params, phone, heard_of_us
+      Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
+      carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
           address = Address.find_by_id(carList[car]["carAddressId"])
@@ -96,9 +91,9 @@ module Quotesmethods
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
       return respond_json({message: "QuickQuote saved"})
-     else
+    else
        return respond_json({error: "Please select atleast one car"})
-     end
+    end
   end
 
   def search_quotes limit_p, offset_p, filter,after_date, before_date
@@ -143,12 +138,25 @@ module Quotesmethods
     res = car["distance"]
     ad.postal = car["carPostal"]
     ad.city = car["carCity"]
-    ad.idClient = client.idClient
+    ad.idClient = client.idClient  if client.present?
     ad.province = car["carProvince"]
     ad.address = car["carStreet"]
     ad.distance = res
     ad.save!
     quote_car.idAddress = ad.idAddress
     quote_car.save!
+  end
+
+  def save_customer params, phone, heard_of_us
+    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
+    address = client.address.first
+    address = client.address.build if !address.present?
+    address.postal = params[:postal]
+    address.city =  " " if address.new_record?
+    address.address = " " if address.new_record?
+    address.province = " " if address.new_record?
+    address.distance = " " if address.new_record?
+    address.save!
+    client
   end
 end

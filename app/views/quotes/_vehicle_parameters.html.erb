@@ -169,7 +169,14 @@
           <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
           <select class="md-form-control md-static car-location-select2" data-id="<%= car.idQuoteCars %>" name="car-location<%= car.idQuoteCars %>" id="car-location<%= car.id %>">
             <% if (car.address.present?) %>
-              <option value="<%= car.address.postal %>" data-select2-tag='true'><%= car.address.postal %></option>
+              <%
+                address = car.address
+                t = ""
+                t += address.address + ", " if address.address && address.address.present?
+                t += address.city + ", " if address.city && address.city.present?
+                t += address.province + ", " if address.province && address.province.present?
+              %>
+              <option value="<%= car.address.postal %>" data-select2-tag='true'><%= t + car.address.postal %></option>
             <% end %>
           </select>
           <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
@@ -177,7 +184,6 @@
             car<span class="required">*</span></label>
         </div>
       </div>
-       <% state = car.address.present? ? 'block' : 'none' %>
       <div class="col-lg-1 col-sm-1 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
               <span class="md-add-on sm-screen-card">
                   <i class="icofont icofont-disc"></i>
