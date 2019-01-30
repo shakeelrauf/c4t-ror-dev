@@ -107,8 +107,10 @@ $(document).ready(function() {
             if(phone.length < 10) {
                 return null;
             }
+            resetCustomer()
+
             return {
-                id: 0,
+                id: "new"+Math.floor(Math.random() * 1000000000),
                 text:  updatePhoneNumber(params.term)+ " New Customer",
                 newTag: true
             }
@@ -129,12 +131,14 @@ $(document).ready(function() {
 
     $("select[name=phone]").on('select2:select', function (e) {
         var clientId = $("select[name=phone]").select2('data')[0].id;
-        $.ajax("/customers/id/" + clientId + "/json").done(client => {
-            fillCustomer(client);
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert(textStatus);
-        });
+        if(Number.isInteger(Number(clientId))){
+            $.ajax("/customers/id/" + clientId + "/json").done(client => {
+                fillCustomer(client);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              alert(textStatus);
+            });
+        }
     });
 
     $(".btn-edit-customer").click(function() {
@@ -175,7 +179,7 @@ function createPostalSelect2(s) {
       createTag: function (params) {
         var postal = params.term.trim().replace(/\s/g, '');
         if(postal.length != 6) {
-            $("input[name=car-postal" + carId +" ]").val(postal)
+            $("input[name=car-postal" + carId +" ]").text(postal)
             return null;
         }
         // Get the distance to this postal code
@@ -552,7 +556,9 @@ function saveCar(callback) {
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length > 1){
             if($("#car-location"+carId).select2('data') != undefined){
-                carAddressId = $("select[name=car-location"+carId+"]").select2('data')[0].id
+                if(Number.isInteger(Number($("select[name=car-location"+carId+"]").select2('data')[0].id))){
+                    carAddressId = Number($("select[name=car-location"+carId+"]").select2('data')[0].id)
+                }
             }
         }
         car = {
@@ -567,13 +573,9 @@ function saveCar(callback) {
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "0",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
-            "carPostal":      ($($(this).find("select[name=car-location"+carId+"] option")[0]).text()),
+            "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
-        }
-        // car["carAddressId"] =$($(this).find("select[name=car-location"+carId+"] option")[0]).text()
-        if(car["carAddressId"] == undefined){
-            car["carAddressId"] = " "
         }
         cars.push(car);
     });
@@ -639,4 +641,12 @@ function fillCustomer(data) {
     } else {
       $("input[name=postal]").val("");
     }
+}
+function resetCustomer(){
+    $("input[name=postal]").val("");
+    $("input[name=firstName]").val("");
+    $("input[name=lastName]").val("");
+    $('.has_quote option:eq(1)').prop('selected', false);
+    $(".has_quote").attr('disabled',false);
+
 }
