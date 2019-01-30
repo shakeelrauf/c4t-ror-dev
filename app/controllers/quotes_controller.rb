@@ -82,26 +82,24 @@ class QuotesController < ApplicationController
 
   def vehicle_search
     vehicles = vehicles_search(params[:limit], params[:offset], params[:q])
-    groups, item = [], {}
+    groups = []
     vehicles.each do |vehicle|
+      item = {}
       if vehicle["make"] == "Other"
         item["text"]= "Other"
       else
         item["text"] = vehicle["make"] + " " + vehicle["year"] + " " + vehicle["model"] + " " + vehicle["body"] + " " + vehicle["trim"] + " " + vehicle["transmission"] + " " + vehicle["drive"] + " " + vehicle["doors"] + " doors and " + vehicle["seats"] + " seats."
         item["id"] = vehicle["idVehiculeInfo"]
         created = false
-        i, length = 0, groups.length
-        while(i < length) do
-          if groups[i][:text] == vehicle["make"]
-            groups[i][:children].push(item)
+        groups.each do |i|
+          if i[:text].to_s == vehicle["make"].to_s
+            i[:children].push(item)
             created = true
-            i+=1
             break
           end
-          i+=1
         end
-        groups.push({text: vehicle["make"], children: [item]}) if !created
       end
+      groups.push({text: vehicle["make"], children: [item]}) if !created
     end
     returned = {}
     returned[:results] = groups
