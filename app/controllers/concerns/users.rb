@@ -22,6 +22,7 @@ module Users
         @user.phone = params[:phoneNumber]
         @user.isSuperadmin = params[:isSuperadmin]
         if @user.save
+          flash[:success] = 'User is successfully Created!'
           return render_json_response(@user, :ok)
         else @user.errors.any?
           return respond_json({:error => @user.errors.messages})
