@@ -111,5 +111,4 @@ class CustomersController < ApplicationController
   def all_heard_of_use
     Heardofus.all
   end
-
 end

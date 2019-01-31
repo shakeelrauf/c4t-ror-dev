@@ -25,5 +25,4 @@ class DistanceController < ApplicationController
       respond_json("-1")
     end
   end
-
 end
