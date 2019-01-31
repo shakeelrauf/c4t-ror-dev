@@ -81,7 +81,11 @@ class QuotesController < ApplicationController
   end
 
   def vehicle_search
-    vehicles = vehicles_search(params[:limit], params[:offset], params[:q])
+    limit =  15
+    offset = 0
+    limit = params[:limit] if params[:limit].present?
+    offset = (params[:page].to_i - 1) * limit if params[:page].present?
+    vehicles = vehicles_search(limit, offset, params[:q])
     groups = []
     vehicles.each do |vehicle|
       item = {}
@@ -104,7 +108,7 @@ class QuotesController < ApplicationController
     returned = {}
     returned[:results] = groups
     returned[:pagination] = {}
-    if(vehicles.length != 30)
+    if(vehicles.length < limit)
       returned[:pagination][:more] = false
     else
       returned[:pagination][:more] = true
