@@ -37,5 +37,4 @@ class CharitiesController < ApplicationController
   def charitie_params
     params.permit(:name, :email, :address, :phone, :info)
   end
-
 end
