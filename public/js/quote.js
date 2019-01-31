@@ -578,13 +578,14 @@ function saveCar(callback) {
           netPrice = price.netPrice;
         }
         var carAddressId = "";
-        if($(this).find("select[name=car-location"+carId+"] option").length > 1){
+        if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
             if($("#car-location"+carId).select2('data') != undefined){
                 if(Number.isInteger(Number($("select[name=car-location"+carId+"]").select2('data')[0].id))){
                     carAddressId = Number($("select[name=car-location"+carId+"]").select2('data')[0].id)
                 }
             }
         }
+        debugger
         car = {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),

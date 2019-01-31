@@ -131,11 +131,7 @@ module Quotesmethods
   end
 
   def update_quote_car_address car, quote_car, client
-    if quote_car.address.present?
-      ad = quote_car.address
-    else
-      ad = Address.new
-    end
+    ad = Address.new
     res = car["distance"]
     ad.postal = car["carPostal"]
     ad.city = car["carCity"]

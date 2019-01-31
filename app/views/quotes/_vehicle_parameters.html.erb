@@ -175,7 +175,7 @@
                 t += address.city + ", " if address.city && address.city.present?
                 t += address.province + ", " if address.province && address.province.present?
               %>
-              <option value="<%= car.address.postal %>" data-select2-tag='true'><%= t + car.address.postal %></option>
+              <option value="<%= car.address.idAddress %>" data-select2-tag='true'><%= t + car.address.postal %></option>
             <% end %>
           </select>
           <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
