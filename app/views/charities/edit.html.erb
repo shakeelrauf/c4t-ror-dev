@@ -48,8 +48,9 @@
                         <i class="icofont icofont-phone"></i>
                     </span>
                   <div class="md-input-wrapper">
-                    <input type="tel" name="phone" class="md-form-control md-static phone" value="<%= phone_number_display(@charitie["phone"]) if @charitie["phone"].present? %>">
+                    <input type="tel" name="phone" class="md-form-control md-static phone" value="<%= phone_number_display(Validations.remove_dashes_from_phone(@charitie["phone"])) if @charitie["phone"].present? %>">
                     <label>Phone <span class=""></span></label>
+
                   </div>
                 </div>
                 <div class="col-lg-10 md-group-add-on">
