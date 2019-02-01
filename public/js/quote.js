@@ -666,7 +666,7 @@ function saveCarAuto(callback) {
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "carAddressId":   (carAddressId),
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
-            "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
+            "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=still_driving"+carId+"]:checked").val() : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
             "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
