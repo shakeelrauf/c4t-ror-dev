@@ -123,10 +123,10 @@ $(document).ready(function() {
                     if(phone.length == 10) {
                         tag = {
                             id: "new" + Math.floor(Math.random() * 1000000000),
-                            text: updatePhoneNumber(params.term) + " New Customer",
+                            text: updatePhoneNumber(phone) + " New Customer",
                         }
                         data.results.forEach(function (no) {
-                            if (parseInt(no.text.replace(/-/g,'')) == parseInt(params.term)) {
+                            if (parseInt(no.text.replace(/-/g,'')) == parseInt(phone)) {
                                 found = true;
                             } else {
                                 resetCustomer()
@@ -590,11 +590,11 @@ function saveCar(callback) {
             "weight":         ($(this).attr("data-weight")),
             "missingWheels":  ($(this).find("input[name=wheels"+carId+"]").val()),
             "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
-            "missingCat":     ($(this).find("input[name=cat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
+            "missingCat":     ($("input[name=cat"+carId+"]:checked").val()),
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "carAddressId":   (carAddressId),
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
-            "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "0",
+            "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
             "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),

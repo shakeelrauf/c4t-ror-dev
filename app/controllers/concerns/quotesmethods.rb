@@ -32,11 +32,11 @@ module Quotesmethods
     quote
   end
 
-  def vehicles_search(limit, offset, q)
+  def vehicles_search(limit_p, offset_p, q)
     limit = 30
     offset = 0
-    limit = (limit.present? ? limit.to_i : 30)
-    offset = ((offset.to_i) * limit) if offset != "-1"
+    limit = (limit_p.present? ? limit_p.to_i : 30)
+    offset = offset_p.present? ? offset_p.to_i : 0
     if q.present?
       filter = + q.gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
