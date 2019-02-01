@@ -37,13 +37,15 @@ $(document).ready(function() {
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
                 createPostalSelect2($("#car-location"+car.idQuoteCars));
+
                 if($(".hiddenaddress").html().trim().length > 0){
                     var addresses = JSON.parse($(".hiddenaddress").html());
                     if(addresses.length == 1){
                         var address = addresses[0];
-                        $("#car-location"+car.idQuoteCars).append("<option value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
-                        $("#car-location"+car.idQuoteCars).select2('data', {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal });
-                        $("#car-location"+car.idQuoteCars).val(address.idAddress).trigger("change");
+                        $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                        $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
+                            data:  {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal }
+                        });
                         getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
                             $("#car-distance" + carId).val(distance);
                             updateCarWithDistance(distance, car.idQuoteCars);
@@ -577,11 +579,12 @@ function saveCar(callback) {
         if (price) {
           netPrice = price.netPrice;
         }
+        debugger
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
             if($("#car-location"+carId).select2('data') != undefined){
-                if(Number.isInteger(Number($("select[name=car-location"+carId+"]").select2('data')[0].id))){
-                    carAddressId = Number($("select[name=car-location"+carId+"]").select2('data')[0].id)
+                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"] option:last").val()))){
+                    carAddressId = Number($(this).find("select[name=car-location"+carId+"] option:last").val())
                 }
             }
         }
