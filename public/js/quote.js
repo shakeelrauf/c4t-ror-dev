@@ -605,6 +605,8 @@ function saveCar(callback) {
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
+        car["still_driving"] = $(this).find("input[name=still_driving"+carId+"]:checked").val()
+
         cars.push(car);
     });
     $.ajax({
