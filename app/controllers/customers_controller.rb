@@ -9,11 +9,6 @@ class CustomersController < ApplicationController
     @heard_of_us = all_heard_of_use
   end
 
-  def save_user
-    quote = Quote.where(idQuote: params[:quote_id]).first
-    quote.idClient =  params[:id] if quote.present?
-    quote.save!
-  end
 
   def create
     if check_params

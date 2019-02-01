@@ -463,6 +463,9 @@ function calcPrice(carId) {
             document.location = "/login?redirect=" + document.location;
         } else if (json.netPrice != null) {
             $("#tab"+carId).data('price', json);
+            saveCarAuto(function(e) {
+                console.log("saved")
+            })
             // Pricing details
             $("#weight"+carId).html(json.weight);
             $("#steelPrice"+carId).html(json.steelPrice);
@@ -576,7 +579,7 @@ function saveCar(callback) {
         var netPrice = null;
         var price = $(this).data('price');
         if (price) {
-          netPrice = price.netPrice;
+            netPrice = price.netPrice;
         }
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
@@ -618,20 +621,88 @@ function saveCar(callback) {
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
-      if (callback) {
-        callback(s);
-      } else {
-          if(s.error){
-            if(s.car){
-              $("#tab-a-"+s.car).click();
-              doGrowlingDanger(s.error);
+        if (callback) {
+            callback(s);
+        } else {
+            if(s.error){
+                if(s.car){
+                    $("#tab-a-"+s.car).click();
+                    doGrowlingDanger(s.error);
+                }else{
+                    doGrowlingDanger(s.error);
+                }
             }else{
-              doGrowlingDanger(s.error);
+                doGrowlingMessage("Saved");
             }
-          }else{
-              doGrowlingMessage("Saved");
-          }
-      }
+        }
+    }).catch(function(data) {
+        doGrowlingDanger(data.responseJSON.error);
+    });
+}
+function saveCarAuto(callback) {
+    var cars = [];
+    $(".card.tab-pane").each(function() {
+        var tab = $(this);
+        var carId = $(this).prop("id").substr(3);
+        var netPrice = null;
+        var price = $(this).data('price');
+        if (price) {
+            netPrice = price.netPrice;
+        }
+        var carAddressId = "";
+        if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
+            if($("#car-location"+carId).select2('data') != undefined){
+                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"] option:last").val()))){
+                    carAddressId = Number($(this).find("select[name=car-location"+carId+"] option:last").val())
+                }
+            }
+        }
+        car = {
+            "car": carId,
+            "weight":         ($(this).attr("data-weight")),
+            "missingWheels":  ($(this).find("input[name=wheels"+carId+"]").val()),
+            "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
+            "missingCat":     ($("input[name=cat"+carId+"]:checked").val()),
+            "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
+            "carAddressId":   (carAddressId),
+            "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
+            "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
+            "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
+            "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
+            "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
+            "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
+            "price":          netPrice
+        }
+        cars.push(car);
+    });
+    $.ajax({
+        method: "POST",
+        url: "/quotes_save_without_validations",
+        data: {
+            "quote": quoteNo,
+            "cars": cars,
+            "phone": unformatPhone($("select[name=phone] option:selected").text()),
+            "firstName": $("input[name=firstName]").val(),
+            "lastName": $("input[name=lastName]").val(),
+            "heardofus": $("select[name=heardOfUs]").val(),
+            "postal": $("input[name=postal]").val(),
+            "note": CKEDITOR.instances['note_'].getData()
+        }
+    }).done(function(s) {
+        if (callback) {
+            callback(s);
+        } else {
+            if(s.error){
+                if(s.car){
+                    $("#tab-a-"+s.car).click();
+                    doGrowlingDanger(s.error);
+                }else{
+                    doGrowlingDanger(s.error);
+                }
+            }else{
+                doGrowlingMessage("Saved");
+            }
+        }
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
     });
@@ -648,11 +719,6 @@ function fillCustomer(data) {
     $(".car-location-select2").each(function(index) {
       createPostalSelect2($(this));
     });
-    $.ajax({
-        url: '/save_user',
-        type: "POST",
-        data: {id: data.idClient, quote_id: quoteNo}
-    })
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
