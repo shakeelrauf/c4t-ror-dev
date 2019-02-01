@@ -92,7 +92,7 @@ class QuotesController < ApplicationController
       if vehicle["make"] == "Other"
         item["text"]= "Other"
       else
-        item["text"] = vehicle["make"] + " " + vehicle["year"] + " " + vehicle["model"] + " " + vehicle["body"] + " " + vehicle["trim"] + " " + vehicle["transmission"] + " " + vehicle["drive"] + " " + vehicle["doors"] + " doors and " + vehicle["seats"] + " seats."
+        item["text"] = vehicle["make"].to_s + " " + vehicle["year"].to_s + " " + vehicle["model"].to_s + " " + vehicle["body"].to_s + " " + vehicle["trim"].to_s + " " + vehicle["transmission"].to_s + " " + vehicle["drive"].to_s + " " + vehicle["doors"].to_s + " doors and " + vehicle["seats"].to_s + " seats."
         item["id"] = vehicle["idVehiculeInfo"]
         created = false
         groups.each do |i|
