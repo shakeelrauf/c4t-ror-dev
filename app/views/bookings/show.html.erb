@@ -13,7 +13,7 @@
             <li class="breadcrumb-item">Clients</li>
             <li class="breadcrumb-item"><a href="/quotes"><%= "QUOTE" %></a></li>
             <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/edit"><%= "EDIT QUOTE" %></a></li>
-            <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/book"><%= "BOOK QUOTE" %></a></li>
+            <li class="breadcrumb-item"><a href="#"><%= "BOOK QUOTE" %></a></li>
           </ol>
         </div>
       </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="card col-lg-12">
           <div class="card-header">
-            <a href="/quotes/<%= quote.idQuote %>/pdf" target="_blank" class="btn btn-danger waves-effect d-inline-block f-right">
+            <a href="#" class="btn btn-danger waves-effect d-inline-block f-right">
               <i class="icofont icofont-file-pdf"></i>
               Envelop
             </a>
@@ -79,6 +79,7 @@
 <% content_for :js do %>
   <script>
       var quoteNo = "<%= quote.idQuote || nil %>";
+      $('.nav-item a:first').tab('show');
   </script>
   <%= public_js_path("book-quote.js") %>
   <%= public_js_path("common.js") %>
