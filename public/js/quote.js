@@ -463,7 +463,6 @@ function calcPrice(carId) {
             document.location = "/login?redirect=" + document.location;
         } else if (json.netPrice != null) {
             $("#tab"+carId).data('price', json);
-
             // Pricing details
             $("#weight"+carId).html(json.weight);
             $("#steelPrice"+carId).html(json.steelPrice);
@@ -579,7 +578,6 @@ function saveCar(callback) {
         if (price) {
           netPrice = price.netPrice;
         }
-        debugger
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
             if($("#car-location"+carId).select2('data') != undefined){
@@ -650,6 +648,11 @@ function fillCustomer(data) {
     $(".car-location-select2").each(function(index) {
       createPostalSelect2($(this));
     });
+    $.ajax({
+        url: '/save_user',
+        type: "POST",
+        data: {id: data.idClient, quote_id: quoteNo}
+    })
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);

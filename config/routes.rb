@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 	mount Ckeditor::Engine => '/ckeditor'
   root "dashboard#dashboard"
+  post "/save_user" => "customers#save_user"
   resources :address, only: [] do
   	member do
 	  	get :json
