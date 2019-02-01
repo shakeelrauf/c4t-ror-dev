@@ -171,8 +171,8 @@ $(document).ready(function() {
     });
 
     $(".btn-edit-customer").click(function() {
-        var clientId = $("select[name=phone]").val();
-        if(clientId == null) {
+        var clientId = Number($("select[name=phone]").val());
+        if(clientId == null || !Number.isInteger(clientId)) {
             window.open("/customers/new?firstName="+$("input[name=firstName]").val()+
             "&lastName="+$("input[name=lastName]").val()+
             "&postal="+$("input[name=postal]").val()+
@@ -585,7 +585,6 @@ function saveCar(callback) {
                 }
             }
         }
-        debugger
         car = {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),
