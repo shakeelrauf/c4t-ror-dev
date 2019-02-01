@@ -126,7 +126,7 @@ $(document).ready(function() {
                             text: updatePhoneNumber(phone) + " New Customer",
                         }
                         data.results.forEach(function (no) {
-                            if (parseInt(no.text.replace(/-/g,'')) == parseInt(params.term)) {
+                            if (parseInt(no.text.replace(/-/g,'')) == parseInt(phone)) {
                                 found = true;
                             } else {
                                 resetCustomer()
