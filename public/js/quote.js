@@ -123,7 +123,7 @@ $(document).ready(function() {
                     if(phone.length == 10) {
                         tag = {
                             id: "new" + Math.floor(Math.random() * 1000000000),
-                            text: updatePhoneNumber(params.term) + " New Customer",
+                            text: updatePhoneNumber(phone) + " New Customer",
                         }
                         data.results.forEach(function (no) {
                             if (parseInt(no.text.replace(/-/g,'')) == parseInt(params.term)) {
