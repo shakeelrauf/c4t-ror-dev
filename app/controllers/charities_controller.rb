@@ -7,12 +7,11 @@ class CharitiesController < ApplicationController
 
   def create
     res = Charitie.new(charitie_params)
-    res.save
     if res.save
       flash[:success] = "Charity Created Successfully"
       redirect_to charities_path
     else
-      flash[:alert] = "Email is invalid."
+      flash.now[:alert] = "Email is invalid."
       render "new", locals: { charitie: res }
     end
   end
@@ -38,7 +37,7 @@ class CharitiesController < ApplicationController
       flash[:success] = "Charity Updated Successfully"
       redirect_to charities_path
     else
-      flash[:alert] = "Email is invalid."
+      flash.now[:alert] = "Email is invalid."
       render :edit, locals: { charitie: @charitie }
     end
   end
