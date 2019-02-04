@@ -299,16 +299,18 @@ function addCusAddress(address) {
           updatePhone($(this));
       });
     });
-
+      $("input[name=email]").rules('add', EMAIL_METHOD);
     $("#saveCustomerButton").click(function(e){
-      if(valid_fields() && $("#customer-form").valid()){
-          if($("#page_type").text().trim() == "New Customer"){
-            number_exist();
-          }
-          else{
-            all_number_validate();
-            $("#customer-form").submit()
-          }
+      if($("#customer-form").valid()){
+          if(valid_fields()){
+              if($("#page_type").text().trim() == "New Customer"){
+                number_exist();
+              }
+              else{
+                all_number_validate();
+                $("#customer-form").submit()
+              }
+            }
       }
       else{
         e.preventDefault();
