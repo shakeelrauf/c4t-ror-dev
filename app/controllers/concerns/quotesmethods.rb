@@ -75,7 +75,6 @@ module Quotesmethods
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
       client = save_customer params, phone, heard_of_us
-      Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
       carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
@@ -91,6 +90,7 @@ module Quotesmethods
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
+      Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
       return respond_json({message: "QuickQuote saved"})
     else
        return respond_json({error: "Please select atleast one car"})
@@ -149,12 +149,15 @@ module Quotesmethods
     client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
     address = client.address.first
     address = client.address.build if !address.present?
-    address.postal = params[:postal]
-    address.city =  " " if address.new_record?
-    address.address = " " if address.new_record?
-    address.province = " " if address.new_record?
-    address.distance = " " if address.new_record?
-    address.save!
+    postal_code = Validations.postal(params[:postal])
+    if (postal_code.length != 7)
+      address.postal = postal_code
+      address.city =  " " if address.new_record?
+      address.address = " " if address.new_record?
+      address.province = " " if address.new_record?
+      address.distance = " " if address.new_record?
+      address.save!
+    end
     client
   end
 end
