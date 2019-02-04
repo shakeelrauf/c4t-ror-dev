@@ -190,7 +190,7 @@ $(document).ready(function() {
     });
 
     function edit_for_new_customer(){
-      var number = $("select[name=phone]").text().trim().split(" ")[0];
+      var number = $(".selection").text().trim().split(" ")[0];
       $.ajax({
           method: "get",
           url: "/number_exist",
