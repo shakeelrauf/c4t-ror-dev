@@ -131,7 +131,8 @@ module Quotesmethods
   end
 
   def update_quote_car_address car, quote_car, client
-    ad = Address.new
+    ad = Address.where(postal: car["carPostal"],city: car["carCity"], province: car["carProvince"], address: car["carStreet"], idClient: client.idClient).first
+    ad = Address.new if ad.nil?
     res = car["distance"]
     ad.postal = car["carPostal"]
     ad.city = car["carCity"]
