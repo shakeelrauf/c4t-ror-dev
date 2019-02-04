@@ -39,7 +39,7 @@ $(document).ready(function() {
                 createPostalSelect2($("#car-location"+car.idQuoteCars));
                 if($(".hiddenaddress").html().trim().length > 0){
                     var addresses = JSON.parse($(".hiddenaddress").html());
-                    if(addresses.length == 1){
+                    if(addresses.length >= 1){
                         var address = addresses[0];
                         $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
                         $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
