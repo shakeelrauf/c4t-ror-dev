@@ -173,18 +173,46 @@ $(document).ready(function() {
 
     $(".btn-edit-customer").click(function() {
         var clientId = Number($("select[name=phone]").val());
-        if(clientId == 0 || clientId == null || !Number.isInteger(clientId)) {
+        if(clientId == 0 || clientId == null) {
             window.open("/customers/new?firstName="+$("input[name=firstName]").val()+
             "&lastName="+$("input[name=lastName]").val()+
             "&postal="+$("input[name=postal]").val()+
             "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
-        } else {
+        } else if (!isNaN(clientId)) {
             window.open("/customers/"+clientId+"/edit?firstName="+$("input[name=firstName]").val()+
             "&lastName="+$("input[name=lastName]").val()+
             "&postal="+$("input[name=postal]").val()+
             "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
         }
+        else{
+          edit_for_new_customer();
+        }
     });
+
+    function edit_for_new_customer(){
+      var number = $("select[name=phone]").text().trim().split(" ")[0];
+      $.ajax({
+          method: "get",
+          url: "/number_exist",
+          data: { phone: number },
+          dataType: "json",
+          async: false,
+          success: function(res){
+            if(res.client_id == null){
+              window.open("/customers/new?firstName="+$("input[name=firstName]").val()+
+              "&lastName="+$("input[name=lastName]").val()+
+              "&postal="+$("input[name=postal]").val()+
+              "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
+            }
+            else{
+              window.open("/customers/"+res.client_id.idClient+"/edit?firstName="+$("input[name=firstName]").val()+
+              "&lastName="+$("input[name=lastName]").val()+
+              "&postal="+$("input[name=postal]").val()+
+              "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
+            }
+          }
+      });
+    }
 
     $(".car-location-select2").each(function(index) {
       createPostalSelect2($(this));

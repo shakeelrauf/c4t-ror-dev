@@ -85,8 +85,9 @@ class CustomersController < ApplicationController
   end
 
   def number_exist
-    client = Customer.where(phone: Validations.remove_dashes_from_phone(params[:phone])).count
-    render json: { client: client }
+    client = Customer.where(phone: Validations.remove_dashes_from_phone(params[:phone]))
+    count = client.count
+    render json: { client: client, client_id: client.first}
   end
 
   private
