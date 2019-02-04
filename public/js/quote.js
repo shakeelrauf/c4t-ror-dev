@@ -174,7 +174,7 @@ $(document).ready(function() {
 
     $(".btn-edit-customer").click(function() {
         var clientId = Number($("select[name=phone]").val());
-        if(clientId == null || !Number.isInteger(clientId)) {
+        if(clientId == 0 || clientId == null || !Number.isInteger(clientId)) {
             window.open("/customers/new?firstName="+$("input[name=firstName]").val()+
             "&lastName="+$("input[name=lastName]").val()+
             "&postal="+$("input[name=postal]").val()+
