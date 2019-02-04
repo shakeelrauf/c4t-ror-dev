@@ -81,9 +81,6 @@ class QuotesController < ApplicationController
   end
 
   def quotes_save_without_validations
-    return respond_json({:error => "Please send all required customer attributes."}) if (!params[:firstName].present? || !params[:lastName].present? || !params[:postal].present? || !params[:heardofus].present? || !params[:phone].present?)
-    postal_code = Validations.postal(params[:postal])
-    return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
     return respond_json({:error => "phone number length must be at least 10 digits."}) if (phone.to_s.length < 10)
     carList = []
@@ -104,10 +101,6 @@ class QuotesController < ApplicationController
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
           car_postal_code = Validations.postal(carList[car]["carPostal"])
-          return respond_json({:error => "Invalid Car Postal Code", car:  carList[car]["car"]}) if  (car_postal_code.length != 7)
-          return respond_json({:error => "Missing Car city", car:  carList[car]["car"]}) if  (car_postal_code.present? && !carList[car]["carCity"].present?)
-          return respond_json({:error => "Missing Car Street", car:  carList[car]["car"]}) if  ( car_postal_code.present? && !carList[car]["carStreet"].present?)
-          return respond_json({:error => "Missing Car Province", car:  carList[car]["car"]}) if  (car_postal_code.present? && !carList[car]["carProvince"].present?)
           update_quote_car_address carList[car], quote_car, client if carList[car]["carPostal"].present?
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?

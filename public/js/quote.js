@@ -37,7 +37,6 @@ $(document).ready(function() {
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
                 createPostalSelect2($("#car-location"+car.idQuoteCars));
-
                 if($(".hiddenaddress").html().trim().length > 0){
                     var addresses = JSON.parse($(".hiddenaddress").html());
                     if(addresses.length == 1){
@@ -46,6 +45,7 @@ $(document).ready(function() {
                         $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
                             data:  {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal }
                         });
+                        $("#car-location"+car.idQuoteCars).val(address.idAddress)
                         getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
                             $("#car-distance" + carId).val(distance);
                             updateCarWithDistance(distance, car.idQuoteCars);
@@ -83,7 +83,6 @@ $(document).ready(function() {
                 calcPrice(car.idQuoteCars,car.idQuote);
                 $('#txtVehicleFilter').html("");
                 callModal();
-                $("#car-location" + car.idQuoteCars).val($(".hiddenaddress").data("customeraddress"))
                 $(".selectcashcar .select2-selection__rendered").html("");
                 // Make the car postal selecter a select2
                 // createPostalSelect2($("#car-location" + car.idQuoteCars));
@@ -612,8 +611,8 @@ function saveCar(callback) {
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
             if($("#car-location"+carId).select2('data') != undefined){
-                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"] option:last").val()))){
-                    carAddressId = Number($(this).find("select[name=car-location"+carId+"] option:last").val())
+                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id))){
+                    carAddressId = Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id)
                 }
             }
         }
@@ -682,8 +681,8 @@ function saveCarAuto(callback) {
         var carAddressId = "";
         if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
             if($("#car-location"+carId).select2('data') != undefined){
-                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"] option:last").val()))){
-                    carAddressId = Number($(this).find("select[name=car-location"+carId+"] option:last").val())
+                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id))){
+                    carAddressId = Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id)
                 }
             }
         }
