@@ -194,7 +194,7 @@ $(document).ready(function() {
       $.ajax({
           method: "get",
           url: "/number_exist",
-          data: { phone: number },
+          data: { phone: $(".selection").text().trim().split(" ")[0] },
           dataType: "json",
           async: false,
           success: function(res){
