@@ -283,6 +283,7 @@ function createPostalSelect2(s) {
         showCarNewAddress(postal, carId);
       });
     }
+    calcPrice(carId)
   });
 }
 
@@ -548,21 +549,22 @@ function calcPrices() {
 
 function sumTotal() {
     var totalPrice = 0;
+    // Update the list price
     // $(".row.tab-content.tab-content-details.vehicle-parameters > .tab-pane").each(function() {
     $(".tab-pane").each(function() {
       if ($(this).hasClass("car-pane")) {
-        const carId = $(this).attr("id").substr(3);
-        const tab = $(this);
-        const vehId = $(tab).attr("class").substr($(tab).attr("class").indexOf("veh-")+4).split(" ")[0];
+        var carId = $(this).attr("id").substr(3);
+        var tab = $(this);
+        var vehId = $(tab).attr("class").substr($(tab).attr("class").indexOf("veh-")+4).split(" ")[0];
 
         var d = $("#tab"+carId).data('price');
-        if (d && d.netPrice) {
+
+          if (d && d.netPrice) {
           var netPrice     = d.netPrice;
           var dropoffPrice = d.dropoffPrice;
           var pickupPrice  = d.pickupPrice;
 
           totalPrice += Math.max(netPrice, 0.0);
-
           // Update the list price
           $("#car-price-dropoff-" + carId).html(toDollar(dropoffPrice) + " $");
           $("#car-price-pickup-" + carId).html(toDollar(pickupPrice) + " $");
