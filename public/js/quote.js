@@ -647,6 +647,8 @@ function saveCar(callback) {
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
+            "phoneType": $("select[name=phoneType]").val(),
+            "customerType": $("select[name=customerType]").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
@@ -752,6 +754,7 @@ function fillCustomer(data) {
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
+    $("select[name=customerType]").val(data.type);
     $(".hiddenaddress").html(JSON.stringify(data.address))
     if (data.quotes.length >= 1) {
       $('.has_quote option:eq(1)').prop('selected', true);
