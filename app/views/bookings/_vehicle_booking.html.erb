@@ -117,7 +117,9 @@
         </div>
       </div>
     </div>
-    <div class="row" style="padding-bottom:10px">
+
+    <!-- remove d-none class to restore previous fields -->
+    <div class="row d-none" style="padding-bottom:10px">
       <div class="col-lg-4">
         <h6>Color</h6>
       </div>
@@ -143,7 +145,10 @@
         </div>
       </div>
     </div>
-    <div class="row" style="padding-bottom:10px">
+
+
+
+    <div class="row d-none" style="padding-bottom:10px">
       <div class="col-lg-4">
         <h6>O/S Name</h6>
       </div>
@@ -171,16 +176,24 @@
     </div>
     <div class="row" style="padding-bottom:10px">
       <div class="col-lg-4">
+        <h6>Color</h6>
+      </div>
+      <div class="col-lg-4">
         <h6>Time booked</h6>
       </div>
       <div class="col-lg-4">
         <h6>Date booked</h6>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-4 d-none">
         <h6>Is Car Towable?</h6>
       </div>
     </div>
     <div class="row">
+      <div class="col-lg-4 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="color-<%= car["idQuoteCars"] %>" value="<%= car["color"] %>"/>
+        </div>
+      </div>
       <div class="col-lg-4 md-input-wrapper">
         <div class="col-lg-6">
           <select id="timeBooked-<%= car["idQuoteCars"] %>" name="timeBooked-<%= car["idQuoteCars"] %>" class="md-form-control md-static">
@@ -200,7 +213,7 @@
           <input type="text" class="date-field" name="dateBooked-<%= car["idQuoteCars"] %>" value="<%= car["dateBooked"] %>"/>
         </div>
       </div>
-      <div class="col-lg-4 md-input-wrapper">
+      <div class="col-lg-4 md-input-wrapper d-none">
         <div class="col-lg-6">
           <input type="radio" name="isTowable-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio towable-select" <%= (car["isTowable"] == "1") ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
@@ -210,21 +223,24 @@
         </div>
       </div>
     </div>
+
+
+
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-6 d-none">
         <h6>Car Notes</h6>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-12">
         <h6>Driver Notes</h6>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6 d-none">
         <div class="mmd-group-add-on cashcheckdiv">
           <div class="md-input-wrapper">
             <textarea name="carNotes-<%= car["idQuoteCars"] %>" rows="3" cols="50"><%= car["carNotes"] %></textarea>
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-12">
         <div class="mmd-group-add-on cashcheckdiv">
           <div class="md-input-wrapper">
             <textarea name="driverNotes-<%= car["idQuoteCars"] %>" rows="3" cols="50"><%= car["driverNotes"] %></textarea>
