@@ -1,6 +1,30 @@
 $(document).ready(function() {
-
   $('.nav-item').eq(0).click();
+    $('.payment-select').on('change', function() {
+        var id =  $(this).data("id");
+        var value =  this.value;
+        hideOrShow(id, value)
+
+    });
+    $(".payment-select").each(function () {
+        var id =  $(this).data("id");
+        var value =  this.value;
+        hideOrShow(id, value)
+    })
+    function hideOrShow(id, value){
+        if(value == "eft"){
+            $(".customer_email"+id).show()
+            $("#customer_email"+id+"-error").show()
+        }else{
+            $(".customer_email"+id).hide()
+            $("#customer_email"+id+"-error").hide()
+        }
+    }
+    $("#the_form").validate()
+    $(".customer_emails").each(function () {
+       $(this).rules("add", "required");
+       $(this).rules("add", EMAIL_METHOD);
+    });
   $('.date-field').dateDropper(
     { format: 'Y-m-d' }
   );
@@ -144,18 +168,20 @@ function gotoEditQuote(quoteId) {
 
 function saveBooking(callback) {
   var serialized = $("#the_form").serializeArray();
+  if($("#the_form").valid()){
+      apost({
+          method: "POST",
+          url: "/bookings",
+          data: serialized
+      }, function(data) {
+          if (callback) {
+              callback();
+          } else {
+              doGrowlingMessage(data.message);
+          }
+      });
+  }
 
-  apost({
-    method: "POST",
-    url: "/bookings",
-    data: serialized
-  }, function(data) {
-      if (callback) {
-        callback();
-      } else {
-        doGrowlingMessage(data.message);
-      }
-  });
 }
 
 function scheduleBooking(quoteId) {
