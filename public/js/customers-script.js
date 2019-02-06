@@ -227,7 +227,7 @@ function addCusAddress(address) {
    function company_validates(){
       var flag = true;
       if(!$(".company-data").hasClass("force-hidden")){
-         $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST').filter(function() {
+         $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST, #txtFlat').filter(function() {
           if (this.value == '') {
             flag = false;
             return false;

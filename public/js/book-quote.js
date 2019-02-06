@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  $('.nav-item').eq(0).click();
     $('.payment-select').on('change', function() {
         var id =  $(this).data("id");
         var value =  this.value;

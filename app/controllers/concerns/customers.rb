@@ -86,7 +86,8 @@ module Customers
       description: params[:description],
       contactPosition: params[:contactPosition],
       pstTaxNo: params[:pstTaxNo],
-      gstTaxNo: params[:gstTaxNo]})
+      gstTaxNo: params[:gstTaxNo],
+      usersFlatFee: params[:usersFlatFee]})
     busi
   end
 
@@ -126,7 +127,8 @@ module Customers
                   description: params[:description],
                   contactPosition: params[:contactPosition],
                   pstTaxNo: params[:pstTaxNo],
-                  gstTaxNo: params[:gstTaxNo])
+                  gstTaxNo: params[:gstTaxNo],
+                  usersFlatFee: params[:usersFlatFee])
   end
 
   def find_address(a, id)
@@ -151,7 +153,8 @@ module Customers
                             description: params[:description],
                             contactPosition: params[:contactPosition],
                             pstTaxNo: params[:pstTaxNo],
-                            gstTaxNo: params[:gstTaxNo])
+                            gstTaxNo: params[:gstTaxNo],
+                            usersFlatFee: params[:usersFlatFee])
     busi
   end
 
@@ -189,7 +192,7 @@ module Customers
   end
 
   def required_params
-    !params[:type].eql?("Individual") && (!params[:name] || !params[:description] || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo])
+    !params[:type].eql?("Individual") && (!params[:name] || !params[:description] || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo] || !params[:usersFlatFee])
   end
 
 end
