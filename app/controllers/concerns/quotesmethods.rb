@@ -93,7 +93,7 @@ module Quotesmethods
       Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
       return respond_json({message: "QuickQuote saved"})
     else
-       return respond_json({error: "Please select atleast one car"})
+       return respond_json({error: "Please select at least one car"})
     end
   end
 
