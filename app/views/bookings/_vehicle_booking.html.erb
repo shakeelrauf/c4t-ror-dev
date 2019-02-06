@@ -248,5 +248,28 @@
         </div>
       </div>
     </div><!-- row -->
+
+    <div class="row" style="padding-bottom:10px">
+      <div class="col-lg-6">
+        <h6>Payment Method</h6>
+      </div>
+      <div class="col-lg-6">
+        <h6 id="customer_email<%=car["idQuoteCars"] %>"  class="customer_email<%=car["idQuoteCars"] %>">Customer email</h6>
+      </div>
+
+      <div class="col-lg-6 md-input-wrapper">
+        <select name="payment_method-<%= car["idQuoteCars"] %>" data-id="<%=car["idQuoteCars"] %>" class="md-form-control md-static payment-select">
+          <option value="">Select a payment method</option>
+          <option value="cash" <%= (car["payment_method"] == 'cash' ? 'selected' : '') %>>Cash</option>
+          <option value="check"     <%= (car["payment_method"] == 'check' ? 'selected' : '') %>>Check</option>
+          <option value="eft"     <%= (car["payment_method"] == 'eft' ? 'selected' : '') %>>EFT</option>
+        </select>
+      </div>
+      <div class="col-lg-6 md-input-wrapper">
+        <div class="col-lg-6">
+          <input type="text" name="customer_email-<%= car["idQuoteCars"] %>" value="<%= car["customer_email"]%>" class="customer_email<%=car["idQuoteCars"] %> customer_emails" id="customer_email<%=car["idQuoteCars"] %>">
+        </div>
+      </div>
+    </div>
   </div>
 </div>

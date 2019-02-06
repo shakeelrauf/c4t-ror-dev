@@ -20,7 +20,8 @@ module Bookingmethods
                     color: params["color-#{id}"],receipt: params["receipt-#{id}"],vin: params["vin-#{id}"],
                     ownershipName: params["ownershipName-#{id}"],ownershipAddress: params["ownershipAddress-#{id}"],
                     cashRegular: cash,timeBooked: params["timeBooked-#{id}"],dateBooked: date,
-                    carNotes: params["carNotes-#{id}"],driverNotes: params["driverNotes-#{id}"])
+                    carNotes: params["carNotes-#{id}"],driverNotes: params["driverNotes-#{id}"],
+                    payment_method: params["payment_method-#{id}"],customer_email: params["customer_email-#{id}"])
       end
     end
     return respond_json({message: "Booking Saved."})
