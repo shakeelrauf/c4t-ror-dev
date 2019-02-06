@@ -33,6 +33,7 @@ class BookingsController < ApplicationController
       cars_formated[i]["dateBooked"] = car.dateBooked
       cars_formated[i]["carNotes"] = car.carNotes
       cars_formated[i]["driverNotes"] = car.driverNotes
+      cars_formated[i]["platesOn"] = car.platesOn
     end
     locals =  {user: current_user, quote: quote, cars: cars_formated, charities: charities, heardsofus: heardofus}
     render :show, locals: locals
