@@ -80,7 +80,8 @@ class Customer < ApplicationRecord
 			  "description":      params[:description],
 			  "contactPosition":  params[:contactPosition],
 			  "pstTaxNo":         params[:pstTaxNo],
-			  "gstTaxNo":         params[:gstTaxNo]
+			  "gstTaxNo":         params[:gstTaxNo],
+			  "usersFlatFee":     params[:usersFlatFee]
 			}
 		end
 

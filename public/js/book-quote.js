@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+  $('.nav-item').eq(0).click();
   $('.date-field').dateDropper(
     { format: 'Y-m-d' }
   );

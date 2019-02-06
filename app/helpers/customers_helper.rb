@@ -67,6 +67,10 @@ module CustomersHelper
   def business_gstax(customer)
     customer.try(:business).try(:gstTaxNo)
   end
+  
+  def business_usersFlatFee(customer)
+    customer.try(:business).try(:usersFlatFee)
+  end
 
   def customer_address(customer)
     customer.try(:address)
