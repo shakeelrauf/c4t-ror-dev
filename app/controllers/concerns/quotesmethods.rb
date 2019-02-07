@@ -81,6 +81,7 @@ module Quotesmethods
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
           address = Address.find_by_id(carList[car]["carAddressId"])
+          address.update(idClient: client.idClient) if params[:new_customer] == true
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
           car_postal_code = Validations.postal(carList[car]["carPostal"])
@@ -150,9 +151,9 @@ module Quotesmethods
   def save_customer params, phone, heard_of_us, customerType
     client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName], type: customerType},{phone: phone})
     address = client.address.first
-    address = client.address.build if !address.present?
     postal_code = Validations.postal(params[:postal])
-    if (postal_code.length != 7)
+    address =  client.address.build  if (params[:new_customer] == true) && address.nil?
+    if (!address.nil? && postal_code.length != 7)
       address.postal = postal_code
       address.city =  " " if address.new_record?
       address.address = " " if address.new_record?

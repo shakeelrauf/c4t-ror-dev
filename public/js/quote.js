@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+    var new_data = false;
     $('#txtVehicleFilter').select2({
         dataType: 'json',
         ajax: {
@@ -37,7 +38,24 @@ $(document).ready(function() {
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
                 createPostalSelect2($("#car-location"+car.idQuoteCars));
-                if($(".hiddenaddress").html().trim().length > 0){
+                if(new_data==true){
+                    var address = {id: 'new', text: $("input[name=postal]").val()}
+                    if(address.text != "") {
+                        if (address.text.trim().replace(/\s/g, '').length == 6){
+                            $("#car-location" + car.idQuoteCars).append("<option data-select2-tag='true' value=" + address.id + " selected>" + address.text + "</option>");
+                            $("#car-location" + car.idQuoteCars).data('select2').trigger('select', {
+                                data: {id: address.id, text: address.text}
+                            });
+                            $("#car-location" + car.idQuoteCars).val(address.id)
+                            getDistanceForCar(address.text, car.idQuoteCars, function (distance, carId) {
+                                $("#car-distance" + carId).val(distance);
+                                updateCarWithDistance(distance, car.idQuoteCars);
+                                showCarNewAddress(address.text, carId);
+                            });
+                        }
+                    }
+                }
+                if(($("select[name=phone]").select2('data')[0] != undefined) && Number.isInteger(Number($("select[name=phone]").select2('data')[0].id)) && $(".hiddenaddress").html().trim().length > 0){
                     var addresses = JSON.parse($(".hiddenaddress").html());
                     if(addresses.length >= 1){
                         var address = addresses[0];
@@ -133,10 +151,14 @@ $(document).ready(function() {
                             if (parseInt(no.text.replace(/-/g,'')) == parseInt(phone)) {
                                 found = true;
                             } else {
+                                $("#new_customer").val(false)
+                                new_data = false;
                                 resetCustomer()
                             }
                         });
                         if (!found) {
+                            new_data = true;
+                            $("#new_customer").val(true)
                             data.results.push(tag)
                             resetCustomer()
                         }
@@ -146,12 +168,17 @@ $(document).ready(function() {
 
                         }
                     }else{
+                        $("#new_customer").val(false)
+                        new_data = false;
+
                         return {
                             results: data.results,
                             pagination:  data.pagination
                         }
                     }
                 }else{
+                    $("#new_customer").val(false)
+                    new_data = false;
                     return {
 
                         results: data.results,
@@ -654,6 +681,7 @@ function saveCar(callback) {
             "postal": $("input[name=postal]").val(),
             "phoneType": $("select[name=phoneType]").val(),
             "customerType": $("select[name=customerType]").val(),
+            "new_customer": $("#new_customer").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
@@ -722,6 +750,9 @@ function saveCarAuto(callback) {
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
+            "phoneType": $("select[name=phoneType]").val(),
+            "customerType": $("select[name=customerType]").val(),
+            "new_customer": $("#new_customer").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
