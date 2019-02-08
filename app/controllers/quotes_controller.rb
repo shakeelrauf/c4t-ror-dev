@@ -92,7 +92,7 @@ class QuotesController < ApplicationController
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
     if !carList.nil?
-      client = save_customer params, phone, heard_of_us, params[:customerType]
+      client = save_customer params, phone, heard_of_us, params[:phoneType], params[:customerType]
       Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
       carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
