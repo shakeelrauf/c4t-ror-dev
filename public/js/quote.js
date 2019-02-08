@@ -546,7 +546,6 @@ function calcPrice(carId) {
             // $("#pickup"+carId).html(json.pickup);
 
             $("#carPrice"+carId).html(json.carPrice);
-
             sumTotal();
         }
     });
@@ -586,8 +585,7 @@ function sumTotal() {
         var vehId = $(tab).attr("class").substr($(tab).attr("class").indexOf("veh-")+4).split(" ")[0];
 
         var d = $("#tab"+carId).data('price');
-
-          if (d && d.netPrice) {
+          if (d && (d.netPrice != undefined)) {
           var netPrice     = d.netPrice;
           var dropoffPrice = d.dropoffPrice;
           var pickupPrice  = d.pickupPrice;
