@@ -138,8 +138,6 @@ $(document).ready(function() {
             },
             processResults: function(data, params) {
                 if(params.term){
-                    $("#phone_type").addClass("hidden");
-                    $("#customer_type").addClass("hidden");
                     var found = false;
                     var phone = unformatPhone(params.term)
                     if(phone.length == 10) {
@@ -782,8 +780,6 @@ function gotoListOfQuotes() {
 
 function fillCustomer(data) {
 
-    $("#phone_type").addClass("hidden");
-    $("#customer_type").addClass("hidden");
     $(".car-location-select2").each(function(index) {
       createPostalSelect2($(this));
     });
@@ -791,7 +787,7 @@ function fillCustomer(data) {
     $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
-    // $("select[name=customerType]").val(data.type);
+    $("select[name=customerType]").val(data.type);
     $(".hiddenaddress").html(JSON.stringify(data.address))
     if (data.quotes.length >= 1) {
       $('.has_quote option:eq(1)').prop('selected', true);
@@ -808,11 +804,10 @@ function fillCustomer(data) {
     }
 }
 function resetCustomer(){
-    $("#phone_type").removeClass("hidden");
-    $("#customer_type").removeClass("hidden");
     $("input[name=postal]").val("");
     $("input[name=firstName]").val("");
     $("input[name=lastName]").val("");
+    $("select[name=customerType]").val("");
     $('.has_quote option:eq(1)').prop('selected', false);
     $(".has_quote").attr('disabled',false);
 
