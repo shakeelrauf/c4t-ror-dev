@@ -58,8 +58,10 @@
       <div class="md-input-wrapper cashradio">
         <label>Uses Flat Fee <span class="required">*</span></label>
         <br>
+        <div class="cash-check-filed">
          <input type="radio"  value="true" name="usersFlatFee" id="txtFlat" <%= business_usersFlatFee(@customer) == true ? 'checked' : '' %>> Yes 
-         <input type="radio"  value="false" name="usersFlatFee" id="txtFlat1"  <%= business_usersFlatFee(@customer) == false ? 'checked' : '' %>> No 
+         <input type="radio"  value="false" name="usersFlatFee" id="txtFlat1"  <%= business_usersFlatFee(@customer) == false ? 'checked' : '' %>> No
+        </div> 
       </div>
   </div>
 </div>
