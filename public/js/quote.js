@@ -792,6 +792,8 @@ function fillCustomer(data) {
     if (data.quotes.length >= 1) {
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);
+      $("select[name=customerType]").attr('disabled',true);
+      $("select[name=phoneType]").attr('disabled',true);
       $("select[name=heardOfUs]").val("Repeat Customer");
     } else {
       $(".has_quote").attr('disabled',false);
@@ -808,6 +810,7 @@ function resetCustomer(){
     $("input[name=firstName]").val("");
     $("input[name=lastName]").val("");
     $("select[name=customerType]").val("");
+    $("select[name=phoneType]").val("");
     $('.has_quote option:eq(1)').prop('selected', false);
     $(".has_quote").attr('disabled',false);
 
