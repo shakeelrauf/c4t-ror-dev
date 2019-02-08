@@ -1,4 +1,12 @@
 $(document).ready(function() {
+  $("body").on("click", ".date-booked-field", function(){
+    $(".dd-s").text("✔");
+  });
+  $("body").on("mouseover", ".dd-fadein", function(){
+    $(".dd-n-left").text("<");
+    $(".dd-n-right").text(">");
+    $(".dd-s").text("✔");
+  })
   $('.nav-item').eq(0).click();
     $('.payment-select').on('change', function() {
         var id =  $(this).data("id");
