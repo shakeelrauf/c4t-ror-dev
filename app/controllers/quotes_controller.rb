@@ -58,7 +58,7 @@ class QuotesController < ApplicationController
     r[:missingWheelsCost] = quote["wheelPrice"].to_f
     r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
     r[:pickupCost] = quote["pickup"].to_f
-    r[:carPrice] = netPrice.to_f
+    r[:carPrice] = '%.2f' % netPrice.to_f
     respond_json(r)
   end
 

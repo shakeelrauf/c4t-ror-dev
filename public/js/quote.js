@@ -37,7 +37,9 @@ $(document).ready(function() {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
-                createPostalSelect2($("#car-location"+car.idQuoteCars));
+                $(".car-location-select2").each(function(index) {
+                    createPostalSelect2($(this));
+                });
                 if(new_data==true){
                     var address = {id: 'new', text: $("input[name=postal]").val()}
                     if(address.text != "") {
@@ -268,13 +270,12 @@ function createPostalSelect2(s) {
             $("input[name=car-postal" + carId +" ]").text(postal)
             return null;
         }
-        // Get the distance to this postal code
-        getDistanceForCar(postal, carId, function(distance, carId) {
-          $("#car-distance" + carId).val(distance);
-          updateCarWithDistance(distance, carId);
-          resetAddress(carId)
-          showCarNewAddress(postal, carId);
-        });
+        // getDistanceForCar(postal, carId, function(distance, carId) {
+        //   $("#car-distance" + carId).val(distance);
+        //   updateCarWithDistance(distance, carId);
+        //   resetAddress(carId)
+        //   showCarNewAddress(postal, carId);
+        // });
         return {
             id: postal,
             text: postal,
@@ -293,9 +294,7 @@ function createPostalSelect2(s) {
               return query;
           }
       }
-  });
-
-  s.on('select2:select', function (e) {
+  }).on('select2:select', function (e) {
     var addressId = $(this).val();
     if (!isNaN(parseInt(addressId))) {
       getDistanceForAddress(addressId, carId, function(distance, carId) {
@@ -768,6 +767,9 @@ function saveCarAuto(callback) {
         }
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
+    });
+    $(".car-location-select2").each(function(index) {
+        createPostalSelect2($(this));
     });
 }
 
