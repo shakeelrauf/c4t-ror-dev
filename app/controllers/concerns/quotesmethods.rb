@@ -63,7 +63,19 @@ module Quotesmethods
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
-    phoneType = params[:phoneType]
+    if params[:phoneType] == "primary"
+      phoneType = phone
+      phoneType_1 = " "
+      phoneType_2 = " "
+    elsif params[:phoneType] == "cell"
+      phoneType = " "
+      phoneType_1 = phone
+      phoneType_2 = " "
+    elsif params[:phoneType] == "other"
+      phoneType = " "
+      phoneType_1 = " "
+      phoneType_2 = phone
+    end
     customerType = params[:customerType]
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
@@ -76,7 +88,7 @@ module Quotesmethods
         return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
-      client = save_customer params, phone, heard_of_us, phoneType, customerType
+      client = save_customer params, heard_of_us, phoneType, phoneType_1, phoneType_2, customerType
       carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
@@ -148,8 +160,8 @@ module Quotesmethods
     quote_car.save!
   end
 
-  def save_customer params, phone, heard_of_us, phoneType, customerType
-    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone, phone_type: phoneType, firstName: params[:firstName],lastName: params[:lastName], type: customerType},{phone: phone})
+  def save_customer params, heard_of_us, phoneType, phoneType1, phoneType2, customerType
+    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
     address =  client.address.build  if (params[:new_customer] == true) && address.nil?
