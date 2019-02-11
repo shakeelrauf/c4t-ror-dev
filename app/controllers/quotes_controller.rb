@@ -286,17 +286,17 @@ class QuotesController < ApplicationController
 
   def bonus_price(setting,value,net_price)
     if setting.first.value == "flatfee"
-      price = ["flatfee", value.first.value]
+      price = ["flatfee", '%.2f' % value.first.value.to_f]
     elsif setting.first.value == "card"
       price = ["carprice", value.first.value]
     elsif setting.first.value == "carp"
-      percentage = (net_price[:carPrice].to_f * value.first.value.to_f)/100
+      percentage = '%.2f' % (net_price[:carPrice].to_f * value.first.value.to_f)/100
       price = ["carprice", percentage]
     elsif setting.first.value == "steelp"
-      percentage = (net_price[:steelPrice].to_f * value.first.value.to_f)/100
+      percentage = '%.2f' % (net_price[:steelPrice].to_f * value.first.value.to_f)/100
       price = ["steelprice", percentage]
     elsif setting.first.value == "steeld"
-      price = ["steelprice", value.first.value]
+      price = ["steelprice",'%.2f' % value.first.value.to_f]
     end
     return price
   end
