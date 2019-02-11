@@ -156,8 +156,10 @@ module Quotesmethods
     ad.address = car["carStreet"]
     ad.distance = res
     ad.save!
+    @add = Address.where(idAddress: quote_car.idAddress).first if quote_car.idAddress.present?
     quote_car.idAddress = ad.idAddress
     quote_car.save!
+    @add.destroy if @add.idAddress != quote_car.idAddress
   end
 
   def save_customer params, heard_of_us, phoneType, phoneType1, phoneType2, customerType
