@@ -85,7 +85,7 @@ class QuotesController < ApplicationController
           r[:pickupCost] = quote["pickup"].to_f
           r[:carPrice] = '%.2f' % bonus[1].to_f
         elsif bonus[0] == "carprice"
-          r[:carPrice] = '%.2f' % (netPrice.to_f + bous[1].to_f )
+          r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[1].to_f )
           r[:netPrice] =  r[:netPrice].to_f + bonus[1].to_f
         # elsif bonus[0] == "custom"
         #   r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[1].to_f )
