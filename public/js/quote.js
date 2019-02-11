@@ -814,6 +814,8 @@ function resetCustomer(){
     $("select[name=customerType]").val("");
     $("select[name=phoneType]").val("");
     $('.has_quote option:eq(1)').prop('selected', false);
+    $("select[name=customerType]").attr('disabled',false);
+    $("select[name=phoneType]").attr('disabled',false);
     $(".has_quote").attr('disabled',false);
 
 }
