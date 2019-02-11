@@ -290,10 +290,10 @@ class QuotesController < ApplicationController
     elsif setting.first.value == "card"
       price = ["carprice", value.first.value]
     elsif setting.first.value == "carp"
-      percentage = '%.2f' % (net_price[:carPrice].to_f * value.first.value.to_f)/100
+      percentage = '%.2f' % ((net_price[:carPrice].to_f * value.first.value.to_f)/100)
       price = ["carprice", percentage]
     elsif setting.first.value == "steelp"
-      percentage = '%.2f' % (net_price[:steelPrice].to_f * value.first.value.to_f)/100
+      percentage = '%.2f' % ((net_price[:steelPrice].to_f * value.first.value.to_f)/100)
       price = ["steelprice", percentage]
     elsif setting.first.value == "steeld"
       price = ["steelprice",'%.2f' % value.first.value.to_f]
