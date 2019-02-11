@@ -89,6 +89,8 @@ class QuotesController < ApplicationController
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
+    phoneType1 = " "
+    phoneType2 = " "
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
     if !carList.nil?
