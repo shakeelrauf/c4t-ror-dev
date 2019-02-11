@@ -63,7 +63,6 @@ module Quotesmethods
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
-    debugger
     if params[:phoneType] == "primary" || params[:phoneType] == ""
       phoneType = phone
       phoneType_1 = " "
