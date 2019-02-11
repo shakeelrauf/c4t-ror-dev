@@ -89,6 +89,7 @@
   <!-- Container-fluid ends -->
 </div>
 </div>
+
 <% content_for :js do %>
   <script>
       $(document).ready(function () {
@@ -128,6 +129,10 @@
                 tooltip: {
                     pointFormat: 'Heard about us: <b>{point.y:.1f} customers</b>'
                 },
+
+                  exporting: {
+                      showTable: true
+                  },
                 series: [{
                     name: 'Population',
                     data: heardofus,
