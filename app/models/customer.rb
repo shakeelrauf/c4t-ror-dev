@@ -19,15 +19,22 @@ class Customer < ApplicationRecord
 
 	def self.custom_upsert(options={},where={})
 		@custom = where(where).first
-		if @custom.present?
+		if @custom.present? && where.inspect != "{}"
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom =  new(options.merge(where))
-			@custom.attributes.each do |key, value|
-				@custom[key] = "" if value.nil?
+			@custom = where("phone = ? or cellPhone = ? or secondaryPhone = ?", options[:phone], options[:cellPhone], options[:secondaryPhone]).last
+			if @custom.present?
+				@custom.update(options)
+				@cutom = @cutom
+			else
+				@custom =  new(options.merge(where))
+				@custom.attributes.each do |key, value|
+					@custom[key] = "" if value.nil?
+				end
+				@custom.save!
 			end
-			@custom.save!
+
 		end
 		@custom
 	end
