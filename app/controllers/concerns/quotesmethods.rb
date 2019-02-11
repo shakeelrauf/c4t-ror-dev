@@ -164,6 +164,7 @@ module Quotesmethods
     client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
+    custom = Customer.where("phone = ? or cellPhone = ? or secondaryPhone = ?", phoneType, phoneType1, phoneType2).last
     address =  client.address.build  if (params[:new_customer] == true) && address.nil?
     if (!address.nil? && postal_code.length != 7)
       address.postal = postal_code
