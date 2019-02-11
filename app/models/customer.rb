@@ -7,6 +7,12 @@ class Customer < ApplicationRecord
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
 	has_many :quotes, class_name: 'Quote', foreign_key: 'idClient'
 
+	GET_HEARD_OF_COUNT = "SELECT heardsofus.type, COUNT(heardsofus.type ) AS count_heardsofus_type, `Clients`.`idHeardOfUs` AS clients_idheardofus FROM `Clients` INNER JOIN `HeardsOfUs` ON `HeardsOfUs`.`idHeardOfUs` = `Clients`.`idHeardOfUs` GROUP BY `Clients`.`idHeardOfUs`"
+
+	def self.customers_heardofus
+		self.run_sql_query(GET_HEARD_OF_COUNT)
+	end
+
 	def name
 		return self.firstName + ' ' + self.lastName
 	end
