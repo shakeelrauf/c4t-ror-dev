@@ -79,7 +79,7 @@
           <h5 class="card-header-text text-uppercase"> HOW PEOPLE HEAR ABOUT US? </h5>
         </div>
         <div class="card-block" style="padding: 10px;">
-          <div id="heardOfUs" style="height: 400px; width: 700px;"></div>
+          <div id="heardOfUs" style="height: 400px"></div>
         </div>
       </div>
     </div>
@@ -95,55 +95,58 @@
           var heardofus =<%= heardofus.to_json.to_s.html_safe %>;
 
 
-          Highcharts.chart('heardOfUs', {
-              chart: {
-                  type: 'column'
-              },
-              title: {
-                  text: 'HOW PEOPLE HEAR ABOUT US?'
-              },
-              // subtitle: {
-              //     text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
-              // },
-              xAxis: {
-                  type: 'category',
-                  labels: {
-                      rotation: -45,
-                      style: {
-                          fontSize: '13px',
-                          fontFamily: 'Verdana, sans-serif'
-                      }
-                  }
-              },
-              yAxis: {
-                  min: 0,
-                  title: {
-                      text: 'Count'
-                  }
-              },
-              legend: {
-                  enabled: false
-              },
-              tooltip: {
-                  pointFormat: 'Heard about us: <b>{point.y:.1f} customers</b>'
-              },
-              series: [{
-                  name: 'Population',
-                  data: heardofus,
-                  dataLabels: {
-                      enabled: true,
-                      rotation: -90,
-                      color: '#FFFFFF',
-                      align: 'right',
-                      format: '{point.y:.1f}', // one decimal
-                      y: 10, // 10 pixels down from the top
-                      style: {
-                          fontSize: '13px',
-                          fontFamily: 'Verdana, sans-serif'
-                      }
-                  }
-              }]
-          });
+          function hiChart() {
+              Highcharts.chart('heardOfUs', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'HOW PEOPLE HEAR ABOUT US?'
+                },
+                // subtitle: {
+                //     text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
+                // },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        rotation: -45,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Count'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: 'Heard about us: <b>{point.y:.1f} customers</b>'
+                },
+                series: [{
+                    name: 'Population',
+                    data: heardofus,
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        format: '{point.y:.1f}', // one decimal
+                        y: 10, // 10 pixels down from the top
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+          };
+          hiChart();
           // function donutChart() {
           //     $.plot("#heardOfUs", heardofus, {
           //         series: {
@@ -161,9 +164,9 @@
           //         }
           //     });
           // };
-          // $(window).resize(function () {
-          //     donutChart();
-          // });
+          $(window).resize(function () {
+              hiChart();
+          });
           // donutChart();
 
       });
