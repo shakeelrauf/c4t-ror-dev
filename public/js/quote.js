@@ -190,6 +190,10 @@ $(document).ready(function() {
     });
 
     $("select[name=phone]").on('select2:select', function (e) {
+      if($(".selection").text().trim().includes("New Customer")){
+        $("select[name=customerType]").val("Individual");
+      }
+        $("#new_customer_id").val("false");
         var clientId = $("select[name=phone]").select2('data')[0].id;
         if(Number.isInteger(Number(clientId))){
             $.ajax("/customers/id/" + clientId + "/json").done(client => {
@@ -724,9 +728,18 @@ function saveCar(callback) {
             "phoneType": $("select[name=phoneType]").val(),
             "customerType": $("select[name=customerType]").val(),
             "new_customer": $("#new_customer").val(),
+            "new_customer_id": $("#new_customer_id").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
+      if($(".selection").text().trim().includes("New Customer")){
+        if(s.q != undefined && s.q.idClient != undefined){
+          $("#new_customer_id").val(s.q.idClient);
+        }
+      }
+      else{
+        $("#new_customer_id").val("false");
+      }
         if (callback) {
             callback(s);
         } else {
@@ -795,9 +808,18 @@ function saveCarAuto(callback) {
             "phoneType": $("select[name=phoneType]").val(),
             "customerType": $("select[name=customerType]").val(),
             "new_customer": $("#new_customer").val(),
+            "new_customer_id": $("#new_customer_id").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
+        if($(".selection").text().trim().includes("New Customer")){
+          if(s != undefined && s.customer_id != undefined){
+            $("#new_customer_id").val(s.customer_id);
+          }
+        }
+        else{
+          $("#new_customer_id").val("false");
+        }
         if (callback) {
             callback(s);
         } else {
@@ -829,7 +851,6 @@ function gotoListOfQuotes() {
 }
 
 function fillCustomer(data) {
-
     $(".car-location-select2").each(function(index) {
       createPostalSelect2($(this));
     });

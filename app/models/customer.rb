@@ -23,18 +23,11 @@ class Customer < ApplicationRecord
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom = where("phone = ? or cellPhone = ? or secondaryPhone = ?", options[:phone], options[:cellPhone], options[:secondaryPhone]).last
-			if @custom.present?
-				@custom.update(options)
-				@cutom = @cutom
-			else
-				@custom =  new(options.merge(where))
-				@custom.attributes.each do |key, value|
-					@custom[key] = "" if value.nil?
-				end
-				@custom.save!
+			@custom =  new(options.merge(where))
+			@custom.attributes.each do |key, value|
+				@custom[key] = "" if value.nil?
 			end
-
+			@custom.save!
 		end
 		@custom
 	end

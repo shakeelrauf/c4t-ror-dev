@@ -36,7 +36,7 @@
         <div class="card col-lg-12">
           <div class="card-header">
             <button class="btn btn-primary waves-effect d-inline-block f-right btn-edit-customer">Edit Customer</button>
-            <h5 id="customer" data-id="<%= quote.customer.idClient if quote.customer.present? %>">Customer</h5>
+            <h5>Customer</h5>
           </div>
           <div class="card-block row">
             <div class="col-lg-12 md-group-add-on">
@@ -267,6 +267,7 @@
       <div class="modal-body">
         <div id="google_map" style="width:450px;height:400px;"></div>
         <input type="hidden" id="new_customer" value=false>
+        <input type="hidden" id="new_customer_id" value=false>
         <input type="hidden" id="us2-lat">
         <input type="hidden" id="us2-lon">
         <input type="hidden" id="us2-lon">

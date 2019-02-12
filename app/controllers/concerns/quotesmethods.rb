@@ -93,7 +93,7 @@ module Quotesmethods
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
           address = Address.find_by_id(carList[car]["carAddressId"])
-          address.update(idClient: client.idClient) if params[:new_customer] == true
+          address.update(idClient: client.idClient) if params[:new_customer] == "true"
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
           car_postal_code = Validations.postal(carList[car]["carPostal"])
@@ -105,8 +105,8 @@ module Quotesmethods
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
-      Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
-      return respond_json({message: "QuickQuote saved"})
+      q = Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
+      return respond_json({message: "QuickQuote saved" , q: q})
     else
        return respond_json({error: "Please select at least one car"})
     end
@@ -156,18 +156,29 @@ module Quotesmethods
     ad.address = car["carStreet"]
     ad.distance = res
     ad.save!
-    @add = Address.where(idAddress: quote_car.idAddress).first if quote_car.idAddress.present?
-    quote_car.idAddress = ad.idAddress
-    quote_car.save!
-    @add.destroy if @add.idAddress != quote_car.idAddress
+    @add = Address.where(idAddress: quote_car.idAddress).first if quote_car && quote_car.idAddress.present?
+    quote_car.idAddress = ad.idAddress if quote_car && quote_car.idAddress.present?
+    quote_car.save! if quote_car && quote_car.idAddress.present?
+    @add.destroy if quote_car && quote_car.idAddress.present? && @add.idAddress != quote_car.idAddress
   end
 
   def save_customer params, heard_of_us, phoneType, phoneType1, phoneType2, customerType
-    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
+    if (params[:new_customer] == "true" && params[:new_customer_id] != "false")
+      client = Customer.where(idClient: params[:new_customer_id]).first
+      client.idHeardOfUs = heard_of_us.idHeardOfUs
+      client.phone = phoneType
+      client.cellPhone = phoneType1
+      client.secondaryPhone = phoneType2
+      client.firstName = params[:firstName]
+      client.lastName = params[:lastName]
+      client.type = customerType
+      client.save!
+    else
+      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
+    end
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
-    custom = Customer.where("phone = ? or cellPhone = ? or secondaryPhone = ?", phoneType, phoneType1, phoneType2).last
-    address =  client.address.build  if (params[:new_customer] == true) && address.nil?
+    address =  client.address.build  if (params[:new_customer] == "true" && params[:new_customer_id] != "false") && address.nil?
     if (!address.nil? && postal_code.length != 7)
       address.postal = postal_code
       address.city =  " " if address.new_record?
