@@ -37,9 +37,9 @@ $(document).ready(function() {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
-                $(".car-location-select2").each(function(index) {
-                    createPostalSelect2($(this));
-                });
+                // $(".car-location-select2").each(function(index) {
+                    createPostalSelect2($("#car-location"+car.idQuoteCars));
+                // });
                 if(new_data==true){
                     var address = {id: 'new', text: $("input[name=postal]").val()}
                     if(address.text != "") {
@@ -876,9 +876,7 @@ function saveCarAuto(callback) {
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
     });
-    $(".car-location-select2").each(function(index) {
-        createPostalSelect2($(this));
-    });
+  
 }
 
 
@@ -907,9 +905,9 @@ function capitalize_Words(str)
 }
 function fillCustomer(data) {
 
-    $(".car-location-select2").each(function(index) {
-        createPostalSelect2($(this));
-    });
+    // $(".car-location-select2").each(function(index) {
+    //     createPostalSelect2($(this));
+    // });
     $("#customer").data("id", data.idClient)
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
