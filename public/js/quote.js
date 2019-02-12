@@ -274,12 +274,12 @@ function createPostalSelect2(s) {
             $("input[name=car-postal" + carId +" ]").text(postal)
             return null;
         }
-        // getDistanceForCar(postal, carId, function(distance, carId) {
-        //   $("#car-distance" + carId).val(distance);
-        //   updateCarWithDistance(distance, carId);
-        //   resetAddress(carId)
-        //   showCarNewAddress(postal, carId);
-        // });
+        getDistanceForCar(postal, carId, function(distance, carId) {
+          $("#car-distance" + carId).val(distance);
+          updateCarWithDistance(distance, carId);
+          resetAddress(carId)
+          showCarNewAddress(postal, carId);
+        });
         return {
             id: postal,
             text: postal,
@@ -297,25 +297,46 @@ function createPostalSelect2(s) {
               }
               return query;
           }
-      }
-  }).on('select2:select', function (e) {
-    var addressId = $(this).val();
-    if (!isNaN(parseInt(addressId))) {
-      getDistanceForAddress(addressId, carId, function(distance, carId) {
-        updateCarWithDistance(distance, carId);
-        hideCarExistingAddress(addressId, carId)
-        showCarExistingAddress(addressId, carId);
-      });
-    } else {
-      var postal = addressId;
-      getDistanceForCar(postal, carId, function(distance, carId) {
-        updateCarWithDistance(distance, carId);
-        resetAddress(carId)
-        showCarNewAddress(postal, carId);
-      });
-    }
-    calcPrice(carId)
-  });
+      },
+      // processResults: function(data, params) {
+      //     var postal = params.term.trim().replace(/\s/g, '');
+      //     if(postal.length == 6) {
+      //         tag = {
+      //             id: postal,
+      //             text: postal
+      //         }
+      //         data.results.push(tag)
+      //     }
+      //     return {
+      //         results: data.results,
+      //         pagination:  data.pagination
+      //
+      //     }
+      // }
+    })
+
+
+    s.on("select2:open", function (e) { console.log("select2:open"); });
+    s.on("select2:close", function (e) { console.log("select2:close"); });
+    s.on("select2:select", function (e) {
+        console.log("select")
+        var addressId = $(this).val();
+        if (!isNaN(parseInt(addressId))) {
+            getDistanceForAddress(addressId, carId, function(distance, carId) {
+                updateCarWithDistance(distance, carId);
+                hideCarExistingAddress(addressId, carId)
+                showCarExistingAddress(addressId, carId);
+            });
+        } else {
+            var postal = addressId;
+            getDistanceForCar(postal, carId, function(distance, carId) {
+                updateCarWithDistance(distance, carId);
+                resetAddress(carId)
+                showCarNewAddress(postal, carId);
+            });
+        }
+        calcPrice(carId)
+    });
 }
 
 function updateCarWithDistance(distance, carId) {
@@ -706,7 +727,7 @@ function saveCar(callback) {
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
-            "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
+            "carPostal":      ($(this).find("input[name=car-postal"+carId+"]").val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
@@ -851,8 +872,9 @@ function gotoListOfQuotes() {
 }
 
 function fillCustomer(data) {
+
     $(".car-location-select2").each(function(index) {
-      createPostalSelect2($(this));
+        createPostalSelect2($(this));
     });
     $("#customer").data("id", data.idClient)
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
