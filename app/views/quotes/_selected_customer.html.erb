@@ -47,7 +47,7 @@
       <i class="icofont icofont-ui-user"></i>
   </span>
   <div class="md-input-wrapper">
-    <select class="md-form-control md-static phone_quote cus_phoneType" name="phoneType">
+    <select class="md-form-control md-static phone_quote cus_phoneType" name="phoneType" id="cus_phoneType">
       <% if @customer.present? %>
          <option value="<%= phone_type_for_quote(@customer).present? ? phone_type_for_quote(@customer) : "" %>" <%= phone_type_for_quote(@customer).present? ? " selected" : "" %>> <%= phone_type_for_quote(@customer) %></option>
       <% else %>
@@ -66,7 +66,7 @@
       <i class="icofont icofont-ui-user"></i>
   </span>
   <div class="md-input-wrapper">
-    <select class="md-form-control md-static customer_quote cus_customerType" name="customerType">
+    <select class="md-form-control md-static customer_quote cus_customerType" name="customerType" id="cus_customerType">
     <% if @customer.present? %>
         <option<%= @customer.type.present? ? " selected" : "" %>>
           <%= @customer.type %></option>
