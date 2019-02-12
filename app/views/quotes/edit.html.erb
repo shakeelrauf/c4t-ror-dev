@@ -120,7 +120,7 @@
                 <span class="md-add-on">
                     <i class="icofont icofont-ui-user"></i>
                 </span>
-                <div class="md-input-wrapper">
+                <div class="md-input-wrapper" id="customer" data-id="<%= quote.customer.idClient if quote.customer.present? %>">
                   <select class="md-form-control md-static phone_quote" name="phoneType">
                     <% if (quote.idQuote != nil && quote.customer != nil) %>
                       <option<%= quote.customer.phone_type.present? ? " selected" : "" %>> <%= quote.customer.phone_type %></option>
