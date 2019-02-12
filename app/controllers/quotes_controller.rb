@@ -274,7 +274,7 @@ class QuotesController < ApplicationController
   private
   def calculate_bonus_or_flatfee(customer, net_price)
     flat_fee = 0
-    if customer.business.usersFlatFee == true
+    if customer.business && customer.business.usersFlatFee == true
       custom_fee = Setting.where(name: "DealerFlatFee").first.value
       price = price_according_to_grade(customer, net_price)
       hash = {user_flat_fee: true,bonus: price, flat_fee: custom_fee.to_f }
