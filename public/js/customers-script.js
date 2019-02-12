@@ -228,7 +228,7 @@ function addCusAddress(address) {
       var flag = true;
       if(!$(".company-data").hasClass("force-hidden")){
          $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST, #txtFlat').filter(function() {
-          if (this.value == '') {
+          if (this.value == '' || ($("input[name='usersFlatFee']:checked").val() == undefined)) {
             flag = false;
             return false;
           }
