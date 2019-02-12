@@ -17,7 +17,6 @@ module Customers
   def create_customer(params, current_user)
       heardofus = Heardofus.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
-        debugger
         if Customer.phone_already_present?(params[:phoneNumber])
           client = Customer.find_or_initialize_by(phone: Validations.remove_dashes_from_phone(params[:phoneNumber]), cellPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]), secondaryPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]))
           if client.new_record?
