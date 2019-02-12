@@ -22,17 +22,7 @@ function updatePhone(f) {
         return;
 
     if (v.length >= 2) {
-        if (v.charAt(0) == '1') {
-            if (v.charAt(1) != '-') {
-                v = "1-" + v.substring(1, v.length);
-            }
-            if (v.length >= 6 && v.charAt(5) != '-') {
-                v = v.substring(0, 5) + "-" + v.substring(5, v.length);
-            }
-            if (v.length >= 10 && v.charAt(9) != '-') {
-                v = v.substring(0, 9) + "-" + v.substring(9, v.length);
-            }
-        } else if (v.length >= 9) {
+        if (v.length >= 9) {
             // Abort after 9 chars
             return;
         } else if (v.length >= 4) {
