@@ -81,15 +81,17 @@ module CustomersHelper
   end
 
   def phone_type(customer)
-    if customer.phone_type == "primary"
-    	customer.phone
-    elsif customer.phone_type == "cell"
-    	customer.cellPhone
-    elsif customer.phone_type == "other"
-    	customer.secondaryPhone
+    num = ""
+    if customer.phone.present?
+    	num = customer.phone
+    elsif customer.cellPhone.present?
+    	num = customer.cellPhone
+    elsif customer.secondaryPhone.present?
+    	num = customer.secondaryPhone
     else
-    	customer.phone
+    	num = customer.phone
     end
+    num
   end
 
 end

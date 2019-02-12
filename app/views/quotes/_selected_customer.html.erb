@@ -42,3 +42,43 @@
      <label style="top: -15px;">Heard of Us <span class="required">*</span></label>
   </div>
 </div>
+<div id="phone_type" class="col-lg-6 md-group-add-on">
+  <span class="md-add-on">
+      <i class="icofont icofont-ui-user"></i>
+  </span>
+  <div class="md-input-wrapper">
+    <select class="md-form-control md-static phone_quote" name="phoneType">
+      <% if @customer.present? %>
+         <option<%= phone_type_for_quote(@customer).present? ? " selected" : "" %>> <%= phone_type_for_quote(@customer) %></option>
+      <% else %>
+        <option value="">Select an option</option>
+      <% end %>
+      <option value="primary">Primary</option>
+      <option value="cell">Cell</option>
+      <option value="other">Other</option>
+    </select>
+    <label style="top: -15px;">Phone Type<span class="required">*</span></label>
+  </div>
+</div>
+
+<div id="customer_type" class="col-lg-6 md-group-add-on">
+  <span class="md-add-on">
+      <i class="icofont icofont-ui-user"></i>
+  </span>
+  <div class="md-input-wrapper">
+    <select class="md-form-control md-static customer_quote" name="customerType">
+    <% if @customer.present? %>
+        <option<%= @customer.type.present? ? " selected" : "" %>>
+          <%= @customer.type %></option>
+    <% else %>
+      <option value="">Select an option</option>
+    <% end %>
+      <option value="Individual">Individual</option>
+      <option value="Business">Business</option>
+      <option value="Garage">Garage</option>
+      <option value="Dealership">Dealership</option>
+      <option value="Tow Tuck">Tow Truck</option>
+    </select> 
+    <label style="top: -15px;">Customer Type<span class="required">*</span></label>
+  </div>
+</div>

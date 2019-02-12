@@ -123,9 +123,9 @@
                 <div class="md-input-wrapper">
                   <select class="md-form-control md-static phone_quote" name="phoneType">
                     <% if (quote.idQuote != nil && quote.customer != nil) %>
-                      <option<%= quote.customer.phone_type.present? ? " selected" : "" %>> <%= quote.customer.phone_type %></option>
+                      <option<%= phone_type_for_quote(quote.customer).present? ? " selected" : "" %>> <%= phone_type_for_quote(quote.customer) %></option>
                       <% elsif @customer.present? %>
-                       <option<%= @customer.phone_type.present? ? " selected" : "" %>> <%= @customer.phone_type %></option>
+                       <option<%= phone_type_for_quote(@customer).present? ? " selected" : "" %>> <%= phone_type_for_quote(@customer) %></option>
                     <% else %>
                       <option value="">Select an option</option>
                     <% end %>
