@@ -180,7 +180,7 @@ module Quotesmethods
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
     address =  client.address.build  if (params[:new_customer] == "true" && params[:new_customer_id] != "false") && address.nil?
-    if (!address.nil? && postal_code.length != 7)
+    if (!address.nil? && postal_code.length == 7)
       address.postal = postal_code
       address.city =  " " if address.new_record?
       address.address = " " if address.new_record?
