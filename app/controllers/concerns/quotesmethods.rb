@@ -93,7 +93,7 @@ module Quotesmethods
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
           address = Address.find_by_id(carList[car]["carAddressId"])
-          address.update(idClient: client.idClient) if params[:new_customer] == true
+          address.update(idClient: client.idClient) if params[:new_customer] == "true"
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
           car_postal_code = Validations.postal(carList[car]["carPostal"])
@@ -156,29 +156,29 @@ module Quotesmethods
     ad.address = car["carStreet"]
     ad.distance = res
     ad.save!
-    @add = Address.where(idAddress: quote_car.idAddress).first if quote_car.idAddress.present?
-    quote_car.idAddress = ad.idAddress
-    quote_car.save!
-    @add.destroy if @add.idAddress != quote_car.idAddress
+    @add = Address.where(idAddress: quote_car.idAddress).first if quote_car && quote_car.idAddress.present?
+    quote_car.idAddress = ad.idAddress if quote_car && quote_car.idAddress.present?
+    quote_car.save! if quote_car && quote_car.idAddress.present?
+    @add.destroy if quote_car && quote_car.idAddress.present? && @add.idAddress != quote_car.idAddress
   end
 
   def save_customer params, heard_of_us, phoneType, phoneType1, phoneType2, customerType
-    if (params[:new_customer] == true && params[:new_customer_id] != "false")
-      c = Customer.where(idClient: params[:new_customer_id]).first
-      c.idHeardOfUs = heard_of_us.idHeardOfUs
-      c.phone = phoneType
-      c.cellPhone = phoneType1
-      c.secondaryPhone = phoneType2
-      c.firstName = params[:firstName]
-      c.lastName = params[:lastName]
-      c.type = customerType
-      c.save!
+    if (params[:new_customer] == "true" && params[:new_customer_id] != "false")
+      client = Customer.where(idClient: params[:new_customer_id]).first
+      client.idHeardOfUs = heard_of_us.idHeardOfUs
+      client.phone = phoneType
+      client.cellPhone = phoneType1
+      client.secondaryPhone = phoneType2
+      client.firstName = params[:firstName]
+      client.lastName = params[:lastName]
+      client.type = customerType
+      client.save!
     else
       client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
     end
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
-    address =  client.address.build  if (params[:new_customer] == true) && address.nil?
+    address =  client.address.build  if (params[:new_customer] == "true" && params[:new_customer_id] != "false") && address.nil?
     if (!address.nil? && postal_code.length != 7)
       address.postal = postal_code
       address.city =  " " if address.new_record?
