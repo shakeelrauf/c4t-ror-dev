@@ -189,9 +189,26 @@ $(document).ready(function() {
         }
     });
 
+    function dup_select_val_remove(){
+      $("select").each(function(){
+          var usedNames = {};
+          $("option", this).each(function () {
+              if(usedNames[this.text]) {
+                  $(this).remove();
+              } else {
+                  usedNames[this.text] = this.value;
+              }
+          });
+       }); 
+    }
+
+
     $("select[name=phone]").on('select2:select', function (e) {
       if($(".selection").text().trim().includes("New Customer")){
         $("select[name=customerType]").val("Individual");
+        $('select[name=phoneType]').prepend("<option>select and option</option>");
+        $('select[name=phoneType] option:eq(0)').prop('selected', true);
+        dup_select_val_remove();
       }
         $("#new_customer_id").val("false");
         var clientId = $("select[name=phone]").select2('data')[0].id;
@@ -871,6 +888,23 @@ function gotoListOfQuotes() {
     }
 }
 
+function set_phone_type(data){
+  if (data.phone.length > 0){
+    $("#cus_phoneType").val("primary");
+  }
+  else if (data.cellPhone.length > 0){
+    $("#cus_phoneType").val("cell");
+  }
+  else {
+    $("#cus_phoneType").val("other");
+  }
+}
+
+
+function capitalize_Words(str)
+{
+ return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 function fillCustomer(data) {
 
     $(".car-location-select2").each(function(index) {
@@ -880,7 +914,10 @@ function fillCustomer(data) {
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
-    $("select[name=customerType]").val(data.type);
+    $("#cus_customerType").val(capitalize_Words(data.type));
+    $("#cus_customerType").attr('disabled',true);
+    set_phone_type(data);
+    $("select[name=phoneType]").attr('disabled',true);
     $(".hiddenaddress").html(JSON.stringify(data.address))
     if (data.quotes.length >= 1) {
       $('.has_quote option:eq(1)').prop('selected', true);
