@@ -17,19 +17,24 @@ module Customers
   def create_customer(params, current_user)
       heardofus = Heardofus.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
-        client = Customer.find_or_initialize_by(phone: Validations.remove_dashes_from_phone(params[:phoneNumber]), cellPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]), secondaryPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]))
-        if client.new_record?
-          client = client_data(client, heardofus)
-          params[:addresses].each do |a|
-            if a.present?
-              client_address(a, client)
+        debugger
+        if Customer.phone_already_present?(params[:phoneNumber])
+          client = Customer.find_or_initialize_by(phone: Validations.remove_dashes_from_phone(params[:phoneNumber]), cellPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]), secondaryPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]))
+          if client.new_record?
+            client = client_data(client, heardofus)
+            params[:addresses].each do |a|
+              if a.present?
+                client_address(a, client)
+              end
             end
-          end
-          if !params[:type].eql?("Individual")
-            busi = non_individual_business(client)
-            if busi.save
-              create_contacts(params, busi)
+            if !params[:type].eql?("Individual")
+              busi = non_individual_business(client)
+              if busi.save
+                create_contacts(params, busi)
+              end
             end
+          else
+            client = false
           end
         else
           client = false

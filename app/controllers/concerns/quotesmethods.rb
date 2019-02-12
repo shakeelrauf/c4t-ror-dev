@@ -88,7 +88,7 @@ module Quotesmethods
         return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
-      client = save_customer params, heard_of_us, phoneType, phoneType_1, phoneType_2, customerType
+      client = save_customer params, heard_of_us, phone,phoneType, phoneType_1, phoneType_2, customerType
       carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
@@ -162,7 +162,7 @@ module Quotesmethods
     @add.destroy if quote_car && quote_car.idAddress.present? && @add.idAddress != quote_car.idAddress
   end
 
-  def save_customer params, heard_of_us, phoneType, phoneType1, phoneType2, customerType
+  def save_customer params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType
     if (params[:new_customer] == "true" && params[:new_customer_id] != "false")
       client = Customer.where(idClient: params[:new_customer_id]).first
       client.idHeardOfUs = heard_of_us.idHeardOfUs
@@ -174,7 +174,7 @@ module Quotesmethods
       client.type = customerType
       client.save!
     else
-      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
+      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType},{phone: phone})
     end
     address = client.address.first
     postal_code = Validations.postal(params[:postal])

@@ -120,29 +120,43 @@ class QuotesController < ApplicationController
   def quotes_save_without_validations
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
     return respond_json({:error => "phone number length must be at least 10 digits."}) if (phone.to_s.length < 10)
-    carList = []
+    car_list = []
     begin
-      carList = JSON.parse(params[:cars].to_json)
+      car_list = JSON.parse(params[:cars].to_json)
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
-    phoneType1 = " "
-    phoneType2 = " "
+    phone_type = " "
+    phone_type_1 = " "
+    phone_type_2 = " "
+    if params[:phoneType] == "primary" || params[:phoneType] == ""
+      phone_type = phone
+      phone_type_1 = " "
+      phone_type_2 = " "
+    elsif params[:phoneType] == "cell"
+      phone_type = " "
+      phone_type_1 = phone
+      phone_type_2 = " "
+    elsif params[:phoneType] == "other"
+      phone_type = " "
+      phone_type_1 = " "
+      phone_type_2 = phone
+    end
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
-    if !carList.nil?
-      client = save_customer params, heard_of_us, phone, phoneType1, phoneType2, params[:customerType]
+    if !car_list.nil?
+      client = save_customer params, heard_of_us,phone, phone_type, phone_type_1, phone_type_2, params[:customerType]
       Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
-      carList.each do |car, val|
-        quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
-        if carList[car]["carAddressId"].present?
-          address = Address.find_by_id(carList[car]["carAddressId"])
+      car_list.each do |car, val|
+        quote_car = QuoteCar.where(idQuoteCars: car_list[car]["car"]).first
+        if car_list[car]["carAddressId"].present?
+          address = Address.find_by_id(car_list[car]["carAddressId"])
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
-          car_postal_code = Validations.postal(carList[car]["carPostal"])
-          update_quote_car_address carList[car], quote_car, client if carList[car]["carPostal"].present?
+          car_postal_code = Validations.postal(car_list[car]["carPostal"])
+          update_quote_car_address car_list[car], quote_car, client if car_list[car]["carPostal"].present?
         end
-        quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
+        quote_car.update(missingBattery: car_list[car]["missingBattery"],missingCat: car_list[car]["missingCat"],gettingMethod: car_list[car]["gettingMethod"],missingWheels: car_list[car]["missingWheels"], still_driving: car_list[car]["still_driving"] ) if quote_car.present?
       end
       return respond_json({message: "QuickQuote saved", customer_id: client.idClient})
     else

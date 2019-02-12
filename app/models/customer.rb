@@ -17,13 +17,27 @@ class Customer < ApplicationRecord
 		return self.firstName + ' ' + self.lastName
 	end
 
-	def self.custom_upsert(options={},where={})
-		@custom = where(where).first
-		if @custom.present? && where.inspect != "{}"
+	def self.phone_already_present?(phone,ph1=nil,ph2=nil)
+		returned = where(phone: phone).or(where(cellPhone: phone)).or(where(secondaryPhone: phone)).first.present?
+		field = "Phone No"
+		if (returned == false) && ph1.present?
+			returned = where(phone: ph1).or(where(cellPhone: ph1)).or(where(secondaryPhone: ph1)).first.present?
+			field = "Cell phone"
+		end
+		if (returned == false) && ph2.present?
+			returned = where(phone: ph2).or(where(cellPhone: ph2)).or(where(secondaryPhone: ph2)).first.present? if (returned == false) && ph2.present?
+			field = "Secondary phone"
+		end
+		{found: returned, type:  field}
+	end
+
+	def self.custom_upsert(options={},where_to_find)
+		@custom = where(phone: where_to_find[:phone]).or(where(cellPhone: where_to_find[:phone])).or(where(secondaryPhone: where_to_find[:phone])).first
+		if @custom.present?
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom =  new(options.merge(where))
+			@custom =  new(options.merge(where_to_find))
 			@custom.attributes.each do |key, value|
 				@custom[key] = "" if value.nil?
 			end
