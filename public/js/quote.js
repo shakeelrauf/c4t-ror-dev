@@ -206,7 +206,7 @@ $(document).ready(function() {
     $("select[name=phone]").on('select2:select', function (e) {
       if($(".selection").text().trim().includes("New Customer")){
         $("select[name=customerType]").val("Individual");
-        $('select[name=phoneType]').prepend("<option>select and option</option>");
+        $('select[name=phoneType]').prepend("<option>Select an option</option>");
         $('select[name=phoneType] option:eq(0)').prop('selected', true);
         dup_select_val_remove();
       }
@@ -889,13 +889,13 @@ function gotoListOfQuotes() {
 }
 
 function set_phone_type(data){
-  if (data.phone.length > 0){
+  if (data.phone == unformatPhone($("select[name=phone] option:selected").text())){
     $("#cus_phoneType").val("primary");
   }
-  else if (data.cellPhone.length > 0){
+  else if (data.cellPhone == unformatPhone($("select[name=phone] option:selected").text())){
     $("#cus_phoneType").val("cell");
   }
-  else {
+  else if (data.secondaryPhone == unformatPhone($("select[name=phone] option:selected").text())) {
     $("#cus_phoneType").val("other");
   }
 }
