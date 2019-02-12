@@ -201,25 +201,30 @@ class QuotesController < ApplicationController
   end
 
   def phone_numbers
-    phones = Customer.where('phone LIKE ?', params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
-    returned = {results: [], pagination: {more: true}}
-    returned[:pagination][:more] = false if phones.length < params[:limit].to_i
-    phones.each do |phone|
-      client = JSON.parse phone.to_json
-      # client["phone"] =  client["cellPhone"] if client["phone"].to_s.match(params[:search]) && client["cellPhone"].to_s.match(params[:search])
-      # client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
-      text = ""
-      if client["phone"].present? && client["phone"].length >= 10
-        text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s + " " + client["firstName"].to_s + " " + client["lastName"].to_s
-      elsif client["phone"].present?
-        text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s
-      end
-      returned[:results].push({id: phone["idClient"], text: text})
-      if client["business"]
-        client["business"]["contacts"].each do |contact|
-          returned[:results].push({id: phone["idClient"],text: text})
+    if params[:search].present?
+      phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%",params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
+      returned = {results: [], pagination: {more: true}}
+      returned[:pagination][:more] = false if phones.length < params[:limit].to_i
+      phones.each do |phone|
+        client = JSON.parse phone.to_json
+        client["phone"] =  client["cellPhone"] if  client["cellPhone"].to_s.match(params[:search])
+        client["phone"] =  client["secondaryPhone"] if  client["secondaryPhone"].to_s.match(params[:search])
+        text = ""
+        if client["phone"].present? && client["phone"].length >= 10
+          text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s + " " + client["firstName"].to_s + " " + client["lastName"].to_s
+        elsif client["phone"].present?
+          text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s
+        end
+        returned[:results].push({id: phone["idClient"], text: text})
+        if client["business"]
+          client["business"]["contacts"].each do |contact|
+            returned[:results].push({id: phone["idClient"],text: text})
+          end
         end
       end
+    else
+      returned = {results: [], pagination: {more: true}}
+      returned[:pagination][:more] = false
     end
     respond_json(returned)
   end
