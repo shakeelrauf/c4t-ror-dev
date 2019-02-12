@@ -61,38 +61,37 @@ class QuotesController < ApplicationController
     r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
     r[:pickupCost] = quote["pickup"].to_f
     r[:carPrice] = '%.2f' % netPrice.to_f
-    if customer.present? && customer.type == "Dealership"
+    if customer.present? && customer.type != "Individual"
       bonus = calculate_bonus_or_flatfee(customer, r)
-      if bonus.is_a? Array
-        if bonus[0] == "flatfee"
-          r = {netPrice: bonus[1].to_f,
-               pickupPrice: pickupPrice
-          }
-          r[:weight] =  params[:weight].to_f / 1000.0
-          r[:steelPrice] =  quote["steelPrice"].to_f
+      if bonus.is_a? Hash
+        if bonus[:user_flat_fee] == true
+          r[:netPrice] = bonus[:flat_fee].to_f
           r[:weightPrice] = " "
-          r[:distance] = car_distance.to_f
-          r[:freeDistance] = quote["freeDistance"].to_f
-          r[:excessDistance] = excessDistance.to_f
-          r[:excessCost] =  excessCost.to_f
           r[:distanceCost] = " "
-          r[:missingCatCost] = quote["catPrice"].to_f
-          r[:missingBatCost] = quote["batteryPrice"].to_f
-          r[:missingCat] = -(quote["catPrice"].to_f * params[:missingCat].to_f)
-          r[:missingBat] = -(quote["batteryPrice"].to_f * params[:missingBattery].to_f)
-          r[:missingWheelsCost] = quote["wheelPrice"].to_f
-          r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
-          r[:pickupCost] = quote["pickup"].to_f
-          r[:carPrice] = '%.2f' % bonus[1].to_f
-        elsif bonus[0] == "carprice"
-          r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[1].to_f )
-          r[:netPrice] =  r[:netPrice].to_f + bonus[1].to_f
-        # elsif bonus[0] == "custom"
-        #   r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[1].to_f )
-        #   r[:netPrice] =  r[:netPrice].to_f + bonus[1].to_f
-        elsif bonus[0] == "steelprice"
-          r[:steelPrice] = r[:steelPrice].to_f + bonus[1].to_f
-          r[:netPrice] =  r[:netPrice].to_f + bonus[1].to_f
+          r[:carPrice] = '%.2f' % bonus[:flat_fee].to_f
+          if bonus[:bonus].present?
+            if bonus[:bonus][:type] == "carprice"
+              r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "steelprice"
+              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "flatfee"
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            end
+          end
+        elsif bonus[:user_flat_fee] == false
+          if bonus[:bonus].present?
+            if bonus[:bonus][:type] == "carprice"
+              r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "steelprice"
+              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "flatfee"
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            end
+          end
         end
       end
     end
@@ -277,32 +276,33 @@ class QuotesController < ApplicationController
     flat_fee = 0
     if customer.business.usersFlatFee == true
       custom_fee = Setting.where(name: "DealerFlatFee").first.value
-      ["flatfee", custom_fee.to_s]
+      price = price_according_to_grade(customer, net_price)
+      hash = {user_flat_fee: true,bonus: price, flat_fee: custom_fee.to_f }
     else
       price = price_according_to_grade(customer, net_price)
-      price
+      hash = {user_flat_fee: false,bonus: price }
     end
   end
 
   def bonus_price(setting,value,net_price)
     if setting.first.value == "flatfee"
-      price = ["flatfee", '%.2f' % value.first.value.to_f]
+      hash = {type: "flatfee", value: '%.2f' % value.first.value.to_f }
     elsif setting.first.value == "card"
-      price = ["carprice", value.first.value]
+      hash = {type: "carprice", value: '%.2f' % value.first.value.to_f }
     elsif setting.first.value == "carp"
       percentage = '%.2f' % ((net_price[:carPrice].to_f * value.first.value.to_f)/100)
-      price = ["carprice", percentage]
+      hash = {type: "carprice", value: percentage }
     elsif setting.first.value == "steelp"
       percentage = '%.2f' % ((net_price[:steelPrice].to_f * value.first.value.to_f)/100)
-      price = ["steelprice", percentage]
+      hash = {type: "steelprice", value: percentage }
     elsif setting.first.value == "steeld"
-      price = ["steelprice",'%.2f' % value.first.value.to_f]
+      hash = {type: "steelprice", value: '%.2f' % value.first.value.to_f }
     end
-    return price
+    return hash
   end
 
   def price_according_to_grade(customer, net_price)
-    price = ["no", 0]
+    price = {type: "no", value: 0}
     if customer.grade == "Custom"
       price =["custom", customer.customDollarCar]
     else
