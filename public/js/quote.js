@@ -583,12 +583,7 @@ function calcPrice(carId) {
                     $("#bonus"+carId).html(json.bonus.bonus.value)
 
                 }
-                if(json.bonus.user_flat_fee== true){
-                    $("#cusflatfee"+carId).html("Applied")
-                    $("#bonuscar"+carId).html(" ")
-                    $("#bonussteel"+carId).html(" ")
-                    $("#customFee"+carId).html(" ")
-                }
+
                 if(json.bonus.bonus.type =="carprice"){
                     $("#bonuscar"+carId).html("Applied")
                     $("#cusflatfee"+carId).html(" ")
@@ -607,6 +602,11 @@ function calcPrice(carId) {
                     $("#bonuscar"+carId).html(" ")
                     $("#bonussteel"+carId).html(" ")
 
+                }
+                if(json.bonus.user_flat_fee== true){
+                    $("#cusflatfee"+carId).html("Applied")
+                }else{
+                    $("#cusflatfee"+carId).html(" ")
                 }
             }
             $("#tab"+carId).data('price', json);
