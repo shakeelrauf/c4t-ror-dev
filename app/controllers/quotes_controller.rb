@@ -61,7 +61,7 @@ class QuotesController < ApplicationController
     r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
     r[:pickupCost] = quote["pickup"].to_f
     r[:carPrice] = '%.2f' % netPrice.to_f
-    if customer.present? && customer.type == "Dealership"
+    if customer.present? && customer.type != "Individual"
       bonus = calculate_bonus_or_flatfee(customer, r)
       if bonus.is_a? Hash
         if bonus[:user_flat_fee] == true
