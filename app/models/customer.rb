@@ -37,7 +37,7 @@ class Customer < ApplicationRecord
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom =  new(options.merge(where_to_find))
+			@custom =  new(options)
 			@custom.attributes.each do |key, value|
 				@custom[key] = "" if value.nil?
 			end
