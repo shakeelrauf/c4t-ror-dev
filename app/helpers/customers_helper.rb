@@ -80,4 +80,16 @@ module CustomersHelper
     DateTime.parse(date).strftime('%d/%m/%Y, %I:%M:%S:%p')
   end
 
+  def phone_type(customer)
+    if customer.phone_type == "primary"
+    	customer.phone
+    elsif customer.phone_type == "cell"
+    	customer.cellPhone
+    elsif customer.phone_type == "other"
+    	customer.secondaryPhone
+    else
+    	customer.phone
+    end
+  end
+
 end
