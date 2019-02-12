@@ -67,7 +67,7 @@
                       <i class="icofont icofont-smart-phone"></i>
                     </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone.delete(" ")) %>">
+                      <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone.delete(" "))  if @customer.cellPhone.present? %>">
                       <label>Cell Phone</label>
                     </div>
                   </div>
@@ -76,7 +76,7 @@
                       <i class="icofont icofont-phone"></i>
                     </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%= phone_number_display(@customer.secondaryPhone.delete(" ")) %>">
+                      <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%= phone_number_display(@customer.secondaryPhone.delete(" ")) if @customer.secondaryPhone.present? %>">
                       <label>Other Phone</label>
                     </div>
                   </div>
