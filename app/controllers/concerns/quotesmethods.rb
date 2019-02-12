@@ -105,8 +105,8 @@ module Quotesmethods
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
-      Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
-      return respond_json({message: "QuickQuote saved"})
+      q = Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
+      return respond_json({message: "QuickQuote saved" , q: q})
     else
        return respond_json({error: "Please select at least one car"})
     end
@@ -161,10 +161,21 @@ module Quotesmethods
   end
 
   def save_customer params, heard_of_us, phoneType, phoneType1, phoneType2, customerType
-    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
+    if (params[:new_customer] == true && params[:new_customer_id] != "false")
+      c = Customer.where(idClient: params[:new_customer_id]).first
+      c.idHeardOfUs = heard_of_us.idHeardOfUs
+      c.phone = phoneType
+      c.cellPhone = phoneType1
+      c.secondaryPhone = phoneType2
+      c.firstName = params[:firstName]
+      c.lastName = params[:lastName]
+      c.type = customerType
+      c.save!
+    else
+      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
+    end
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
-    custom = Customer.where("phone = ? or cellPhone = ? or secondaryPhone = ?", phoneType, phoneType1, phoneType2).last
     address =  client.address.build  if (params[:new_customer] == true) && address.nil?
     if (!address.nil? && postal_code.length != 7)
       address.postal = postal_code
