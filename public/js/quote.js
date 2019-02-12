@@ -37,9 +37,9 @@ $(document).ready(function() {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
-                $(".car-location-select2").each(function(index) {
-                    createPostalSelect2($(this));
-                });
+                // $(".car-location-select2").each(function(index) {
+                    createPostalSelect2($("#car-location"+car.idQuoteCars));
+                // });
                 if(new_data==true){
                     var address = {id: 'new', text: $("input[name=postal]").val()}
                     if(address.text != "") {
@@ -274,6 +274,17 @@ $(document).ready(function() {
 
     calcPrices();
 });
+function customerUrl(){
+    var clientId = $("select[name=phone]").select2('data')[0];
+    if (!clientId) {
+        // There's no client selected, make a "no results" client
+        clientId = 0;
+    }else{
+        clientId = clientId.id
+    }
+    var  url = '/customers/' + clientId + '/postal-select2'
+    return url
+}
 function createPostalSelect2(s) {
   var clientId = $("select[name=phone]").select2('data')[0];
   if (!clientId) {
@@ -305,7 +316,7 @@ function createPostalSelect2(s) {
       },
       dataType: 'json',
       ajax: {
-          url: '/customers/' + clientId + '/postal-select2',
+          url: customerUrl(),
           data: function (params) {
               var query = {
                   search: params.term,
@@ -333,7 +344,8 @@ function createPostalSelect2(s) {
     })
 
 
-    s.on("select2:open", function (e) { console.log("select2:open"); });
+    s.on("select2:open", function (e) { console.log("select2:open");
+    });
     s.on("select2:close", function (e) { console.log("select2:close"); });
     s.on("select2:select", function (e) {
         console.log("select")
@@ -876,9 +888,7 @@ function saveCarAuto(callback) {
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
     });
-    $(".car-location-select2").each(function(index) {
-        createPostalSelect2($(this));
-    });
+  
 }
 
 
@@ -906,8 +916,8 @@ function capitalize_Words(str)
  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 function fillCustomer(data) {
-
     $(".car-location-select2").each(function(index) {
+        $(this).select2('destroy');
         createPostalSelect2($(this));
     });
     $("#customer").data("id", data.idClient)
