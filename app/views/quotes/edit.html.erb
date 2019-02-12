@@ -123,7 +123,13 @@
                 </span>
                 <div class="md-input-wrapper">
                   <select class="md-form-control md-static phone_quote" name="phoneType">
-                    <option value="">Select an option</option>
+                    <% if (quote.idQuote != nil && quote.customer != nil) %>
+                      <option<%= quote.customer.phone_type.present? ? " selected" : "" %>> <%= quote.customer.phone_type %></option>
+                      <% elsif @customer.present? %>
+                       <option<%= @customer.phone_type.present? ? " selected" : "" %>> <%= @customer.phone_type %></option>
+                    <% else %>
+                      <option value="">Select an option</option>
+                    <% end %>
                     <option value="primary">Primary</option>
                     <option value="cell">Cell</option>
                     <option value="other">Other</option>
@@ -141,6 +147,9 @@
                   <% if (quote.idQuote != nil && quote.customer != nil) %>
                         <option<%= quote.customer.type.present? ? " selected" : "" %>>
                         <%= quote.customer.type %></option>
+                  <% elsif @customer.present? %>
+                      <option<%= @customer.type.present? ? " selected" : "" %>>
+                        <%= @customer.type %></option>
                   <% else %>
                     <option value="">Select an option</option>
                   <% end %>
@@ -284,6 +293,8 @@
         $('.has_quote option:eq(1)').prop('selected', true);
         $(".has_quote").attr('disabled',true);
         $(".has_quote").val("Repeat Customer");
+        $("select[name=customerType]").attr('disabled',true);
+        $("select[name=phoneType]").attr('disabled',true);
       <% end %>
 
       $(document).ready(function () {

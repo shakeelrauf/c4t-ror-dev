@@ -172,9 +172,10 @@ module Quotesmethods
       client.firstName = params[:firstName]
       client.lastName = params[:lastName]
       client.type = customerType
+      client.phone_type = params[:phoneType]
       client.save!
     else
-      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType})
+      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType, phone_type: params[:phoneType]})
     end
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
