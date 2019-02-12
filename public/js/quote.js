@@ -532,25 +532,39 @@ function calcPrice(carId) {
                 //     $("#customFee"+carId).html("Applied")
                 //     $("#bonus"+carId).html(json.bonus[1])
                 // }
-                if(json.bonus[0]=="flatfee"){
+                if(json.bonus.bonus.type == "flatfee"){
                     $("#flatfee"+carId).html("Applied")
+                    $("#cusflatfee"+carId).html(" ")
+                    $("#bonuscar"+carId).html(" ")
+                    $("#bonussteel"+carId).html(" ")
+                    $("#customFee"+carId).html(" ")
+                    $("#bonus"+carId).html(json.bonus.bonus.value)
+
+                }
+                if(json.bonus.user_flat_fee== true){
+                    $("#cusflatfee"+carId).html("Applied")
                     $("#bonuscar"+carId).html(" ")
                     $("#bonussteel"+carId).html(" ")
                     $("#customFee"+carId).html(" ")
                 }
-                if(json.bonus[0]=="carprice"){
+                if(json.bonus.bonus.type =="carprice"){
                     $("#bonuscar"+carId).html("Applied")
-                    $("#flatfee"+carId).html(" ")
+                    $("#cusflatfee"+carId).html(" ")
                     $("#bonussteel"+carId).html(" ")
                     $("#customFee"+carId).html(" ")
-                    $("#bonus"+carId).html(json.bonus[1])
+                    $("#bonus"+carId).html(json.bonus.bonus.value)
                 }
-                if(json.bonus[0]=="steelprice"){
-                    $("#flatfee"+carId).html(" ")
+                if(json.bonus.bonus.type=="steelprice"){
+                    $("#cusflatfee"+carId).html(" ")
                     $("#customFee"+carId).html(" ")
                     $("#bonuscar"+carId).html(" ")
                     $("#bonussteel"+carId).html("Applied")
-                    $("#bonus"+carId).html(json.bonus[1])
+                    $("#bonus"+carId).html(json.bonus.bonus.value)
+                }
+                if(json.bonus.bonus.type == "no"){
+                    $("#bonuscar"+carId).html(" ")
+                    $("#bonussteel"+carId).html(" ")
+
                 }
             }
             $("#tab"+carId).data('price', json);
