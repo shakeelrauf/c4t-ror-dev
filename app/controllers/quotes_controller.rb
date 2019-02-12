@@ -309,7 +309,7 @@ class QuotesController < ApplicationController
     elsif setting.first.value == "card"
       hash = {type: "carprice", value: '%.2f' % value.first.value.to_f }
     elsif setting.first.value == "carp"
-      percentage = '%.2f' % ((net_price[:carPrice].to_f * value.first.value.to_f)/100)
+      percentage = '%.2f' % ((net_price[:steelPrice].to_f * net_price[:weight] * value.first.value.to_f)/100)
       hash = {type: "carprice", value: percentage }
     elsif setting.first.value == "steelp"
       percentage = '%.2f' % ((net_price[:steelPrice].to_f * value.first.value.to_f)/100)
