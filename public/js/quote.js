@@ -710,9 +710,16 @@ function saveCar(callback) {
             "phoneType": $("select[name=phoneType]").val(),
             "customerType": $("select[name=customerType]").val(),
             "new_customer": $("#new_customer").val(),
+            "new_customer_id": $("#new_customer_id").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
+      if($("#new_customer").val() != "false" && s.q != undefined && s.q.idClient != undefined){
+        $("#new_customer_id").val(s.q.idClient);
+      }
+      else{
+        $("#new_customer_id").val("false");
+      }
         if (callback) {
             callback(s);
         } else {
