@@ -248,6 +248,12 @@ $(document).ready(function() {
             "&postal="+$("input[name=postal]").val()+
             "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
         }
+        else if ($("#new_customer_id").val() != "false"){
+          window.open("/customers/"+$("#new_customer_id").val()+"/edit?firstName="+$("input[name=firstName]").val()+
+            "&lastName="+$("input[name=lastName]").val()+
+            "&postal="+$("input[name=postal]").val()+
+            "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
+        }
         else{
           edit_for_new_customer();
         }
