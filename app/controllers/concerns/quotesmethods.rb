@@ -166,16 +166,17 @@ module Quotesmethods
     if (params[:new_customer] == "true" && params[:new_customer_id] != "false")
       client = Customer.where(idClient: params[:new_customer_id]).first
       client.idHeardOfUs = heard_of_us.idHeardOfUs
-      client.phone = phoneType
-      client.cellPhone = phoneType1
-      client.secondaryPhone = phoneType2
+      client.phone = phoneType if phoneType.present?
+      client.cellPhone = phoneType1 if phoneType1.present?
+      client.secondaryPhone = phoneType2 if phoneType2.present?
       client.firstName = params[:firstName]
       client.lastName = params[:lastName]
       client.type = customerType
       client.phone_type = params[:phoneType]
       client.save!
     else
-      client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phoneType, cellPhone: phoneType1, secondaryPhone: phoneType2, firstName: params[:firstName],lastName: params[:lastName], type: customerType, phone_type: params[:phoneType]},{phone: phone})
+      customer = phone_settings(params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType)
+      client = Customer.custom_upsert(customer,{phone: phone})
     end
     address = client.address.first
     postal_code = Validations.postal(params[:postal])
@@ -189,5 +190,13 @@ module Quotesmethods
       address.save!
     end
     client
+  end
+
+  def phone_settings(params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType)
+    val = {idHeardOfUs: heard_of_us.idHeardOfUs, firstName: params[:firstName],lastName: params[:lastName], type: customerType, phone_type: params[:phoneType]}
+    val.merge({phone: phoneType}) if phoneType.present?
+    val.merge({cellPhone: phoneType1}) if phoneType1.present?
+    val.merge({secondaryPhone: phoneType2}) if phoneType2.present?
+    val
   end
 end

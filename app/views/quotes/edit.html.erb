@@ -44,14 +44,14 @@
                   <i class="icofont icofont-phone"></i>
               </span>
               <div class="md-input-wrapper">
-                <select class="md-form-control md-static" name="phone">
+                <select class="md-form-control md-static" name="phone" id="select-2">
                   <%
                     if (quote.idQuote != nil && quote.customer != nil) %>
-                    <option value="<%= quote.customer.idClient %>" selected><%=
+                    <option selected><%=
                       phone_number_display(phone_type(quote.customer)) + " " + quote.customer.firstName + " " + quote.customer.lastName
                     %></option>
                     <% elsif @customer.present? %>
-                      <option value="<%= @customer.idClient %>" selected><%=
+                      <option selected><%=
                           phone_number_display(phone_type(@customer)) +
                           " " + @customer.firstName + " " + @customer.lastName
                       %></option>
