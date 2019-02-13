@@ -61,7 +61,20 @@ $(document).ready(function() {
                     var addresses = JSON.parse($(".hiddenaddress").html());
                     if(addresses.length >= 1){
                         var address = addresses[0];
-                        $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                        var text = " ";
+                        if(address.address != undefined && address.address != "" ){
+                            text += address.address+", "
+                        }
+                        if(address.city != undefined && address.city != "" ){
+                            text += address.city+", "
+                        }
+                        if(address.province != undefined && address.province != "" ){
+                            text += address.province+", "
+                        }
+                        if(address.postal != undefined && address.postal != "" ){
+                            text += address.postal
+                        }
+                        $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+text+"</option>");
                         $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
                             data:  {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal }
                         });
