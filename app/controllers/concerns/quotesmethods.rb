@@ -194,9 +194,9 @@ module Quotesmethods
 
   def phone_settings(params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType)
     val = {idHeardOfUs: heard_of_us.idHeardOfUs, firstName: params[:firstName],lastName: params[:lastName], type: customerType, phone_type: params[:phoneType]}
-    val.merge({phone: phoneType}) if phoneType.present?
-    val.merge({cellPhone: phoneType1}) if phoneType1.present?
-    val.merge({secondaryPhone: phoneType2}) if phoneType2.present?
+    val = val.merge({phone: phoneType}) if phoneType.present?
+    val = val.merge({cellPhone: phoneType1}) if phoneType1.present?
+    val = val.merge({secondaryPhone: phoneType2}) if phoneType2.present?
     val
   end
 end
