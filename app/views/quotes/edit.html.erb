@@ -172,7 +172,7 @@
           <div class="card-block" style="margin-bottom: 15px;">
             <div class="cars-total-list">
               <div class="hiddenaddress">
-                <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.to_json.to_s : "" %>
+                <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.to_json.to_s : (@customer.present? && @customer.address.present?) ? @customer.address.to_json.to_s : " "  %>
               </div>
               <div class="row font-weight-bold" style="">
                 <div class="col-lg-6"></div>
