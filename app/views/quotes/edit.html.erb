@@ -47,11 +47,11 @@
                 <select class="md-form-control md-static" name="phone" id="select-2">
                   <%
                     if (quote.idQuote != nil && quote.customer != nil) %>
-                    <option selected><%=
+                    <option value="<%= quote.customer.idClient %>"  selected><%=
                       phone_number_display(phone_type(quote.customer)) + " " + quote.customer.firstName + " " + quote.customer.lastName
                     %></option>
                     <% elsif @customer.present? %>
-                      <option selected><%=
+                      <option value="<%= @customer.idClient %>"  selected><%=
                           phone_number_display(phone_type(@customer)) +
                           " " + @customer.firstName + " " + @customer.lastName
                       %></option>
