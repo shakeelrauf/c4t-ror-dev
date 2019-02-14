@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_04_072930) do
+ActiveRecord::Schema.define(version: 2019_02_06_063601) do
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_072930) do
     t.text "contactPosition", null: false
     t.text "pstTaxNo", null: false
     t.text "gstTaxNo", null: false
+    t.boolean "usersFlatFee", default: false
     t.index ["idClient"], name: "business-client_idx"
   end
 
@@ -135,6 +136,9 @@ ActiveRecord::Schema.define(version: 2019_02_04_072930) do
     t.decimal "distance", precision: 10, scale: 2
     t.decimal "price", precision: 10, scale: 2
     t.boolean "still_driving"
+    t.string "payment_method"
+    t.string "customer_email"
+    t.integer "platesOn"
     t.index ["idAddress"], name: "Address_idAddress_idx"
     t.index ["idCar"], name: "VehiclulesInfo_idCar_idx"
     t.index ["idQuote"], name: "Quotes_idQuote_idx"

@@ -3,9 +3,13 @@ class DashboardController < ApplicationController
   include Customers
 
   def dashboard
-    heardofus = get_heard_of_us
-    countClients =  heardofus.count
-    render locals: {user: current_user,heardofus: heardofus, countClients: countClients}
+    heardofus = Customer.customers_heardofus
+    @count = Customer.count
+    heardofus_required_format_data = []
+    heardofus.each do |hou|
+      heardofus_required_format_data.push [hou["type"],hou["count_heardsofus_type"]]
+    end
+    render locals: {heardofus: heardofus_required_format_data}
   end
 
   def dispatched

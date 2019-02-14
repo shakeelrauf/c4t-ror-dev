@@ -26,6 +26,7 @@
  *= require main.css
  *= require style.css
  *= require responsive.css
+ *= require hichart
  *= require datedropper/datedropper.css
  *= require jquery-confirm/dist/jquery-confirm.min.css
  */

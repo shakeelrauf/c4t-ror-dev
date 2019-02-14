@@ -80,6 +80,7 @@
   <script>
       var quoteNo = "<%= quote.idQuote || nil %>";
       $('.nav-item a:first').tab('show');
+      setTimeout(function() { $('.nav-item').eq(0).click(); }, 100);
   </script>
   <%= public_js_path("book-quote.js") %>
   <%= public_js_path("common.js") %>

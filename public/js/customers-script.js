@@ -227,8 +227,8 @@ function addCusAddress(address) {
    function company_validates(){
       var flag = true;
       if(!$(".company-data").hasClass("force-hidden")){
-         $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST').filter(function() {
-          if (this.value == '') {
+         $('#txtContactPosition, #txtCompanyName, #txtPST, #txtGST, #txtFlat').filter(function() {
+          if (this.value == '' || ($("input[name='usersFlatFee']:checked").val() == undefined) ) {
             flag = false;
             return false;
           }
@@ -327,18 +327,21 @@ function addCusAddress(address) {
     function number_exist()
     {
       var $phone_num = $("#txtPhone").val();
+      var $phone_num1 = $("#txtCell").val();
+      var $phone_num2 = $("#txtSecondPhone").val();
       $.ajax({
           method: "get",
           url: "/number_exist",
-          data: { phone: $phone_num },
+          data: { phone: $phone_num , cell_phone: $phone_num1, secondary_phone: $phone_num2},
           dataType: "json",
           success: function(res){
-            if(res.client == 0){
-              all_number_validate();
-              $("#customer-form").submit()
+
+            if(res.found.found == true){
+                growling(res.found.type +" already exist.");
             }
             else{
-              growling("Phone Number already exist.");
+                all_number_validate();
+                $("#customer-form").submit()
             }
           }
       });

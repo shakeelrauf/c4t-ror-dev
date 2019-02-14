@@ -5,4 +5,7 @@ class QuoteCar < ApplicationRecord
 	belongs_to :address ,class_name: 'Address', foreign_key: 'idAddress', optional: true
 	has_one :schedule, class_name: "Schedule", foreign_key: 'idCar', dependent: :destroy
 
+	def booking_reference_no
+		format '%06d',self.id
+	end
 end

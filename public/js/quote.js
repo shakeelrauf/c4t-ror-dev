@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+    var new_data = false;
     $('#txtVehicleFilter').select2({
         dataType: 'json',
         ajax: {
@@ -36,12 +37,44 @@ $(document).ready(function() {
 
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
-                createPostalSelect2($("#car-location"+car.idQuoteCars));
-                if($(".hiddenaddress").html().trim().length > 0){
+                // $(".car-location-select2").each(function(index) {
+                    createPostalSelect2($("#car-location"+car.idQuoteCars));
+                // });
+                if(new_data==true){
+                    var address = {id: 'new', text: $("input[name=postal]").val()}
+                    if(address.text != "") {
+                        if (address.text.trim().replace(/\s/g, '').length == 6){
+                            $("#car-location" + car.idQuoteCars).append("<option data-select2-tag='true' value=" + address.id + " selected>" + address.text + "</option>");
+                            $("#car-location" + car.idQuoteCars).data('select2').trigger('select', {
+                                data: {id: address.id, text: address.text}
+                            });
+                            $("#car-location" + car.idQuoteCars).val(address.id)
+                            getDistanceForCar(address.text, car.idQuoteCars, function (distance, carId) {
+                                $("#car-distance" + carId).val(distance);
+                                updateCarWithDistance(distance, car.idQuoteCars);
+                                showCarNewAddress(address.text, carId);
+                            });
+                        }
+                    }
+                }
+                if(($("select[name=phone]").select2('data')[0] != undefined) && Number.isInteger(Number($("select[name=phone]").select2('data')[0].id)) && $(".hiddenaddress").html().trim().length > 0){
                     var addresses = JSON.parse($(".hiddenaddress").html());
                     if(addresses.length >= 1){
                         var address = addresses[0];
-                        $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+address.address+", "+address.city + ", "+address.province + ", " +address.postal+"</option>");
+                        var text = " ";
+                        if(address.address != undefined && address.address != "" ){
+                            text += address.address+", "
+                        }
+                        if(address.city != undefined && address.city != "" ){
+                            text += address.city+", "
+                        }
+                        if(address.province != undefined && address.province != "" ){
+                            text += address.province+", "
+                        }
+                        if(address.postal != undefined && address.postal != "" ){
+                            text += address.postal
+                        }
+                        $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+text+"</option>");
                         $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
                             data:  {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal }
                         });
@@ -103,6 +136,7 @@ $(document).ready(function() {
     $("select[name=phone]").select2({
         tags: true,
         createTag: function(params) {
+
             var phone = unformatPhone(params.term)
             return null
         },
@@ -130,10 +164,14 @@ $(document).ready(function() {
                             if (parseInt(no.text.replace(/-/g,'')) == parseInt(phone)) {
                                 found = true;
                             } else {
+                                $("#new_customer").val(false)
+                                new_data = false;
                                 resetCustomer()
                             }
                         });
                         if (!found) {
+                            new_data = true;
+                            $("#new_customer").val(true)
                             data.results.push(tag)
                             resetCustomer()
                         }
@@ -143,12 +181,17 @@ $(document).ready(function() {
 
                         }
                     }else{
+                        $("#new_customer").val(false)
+                        new_data = false;
+
                         return {
                             results: data.results,
                             pagination:  data.pagination
                         }
                     }
                 }else{
+                    $("#new_customer").val(false)
+                    new_data = false;
                     return {
 
                         results: data.results,
@@ -159,7 +202,28 @@ $(document).ready(function() {
         }
     });
 
+    function dup_select_val_remove(){
+      $("select").each(function(){
+          var usedNames = {};
+          $("option", this).each(function () {
+              if(usedNames[this.text]) {
+                  $(this).remove();
+              } else {
+                  usedNames[this.text] = this.value;
+              }
+          });
+       }); 
+    }
+
+
     $("select[name=phone]").on('select2:select', function (e) {
+      if($(".selection").text().trim().includes("New Customer")){
+        $("select[name=customerType]").val("Individual");
+        $('select[name=phoneType]').prepend("<option>Select an option</option>");
+        $('select[name=phoneType] option:eq(0)').prop('selected', true);
+        dup_select_val_remove();
+      }
+        $("#new_customer_id").val("false");
         var clientId = $("select[name=phone]").select2('data')[0].id;
         if(Number.isInteger(Number(clientId))){
             $.ajax("/customers/id/" + clientId + "/json").done(client => {
@@ -180,6 +244,12 @@ $(document).ready(function() {
             "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
         } else if (!isNaN(clientId)) {
             window.open("/customers/"+clientId+"/edit?firstName="+$("input[name=firstName]").val()+
+            "&lastName="+$("input[name=lastName]").val()+
+            "&postal="+$("input[name=postal]").val()+
+            "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
+        }
+        else if ($("#new_customer_id").val() != "false"){
+          window.open("/customers/"+$("#new_customer_id").val()+"/edit?firstName="+$("input[name=firstName]").val()+
             "&lastName="+$("input[name=lastName]").val()+
             "&postal="+$("input[name=postal]").val()+
             "&heardOfUs="+$("select[name=heardOfUs]").val(), "_blank");
@@ -223,6 +293,17 @@ $(document).ready(function() {
 
     calcPrices();
 });
+function customerUrl(){
+    var clientId = $("select[name=phone]").select2('data')[0];
+    if (!clientId) {
+        // There's no client selected, make a "no results" client
+        clientId = 0;
+    }else{
+        clientId = clientId.id
+    }
+    var  url = '/customers/' + clientId + '/postal-select2'
+    return url
+}
 function createPostalSelect2(s) {
   var clientId = $("select[name=phone]").select2('data')[0];
   if (!clientId) {
@@ -240,7 +321,6 @@ function createPostalSelect2(s) {
             $("input[name=car-postal" + carId +" ]").text(postal)
             return null;
         }
-        // Get the distance to this postal code
         getDistanceForCar(postal, carId, function(distance, carId) {
           $("#car-distance" + carId).val(distance);
           updateCarWithDistance(distance, carId);
@@ -255,7 +335,7 @@ function createPostalSelect2(s) {
       },
       dataType: 'json',
       ajax: {
-          url: '/customers/' + clientId + '/postal-select2',
+          url: customerUrl(),
           data: function (params) {
               var query = {
                   search: params.term,
@@ -264,26 +344,47 @@ function createPostalSelect2(s) {
               }
               return query;
           }
-      }
-  });
+      },
+      // processResults: function(data, params) {
+      //     var postal = params.term.trim().replace(/\s/g, '');
+      //     if(postal.length == 6) {
+      //         tag = {
+      //             id: postal,
+      //             text: postal
+      //         }
+      //         data.results.push(tag)
+      //     }
+      //     return {
+      //         results: data.results,
+      //         pagination:  data.pagination
+      //
+      //     }
+      // }
+    })
 
-  s.on('select2:select', function (e) {
-    var addressId = $(this).val();
-    if (!isNaN(parseInt(addressId))) {
-      getDistanceForAddress(addressId, carId, function(distance, carId) {
-        updateCarWithDistance(distance, carId);
-        hideCarExistingAddress(addressId, carId)
-        showCarExistingAddress(addressId, carId);
-      });
-    } else {
-      var postal = addressId;
-      getDistanceForCar(postal, carId, function(distance, carId) {
-        updateCarWithDistance(distance, carId);
-        resetAddress(carId)
-        showCarNewAddress(postal, carId);
-      });
-    }
-  });
+
+    s.on("select2:open", function (e) { console.log("select2:open");
+    });
+    s.on("select2:close", function (e) { console.log("select2:close"); });
+    s.on("select2:select", function (e) {
+        console.log("select")
+        var addressId = $(this).val();
+        if (!isNaN(parseInt(addressId))) {
+            getDistanceForAddress(addressId, carId, function(distance, carId) {
+                updateCarWithDistance(distance, carId);
+                hideCarExistingAddress(addressId, carId)
+                showCarExistingAddress(addressId, carId);
+            });
+        } else {
+            var postal = addressId;
+            getDistanceForCar(postal, carId, function(distance, carId) {
+                updateCarWithDistance(distance, carId);
+                resetAddress(carId)
+                showCarNewAddress(postal, carId);
+            });
+        }
+        calcPrice(carId)
+    });
 }
 
 function updateCarWithDistance(distance, carId) {
@@ -442,7 +543,9 @@ function calcPrice(carId,quote_id) {
 
 function calcPrice(carId) {
     var t = $("#tab" + carId);
-    quote_id = $("#quote").data("id");
+    quote_id = $("#quote").data("id"),
+        customer_id = $("#customer").data("id");
+
     // Get the distance from the input field
     var distance = $("#car-distance" + carId).val();
     if (isNaN(parseInt(distance))) {
@@ -472,6 +575,7 @@ function calcPrice(carId) {
     // Car price data
     var data = {
         "car":            carId,
+        "customer_id":    customer_id,
         "quoteId":        quote_id,
         "weight":         (t.attr("data-weight")),
         "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
@@ -489,10 +593,54 @@ function calcPrice(carId) {
         if (json.trim && json.trim().startsWith("<!DOCTYPE html>")) {
             document.location = "/login?redirect=" + document.location;
         } else if (json.netPrice != null) {
-            $("#tab"+carId).data('price', json);
             saveCarAuto(function(e) {
                 console.log("saved")
-            })
+            });
+            if(json.bonus!=undefined){
+                // if(json.bonus[0]=="custom"){
+                //
+                //     $("#flatfee"+carId).html(" ")
+                //     $("#bonuscar"+carId).html(" ")
+                //     $("#bonussteel"+carId).html(" ")
+                //     $("#customFee"+carId).html("Applied")
+                //     $("#bonus"+carId).html(json.bonus[1])
+                // }
+                if(json.bonus.bonus.type == "flatfee"){
+                    $("#flatfee"+carId).html("Applied")
+                    $("#cusflatfee"+carId).html(" ")
+                    $("#bonuscar"+carId).html(" ")
+                    $("#bonussteel"+carId).html(" ")
+                    $("#customFee"+carId).html(" ")
+                    $("#bonus"+carId).html(json.bonus.bonus.value)
+
+                }
+
+                if(json.bonus.bonus.type =="carprice"){
+                    $("#bonuscar"+carId).html("Applied")
+                    $("#cusflatfee"+carId).html(" ")
+                    $("#bonussteel"+carId).html(" ")
+                    $("#customFee"+carId).html(" ")
+                    $("#bonus"+carId).html(json.bonus.bonus.value)
+                }
+                if(json.bonus.bonus.type=="steelprice"){
+                    $("#cusflatfee"+carId).html(" ")
+                    $("#customFee"+carId).html(" ")
+                    $("#bonuscar"+carId).html(" ")
+                    $("#bonussteel"+carId).html("Applied")
+                    $("#bonus"+carId).html(json.bonus.bonus.value)
+                }
+                if(json.bonus.bonus.type == "no"){
+                    $("#bonuscar"+carId).html(" ")
+                    $("#bonussteel"+carId).html(" ")
+
+                }
+                if(json.bonus.user_flat_fee== true){
+                    $("#cusflatfee"+carId).html("Applied")
+                }else{
+                    $("#cusflatfee"+carId).html(" ")
+                }
+            }
+            $("#tab"+carId).data('price', json);
             // Pricing details
             $("#weight"+carId).html(json.weight);
             $("#steelPrice"+carId).html(json.steelPrice);
@@ -517,7 +665,6 @@ function calcPrice(carId) {
             // $("#pickup"+carId).html(json.pickup);
 
             $("#carPrice"+carId).html(json.carPrice);
-
             sumTotal();
         }
     });
@@ -548,21 +695,21 @@ function calcPrices() {
 
 function sumTotal() {
     var totalPrice = 0;
+    // Update the list price
     // $(".row.tab-content.tab-content-details.vehicle-parameters > .tab-pane").each(function() {
     $(".tab-pane").each(function() {
       if ($(this).hasClass("car-pane")) {
-        const carId = $(this).attr("id").substr(3);
-        const tab = $(this);
-        const vehId = $(tab).attr("class").substr($(tab).attr("class").indexOf("veh-")+4).split(" ")[0];
+        var carId = $(this).attr("id").substr(3);
+        var tab = $(this);
+        var vehId = $(tab).attr("class").substr($(tab).attr("class").indexOf("veh-")+4).split(" ")[0];
 
         var d = $("#tab"+carId).data('price');
-        if (d && d.netPrice) {
+          if (d && (d.netPrice != undefined)) {
           var netPrice     = d.netPrice;
           var dropoffPrice = d.dropoffPrice;
           var pickupPrice  = d.pickupPrice;
 
           totalPrice += Math.max(netPrice, 0.0);
-
           // Update the list price
           $("#car-price-dropoff-" + carId).html(toDollar(dropoffPrice) + " $");
           $("#car-price-pickup-" + carId).html(toDollar(pickupPrice) + " $");
@@ -628,7 +775,7 @@ function saveCar(callback) {
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
             "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
-            "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
+            "carPostal":      ($(this).find("input[name=car-postal"+carId+"]").val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
         }
@@ -647,9 +794,21 @@ function saveCar(callback) {
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
+            "phoneType": $("select[name=phoneType]").val(),
+            "customerType": $("select[name=customerType]").val(),
+            "new_customer": $("#new_customer").val(),
+            "new_customer_id": $("#new_customer_id").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
+      if($(".selection").text().trim().includes("New Customer")){
+        if(s.q != undefined && s.q.idClient != undefined){
+          $("#new_customer_id").val(s.q.idClient);
+        }
+      }
+      else{
+        $("#new_customer_id").val("false");
+      }
         if (callback) {
             callback(s);
         } else {
@@ -715,9 +874,21 @@ function saveCarAuto(callback) {
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
+            "phoneType": $("select[name=phoneType]").val(),
+            "customerType": $("select[name=customerType]").val(),
+            "new_customer": $("#new_customer").val(),
+            "new_customer_id": $("#new_customer_id").val(),
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
+        if($(".selection").text().trim().includes("New Customer")){
+          if(s != undefined && s.customer_id != undefined){
+            $("#new_customer_id").val(s.customer_id);
+          }
+        }
+        else{
+          $("#new_customer_id").val("false");
+        }
         if (callback) {
             callback(s);
         } else {
@@ -729,12 +900,14 @@ function saveCarAuto(callback) {
                     doGrowlingDanger(s.error);
                 }
             }else{
+                $("#customer").data("id", s.customer_id)
                 doGrowlingMessage("Saved");
             }
         }
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
     });
+  
 }
 
 
@@ -744,18 +917,42 @@ function gotoListOfQuotes() {
     }
 }
 
+function set_phone_type(data){
+  if (data.phone == unformatPhone($("select[name=phone] option:selected").text())){
+    $("#cus_phoneType").val("primary");
+  }
+  else if (data.cellPhone == unformatPhone($("select[name=phone] option:selected").text())){
+    $("#cus_phoneType").val("cell");
+  }
+  else if (data.secondaryPhone == unformatPhone($("select[name=phone] option:selected").text())) {
+    $("#cus_phoneType").val("other");
+  }
+}
+
+
+function capitalize_Words(str)
+{
+ return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 function fillCustomer(data) {
     $(".car-location-select2").each(function(index) {
-      createPostalSelect2($(this));
+        $(this).select2('destroy');
+        createPostalSelect2($(this));
     });
+    $("#customer").data("id", data.idClient)
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
-    $("select[name=phone] option:selected").text(data.phone + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
+    $("#cus_customerType").val(capitalize_Words(data.type));
+    $("#cus_customerType").attr('disabled',true);
+    set_phone_type(data);
+    $("select[name=phoneType]").attr('disabled',true);
     $(".hiddenaddress").html(JSON.stringify(data.address))
     if (data.quotes.length >= 1) {
       $('.has_quote option:eq(1)').prop('selected', true);
       $(".has_quote").attr('disabled',true);
+      $("select[name=customerType]").attr('disabled',true);
+      $("select[name=phoneType]").attr('disabled',true);
       $("select[name=heardOfUs]").val("Repeat Customer");
     } else {
       $(".has_quote").attr('disabled',false);
@@ -771,7 +968,11 @@ function resetCustomer(){
     $("input[name=postal]").val("");
     $("input[name=firstName]").val("");
     $("input[name=lastName]").val("");
+    $("select[name=customerType]").val("");
+    $("select[name=phoneType]").val("");
     $('.has_quote option:eq(1)').prop('selected', false);
+    $("select[name=customerType]").attr('disabled',false);
+    $("select[name=phoneType]").attr('disabled',false);
     $(".has_quote").attr('disabled',false);
 
 }

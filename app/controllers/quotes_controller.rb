@@ -16,7 +16,9 @@ class QuotesController < ApplicationController
 
   def car_price
     return respond_json({"netPrice": nil}) if !params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?
-    quote = JSON.parse Quote.where(idQuote: params[:quoteId]).first.to_json
+    @quote = Quote.where(idQuote: params[:quoteId]).first
+    quote = JSON.parse @quote.to_json
+    customer = Customer.find_by_id(params[:customer_id])
     return respond_json({"netPrice": nil}) if quote.nil?
     car_distance =  params[:distance]
     car_distance = car_distance.to_i if car_distance.present?
@@ -58,7 +60,42 @@ class QuotesController < ApplicationController
     r[:missingWheelsCost] = quote["wheelPrice"].to_f
     r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
     r[:pickupCost] = quote["pickup"].to_f
-    r[:carPrice] = netPrice.to_f
+    r[:carPrice] = '%.2f' % netPrice.to_f
+    if customer.present? && customer.type != "Individual"
+      bonus = calculate_bonus_or_flatfee(customer, r)
+      if bonus.is_a? Hash
+        if bonus[:user_flat_fee] == true
+          r[:netPrice] = bonus[:flat_fee].to_f
+          r[:weightPrice] = " "
+          r[:distanceCost] = " "
+          r[:carPrice] = '%.2f' % bonus[:flat_fee].to_f
+          if bonus[:bonus].present?
+            if bonus[:bonus][:type] == "carprice"
+              r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "steelprice"
+              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "flatfee"
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            end
+          end
+        elsif bonus[:user_flat_fee] == false
+          if bonus[:bonus].present?
+            if bonus[:bonus][:type] == "carprice"
+              r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "steelprice"
+              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            elsif bonus[:bonus][:type] == "flatfee"
+              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+            end
+          end
+        end
+      end
+    end
+    r[:bonus] = bonus
     respond_json(r)
   end
 
@@ -83,29 +120,45 @@ class QuotesController < ApplicationController
   def quotes_save_without_validations
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
     return respond_json({:error => "phone number length must be at least 10 digits."}) if (phone.to_s.length < 10)
-    carList = []
+    car_list = []
     begin
-      carList = JSON.parse(params[:cars].to_json)
+      car_list = JSON.parse(params[:cars].to_json)
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
+    phone_type = " "
+    phone_type_1 = " "
+    phone_type_2 = " "
+    if params[:phoneType] == "primary" || params[:phoneType] == ""
+      phone_type = phone
+      phone_type_1 = " "
+      phone_type_2 = " "
+    elsif params[:phoneType] == "cell"
+      phone_type = " "
+      phone_type_1 = phone
+      phone_type_2 = " "
+    elsif params[:phoneType] == "other"
+      phone_type = " "
+      phone_type_1 = " "
+      phone_type_2 = phone
+    end
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
-    if !carList.nil?
-      client = save_customer params, phone, heard_of_us
+    if !car_list.nil?
+      client = save_customer params, heard_of_us,phone, phone_type, phone_type_1, phone_type_2, params[:customerType]
       Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
-      carList.each do |car, val|
-        quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
-        if carList[car]["carAddressId"].present?
-          address = Address.find_by_id(carList[car]["carAddressId"])
+      car_list.each do |car, val|
+        quote_car = QuoteCar.where(idQuoteCars: car_list[car]["car"]).first
+        if car_list[car]["carAddressId"].present?
+          address = Address.find_by_id(car_list[car]["carAddressId"])
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
-          car_postal_code = Validations.postal(carList[car]["carPostal"])
-          update_quote_car_address carList[car], quote_car, client if carList[car]["carPostal"].present?
+          car_postal_code = Validations.postal(car_list[car]["carPostal"])
+          update_quote_car_address car_list[car], quote_car, client if car_list[car]["carPostal"].present?
         end
-        quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
+        quote_car.update(missingBattery: car_list[car]["missingBattery"],missingCat: car_list[car]["missingCat"],gettingMethod: car_list[car]["gettingMethod"],missingWheels: car_list[car]["missingWheels"], still_driving: car_list[car]["still_driving"] ) if quote_car.present?
       end
-      return respond_json({message: "QuickQuote saved"})
+      return respond_json({message: "QuickQuote saved", customer_id: client.idClient})
     else
       return respond_json({error: "Please select atleast one car"})
     end
@@ -148,25 +201,30 @@ class QuotesController < ApplicationController
   end
 
   def phone_numbers
-    phones = Customer.where('phone LIKE ?', params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
-    returned = {results: [], pagination: {more: true}}
-    returned[:pagination][:more] = false if phones.length < params[:limit].to_i
-    phones.each do |phone|
-      client = JSON.parse phone.to_json
-      # client["phone"] =  client["cellPhone"] if client["phone"].to_s.match(params[:search]) && client["cellPhone"].to_s.match(params[:search])
-      # client["phone"] =  client["secondaryPhone"] if client["phone"].to_s.match(params[:search]) && client["secondaryPhone"].to_s.match(params[:search])
-      text = ""
-      if client["phone"].present? && client["phone"].length >= 10
-        text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s + " " + client["firstName"].to_s + " " + client["lastName"].to_s
-      elsif client["phone"].present?
-        text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s
-      end
-      returned[:results].push({id: phone["idClient"], text: text})
-      if client["business"]
-        client["business"]["contacts"].each do |contact|
-          returned[:results].push({id: phone["idClient"],text: text})
+    if params[:search].present?
+      phones = Customer.where('phone LIKE ? OR cellPhone LIKE ? OR secondaryPhone LIKE ?', params[:search] + "%",params[:search] + "%", params[:search] + "%").limit(params[:limit].to_i).offset(params[:offset].to_i * params[:limit].to_i)
+      returned = {results: [], pagination: {more: true}}
+      returned[:pagination][:more] = false if phones.length < params[:limit].to_i
+      phones.each do |phone|
+        client = JSON.parse phone.to_json
+        client["phone"] =  client["cellPhone"] if  client["cellPhone"].to_s.match(params[:search])
+        client["phone"] =  client["secondaryPhone"] if  client["secondaryPhone"].to_s.match(params[:search])
+        text = ""
+        if client["phone"].present? && client["phone"].length >= 10
+          text = client["phone"][0,3].to_s + "-" + client["phone"][3,3].to_s+ "-" + client["phone"][6,10].to_s + " " + client["firstName"].to_s + " " + client["lastName"].to_s
+        elsif client["phone"].present?
+          text = client["phone"]+ " " + client["firstName"].to_s + " " + client["lastName"].to_s
+        end
+        returned[:results].push({id: phone["idClient"], text: text})
+        if client["business"]
+          client["business"]["contacts"].each do |contact|
+            returned[:results].push({id: phone["idClient"],text: text})
+          end
         end
       end
+    else
+      returned = {results: [], pagination: {more: true}}
+      returned[:pagination][:more] = false
     end
     respond_json(returned)
   end
@@ -230,5 +288,60 @@ class QuotesController < ApplicationController
       end
     end
     respond_json(quotes)
+  end
+
+  private
+  def calculate_bonus_or_flatfee(customer, net_price)
+    flat_fee = 0
+    if customer.business && customer.business.usersFlatFee == true
+      custom_fee = Setting.where(name: "DealerFlatFee").first.value
+      price = price_according_to_grade(customer, net_price)
+      hash = {user_flat_fee: true,bonus: price, flat_fee: custom_fee.to_f }
+    else
+      price = price_according_to_grade(customer, net_price)
+      hash = {user_flat_fee: false,bonus: price }
+    end
+  end
+
+  def bonus_price(setting,value,net_price)
+    if setting.first.value == "flatfee"
+      hash = {type: "flatfee", value: '%.2f' % value.first.value.to_f }
+    elsif setting.first.value == "card"
+      hash = {type: "carprice", value: '%.2f' % value.first.value.to_f }
+    elsif setting.first.value == "carp"
+      percentage = '%.2f' % ((net_price[:steelPrice].to_f * net_price[:weight] * value.first.value.to_f)/100)
+      hash = {type: "carprice", value: percentage }
+    elsif setting.first.value == "steelp"
+      percentage = '%.2f' % ((net_price[:steelPrice].to_f * value.first.value.to_f)/100)
+      hash = {type: "steelprice", value: percentage }
+    elsif setting.first.value == "steeld"
+      hash = {type: "steelprice", value: '%.2f' % value.first.value.to_f }
+    end
+    return hash
+  end
+
+  def price_according_to_grade(customer, net_price)
+    price = {type: "no", value: 0}
+    if customer.grade == "Custom"
+      price =["custom", customer.customDollarCar]
+    else
+      if customer.grade == "Bronze"
+        settings = Setting.where(grade: 'Bronze')
+        value = settings.select{|s| s.label =="bonus"}
+        setting = settings.select{|s| s.label =="bonus-type"}
+        price = bonus_price(setting,value, net_price)
+      elsif customer.grade == "Silver"
+        settings = Setting.where(grade: 'Silver')
+        value = settings.select{|s| s.label =="bonus-1"}
+        setting = settings.select{|s| s.label =="bonus-type-1"}
+        price = bonus_price(setting,value, net_price)
+      elsif customer.grade == "Gold"
+        settings = Setting.where(grade: 'Gold')
+        value = settings.select{|s| s.label =="bonus-2"}
+        setting = settings.select{|s| s.label =="bonus-type-2"}
+        price = bonus_price(setting,value, net_price)
+      end
+    end
+    return price
   end
 end

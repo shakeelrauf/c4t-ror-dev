@@ -10,11 +10,13 @@
     <link rel="shortcut icon" href="<%= image_url 'favicon.png' %>" type="image/x-icon">
     <link rel="icon" href="<%= image_url 'favicon.ico' %>" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/dd-icon/dd-icon.woff">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/dd-icon/dd-icon.ttf">
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
     <%= stylesheet_link_tag 'dashboard.css' %>
     <%= javascript_include_tag 'dashboard.js' %>
-
+    <%= yield :head_js %>
   </head>
   <body class="sidebar-mini fixed">
     <div class="loading hidden">
