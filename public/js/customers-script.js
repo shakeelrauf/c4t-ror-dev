@@ -349,6 +349,7 @@ function addCusAddress(address) {
 
     $("#txtType").change(function() {
         changeViewType();
+        changeGradeViewType();
     });
 
     $("#txtGrade").change(function() {
