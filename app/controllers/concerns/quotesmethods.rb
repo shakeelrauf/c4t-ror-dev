@@ -5,7 +5,7 @@ module Quotesmethods
   end
 
   def create_default_quote
-    settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
+    settings = Setting.run_sql_query("SELECT * FROM settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM settings GROUP BY name)")
     settings_hash = {}
     settings.each do |setting|
       settings_hash[setting["name"]] = setting["value"]
@@ -40,7 +40,7 @@ module Quotesmethods
     if q.present?
       filter = + q.gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * from VehiculesInfo where"
+      query = "Select * from vehicles_info where"
       filters.each do |fil|
         query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
         query.concat(" AND ") if !fil.eql?(filters.last)

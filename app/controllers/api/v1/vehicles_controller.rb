@@ -17,7 +17,7 @@ class Api::V1::VehiclesController < ApiController
     if info.nil?
       return render_json_response({:error => VEHICLE_NOT_FOUND, :success => false}, :not_found)
     else
-    	return render_json_response(info, :ok) 
+    	return render_json_response(info, :ok)
     end
 	end
 
@@ -29,7 +29,7 @@ class Api::V1::VehiclesController < ApiController
     if params[:filter].present?
       filter = + params[:filter].gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * from VehiculesInfo where"
+      query = "Select * from vehicule_infos where"
       filters.each do |fil|
       	query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
       	query.concat(" AND ") if !fil.eql?(filters.last)
@@ -47,7 +47,7 @@ class Api::V1::VehiclesController < ApiController
     if params[:filter].present?
 			filter = "%" + params[:filter].gsub(/[\s]/, "% %") + "%"
 			filters = filter.split(' ')
-			query = "Select * from VehiculesInfo where"
+			query = "Select * from vehicule_infos where"
 			filters.each do |fil|
 				query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
 				query.concat(" AND ") if !fil.eql?(filters.last)
@@ -62,7 +62,7 @@ class Api::V1::VehiclesController < ApiController
 	  end
 	end
 
-	private 
+	private
 	def invalid_params
 		!is_number(params[:year]) || !params[:make] || !params[:model] || !is_number(params[:weight])
 	end

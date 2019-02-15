@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_15_063305) do
+ActiveRecord::Schema.define(version: 2019_02_15_144540) do
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_063305) do
     t.string "salt"
   end
 
-  create_table "vehicule_infos", primary_key: "idVehiculeInfo", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "vehicle_infos", primary_key: "idVehiculeInfo", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.text "year"
     t.text "make"
     t.text "model"
@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_063305) do
   add_foreign_key "contacts", "business", column: "idBusiness", primary_key: "idClient", name: "Contacts-Business"
   add_foreign_key "quote_cars", "address", column: "idAddress", primary_key: "idAddress", name: "Address_idAddress"
   add_foreign_key "quote_cars", "quotes", column: "idQuote", primary_key: "idQuote", name: "Quotes_idQuote"
-  add_foreign_key "quote_cars", "vehicule_infos", column: "idCar", primary_key: "idVehiculeInfo", name: "VehiclesInfo_idCar"
+  add_foreign_key "quote_cars", "vehicle_infos", column: "idCar", primary_key: "idVehiculeInfo", name: "VehiclesInfo_idCar"
   add_foreign_key "quotes", "clients", column: "idClient", primary_key: "idClient", name: "Clients_idClient"
   add_foreign_key "quotes", "status", column: "idStatus", primary_key: "idStatus", name: "Status_idStatus"
   add_foreign_key "quotes", "users", column: "idUser", primary_key: "idUser", name: "Users_idUser"

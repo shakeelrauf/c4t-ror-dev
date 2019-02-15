@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-	self.table_name = 'Users'
+	self.table_name = 'users'
 	include Roles
 	validates :email,  presence: true
  	validates_format_of :email, :with => /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i, message: "Email is invalid."
@@ -81,4 +81,3 @@ class User < ApplicationRecord
 	  crypt.decrypt_and_verify data
 	end
 end
-
