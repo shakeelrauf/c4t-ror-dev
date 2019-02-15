@@ -605,19 +605,12 @@ function calcPrice(carId) {
                 //     $("#customFee"+carId).html("Applied")
                 //     $("#bonus"+carId).html(json.bonus[1])
                 // }
-                if(json.bonus.bonus.type == "flatfee"){
-                    $("#flatfee"+carId).html("Applied")
-                    $("#cusflatfee"+carId).html(" ")
-                    $("#bonuscar"+carId).html(" ")
-                    $("#bonussteel"+carId).html(" ")
-                    $("#customFee"+carId).html(" ")
-                    $("#bonus"+carId).html(json.bonus.bonus.value)
 
-                }
 
                 if(json.bonus.bonus.type =="carprice"){
                     $("#bonuscar"+carId).html("Applied")
                     $("#cusflatfee"+carId).html(" ")
+                    $("#flatfee"+carId).html(" ")
                     $("#bonussteel"+carId).html(" ")
                     $("#customFee"+carId).html(" ")
                     $("#bonus"+carId).html(json.bonus.bonus.value)
@@ -635,9 +628,18 @@ function calcPrice(carId) {
 
                 }
                 if(json.bonus.user_flat_fee== true){
-                    $("#cusflatfee"+carId).html("Applied")
+                    $("#cusflatfee"+carId).html(json.doorPrice)
+                    if(json.bonus.bonus.type == "flatfee"){
+                        $("#flatfee"+carId).html("Applied")
+                        $("#bonuscar"+carId).html(" ")
+                        $("#bonussteel"+carId).html(" ")
+                        $("#customFee"+carId).html(" ")
+                        $("#bonus"+carId).html(json.bonus.bonus.value)
+
+                    }
                 }else{
                     $("#cusflatfee"+carId).html(" ")
+                    $("#flatfee"+carId).html(" ")
                 }
             }
             $("#tab"+carId).data('price', json);
