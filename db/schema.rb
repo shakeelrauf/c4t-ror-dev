@@ -10,7 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_06_063601) do
+ActiveRecord::Schema.define(version: 2019_02_15_063305) do
+
+  create_table "QuotesCars", primary_key: "idQuoteCars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "idQuote", null: false
+    t.integer "idCar", null: false
+    t.integer "idAddress"
+    t.text "donation"
+    t.text "gettingMethod", null: false
+    t.text "vin"
+    t.integer "gotKeys", limit: 1
+    t.text "drivetrain"
+    t.text "tiresCondition"
+    t.integer "ownership", limit: 1
+    t.integer "running", limit: 1
+    t.integer "complete", limit: 1
+    t.text "color"
+    t.text "receipt"
+    t.text "ownershipName"
+    t.text "ownershipAddress"
+    t.integer "cashRegular"
+    t.text "timeBooked"
+    t.text "carNotes"
+    t.text "driverNotes"
+    t.date "dateBooked"
+    t.integer "missingWheels", default: 0
+    t.boolean "missingBattery"
+    t.boolean "missingCat"
+    t.integer "isTowable", limit: 1
+    t.integer "canDo2wd", limit: 1
+    t.integer "canGoNeutral", limit: 1
+    t.decimal "distance", precision: 10, scale: 2
+    t.decimal "price", precision: 10, scale: 2
+    t.boolean "still_driving"
+    t.integer "platesOn"
+    t.string "payment_method"
+    t.string "customer_email"
+    t.index ["idAddress"], name: "Address_idAddress_idx"
+    t.index ["idCar"], name: "VehiclulesInfo_idCar_idx"
+    t.index ["idQuote"], name: "Quotes_idQuote_idx"
+  end
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -35,7 +74,7 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.text "contactPosition", null: false
     t.text "pstTaxNo", null: false
     t.text "gstTaxNo", null: false
-    t.boolean "usersFlatFee", default: false
+    t.boolean "usersFlatFee"
     t.index ["idClient"], name: "business-client_idx"
   end
 
@@ -58,11 +97,12 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.text "cellPhone"
     t.text "secondaryPhone"
     t.text "note", null: false
-    t.text "grade", null: false
+    t.string "grade"
     t.text "customDollarCar", null: false
     t.text "customDollarSteel", null: false
     t.text "customPercCar", null: false
     t.text "customPercSteel", null: false
+    t.string "phone_type"
     t.index ["idHeardOfUs"], name: "Clients-HeardsOfUs_idx"
   end
 
@@ -103,45 +143,6 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.index ["idClient"], name: "Clients_idClient_idx"
     t.index ["idStatus"], name: "Status_idStatus_idx"
     t.index ["idUser"], name: "Users_idUser_idx"
-  end
-
-  create_table "quotescars", primary_key: "idQuoteCars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.integer "idQuote", null: false
-    t.integer "idCar", null: false
-    t.integer "idAddress"
-    t.text "donation"
-    t.text "gettingMethod", null: false
-    t.text "vin"
-    t.integer "gotKeys", limit: 1
-    t.text "drivetrain"
-    t.text "tiresCondition"
-    t.integer "ownership", limit: 1
-    t.integer "running", limit: 1
-    t.integer "complete", limit: 1
-    t.text "color"
-    t.text "receipt"
-    t.text "ownershipName"
-    t.text "ownershipAddress"
-    t.integer "cashRegular"
-    t.text "timeBooked"
-    t.text "carNotes"
-    t.text "driverNotes"
-    t.date "dateBooked"
-    t.integer "missingWheels", default: 0
-    t.boolean "missingBattery"
-    t.boolean "missingCat"
-    t.integer "isTowable", limit: 1
-    t.integer "canDo2wd", limit: 1
-    t.integer "canGoNeutral", limit: 1
-    t.decimal "distance", precision: 10, scale: 2
-    t.decimal "price", precision: 10, scale: 2
-    t.boolean "still_driving"
-    t.string "payment_method"
-    t.string "customer_email"
-    t.integer "platesOn"
-    t.index ["idAddress"], name: "Address_idAddress_idx"
-    t.index ["idCar"], name: "VehiclulesInfo_idCar_idx"
-    t.index ["idQuote"], name: "Quotes_idQuote_idx"
   end
 
   create_table "satisfactions", primary_key: "idSatisfaction", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -220,16 +221,16 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.text "weight"
   end
 
-  add_foreign_key "address", "clients", column: "idClient", primary_key: "idClient", name: "Address_idClient"
-  add_foreign_key "business", "clients", column: "idClient", primary_key: "idClient", name: "business-client"
-  add_foreign_key "clients", "heardsofus", column: "idHeardOfUs", primary_key: "idHeardOfUs", name: "Clients-HeardsOfUs"
-  add_foreign_key "contacts", "business", column: "idBusiness", primary_key: "idClient", name: "Contacts-Business"
-  add_foreign_key "quotes", "clients", column: "idClient", primary_key: "idClient", name: "Clients_idClient"
-  add_foreign_key "quotes", "status", column: "idStatus", primary_key: "idStatus", name: "Status_idStatus"
-  add_foreign_key "quotes", "users", column: "idUser", primary_key: "idUser", name: "Users_idUser"
-  add_foreign_key "quotescars", "address", column: "idAddress", primary_key: "idAddress", name: "Address_idAddress"
-  add_foreign_key "quotescars", "quotes", column: "idQuote", primary_key: "idQuote", name: "Quotes_idQuote"
-  add_foreign_key "quotescars", "vehiculesinfo", column: "idCar", primary_key: "idVehiculeInfo", name: "VehiclesInfo_idCar"
-  add_foreign_key "satisfactions", "clients", column: "idClient", primary_key: "idClient", name: "Satisfactions_Clients_idClient"
-  add_foreign_key "schedules", "quotescars", column: "idCar", primary_key: "idQuoteCars", name: "Schedules_idQuoteCar"
+  add_foreign_key "QuotesCars", "address", column: "idAddress", primary_key: "idaddress", name: "Address_idAddress"
+  add_foreign_key "QuotesCars", "quotes", column: "idQuote", primary_key: "idquote", name: "Quotes_idQuote"
+  add_foreign_key "QuotesCars", "vehiculesinfo", column: "idCar", primary_key: "idvehiculeinfo", name: "VehiclesInfo_idCar"
+  add_foreign_key "address", "clients", column: "idClient", primary_key: "idclient", name: "Address_idClient"
+  add_foreign_key "business", "clients", column: "idClient", primary_key: "idclient", name: "business-client"
+  add_foreign_key "clients", "heardsofus", column: "idHeardOfUs", primary_key: "idheardofus", name: "Clients-HeardsOfUs"
+  add_foreign_key "contacts", "business", column: "idBusiness", primary_key: "idclient", name: "Contacts-Business"
+  add_foreign_key "quotes", "clients", column: "idClient", primary_key: "idclient", name: "Clients_idClient"
+  add_foreign_key "quotes", "status", column: "idStatus", primary_key: "idstatus", name: "Status_idStatus"
+  add_foreign_key "quotes", "users", column: "idUser", primary_key: "iduser", name: "Users_idUser"
+  add_foreign_key "satisfactions", "clients", column: "idClient", primary_key: "idclient", name: "Satisfactions_Clients_idClient"
+  add_foreign_key "schedules", "quotescars", column: "idCar", primary_key: "idquotecars", name: "Schedules_idQuoteCar"
 end
