@@ -1,3 +1,3 @@
 class VehicleInfo < ApplicationRecord
-	self.table_name = 'vehicule_infos'
+	self.table_name = 'vehicle_infos'
 end

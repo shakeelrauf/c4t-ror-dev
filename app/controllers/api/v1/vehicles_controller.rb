@@ -29,7 +29,7 @@ class Api::V1::VehiclesController < ApiController
     if params[:filter].present?
       filter = + params[:filter].gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * from vehicule_infos where"
+      query = "Select * from vehicle_infos where"
       filters.each do |fil|
       	query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
       	query.concat(" AND ") if !fil.eql?(filters.last)
@@ -47,7 +47,7 @@ class Api::V1::VehiclesController < ApiController
     if params[:filter].present?
 			filter = "%" + params[:filter].gsub(/[\s]/, "% %") + "%"
 			filters = filter.split(' ')
-			query = "Select * from vehicule_infos where"
+			query = "Select * from vehicle_infos where"
 			filters.each do |fil|
 				query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
 				query.concat(" AND ") if !fil.eql?(filters.last)
