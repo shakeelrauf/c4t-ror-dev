@@ -1,5 +1,5 @@
 class Address < ApplicationRecord
-	self.table_name = 'Address'
+	self.table_name = 'address'
 
 	belongs_to :client   ,class_name: 'Customer', foreign_key: 'idClient', optional: true
 	has_one    :quotecar ,class_name: 'Quotecar', foreign_key: 'idAddress'
