@@ -178,7 +178,7 @@
                       </span>
                     <div class="md-input-wrapper">
                       <select class="md-form-control md-static selectcash" id="txtGrade" name="grade">
-                        <% if action_name == "edit" %>
+                        <% if action_name == "edit" && @customer.grade != nil %>
                           <option selected="selected"><%= @customer.grade %></option>
                         <% end %>
                         <% if @customer.grade == nil%>

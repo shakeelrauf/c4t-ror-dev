@@ -84,6 +84,22 @@ function validString(str, re) {
     console.log(patt.test(str))
     return patt.test(str);
 }
+function growling(message) {
+    $.growl({
+        message: message
+    },{
+        type: "danger",
+        allow_dismiss: true,
+        label: 'Cancel',
+        className: 'btn-xs btn-inverse',
+        placement: {
+            from: 'top',
+            align: 'center'
+        },
+        delay: 0,
+        animate: { enter: 'animated fadeInDown' }
+    });
+}
 
 if ($(".the_form").length) {
     $(".the_form").validate(RULES);
@@ -101,6 +117,9 @@ if ($(".the_form").length) {
                  // $(this).val($(this).val().replace(/-/g, ''));
              });
             $(".the_form").submit()
+        }
+        else{
+            growling("Some fields are in an incorrect format and could not be validated");
         }
     })
 }

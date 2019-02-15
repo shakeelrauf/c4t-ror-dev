@@ -182,5 +182,8 @@ $( document ).ready(function() {
                 });
             }
         }
+        else{
+            growling("Some fields are in an incorrect format and could not be validated");
+        }
     });
 });
