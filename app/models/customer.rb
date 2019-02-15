@@ -1,5 +1,5 @@
 class Customer < ApplicationRecord
-	self.table_name = "Clients"
+	self.table_name = "clients"
 	self.inheritance_column = :_type_disabled
 	has_many :address, class_name: 'Address', inverse_of: :client, foreign_key: 'idClient', dependent: :destroy
 	has_one :business, class_name: 'Business',inverse_of: :client ,foreign_key: 'idClient'
