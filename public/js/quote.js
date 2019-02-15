@@ -640,6 +640,7 @@ function calcPrice(carId) {
                 }else{
                     $("#cusflatfee"+carId).html(" ")
                     $("#flatfee"+carId).html(" ")
+                    $("#bonus"+carId).html(" ")
                 }
             }
             $("#tab"+carId).data('price', json);
