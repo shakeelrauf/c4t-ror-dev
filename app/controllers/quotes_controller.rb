@@ -72,14 +72,14 @@ class QuotesController < ApplicationController
           if bonus[:bonus].present?
             if bonus[:bonus][:type] == "carprice"
               r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
             elsif bonus[:bonus][:type] == "steelprice"
-              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+              r[:steelPrice] = '%.2f' % ( r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  '%.2f' %  (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
             elsif bonus[:bonus][:type] == "flatfee"
-              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f)
+              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
             else
-              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f)
+              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' %  (r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
             end
           end
         elsif bonus[:user_flat_fee] == false
@@ -87,20 +87,20 @@ class QuotesController < ApplicationController
             if bonus[:bonus][:type] == "carprice"
               r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
               if isPickup
-                r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+                r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:netPrice].to_f + bonus[:bonus][:value].to_f)
                 r[:dropoffPrice] += bonus[:bonus][:value].to_f
               else
                 (r[:dropoffPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f)
                 r[:pickupPrice] += bonus[:bonus][:value].to_f
               end
             elsif bonus[:bonus][:type] == "steelprice"
-              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
-              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+              r[:steelPrice] = '%.2f' % (r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
               if isPickup
-                r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+                r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
                 r[:dropoffPrice] += bonus[:bonus][:value].to_f
               else
-                (r[:dropoffPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+                (r[:dropoffPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f))
                 r[:pickupPrice] += bonus[:bonus][:value].to_f
               end
               # elsif bonus[:bonus][:type] == "flatfee"
