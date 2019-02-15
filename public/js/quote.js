@@ -640,6 +640,7 @@ function calcPrice(carId) {
                 }else{
                     $("#cusflatfee"+carId).html(" ")
                     $("#flatfee"+carId).html(" ")
+                    $("#bonus"+carId).html(" ")
                 }
             }
             $("#tab"+carId).data('price', json);
@@ -955,7 +956,8 @@ function fillCustomer(data) {
       $(".has_quote").attr('disabled',true);
       $("select[name=customerType]").attr('disabled',true);
       $("select[name=phoneType]").attr('disabled',true);
-      $("select[name=heardOfUs]").val("Repeat Customer");
+        $("select[name=heardOfUs]").val(data.heardofus.type);
+        $("select[name=heardOfUs] option:selected").text("Repeat Customer");
     } else {
       $(".has_quote").attr('disabled',false);
       $("select[name=heardOfUs]").val(data.heardofus.type);

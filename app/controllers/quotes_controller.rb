@@ -77,7 +77,7 @@ class QuotesController < ApplicationController
               r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
               r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
             elsif bonus[:bonus][:type] == "flatfee"
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f)
+              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f)
             end
           end
         elsif bonus[:user_flat_fee] == false
