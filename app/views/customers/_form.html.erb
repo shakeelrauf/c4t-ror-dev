@@ -172,7 +172,7 @@
                       <label>Heard of Us <span class="required">*</span></label>
                     </div>
                   </div>
-                  <div class="col-lg-6 md-group-add-on">
+                  <div class="col-lg-6 md-group-add-on company-data force-hidden">
                       <span class="md-add-on">
                         <i class="icofont icofont-coins"></i>
                       </span>
@@ -241,7 +241,17 @@
       success_response = "Customer is now edited!"
       changeViewType();
       custom_grade();
+      changeGradeViewType();
       <% end %>
+
+
+      function changeGradeViewType() {
+          if ($("#txtType").val() != "Individual") {
+              $(".company-data").removeClass("force-hidden");
+          } else {
+              $(".company-data").addClass("force-hidden");
+          }
+      }
 
       function changeViewType() {
           if ($("#txtType").val() != "Individual") {
