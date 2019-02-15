@@ -47,7 +47,7 @@ class QuotesController < ApplicationController
     }
     r[:weight] =  params[:weight].to_f / 1000.0
     r[:steelPrice] =  quote["steelPrice"].to_f
-    r[:weightPrice] = weightPrice
+    r[:weightPrice] = '%.2f' % weightPrice.to_f
     r[:distance] = car_distance.to_f
     r[:freeDistance] = quote["freeDistance"].to_f
     r[:excessDistance] = excessDistance.to_f
