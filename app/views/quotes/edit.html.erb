@@ -97,7 +97,6 @@
                 <div class="md-input-wrapper">
                   <select class="md-form-control md-static has_quote" name="heardOfUs">
                     <option value="">Select an option</option>
-                    <option>Repeat Customer</option>
                     <% heardOfUsFound = false %>
                     <% heardsofus.each do |heardofus| %>
                       <% if (quote.idQuote != nil && quote.customer != nil) %>
@@ -105,10 +104,10 @@
                         <% if (heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
                           <% heardOfUsFound = true %>
                         <% else %>
-                          <option><%= heardofus.type %></option>
+                          <option value="<%= heardofus.type %>"><%= heardofus.type %></option>
                         <% end %>
                       <% elsif (quote.idQuote != nil && !heardOfUsFound) %>
-                        <option><%= heardofus.type %></option>
+                        <option value="<%= heardofus.type %>"><%= heardofus.type %></option>
                       <% end %>
                     <% end %>
                   </select>
