@@ -313,6 +313,7 @@ function addCusAddress(address) {
             }
       }
       else{
+        growling("Some fields are in an incorrect format and could not be validated");
         e.preventDefault();
       }
     });

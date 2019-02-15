@@ -181,7 +181,9 @@
                         <% if action_name == "edit" %>
                           <option selected="selected"><%= @customer.grade %></option>
                         <% end %>
-                        <option>None</option>
+                        <% if @customer.grade == nil%>
+                          <option>None</option>
+                        <% end %>
                         <option>Bronze</option>
                         <option>Silver</option>
                         <option>Gold</option>
