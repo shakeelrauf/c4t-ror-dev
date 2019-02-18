@@ -338,7 +338,7 @@ class QuotesController < ApplicationController
   def price_according_to_grade(customer, net_price)
     price = {type: "no", value: 0}
     if customer.grade == "Custom"
-      price =["custom", customer.customDollarCar]
+      price = {type: "custom", value: customer.customDollarCar}
     else
       if customer.grade == "Bronze"
         settings = Setting.where(grade: 'Bronze')
