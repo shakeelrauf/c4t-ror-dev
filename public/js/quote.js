@@ -567,10 +567,14 @@ function onWeightChange(carId){
         var byWeight = "";
         if (byWeightVal && byWeightVal != "") {
             if(byWeightVal == "1"){
-
-
+                if(t.attr("data-weightold") == undefined){
+                    t.attr("data-weightold",t.attr("data-weight") );
+                }
+                t.attr("data-weight", parseFloat(weight.val())*1000)
                 byWeight = 1
             }else{
+                t.attr("data-weight",t.attr("data-weightold") );
+
                 byWeight=0
             }
         }
@@ -598,7 +602,6 @@ function onWeightChange(carId){
             missingStil = (missingStilVal == "1") ? 1 : 0;
         }
         // Car price data
-        t.attr("data-weight", parseFloat(weight.val())*1000)
         var data = {
             "car":            carId,
             "customer_id":    customer_id,
@@ -720,6 +723,7 @@ function calcPrice(carId) {
     if (byWeightVal && byWeightVal != "") {
         if(byWeightVal == "1"){
             $(".wheels"+carId).hide()
+
             $(".cat"+carId).hide()
             $(".bat"+carId).hide()
             var input =   "<input type='number' step='0.1' onchange='onWeightChange("+carId+")' name='weight"+carId+"' id='weight"+carId+"' style='width: 100%;'>"
@@ -733,6 +737,8 @@ function calcPrice(carId) {
             byWeight = 1
         }else{
             var div = "<div class='n' id='weight"+carId+"'></div>"
+
+            t.attr("data-weight",t.attr("data-weightold") );
             $(".wheels"+carId).show()
             $(".cat"+carId).show()
             $(".bat"+carId).show()

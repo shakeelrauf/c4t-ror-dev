@@ -22,6 +22,11 @@
                        <%
                          if (vehicle.year.to_f > Setting.where(name: 'weight_year').first.value.to_f) %>
                        checked="checked"
+                       <% end %>
+
+                       <%
+                         if (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) %>
+                       disabled="true"
                        <% end %> class="handlingOptionRadio">
                 <label>Yes</label><br>
               </div>
@@ -32,6 +37,11 @@
                        <%
                          if (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) %>
                        checked="checked"
+                       <% end %>
+
+                       <%
+                         if (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) %>
+                       disabled="true"
                        <% end %> class="handlingOptionRadio">
                 <label>No</label>
               </div>
