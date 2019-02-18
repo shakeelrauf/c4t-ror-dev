@@ -10,7 +10,7 @@ class SettingsController < ApplicationController
 
   def index
     @edited = false || params[:edited]
-    @settings = Setting.all
+    @settings = Setting.init_settings
   end
 
   def update
