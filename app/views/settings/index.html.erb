@@ -7,11 +7,11 @@
     <div class="row">
       <div class="col-sm-12 p-0">
         <div class="main-header">
-          <h4>Settings</h4>
+          <h4><%=t("settings.h1") %></h4>
           <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
             <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
-            <li class="breadcrumb-item">Administration</li>
-            <li class="breadcrumb-item"><a href="/settings">Settings</a></li>
+            <li class="breadcrumb-item"><%= t("settings.admin") %>></li>
+            <li class="breadcrumb-item"><a href="/settings"><%=t("settings.h1") %></a></li>
           </ol>
         </div>
       </div>
@@ -22,14 +22,14 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-header">
-              <h5>Settings</h5>
+              <h5><%=t("settings.h1") %></h5>
             </div>
             <div class="card-block">
               <form method="post" action="/settings/<%=@settings.first.id %>">
                 <input type="hidden" name="_method" value="put" />
                 <br>
                 <div class="row">
-                  <h6>Values</h6>
+                  <h6><%= t("settings.h2") %></h6>
                 </div>
                 <hr>
                 <% @settings.each do |setting| %>
@@ -37,24 +37,24 @@
                     <div class="form-group row">
                       <label class="col-sm-3  col-form-label form-control-label"><%= label(setting.name) %></label>
                       <div class="col-sm-9 ">
-                        <input class="form-control" type="number" step="0.01" onchange="setTwoNumberDecimal" name="<%= setting.name %>" value="<%= setting.value %>">
+                        <input class="form-control" type="number" step="1" onchange="setTwoNumberDecimal" name="<%= setting.name %>" value="<%= setting.value %>">
                       </div>
                     </div>
                   <% end %>
                 <% end %>
 
 
-                <% groupOrder = ["Bronze", "Silver", "Gold"] %>
+                <% groupOrder = [t("settings.bronze"), t("settings.silver"), t("settings.gold")] %>
                 <% groupOrder.each do |group| %>
                   <br>
                   <div class="row">
-                    <h6><%= group %> bonus</h6>
+                    <h6><%= group %> <%= t("settings.bonus") %></h6>
                   </div>
                   <% @settings.each do |setting| %>
                     <% if (setting.grade == group) %>
                       <% if (setting.name == 'bonus') %>
                         <div class="form-group row">
-                          <label class="col-sm-3  col-form-label form-control-label">Bonus</label>
+                          <label class="col-sm-3  col-form-label form-control-label"><%= t("settings.bonus") %></label>
                           <div class="col-sm-9 ">
                             <input class="form-control" type="number" onchange="setTwoNumberDecimal" name="--<%= group %>--bonus" value="<%= setting.value %>">
                           </div>
@@ -66,19 +66,19 @@
                           <div class="col-sm-9 ">
                             <div class="md-input-wrapper">
                               <select name="--<%= group %>--bonus-type">
-<!--                                <option value="steelp" <%#= (setting.value == 'steelp' ? 'selected' : '') %>>% on the-->
-<!--                                  steel price-->
+<!--                                <option value="steelp" <%#= (setting.value == 'steelp' ? 'selected' : '') %>>% <%#= t("settings.option_3")  %>-->
+<!--                                  -->
 <!--                                </option>-->
-<!--                                <option value="steeld" <%#= (setting.value == 'steeld' ? 'selected' : '') %>>$ on the-->
-<!--                                  steel price-->
+<!--                                <option value="steeld" <%#= (setting.value == 'steeld' ? 'selected' : '') %>>$ <%#= t("settings.option_3")  %>-->
+<!--                                  -->
 <!--                                </option>-->
-<!--                                <option value="carp"   <%#= (setting.value == 'carp' ? 'selected' : '') %>>% on the car-->
-<!--                                  price-->
+<!--                                <option value="carp"   <%#= (setting.value == 'carp' ? 'selected' : '') %>>%<%#= t("settings.option_2") %>  -->
+<!--                                 -->
 <!--                                </option>-->
-<!--                                <option value="card"   <%#= (setting.value == 'card' ? 'selected' : '') %>>$ on the car-->
-<!--                                  price-->
+<!--                                <option value="card"   <%#= (setting.value == 'card' ? 'selected' : '') %>>$ <%#= t("settings.option_2") %> -->
+<!--                                  -->
 <!--                                </option>-->
-                                <option value="flatfee"   <%= (setting.value == 'flatfee' ? 'selected' : '') %>>$ on the Door Price
+                                <option value="flatfee"   <%= (setting.value == 'flatfee' ? 'selected' : '') %>>$ <%= t("settings.option_1") %>
                                 </option>
                               </select>
                             </div>
