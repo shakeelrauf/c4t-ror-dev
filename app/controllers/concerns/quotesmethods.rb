@@ -82,10 +82,10 @@ module Quotesmethods
     if !carList.nil?
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
-        return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingWheels"].present?)
+        return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false  :  (!carList[car]["missingWheels"].present?)
         return respond_json({:error => "The still driving was not selected" , car:  carList[car]["car"]}) if (!carList[car]["still_driving"].present?)
-        return respond_json({:error => "The catalytic converter missing was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingCat"].present?)
-        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
+        return respond_json({:error => "The catalytic converter missing was not selected" , car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false  : (!carList[car]["missingCat"].present?)
+        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false : (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
       client = save_customer params, heard_of_us, phone,phoneType, phoneType_1, phoneType_2, customerType

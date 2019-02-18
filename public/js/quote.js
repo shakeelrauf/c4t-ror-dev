@@ -1003,6 +1003,15 @@ function saveCar(callback) {
                 }
             }
         }
+        var byWeightVal = $("#tab" + carId + " input[name=byweight"+carId+"]:checked").val();
+        var byWeight = "";
+        if (byWeightVal && byWeightVal != "") {
+            if(byWeightVal == "1"){
+                byWeight = 1
+            }else{
+                byWeight = 0
+            }
+        }
         car = {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),
@@ -1011,6 +1020,7 @@ function saveCar(callback) {
             "missingCat":     ($("input[name=cat"+carId+"]:checked").val()),
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "carAddressId":   (carAddressId),
+            "byWeight":       byWeight,
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
@@ -1085,6 +1095,15 @@ function saveCarAuto(callback) {
                 }
             }
         }
+        var byWeightVal = $("#tab" + carId + " input[name=byweight"+carId+"]:checked").val();
+        var byWeight = "";
+        if (byWeightVal && byWeightVal != "") {
+            if(byWeightVal == "1"){
+                byWeight = 1
+            }else{
+                byWeight = 0
+            }
+        }
         car = {
             "car": carId,
             "weight":         ($(this).attr("data-weight")),
@@ -1093,6 +1112,7 @@ function saveCarAuto(callback) {
             "missingCat":     ($("input[name=cat"+carId+"]:checked").val()),
             "gettingMethod":  ($(this).find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "carAddressId":   (carAddressId),
+            "byWeight":       byWeight,
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=still_driving"+carId+"]:checked").val() : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
