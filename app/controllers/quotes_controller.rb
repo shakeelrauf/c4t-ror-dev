@@ -15,7 +15,7 @@ class QuotesController < ApplicationController
   end
 
   def car_price
-    return respond_json({"netPrice": nil}) if !params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?
+    return respond_json({"netPrice": nil}) if (params[:byWeight] == "1" ? false : (!params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?))
     @quote = Quote.where(idQuote: params[:quoteId]).first
     quote = JSON.parse @quote.to_json
     customer = Customer.find_by_id(params[:customer_id])
