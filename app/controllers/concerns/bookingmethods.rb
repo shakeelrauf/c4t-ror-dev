@@ -1,5 +1,10 @@
 module Bookingmethods
   def update_booking(params)
+    quote =  Quote.where(idQuote:  params[:quote_id]).first
+    quote.payment_method = params[:payment_method]
+    quote.customer.email = params[:customer_email]
+    quote.customer.save!
+    quote.save!
     params.each do |key,value|
       if key.match(/^vin+/)
         id  =  key.split('-')[1]
@@ -22,7 +27,7 @@ module Bookingmethods
                     ownershipName: params["ownershipName-#{id}"],ownershipAddress: params["ownershipAddress-#{id}"],
                     cashRegular: cash,timeBooked: params["timeBooked-#{id}"],dateBooked: date,
                     carNotes: params["carNotes-#{id}"],driverNotes: params["driverNotes-#{id}"],
-                    payment_method: params["payment_method-#{id}"],customer_email: params["customer_email-#{id}"], platesOn: plates_on)
+                    platesOn: plates_on)
       end
     end
     return respond_json({message: "Booking Saved."})

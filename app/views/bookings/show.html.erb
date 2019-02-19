@@ -51,14 +51,38 @@
                         <%= render partial: "vehicle_booking",locals: {
                             vehicle: cars[index],
                             car: car,
-                            index: index}
-                        %>
-                      <%
-                        end
-                      end%>
+                            index: index,
+                            quote: quote}
+                        %>           
+                        <% end %>
+                          <div class="row" style="padding-bottom:10px;position: absolute;bottom: 0;left: 48px;bottom: -25px;">
+                            <div class="col-lg-6">
+                              <h6>Payment Method</h6>
+                            </div>
+                            <div class="col-lg-6">
+                              <h6 id="customer_email"  class="customer_email">Customer email</h6>
+                            </div>
+
+                            <div class="col-lg-6 md-input-wrapper">
+                              <select name="payment_method" data-id="" class="md-form-control md-static payment-select">
+                                <option value="">Select a payment method</option>
+                               <option value="cash" <%= (quote["payment_method"] == 'cash' ? 'selected' : '') %>>Cash</option>
+                                <option value="check"     <%= (quote["payment_method"] == 'check' ? 'selected' : '') %>>Check</option>
+                                <option value="eft"     <%= (quote["payment_method"] == 'eft' ? 'selected' : '') %>>EFT</option>
+                              </select>
+                            </div>
+                            <div class="col-lg-6 md-input-wrapper">
+                              <div class="col-lg-6">
+                                <input type="text" name="customer_email" value="<%= quote.customer.email %>" class="customer_email customer_emails" id="customer_email" >
+                              </div>
+                              <input type="text" name="quote_id" value="<%= quote.idQuote %>" hidden>
+                              <input type="text" name="customer_id" value="<%= quote.customer.idClient %>" hidden>
+                            </div>
+                          </div>
+                     <% end %>
                   </div>
           </div>
-          <div class="card-block quick-quote-navigator" style="padding-top: 0px;">
+          <div class="card-block quick-quote-navigator" style="padding-top: 35px;">
             <a href="javascript:saveBooking();" class="btn btn-primary waves-effect d-inline-block">
               <i class="icofont icofont-cur-dollar"></i>
               <%= "SAVE" %>
