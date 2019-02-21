@@ -15,7 +15,7 @@
         <h6>Tires condition</h6>
       </div>
       <div class="col-lg-4 md-input-wrapper">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
           <input type="radio" name="gotKeys-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["gotKeys"] == 1) ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
@@ -61,7 +61,7 @@
       <div class="col-lg-4 md-input-wrapper">
       </div>
       <div class="col-lg-4 md-input-wrapper">
-        <div class="col-lg-6 2wd-ability" style="display:none">
+        <div class="col-lg-8 2wd-ability" style="display:none">
           <input type="radio" name="canDo2wd-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["canDo2wd"] == 1) ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
@@ -70,7 +70,7 @@
         </div>
       </div>
       <div class="col-lg-4 md-input-wrapper">
-        <div class="col-lg-6 can-go-neutral" style="display:none">
+        <div class="col-lg-8 can-go-neutral" style="display:none">
           <input type="radio" name="canGoNeutral-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["canGoNeutral"] == 1) ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
@@ -90,7 +90,7 @@
         <h6>Complete?</h6>
       </div>
       <div class="col-lg-4 md-input-wrapper">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
           <input type="radio" name="ownership-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["ownership"] == 1) ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
@@ -99,7 +99,7 @@
         </div>
       </div>
       <div class="col-lg-4 md-input-wrapper">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
           <input type="radio" name="running-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["running"] == 1) ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
@@ -108,7 +108,7 @@
         </div>
       </div>
       <div class="col-lg-4 md-input-wrapper">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
           <input type="radio" name="complete-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio" <%= (car["complete"] == 1) ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
@@ -214,7 +214,7 @@
         </div>
       </div>
       <div class="col-lg-4 md-input-wrapper d-none">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
           <input type="radio" name="isTowable-<%= car["idQuoteCars"] %>" value="1" class="handlingOptionRadio towable-select" <%= (car["isTowable"] == "1") ? 'checked="checked"' : '' %>>
           <label>&nbsp;Yes</label>
           <div style="width:20px;display: inline-block"></div>
