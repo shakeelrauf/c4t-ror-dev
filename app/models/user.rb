@@ -1,9 +1,8 @@
 class User < ApplicationRecord
 	self.table_name = 'users'
-
 	include Roles
 	validates :email,  presence: true
- 	validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+ 	validates_format_of :email, :with => /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i, message: "Email is invalid."
  	validates_length_of :password, minimum: 8, message: "Password is too short"
 	has_one :user_config
 	has_many :authentications

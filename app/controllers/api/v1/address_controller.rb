@@ -13,7 +13,7 @@ class Api::V1::AddressController < ApiController
     going, returning  =  0,0
     going , returning = distance["rows"][0]["elements"][1]["distance"]["value"],distance["rows"][1]["elements"][0]["distance"]["value"] if check_address(distance)
     client = Customer.includes(:address).find_by_id(params[:no]).to_json(:address)
-    return render_json_response({:error => CLIENT_NOT_FOUND_MSG, :success => false}, :not_found) if client.nil? 
+    return render_json_response({:error => CLIENT_NOT_FOUND_MSG, :success => false}, :not_found) if client.nil?
     params[:addresses].each do |addresses|
 			Address.create(idClient: client.id,
 	                  	address: address_components["street_number"] + " " + address_components["route"],
@@ -23,7 +23,7 @@ class Api::V1::AddressController < ApiController
 	                    distance: going.to_i + returning.to_i )
 
     end
-		return render_json_response(client, :ok)  
+		return render_json_response(client, :ok)
 	end
 
 	def address
@@ -36,7 +36,7 @@ class Api::V1::AddressController < ApiController
 		else
 			list = Address.all
 		end
-		return render_json_response(list, :ok)   
+		return render_json_response(list, :ok)
 	end
 
 	def show
@@ -53,14 +53,14 @@ class Api::V1::AddressController < ApiController
 
 	def create
 		address = Address.create(idClient: params[:clientId], address: "",city: "",province: "",postal: "",distance: "")
-		return render_json_response(address, :ok)   
+		return render_json_response(address, :ok)
 	end
 
 	def distance
 		r_address =  Address.find_by_idAddress(params[:no])
 		return render_json_response({error: ADDRESS_NOT_FOUND, success: false}, :not_found)  if r_address.nil?
 		distance = get_distance(r_address)
-    r_setting  = Setting.where('dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)')
+    r_setting  = Setting.where('dtCreated IN (SELECT MAX(dtCreated) FROM settings GROUP BY name)')
 		freeDistance, excessPrice = get_distance_and_price(r_setting)
     return render_json_response({error: ADDRESS_INVALID_MSG, success: false}, :bad_request)  if check_address(distance) || distance.nil?
     excessDistance = distance["rows"][0]["elements"][1]["distance"]["value"] / 1000 + distance["rows"][1]["elements"][0]["distance"]["value"] / 1000 - freeDistance

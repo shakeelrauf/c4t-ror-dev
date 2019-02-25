@@ -13,7 +13,7 @@
             <li class="breadcrumb-item">Clients</li>
             <li class="breadcrumb-item"><a href="/quotes"><%= "QUOTE" %></a></li>
             <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/edit"><%= "EDIT QUOTE" %></a></li>
-            <li class="breadcrumb-item"><a href="/quotes/<%= quote.idQuote %>/book"><%= "BOOK QUOTE" %></a></li>
+            <li class="breadcrumb-item"><a href="#"><%= "BOOK QUOTE" %></a></li>
           </ol>
         </div>
       </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="card col-lg-12">
           <div class="card-header">
-            <a href="/quotes/<%= quote.idQuote %>/pdf" target="_blank" class="btn btn-danger waves-effect d-inline-block f-right">
+            <a href="#" class="btn btn-danger waves-effect d-inline-block f-right">
               <i class="icofont icofont-file-pdf"></i>
               Envelop
             </a>
@@ -51,14 +51,38 @@
                         <%= render partial: "vehicle_booking",locals: {
                             vehicle: cars[index],
                             car: car,
-                            index: index}
-                        %>
-                      <%
-                        end
-                      end%>
+                            index: index,
+                            quote: quote}
+                        %>           
+                        <% end %>
+                          <div class="row booking-payment-dv">
+                            <div class="col-lg-6">
+                              <h6>Payment Method</h6>
+                            </div>
+                            <div class="col-lg-6">
+                              <h6 id="customer_email"  class="customer_email">Customer email</h6>
+                            </div>
+
+                            <div class="col-lg-6 md-input-wrapper">
+                              <select name="payment_method" data-id="" class="md-form-control md-static payment-select">
+                                <option value="">Select a payment method</option>
+                               <option value="cash" <%= (quote["payment_method"] == 'cash' ? 'selected' : '') %>>Cash</option>
+                                <option value="check"     <%= (quote["payment_method"] == 'check' ? 'selected' : '') %>>Check</option>
+                                <option value="eft"     <%= (quote["payment_method"] == 'eft' ? 'selected' : '') %>>EFT</option>
+                              </select>
+                            </div>
+                            <div class="col-lg-6 md-input-wrapper">
+                              <div class="col-lg-6">
+                                <input type="text" name="customer_email" value="<%= quote.customer.email %>" class="customer_email customer_emails" id="customer_email" >
+                              </div>
+                              <input type="text" name="quote_id" value="<%= quote.idQuote %>" hidden>
+                              <input type="text" name="customer_id" value="<%= quote.customer.idClient %>" hidden>
+                            </div>
+                          </div>
+                     <% end %>
                   </div>
           </div>
-          <div class="card-block quick-quote-navigator" style="padding-top: 0px;">
+          <div class="card-block quick-quote-navigator" style="padding-top: 45px;">
             <a href="javascript:saveBooking();" class="btn btn-primary waves-effect d-inline-block">
               <i class="icofont icofont-cur-dollar"></i>
               <%= "SAVE" %>
@@ -79,6 +103,8 @@
 <% content_for :js do %>
   <script>
       var quoteNo = "<%= quote.idQuote || nil %>";
+      $('.nav-item a:first').tab('show');
+      setTimeout(function() { $('.nav-item').eq(0).click(); }, 100);
   </script>
   <%= public_js_path("book-quote.js") %>
   <%= public_js_path("common.js") %>

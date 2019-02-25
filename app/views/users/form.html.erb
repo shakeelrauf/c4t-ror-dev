@@ -46,7 +46,7 @@
                       <i class="icofont icofont-globe"></i>
                   </span>
                     <div class="md-input-wrapper">
-                      <input type="text" class="md-form-control md-static" id="txtUsername"<%=
+                      <input type="text" class="md-form-control md-static" name="username" id="txtUsername"<%=
                         (!user.new_record? ? ' value=' + user.username : "") %>>
                       <label>Username <span class="required">*</span></label>
                     </div>
@@ -91,7 +91,7 @@
                           <i class="icofont icofont-ui-email"></i>
                       </span>
                     <div class="md-input-wrapper">
-                      <input type="email" class="md-form-control md-static" id="txtEmail"<%=
+                      <input type="email" class="md-form-control md-static" name="email" id="txtEmail"<%=
                         (!user.new_record? ? ' value=' + user.email : "") %>>
                       <label>Email <span class="required">*</span></label>
                     </div>

@@ -38,7 +38,7 @@ module Postmarker extend ActiveSupport::Concern
   end
 
   def send_email(subject, content, to, attachments=[])
-    from = "support@aflsix.com"
+    from =  ENV['EMAIL_FROM']
     client = Postmark::ApiClient.new(ENV['POSTMARK_API_TOKEN_COM'])
     client.deliver(from: from,
                    to: to,

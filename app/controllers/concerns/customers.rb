@@ -17,19 +17,23 @@ module Customers
   def create_customer(params, current_user)
       heardofus = Heardofus.find_or_create_by(type: params[:heardOfUs])
       if heardofus.present?
-        client = Customer.find_or_initialize_by(phone: Validations.remove_dashes_from_phone(params[:phoneNumber]))
-        if client.new_record?
-          client = client_data(client, heardofus)
-          params[:addresses].each do |a|
-            if a.present?
-              client_address(a, client)
+        if Customer.phone_already_present?(params[:phoneNumber])
+          client = Customer.find_or_initialize_by(phone: Validations.remove_dashes_from_phone(params[:phoneNumber]), cellPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]), secondaryPhone: Validations.remove_dashes_from_phone(params[:phoneNumber]))
+          if client.new_record?
+            client = client_data(client, heardofus)
+            params[:addresses].each do |a|
+              if a.present?
+                client_address(a, client)
+              end
             end
-          end
-          if !params[:type].eql?("Individual")
-            busi = non_individual_business(client)
-            if busi.save
-              create_contacts(params, busi)
+            if !params[:type].eql?("Individual")
+              busi = non_individual_business(client)
+              if busi.save
+                create_contacts(params, busi)
+              end
             end
+          else
+            client = false
           end
         else
           client = false
@@ -86,7 +90,8 @@ module Customers
       description: params[:description],
       contactPosition: params[:contactPosition],
       pstTaxNo: params[:pstTaxNo],
-      gstTaxNo: params[:gstTaxNo]})
+      gstTaxNo: params[:gstTaxNo],
+      usersFlatFee: params[:usersFlatFee]})
     busi
   end
 
@@ -126,7 +131,8 @@ module Customers
                   description: params[:description],
                   contactPosition: params[:contactPosition],
                   pstTaxNo: params[:pstTaxNo],
-                  gstTaxNo: params[:gstTaxNo])
+                  gstTaxNo: params[:gstTaxNo],
+                  usersFlatFee: params[:usersFlatFee])
   end
 
   def find_address(a, id)
@@ -151,7 +157,8 @@ module Customers
                             description: params[:description],
                             contactPosition: params[:contactPosition],
                             pstTaxNo: params[:pstTaxNo],
-                            gstTaxNo: params[:gstTaxNo])
+                            gstTaxNo: params[:gstTaxNo],
+                            usersFlatFee: params[:usersFlatFee])
     busi
   end
 
@@ -189,7 +196,7 @@ module Customers
   end
 
   def required_params
-    !params[:type].eql?("Individual") && (!params[:name] || !params[:description] || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo])
+    !params[:type].eql?("Individual") && (!params[:name] || !params[:description] || !params[:contactPosition] || !params[:pstTaxNo] || !params[:gstTaxNo] || !params[:usersFlatFee])
   end
 
 end

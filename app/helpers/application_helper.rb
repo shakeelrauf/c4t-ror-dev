@@ -12,26 +12,30 @@ module ApplicationHelper
     return if val.nil?
     return  if (val.length == 0)
     if (val.length >= 2)
-      if (val[0] == '1')
-        if (val[1] != '-')
-            val = "1-" + val[1, val.length]
-        end
-        if (val.length >= 6 && val[5] != '-')
-          val = val[0, 5] + "-" + val[5, val.length]
-        end
-        if (val.length >= 10 && val[9] != '-')
-          val = val[0, 9] + "-" + val[9, val.length]
-        end
-      else
+      # if (val[0] == '1')
+      #   if (val[1] != '-')
+      #       val = "1-" + val[1, val.length]
+      #   end
+      #   if (val.length >= 6 && val[5] != '-')
+      #     val = val[0, 5] + "-" + val[5, val.length]
+      #   end
+      #   if (val.length >= 10 && val[9] != '-')
+      #     val = val[0, 9] + "-" + val[9, val.length]
+      #   end
+      # else
         if (val.length >= 6)
           val = val[0, 3] + "-" + val[3, val.length]
         end
         if (val.length >= 10 )
           val = val[0, 4] + val[4,3] + "-" + val[7, val.length]
         end
-      end
+      # end
     end
     return val
+  end
+
+  def t(s)
+    I18n.t(s)
   end
 
   def cal_car_price car, quote

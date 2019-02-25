@@ -1,23 +1,43 @@
 class Customer < ApplicationRecord
 	self.table_name = "clients"
 	self.inheritance_column = :_type_disabled
-	has_many :address, class_name: 'Address', inverse_of: :client, foreign_key: 'idClient'
+	has_many :address, class_name: 'Address', inverse_of: :client, foreign_key: 'idClient', dependent: :destroy
 	has_one :business, class_name: 'Business',inverse_of: :client ,foreign_key: 'idClient'
 	belongs_to :heardofus, class_name: 'Heardofus', foreign_key: 'idHeardOfUs'
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
 	has_many :quotes, class_name: 'Quote', foreign_key: 'idClient'
 
+	GET_HEARD_OF_COUNT = "SELECT heardsofus.type, COUNT(heardsofus.type ) AS count_heardsofus_type, `clients`.`idHeardOfUs` AS clients_idheardofus FROM `clients` INNER JOIN `heardsofus` ON `heardsofus`.`idHeardOfUs` = `clients`.`idHeardOfUs` GROUP BY `clients`.`idHeardOfUs` ORDER BY COUNT(heardsofus.type ) DESC"
+
+	def self.customers_heardofus
+		self.run_sql_query(GET_HEARD_OF_COUNT)
+	end
+
 	def name
 		return self.firstName + ' ' + self.lastName
 	end
 
-	def self.custom_upsert(options={},where={})
-		@custom = where(where).first
+	def self.phone_already_present?(phone,ph1=nil,ph2=nil)
+		returned = where(phone: phone).or(where(cellPhone: phone)).or(where(secondaryPhone: phone)).first.present?
+		field = "Phone No"
+		if (returned == false) && ph1.present?
+			returned = where(phone: ph1).or(where(cellPhone: ph1)).or(where(secondaryPhone: ph1)).first.present?
+			field = "Cell phone"
+		end
+		if (returned == false) && ph2.present?
+			returned = where(phone: ph2).or(where(cellPhone: ph2)).or(where(secondaryPhone: ph2)).first.present? if (returned == false) && ph2.present?
+			field = "Secondary phone"
+		end
+		{found: returned, type:  field}
+	end
+
+	def self.custom_upsert(options={},where_to_find)
+		@custom = where(phone: where_to_find[:phone]).or(where(cellPhone: where_to_find[:phone])).or(where(secondaryPhone: where_to_find[:phone])).first
 		if @custom.present?
 			@custom.update(options)
 			@cutom = @cutom
 		else
-			@custom =  new(options.merge(where))
+			@custom =  new(options)
 			@custom.attributes.each do |key, value|
 				@custom[key] = "" if value.nil?
 			end
@@ -80,7 +100,8 @@ class Customer < ApplicationRecord
 			  "description":      params[:description],
 			  "contactPosition":  params[:contactPosition],
 			  "pstTaxNo":         params[:pstTaxNo],
-			  "gstTaxNo":         params[:gstTaxNo]
+			  "gstTaxNo":         params[:gstTaxNo],
+			  "usersFlatFee":     params[:usersFlatFee]
 			}
 		end
 

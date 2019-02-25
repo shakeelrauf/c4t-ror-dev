@@ -32,7 +32,7 @@
           <h2>Create Quote</h2>
         <% end %>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6 first_block">
         <div class="card col-lg-12">
           <div class="card-header">
             <button class="btn btn-primary waves-effect d-inline-block f-right btn-edit-customer">Edit Customer</button>
@@ -44,16 +44,15 @@
                   <i class="icofont icofont-phone"></i>
               </span>
               <div class="md-input-wrapper">
-                <select class="md-form-control md-static" name="phone">
+                <select class="md-form-control md-static" name="phone" id="select-2">
                   <%
                     if (quote.idQuote != nil && quote.customer != nil) %>
-                    <option value="<%= quote.customer.idClient %>" selected><%=
-                      quote.customer.phone[0, 3] + "-" + quote.customer.phone[3, 3] + "-" + quote.customer.phone[6, 10] +
-                          " " + quote.customer.firstName + " " + quote.customer.lastName
+                    <option value="<%= quote.customer.idClient %>"  selected><%=
+                      phone_number_display(phone_type(quote.customer)) + " " + quote.customer.firstName + " " + quote.customer.lastName
                     %></option>
                     <% elsif @customer.present? %>
-                      <option value="<%= @customer.idClient %>" selected><%=
-                          phone_number_display(@customer.phone) +
+                      <option value="<%= @customer.idClient %>"  selected><%=
+                          phone_number_display(phone_type(@customer)) +
                           " " + @customer.firstName + " " + @customer.lastName
                       %></option>
                   <% end %>
@@ -98,7 +97,6 @@
                 <div class="md-input-wrapper">
                   <select class="md-form-control md-static has_quote" name="heardOfUs">
                     <option value="">Select an option</option>
-                    <option>Repeat Customer</option>
                     <% heardOfUsFound = false %>
                     <% heardsofus.each do |heardofus| %>
                       <% if (quote.idQuote != nil && quote.customer != nil) %>
@@ -106,27 +104,74 @@
                         <% if (heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
                           <% heardOfUsFound = true %>
                         <% else %>
-                          <option><%= heardofus.type %></option>
+                          <option value="<%= heardofus.type %>"><%= heardofus.type %></option>
                         <% end %>
                       <% elsif (quote.idQuote != nil && !heardOfUsFound) %>
-                        <option><%= heardofus.type %></option>
+                        <option value="<%= heardofus.type %>"><%= heardofus.type %></option>
                       <% end %>
                     <% end %>
                   </select>
                   <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
                 </div>
               </div>
+
+              <div id="phone_type" class="col-lg-6 md-group-add-on">
+                <span class="md-add-on">
+                    <i class="icofont icofont-ui-user"></i>
+                </span>
+                <div class="md-input-wrapper" id="customer" data-id="<%= quote.customer.idClient if quote.customer.present? %>">
+                  <select class="md-form-control md-static phone_quote cus_phoneType" name="phoneType" id="cus_phoneType">
+                    <% if (quote.idQuote != nil && quote.customer != nil) %>
+                      <option value="<%= phone_type_for_quote(quote.customer).present? ? phone_type_for_quote(quote.customer) : "" %>" <%= phone_type_for_quote(quote.customer).present? ? " selected" : "" %>> <%= phone_type_for_quote(quote.customer).humanize %></option>
+                      <% elsif @customer.present? %>
+                       <option value="<%= phone_type_for_quote(@customer).present? ? phone_type_for_quote(@customer) : "" %>" <%= phone_type_for_quote(@customer).present? ? " selected" : "" %>> <%= phone_type_for_quote(@customer).humanize %></option>
+                    <% else %>
+                      <option value="">Select an option</option>
+                    <% end %>
+                    <option value="primary">Primary</option>
+                    <option value="cell">Cell</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <label style="top: -15px;">Phone Type<span class="required">*</span></label>
+                </div>
+              </div>
+
+              <div id="customer_type" class="col-lg-6 md-group-add-on">
+                <span class="md-add-on">
+                    <i class="icofont icofont-ui-user"></i>
+                </span>
+                <div class="md-input-wrapper">
+                  <select class="md-form-control md-static customer_quote cus_customerType" name="customerType" id="cus_customerType">
+                  <% if (quote.idQuote != nil && quote.customer != nil) %>
+                        <option<%= quote.customer.type.present? ? " selected" : "" %>>
+                        <%= quote.customer.type %></option>
+                  <% elsif @customer.present? %>
+                      <option<%= @customer.type.present? ? " selected" : "" %>>
+                        <%= @customer.type %></option>
+                  <% else %>
+                    <option value="">Select an option</option>
+                  <% end %>
+                    <option value="Individual">Individual</option>
+                    <option value="Business">Business</option>
+                    <option value="Garage">Garage</option>
+                    <option value="Dealership">Dealership</option>
+                    <option value="Tow Truck">Tow Truck</option>
+                  </select>
+                  <label style="top: -15px;">Customer Type<span class="required">*</span></label>
+                </div>
+              </div>
             <% end %>
           </div>
         </div>
-        <div class="card col-lg-12" style="height: 19%;">
+
+        <div class="card col-lg-12" style="height: auto;">
           <div class="card-header">
             <h5>Price</h5>
           </div>
-          <div class="card-block">
+          <div class="card-block" style="margin-bottom: 15px;">
             <div class="cars-total-list">
               <div class="hiddenaddress">
-                <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.to_json.to_s : "" %>
+                <%= (quote.customer.present? && quote.customer.address.present?) ? quote.customer.address.to_json.to_s : (@customer.present? && @customer.address.present?) ? @customer.address.to_json.to_s : " "  %>
               </div>
               <div class="row font-weight-bold" style="">
                 <div class="col-lg-6"></div>
@@ -162,7 +207,7 @@
           <%= cktext_area "note", "", ckeditor: {toolbar: 'mini'} %>
         </div>
         <div class="card col-lg-12">
-          <div class="card-block quick-quote-navigator d-flex pb-3">
+          <div class="card-block quick-quote-navigator d-flex pb-3 save-book">
             <a href="javascript:saveCar();" class="btn btn-primary waves-effect d-inline-block">
               <i class="icofont icofont-cur-dollar"></i>
               Save
@@ -177,7 +222,7 @@
           </div>
         </div>
       </div>
-      <div class="card col-lg-6">
+      <div class="card col-lg-6 second_block">
         <div class="card-header">
           <h3 class="card-header-text d-inline-block m-b-0 f-w-600">Cars</h3>
         </div>
@@ -228,6 +273,8 @@
       </div>
       <div class="modal-body">
         <div id="google_map" style="width:450px;height:400px;"></div>
+        <input type="hidden" id="new_customer" value=false>
+        <input type="hidden" id="new_customer_id" value=false>
         <input type="hidden" id="us2-lat">
         <input type="hidden" id="us2-lon">
         <input type="hidden" id="us2-lon">
@@ -244,6 +291,8 @@
         $('.has_quote option:eq(1)').prop('selected', true);
         $(".has_quote").attr('disabled',true);
         $(".has_quote").val("Repeat Customer");
+        $("select[name=customerType]").attr('disabled',true);
+        $("select[name=phoneType]").attr('disabled',true);
       <% end %>
 
       $(document).ready(function () {

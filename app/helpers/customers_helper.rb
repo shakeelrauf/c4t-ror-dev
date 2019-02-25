@@ -67,6 +67,10 @@ module CustomersHelper
   def business_gstax(customer)
     customer.try(:business).try(:gstTaxNo)
   end
+  
+  def business_usersFlatFee(customer)
+    customer.try(:business).try(:usersFlatFee)
+  end
 
   def customer_address(customer)
     customer.try(:address)
@@ -74,6 +78,20 @@ module CustomersHelper
 
   def quote_created_at(date)
     DateTime.parse(date).strftime('%d/%m/%Y, %I:%M:%S:%p')
+  end
+
+  def phone_type(customer)
+    num = ""
+    if customer.phone.present?
+    	num = customer.phone
+    elsif customer.cellPhone.present?
+    	num = customer.cellPhone
+    elsif customer.secondaryPhone.present?
+    	num = customer.secondaryPhone
+    else
+    	num = customer.phone
+    end
+    num
   end
 
 end

@@ -32,15 +32,15 @@ module Quotesmethods
     quote
   end
 
-  def vehicles_search(limit, offset, q)
+  def vehicles_search(limit_p, offset_p, q)
     limit = 30
     offset = 0
-    limit = (limit.present? ? limit.to_i : 30)
-    offset = ((offset.to_i) * limit) if offset != "-1"
+    limit = (limit_p.present? ? limit_p.to_i : 30)
+    offset = offset_p.present? ? offset_p.to_i : 0
     if q.present?
       filter = + q.gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * from vehiculesinfo where"
+      query = "Select * from vehicle_infos where"
       filters.each do |fil|
         query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
         query.concat(" AND ") if !fil.eql?(filters.last)
@@ -52,7 +52,7 @@ module Quotesmethods
   end
 
   def save_quotes
-    return respond_json({:error => "Please send all required customer attributes."}) if (!params[:firstName].present? || !params[:lastName].present? || !params[:postal].present? || !params[:heardofus].present? || !params[:phone].present?)
+    return respond_json({:error => "Please send all required customer attributes."}) if (!params[:firstName].present? || !params[:lastName].present? || !params[:postal].present? || !params[:heardofus].present? || !params[:phone].present? || !params[:customerType].present? )
     postal_code = Validations.postal(params[:postal])
     return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
@@ -63,27 +63,37 @@ module Quotesmethods
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
+    if params[:phoneType] == "primary" || params[:phoneType] == ""
+      phoneType = phone
+      phoneType_1 = " "
+      phoneType_2 = " "
+    elsif params[:phoneType] == "cell"
+      phoneType = " "
+      phoneType_1 = phone
+      phoneType_2 = " "
+    elsif params[:phoneType] == "other"
+      phoneType = " "
+      phoneType_1 = " "
+      phoneType_2 = phone
+    end
+    customerType = params[:customerType]
     heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
     heard_of_us.save! if heard_of_us.new_record?
-    client = Customer.custom_upsert({idHeardOfUs: heard_of_us.idHeardOfUs,phone: phone,firstName: params[:firstName],lastName: params[:lastName]},{phone: phone})
-    address = client.address.first
-    address = client.address.build if !address.present?
-    address.postal = params[:postal]
-    address.city =  " " if address.new_record?
-    address.address = " " if address.new_record?
-    address.province = " " if address.new_record?
-    address.distance = " " if address.new_record?
-    address.save!
-    Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
     if !carList.nil?
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
-        return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingWheels"].present?)
-        return respond_json({:error => "The missing battery was not selected: [" + carList[car]["missingBattery"] + "]", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
+        return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false  :  (!carList[car]["missingWheels"].present?)
+        return respond_json({:error => "The still driving was not selected" , car:  carList[car]["car"]}) if (!carList[car]["still_driving"].present?)
+        return respond_json({:error => "The catalytic converter missing was not selected" , car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false  : (!carList[car]["missingCat"].present?)
+        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false : (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
+      end
+      client = save_customer params, heard_of_us, phone,phoneType, phoneType_1, phoneType_2, customerType
+      carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
           address = Address.find_by_id(carList[car]["carAddressId"])
+          address.update(idClient: client.idClient) if params[:new_customer] == "true"
           quote_car.update(idAddress: address.idAddress) if address.present?
         else
           car_postal_code = Validations.postal(carList[car]["carPostal"])
@@ -95,10 +105,11 @@ module Quotesmethods
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
-      return respond_json({message: "QuickQuote saved"})
-     else
-       return respond_json({error: "Please select atleast one car"})
-     end
+      q = Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient, is_published: true},{idQuote: params[:quote]})
+      return respond_json({message: "QuickQuote saved" , q: q})
+    else
+       return respond_json({error: "Please select at least one car"})
+    end
   end
 
   def search_quotes limit_p, offset_p, filter,after_date, before_date
@@ -135,20 +146,57 @@ module Quotesmethods
   end
 
   def update_quote_car_address car, quote_car, client
-    if quote_car.address.present?
-      ad = quote_car.address
-    else
-      ad = Address.new
-    end
+    ad = Address.where(postal: car["carPostal"],city: car["carCity"], province: car["carProvince"], address: car["carStreet"], idClient: client.idClient).first
+    ad = Address.new if ad.nil?
     res = car["distance"]
     ad.postal = car["carPostal"]
     ad.city = car["carCity"]
-    ad.idClient = client.idClient
+    ad.idClient = client.idClient  if client.present?
     ad.province = car["carProvince"]
     ad.address = car["carStreet"]
     ad.distance = res
     ad.save!
-    quote_car.idAddress = ad.idAddress
-    quote_car.save!
+    # @add = Address.where(idAddress: quote_car.idAddress).first if quote_car && quote_car.idAddress.present?
+    quote_car.idAddress = ad.idAddress if quote_car && quote_car.idAddress.present?
+    quote_car.save! #if quote_car && quote_car.idAddress.present?
+    # @add.destroy if quote_car && quote_car.idAddress.present? && @add.idAddress != quote_car.idAddress
+  end
+
+  def save_customer params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType
+    if (params[:new_customer] == "true" && params[:new_customer_id] != "false")
+      client = Customer.where(idClient: params[:new_customer_id]).first
+      client.idHeardOfUs = heard_of_us.idHeardOfUs
+      client.phone = phoneType if phoneType.present?
+      client.cellPhone = phoneType1 if phoneType1.present?
+      client.secondaryPhone = phoneType2 if phoneType2.present?
+      client.firstName = params[:firstName]
+      client.lastName = params[:lastName]
+      client.type = customerType
+      client.phone_type = params[:phoneType]
+      client.save!
+    else
+      customer = phone_settings(params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType)
+      client = Customer.custom_upsert(customer,{phone: phone})
+    end
+    address = client.address.first
+    postal_code = Validations.postal(params[:postal])
+    address =  client.address.build  if (params[:new_customer] == "true" && params[:new_customer_id] != "false") && address.nil?
+    if (!address.nil? && postal_code.length == 7)
+      address.postal = postal_code
+      address.city =  " " if address.new_record?
+      address.address = " " if address.new_record?
+      address.province = " " if address.new_record?
+      address.distance = " " if address.new_record?
+      address.save!
+    end
+    client
+  end
+
+  def phone_settings(params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType)
+    val = {idHeardOfUs: heard_of_us.idHeardOfUs, firstName: params[:firstName],lastName: params[:lastName], type: customerType, phone_type: params[:phoneType]}
+    val = val.merge({phone: phoneType}) if phoneType.present?
+    val = val.merge({cellPhone: phoneType1}) if phoneType1.present?
+    val = val.merge({secondaryPhone: phoneType2}) if phoneType2.present?
+    val
   end
 end

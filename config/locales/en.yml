@@ -31,3 +31,24 @@
 
 en:
   hello: "Hello world"
+  settings:
+    admin: "Administration"
+    h1: "Settings"
+    h2: "Values"
+    door_price: "Door Price"
+    excess_of_distance: "Price $ Per Additional Km"
+    free_distance: "Free Distance In Km"
+    price_of_steel: "Price Of Steel"
+    value_of_bettery: "Value Of A Battery"
+    value_of_cata: "Value Of A Catalytic Converter"
+    value_of_wheel: "Value Of A Wheel"
+    bronze: "Bronze"
+    silver: "Silver"
+    gold: "Gold"
+    option_1: "on the Door Price"
+    option_2: "on the car price"
+    option_3: "on the steel price"
+    bonus: "bonus"
+    weight_year: "Weight Year"
+
+

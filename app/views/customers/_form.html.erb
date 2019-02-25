@@ -56,7 +56,7 @@
                       <i class="icofont icofont-ui-email"></i>
                     </span>
                     <div class="md-input-wrapper">
-                      <input type="email" class="md-form-control md-static" name="email" id="txtEmail" value="<%= @customer.email %>">
+                      <input type="email" name="email" class="md-form-control md-static" name="email" id="txtEmail" value="<%= @customer.email %>">
                       <label>Email</label>
                     </div>
                   </div>
@@ -67,7 +67,7 @@
                       <i class="icofont icofont-smart-phone"></i>
                     </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone) %>">
+                      <input type="tel" class="md-form-control md-static phone " name="phoneNumber2" id="txtCell" value="<%= phone_number_display(@customer.cellPhone.delete(" "))  if @customer.cellPhone.present? %>">
                       <label>Cell Phone</label>
                     </div>
                   </div>
@@ -76,7 +76,7 @@
                       <i class="icofont icofont-phone"></i>
                     </span>
                     <div class="md-input-wrapper">
-                      <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%= phone_number_display(@customer.secondaryPhone) %>">
+                      <input type="tel" class="md-form-control md-static phone" name="phoneNumber3" id="txtSecondPhone" value="<%= phone_number_display(@customer.secondaryPhone.delete(" ")) if @customer.secondaryPhone.present? %>">
                       <label>Other Phone</label>
                     </div>
                   </div>
@@ -110,7 +110,7 @@
                     <div class="md-input-wrapper">
                       <select class="md-form-control md-static selectcash" id="txtType" name="type">
                         <% if action_name == "edit" %>
-                          <option selected="selected"><%= @customer.type.delete("<br>") %></option>
+                          <option selected="selected"><%= @customer.type %></option>
                         <% end %>
                         <option>Individual</option>
                         <option>Business</option>
@@ -172,16 +172,18 @@
                       <label>Heard of Us <span class="required">*</span></label>
                     </div>
                   </div>
-                  <div class="col-lg-6 md-group-add-on">
+                  <div class="col-lg-6 md-group-add-on company-data force-hidden">
                       <span class="md-add-on">
                         <i class="icofont icofont-coins"></i>
                       </span>
                     <div class="md-input-wrapper">
                       <select class="md-form-control md-static selectcash" id="txtGrade" name="grade">
-                        <% if action_name == "edit" %>
+                        <% if action_name == "edit" && @customer.grade != nil %>
                           <option selected="selected"><%= @customer.grade %></option>
                         <% end %>
-                        <option>None</option>
+                        <% if @customer.grade == nil%>
+                          <option>None</option>
+                        <% end %>
                         <option>Bronze</option>
                         <option>Silver</option>
                         <option>Gold</option>
@@ -241,7 +243,17 @@
       success_response = "Customer is now edited!"
       changeViewType();
       custom_grade();
+      changeGradeViewType();
       <% end %>
+
+
+      function changeGradeViewType() {
+          if ($("#txtType").val() != "Individual") {
+              $(".company-data").removeClass("force-hidden");
+          } else {
+              $(".company-data").addClass("force-hidden");
+          }
+      }
 
       function changeViewType() {
           if ($("#txtType").val() != "Individual") {

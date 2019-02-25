@@ -100,73 +100,90 @@ function growling(message) {
 var stringConstructor = "test".constructor;
 var arrayConstructor = [].constructor;
 var objectConstructor = {}.constructor;
-
-$("#btnSaveUser").click(function() {
-    if($(".the_form").valid()) {
-        if ($("#txtUsername").val() == "" ||
-            $("#txtEmail").val() == "") {
-            growling("Please fill field Username and email.");
-        } else if ($("#txtPwd").val() != $("#txtPwdValidation").val()) {
-            growling("Password is different of validation.");
-        } else {
-            var noUserToGet = $(this).data('id-user');
-            var url = "";
-            $(".loading").removeClass("hidden");
-            if (noUserToGet == "new") {
-                url = "/users";
-            } else {
-                url = "/users/" + noUserToGet;
-            }
-            var phone =  $("#txtPhone").val();
-            $.ajax({
-                url: url,
-                type: url == "/users" ? "POST" : "PUT",
-                data: {
-                    username: $("#txtUsername").val(),
-                    firstName: $("#txtFirstName").val(),
-                    lastName: $("#txtLastName").val(),
-                    roles: $("#txtRole").val(),
-                    email: $("#txtEmail").val(),
-                    phoneNumber: phone,
-                    pwd: $("#txtPwd").val()
-                }
-            }).done(function (data) {
-                if (data["error"]) {
-                    if (data.error === null) {
-                        growling("Something went wrong")
-                    }
-                    else if (data.error === undefined) {
-                        growling("Something went wrong")
-                    }
-                    else if (data.error.constructor === stringConstructor) {
-                        growling(data.error)
-                    }
-                    else if (data.error.constructor === objectConstructor) {
-                        for (var i in data.error) {
-                            growling(data.error[i])
-                        }
-                    }
-                    $(".loading").addClass("hidden");
-
-                } else {
-                    var nextURL = "/users";
-                    if (noUserToGet == "new") {
-                        document.location = nextURL + "?added=true";
-                    } else {
-                        if ($("#txtRole").val() != "admin") {
-                            nextURL = "/users";
-                        }
-                        document.location = nextURL + "?edited=true";
-                    }
-                }
-            });
+$(".the_form").validate( {
+    rules: {
+        username: {
+            required: true,
+        },
+        email: {
+            required: true,
+            email: true
         }
     }
-});
+} );
 
 $( document ).ready(function() {
     var params = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
     if (params[0].length == 16){
         doGrowlingMessage("User state is changed!");
     }
+
+    $("input[class=phone]").rules('add', PHONE_METHOD);
+    $("input[name=email]").rules('add', EMAIL_METHOD);
+
+    $("#btnSaveUser").click(function() {
+        if($(".the_form").valid()) {
+            if ($("#txtUsername").val() == "" ||
+                $("#txtEmail").val() == "") {
+                growling("Please fill field Username and email.");
+            } else if ($("#txtPwd").val() != $("#txtPwdValidation").val()) {
+                growling("Password is different of validation.");
+            } else {
+                var noUserToGet = $(this).data('id-user');
+                var url = "";
+                $(".loading").removeClass("hidden");
+                if (noUserToGet == "new") {
+                    url = "/users";
+                } else {
+                    url = "/users/" + noUserToGet;
+                }
+                var phone =  $("#txtPhone").val();
+                $.ajax({
+                    url: url,
+                    type: url == "/users" ? "POST" : "PUT",
+                    data: {
+                        username: $("#txtUsername").val(),
+                        firstName: $("#txtFirstName").val(),
+                        lastName: $("#txtLastName").val(),
+                        roles: $("#txtRole").val(),
+                        email: $("#txtEmail").val(),
+                        phoneNumber: phone,
+                        pwd: $("#txtPwd").val()
+                    }
+                }).done(function (data) {
+                    if (data["error"]) {
+                        if (data.error === null) {
+                            growling("Something went wrong")
+                        }
+                        else if (data.error === undefined) {
+                            growling("Something went wrong")
+                        }
+                        else if (data.error.constructor === stringConstructor) {
+                            growling(data.error)
+                        }
+                        else if (data.error.constructor === objectConstructor) {
+                            for (var i in data.error) {
+                                growling(data.error[i])
+                            }
+                        }
+                        $(".loading").addClass("hidden");
+
+                    } else {
+                        var nextURL = "/users";
+                        if (noUserToGet == "new") {
+                            document.location = nextURL + "?added=true";
+                        } else {
+                            if ($("#txtRole").val() != "admin") {
+                                nextURL = "/users";
+                            }
+                            document.location = nextURL + "?edited=true";
+                        }
+                    }
+                });
+            }
+        }
+        else{
+            growling("Some fields are in an incorrect format and could not be validated");
+        }
+    });
 });

@@ -2,6 +2,16 @@
 .md-input-wrapper select, .md-input-wrapper textarea, input[type="email"].md-form-control, input[type="file"].md-form-control, input[type="number"].md-form-control, input[type="password"].md-form-control, input[type="text"].md-form-control {
     padding: 4px 4px;
 }
+
+.modal-footer .btn.btn-danger {
+    padding: 10px 20px !important;
+    font-size: .75rem !important;
+    line-height: 1.5 !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075) !important;
+}
+
 .custom-growl{
     position: fixed;
     margin: 0px 0px 0px -148.516px;
@@ -405,15 +415,31 @@ display: table!Important;
 .addr-top{
     top: -15px !important;
 }
+.cash-check-filed {
+    text-align: right;
+}
+.cash-check-filed input {
+    position: relative;
+    top: 2px;
+    margin-right: 2px;
+    margin-left: 4px; 
+}
+
+
+
 @media (max-width: 1500px) and (min-width: 576px) {
     .addr-top{
         top: -15px;
     }
+    .save-book a:link{
+    overflow: hidden;
+    font-size: 13px;
+  }
 }
-@media (max-width: 575px) and (min-width: 300px) {
+@media (max-width: 575px) and (min-width: 100px) {
   .sm-screen-card{
       position: absolute;
-      margin-left: -20px;
+      margin-left: -23px;
   }
   .address-sm-screen{
     margin-top: 24px;
@@ -422,4 +448,54 @@ display: table!Important;
   .addr-top{
     top: -25px !important;
   }
+  .car-street{
+    margin-top: 6px;
+  }
+
+}
+@media (max-width: 575px) and (min-width: 366px) {
+   .save-book a:link{
+    overflow: visible;
+    font-size: 10px;
+  }
+}
+@media (max-width: 1300px) and (min-width: 992px) {
+    .first_block, .second_block{
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+}
+@media (max-width: 365px) and (min-width: 100px) {
+  .save-book a:link{
+    overflow: hidden;
+    font-size: 7px;
+  }
+  .save-book a:link{
+    width:unset !important;
+  }
+}
+@media (max-width: 330px) and (min-width: 100px) {
+   .quote-select .select2-container {
+        margin-top: 20px;
+    }
+    .still-label{
+        top: -20px !important;
+    }
+}
+.flat-fee-bus{
+    margin-left: 16px;
+    top: -30px;
+}
+#customer_email-error{
+    position: absolute;
+    top: 30px !important;
+    font-size: 11px;
+    left: 15px !important;
+}
+.booking-payment-dv{
+    padding-bottom:10px;
+    position: absolute;
+    bottom: 0;
+    left: 48px;
+    bottom: -35px;
 }

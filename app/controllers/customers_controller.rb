@@ -9,6 +9,7 @@ class CustomersController < ApplicationController
     @heard_of_us = all_heard_of_use
   end
 
+
   def create
     if check_params
       required_params_error(false)
@@ -39,9 +40,9 @@ class CustomersController < ApplicationController
     }
     addresses.each do |address|
       t = ""
-      t += address.address + ", " if address.address && address.address != ""
-      t += address.city + ", " if address.city && address.city != ""
-      t += address.province + ", " if address.province && address.province != ""
+      t += address.address + ", " if address.address && address.address.present?
+      t += address.city + ", " if address.city && address.city.present?
+      t += address.province + ", " if address.province && address.province.present?
       returned[:results].push({id: address.idAddress, text: t+ address.postal})
     end
     respond_json(returned)
@@ -84,8 +85,8 @@ class CustomersController < ApplicationController
   end
 
   def number_exist
-    client = Customer.where(phone: Validations.remove_dashes_from_phone(params[:phone])).count
-    render json: { client: client }
+    cus = Customer.phone_already_present?(Validations.remove_dashes_from_phone(params[:phone]), Validations.remove_dashes_from_phone(params[:cell_phone]),  Validations.remove_dashes_from_phone(params[:secondary_phone]))
+    render json: { found: cus}
   end
 
   private
@@ -111,5 +112,4 @@ class CustomersController < ApplicationController
   def all_heard_of_use
     Heardofus.all
   end
-
 end

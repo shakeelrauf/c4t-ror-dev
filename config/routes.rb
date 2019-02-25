@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 	mount Ckeditor::Engine => '/ckeditor'
   root "dashboard#dashboard"
+  post "/save_user" => "quotes#save_user"
+  post "/quotes_save_without_validations" => "quotes#quotes_save_without_validations"
   resources :address, only: [] do
   	member do
 	  	get :json
