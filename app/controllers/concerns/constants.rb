@@ -3,4 +3,7 @@ class Constants
   CSRF_COOKIE     = "csrf_cookie"
   CSRF_TOKENS     = "csrf_tokens"
   CSRF_HEADER     = "csrf_header"
+
+  TS = Time.now.to_i
+  
 end
