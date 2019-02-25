@@ -551,7 +551,7 @@ function onWeightChange(carId){
     var weight = $('#weight'+carId)
     if(parseFloat(weight.val()) > 0 ){
         var t = $("tab"+carId);
-        t.attr("data-weight", parseFloat(weight.val())*1000)
+        t.attr("data-weight", parseFloat(weight.val()))
         var t = $("#tab" + carId);
         quote_id = $("#quote").data("id"),
             customer_id = $("#customer").data("id");
@@ -570,11 +570,10 @@ function onWeightChange(carId){
                 if(t.attr("data-weightold") == undefined){
                     t.attr("data-weightold",t.attr("data-weight") );
                 }
-                t.attr("data-weight", parseFloat(weight.val())*1000)
+                t.attr("data-weight", parseFloat(weight.val())* 1000)
                 byWeight = 1
             }else{
                 t.attr("data-weight",t.attr("data-weightold") );
-
                 byWeight=0
             }
         }
@@ -805,7 +804,6 @@ function calcPrice(carId) {
         "car":            carId,
         "customer_id":    customer_id,
         "quoteId":        quote_id,
-        "weight":         (t.attr("data-weight")),
         "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
         "missingBattery": missingBat,
         "byWeight":       byWeight,
@@ -813,6 +811,11 @@ function calcPrice(carId) {
         "still_driving":  missingStil,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
+    }
+    if(byWeight == 1){
+        data["weight"] = t.attr("data-byweight")
+    }else{
+        data["weight"] = t.attr("data-notbyweight")
     }
     $.ajax({
         method: "POST",
@@ -1014,7 +1017,6 @@ function saveCar(callback) {
         }
         car = {
             "car": carId,
-            "weight":         ($(this).attr("data-weight")),
             "missingWheels":  ($(this).find("input[name=wheels"+carId+"]").val()),
             "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
             "missingCat":     ($("input[name=cat"+carId+"]:checked").val()),
@@ -1031,6 +1033,11 @@ function saveCar(callback) {
         }
         car["still_driving"] = $(this).find("input[name=still_driving"+carId+"]:checked").val()
 
+        if(byWeight == 1){
+            car["weight"] = $(this).attr("data-byweight")
+        }else{
+            car["weight"] = $(this).attr("data-notbyweight")
+        }
         cars.push(car);
     });
     $.ajax({
@@ -1106,7 +1113,6 @@ function saveCarAuto(callback) {
         }
         car = {
             "car": carId,
-            "weight":         ($(this).attr("data-weight")),
             "missingWheels":  ($(this).find("input[name=wheels"+carId+"]").val()),
             "missingBattery": ($(this).find("input[name=bat"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=bat"+carId+"]:checked").val() : " ",
             "missingCat":     ($("input[name=cat"+carId+"]:checked").val()),
@@ -1120,6 +1126,11 @@ function saveCarAuto(callback) {
             "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
+        }
+        if(byWeight == 1){
+            car["weight"] = $(this).attr("data-byweight")
+        }else{
+            car["weight"] = $(this).attr("data-notbyweight")
         }
         cars.push(car);
     });
