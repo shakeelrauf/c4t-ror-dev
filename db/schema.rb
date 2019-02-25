@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_19_125253) do
+ActiveRecord::Schema.define(version: 2019_02_25_054849) do
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(version: 2019_02_19_125253) do
     t.decimal "price", precision: 10, scale: 2
     t.boolean "still_driving"
     t.integer "platesOn"
+    t.float "weight"
+    t.boolean "by_weight"
     t.index ["idAddress"], name: "Address_idAddress_idx"
     t.index ["idCar"], name: "VehiclulesInfo_idCar_idx"
     t.index ["idQuote"], name: "Quotes_idQuote_idx"
