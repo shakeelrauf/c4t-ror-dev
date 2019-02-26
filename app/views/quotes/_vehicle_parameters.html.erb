@@ -315,9 +315,9 @@
         <div class="col-lg-4">
           Weight:
         </div>
-        <div class="col-lg-2 weightWrapper<%=car.idQuoteCars %>"  data-weightValue="<%= car.weight %>" style="padding-right: 0px;padding-left: 0px;">
+        <div class="col-lg-2 weightWrapper<%=car.idQuoteCars %>"  data-weightValue="<%= car.weight %>" id="weight-wrapper-dv">
           <%  if  (car.by_weight == true) or (car.by_weight.nil? ? (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) : false) %>
-            <input type="number" step="0.1"  class="weight<%=car.idQuoteCars %>" name="weight<%=car.idQuoteCars %>" id="weight<%=car.idQuoteCars %>"  value="<%= car.weight %>" onchange="onWeightChange(<%= car.idQuoteCars %>);" style="width: 100%;">
+            <input type="number" step="0.1"  class="weight<%=car.idQuoteCars %>" name="weight<%=car.idQuoteCars %>" id="weight<%=car.idQuoteCars %>"  value="<%= car.weight %>" onchange="onWeightChange(<%= car.idQuoteCars %>);" style="width: 100%;text-align: right;">
           <%else %>
             <div class="n" id="weight<%= car.idQuoteCars %>"></div>
           <% end %>
