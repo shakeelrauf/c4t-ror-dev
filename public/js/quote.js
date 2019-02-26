@@ -725,7 +725,8 @@ function calcPrice(carId) {
 
             $(".cat"+carId).hide()
             $(".bat"+carId).hide()
-            var input =   "<input type='number' step='0.1' onchange='onWeightChange("+carId+")' name='weight"+carId+"' id='weight"+carId+"' style='width: 100%;'>"
+            $("#weight-wrapper-dv").css({"padding-right": "0px","padding-left": "0px"});
+            var input =   "<input type='number' step='0.1' onchange='onWeightChange("+carId+")' name='weight"+carId+"' id='weight"+carId+"' style='width: 100%;text-align: right;'>"
             $("#weight"+carId).replaceWith(input)
             // $("input[name=cat"+carId+"]").val(0)
             // $("input[name=bat"+carId+"]").val(0)
@@ -735,6 +736,7 @@ function calcPrice(carId) {
 
             byWeight = 1
         }else{
+            $("#weight-wrapper-dv").css({"padding-right": "14px","padding-left": "0px"});
             var div = "<div class='n' id='weight"+carId+"'></div>"
 
             t.attr("data-weight",t.attr("data-weightold") );

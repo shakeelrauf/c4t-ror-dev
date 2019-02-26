@@ -124,7 +124,7 @@ module Quotesmethods
       filters =  filter.split(' ')
       length =  filters.length
       filters.each.with_index do |fil,i|
-        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR Clients.firstName like '#{fil}' OR Clients.lastName like '#{fil}' OR Clients.phone like '#{fil}' OR Clients.cellPhone like '#{fil}' OR Clients.secondaryPhone like '#{fil}' OR Users.firstName like '#{fil}' OR Users.lastName like '#{fil}' OR Status.name like '#{fil}')"
+        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR clients.firstName like '#{fil}' OR clients.lastName like '#{fil}' OR clients.phone like '#{fil}' OR clients.cellPhone like '#{fil}' OR clients.secondaryPhone like '#{fil}' OR users.firstName like '#{fil}' OR users.lastName like '#{fil}' OR status.name like '#{fil}')"
         query+= " AND " if i < (length -1)
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{after_date+ ' 00:00:00'}') AND ('dtCreated' >= '#{before_date+ ' 23:59:59'}'))" if after_date && after_date.to_s.length == 10 && DateTime.parse(after_date, "YYYY-MM-DD")
