@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def public_js_path(name)
-    return "<script type='text/javascript' src='/js/#{name}'></script>".html_safe
+    return "<script type='text/javascript' src='/js/#{name}?#{Constants::TS}'></script>".html_safe
   end
 
   def public_css_path(name)
