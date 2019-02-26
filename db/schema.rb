@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_06_063601) do
+ActiveRecord::Schema.define(version: 2019_02_25_054849) do
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.text "contactPosition", null: false
     t.text "pstTaxNo", null: false
     t.text "gstTaxNo", null: false
-    t.boolean "usersFlatFee", default: false
+    t.boolean "usersFlatFee"
     t.index ["idClient"], name: "business-client_idx"
   end
 
@@ -58,11 +58,12 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.text "cellPhone"
     t.text "secondaryPhone"
     t.text "note", null: false
-    t.text "grade", null: false
+    t.string "grade"
     t.text "customDollarCar", null: false
     t.text "customDollarSteel", null: false
     t.text "customPercCar", null: false
     t.text "customPercSteel", null: false
+    t.string "phone_type"
     t.index ["idHeardOfUs"], name: "Clients-HeardsOfUs_idx"
   end
 
@@ -79,33 +80,7 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.index ["type"], name: "type_UNIQUE", unique: true
   end
 
-  create_table "quotes", primary_key: "idQuote", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.integer "idUser"
-    t.integer "idClient"
-    t.integer "idStatus", default: 1, null: false
-    t.datetime "dtStatusUpdated"
-    t.datetime "dtCreated"
-    t.text "note"
-    t.text "referNo"
-    t.decimal "bonus", precision: 10, scale: 2
-    t.integer "isSatisfactionSMSQuoteSent", limit: 1
-    t.decimal "smallCarPrice", precision: 10, scale: 2, null: false
-    t.decimal "midCarPrice", precision: 10, scale: 2, null: false
-    t.decimal "largeCarPrice", precision: 10, scale: 2, null: false
-    t.decimal "steelPrice", precision: 10, scale: 2, null: false
-    t.decimal "wheelPrice", precision: 10, scale: 2, null: false
-    t.decimal "batteryPrice", precision: 10, scale: 2, null: false
-    t.decimal "catPrice", precision: 10, scale: 2, null: false
-    t.decimal "pickup", precision: 10, scale: 2, null: false
-    t.decimal "freeDistance", precision: 10, scale: 2, null: false
-    t.decimal "excessCost", precision: 10, scale: 2, null: false
-    t.boolean "is_published", default: false
-    t.index ["idClient"], name: "Clients_idClient_idx"
-    t.index ["idStatus"], name: "Status_idStatus_idx"
-    t.index ["idUser"], name: "Users_idUser_idx"
-  end
-
-  create_table "quotescars", primary_key: "idQuoteCars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "quote_cars", primary_key: "idQuoteCars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idQuote", null: false
     t.integer "idCar", null: false
     t.integer "idAddress"
@@ -136,12 +111,39 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.decimal "distance", precision: 10, scale: 2
     t.decimal "price", precision: 10, scale: 2
     t.boolean "still_driving"
-    t.string "payment_method"
-    t.string "customer_email"
     t.integer "platesOn"
+    t.float "weight"
+    t.boolean "by_weight"
     t.index ["idAddress"], name: "Address_idAddress_idx"
     t.index ["idCar"], name: "VehiclulesInfo_idCar_idx"
     t.index ["idQuote"], name: "Quotes_idQuote_idx"
+  end
+
+  create_table "quotes", primary_key: "idQuote", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "idUser"
+    t.integer "idClient"
+    t.integer "idStatus", default: 1, null: false
+    t.datetime "dtStatusUpdated"
+    t.datetime "dtCreated"
+    t.text "note"
+    t.text "referNo"
+    t.decimal "bonus", precision: 10, scale: 2
+    t.integer "isSatisfactionSMSQuoteSent", limit: 1
+    t.decimal "smallCarPrice", precision: 10, scale: 2, null: false
+    t.decimal "midCarPrice", precision: 10, scale: 2, null: false
+    t.decimal "largeCarPrice", precision: 10, scale: 2, null: false
+    t.decimal "steelPrice", precision: 10, scale: 2, null: false
+    t.decimal "wheelPrice", precision: 10, scale: 2, null: false
+    t.decimal "batteryPrice", precision: 10, scale: 2, null: false
+    t.decimal "catPrice", precision: 10, scale: 2, null: false
+    t.decimal "pickup", precision: 10, scale: 2, null: false
+    t.decimal "freeDistance", precision: 10, scale: 2, null: false
+    t.decimal "excessCost", precision: 10, scale: 2, null: false
+    t.boolean "is_published", default: false
+    t.string "payment_method"
+    t.index ["idClient"], name: "Clients_idClient_idx"
+    t.index ["idStatus"], name: "Status_idStatus_idx"
+    t.index ["idUser"], name: "Users_idUser_idx"
   end
 
   create_table "satisfactions", primary_key: "idSatisfaction", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -207,7 +209,7 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
     t.string "salt"
   end
 
-  create_table "vehiculesinfo", primary_key: "idVehiculeInfo", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "vehicle_infos", primary_key: "idVehiculeInfo", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.text "year"
     t.text "make"
     t.text "model"
@@ -224,12 +226,12 @@ ActiveRecord::Schema.define(version: 2019_02_06_063601) do
   add_foreign_key "business", "clients", column: "idClient", primary_key: "idClient", name: "business-client"
   add_foreign_key "clients", "heardsofus", column: "idHeardOfUs", primary_key: "idHeardOfUs", name: "Clients-HeardsOfUs"
   add_foreign_key "contacts", "business", column: "idBusiness", primary_key: "idClient", name: "Contacts-Business"
+  add_foreign_key "quote_cars", "address", column: "idAddress", primary_key: "idAddress", name: "Address_idAddress"
+  add_foreign_key "quote_cars", "quotes", column: "idQuote", primary_key: "idQuote", name: "Quotes_idQuote"
+  add_foreign_key "quote_cars", "vehicle_infos", column: "idCar", primary_key: "idVehiculeInfo", name: "VehiclesInfo_idCar"
   add_foreign_key "quotes", "clients", column: "idClient", primary_key: "idClient", name: "Clients_idClient"
   add_foreign_key "quotes", "status", column: "idStatus", primary_key: "idStatus", name: "Status_idStatus"
   add_foreign_key "quotes", "users", column: "idUser", primary_key: "idUser", name: "Users_idUser"
-  add_foreign_key "quotescars", "address", column: "idAddress", primary_key: "idAddress", name: "Address_idAddress"
-  add_foreign_key "quotescars", "quotes", column: "idQuote", primary_key: "idQuote", name: "Quotes_idQuote"
-  add_foreign_key "quotescars", "vehiculesinfo", column: "idCar", primary_key: "idVehiculeInfo", name: "VehiclesInfo_idCar"
   add_foreign_key "satisfactions", "clients", column: "idClient", primary_key: "idClient", name: "Satisfactions_Clients_idClient"
-  add_foreign_key "schedules", "quotescars", column: "idCar", primary_key: "idQuoteCars", name: "Schedules_idQuoteCar"
+  add_foreign_key "schedules", "quote_cars", column: "idCar", primary_key: "idQuoteCars", name: "Schedules_idQuoteCar"
 end

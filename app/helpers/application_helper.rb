@@ -34,6 +34,10 @@ module ApplicationHelper
     return val
   end
 
+  def t(s)
+    I18n.t(s)
+  end
+
   def cal_car_price car, quote
     @bonus_car_price = 0
     if((car.information.weight).to_i <= 1500)

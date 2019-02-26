@@ -15,11 +15,12 @@ class QuotesController < ApplicationController
   end
 
   def car_price
-    return respond_json({"netPrice": nil}) if !params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?
+    return respond_json({"netPrice": nil}) if (params[:byWeight] == "1" ? false : (!params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?))
     @quote = Quote.where(idQuote: params[:quoteId]).first
     quote = JSON.parse @quote.to_json
     customer = Customer.find_by_id(params[:customer_id])
     return respond_json({"netPrice": nil}) if quote.nil?
+    car =  QuoteCar.where(idQuoteCars: params[:car]).first
     car_distance =  params[:distance]
     car_distance = car_distance.to_i if car_distance.present?
     excessDistance = 0.0
@@ -29,14 +30,13 @@ class QuotesController < ApplicationController
     excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
     distanceCost  = excessDistance * excessCost
     weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f
+    weightPrice   = car.weight.to_f / 1000.0 * quote["steelPrice"].to_f if params[:byWeight] == "1"
     dropoff = weightPrice
     dropoff -=  params[:missingWheels].to_i * quote["steelPrice"].to_f
     dropoff -=  params[:missingCat].to_i * quote["catPrice"].to_f
     dropoff -=  params[:missingBattery].to_i * quote["batteryPrice"].to_f
     dropoffPrice = [dropoff,0.0].max
     pickupPrice = 0.0
-    car =  QuoteCar.where(idQuoteCars: params[:car]).first
-    car.update(missingWheels: params[:missingWheels], missingBattery: params[:missingBattery], missingCat: params[:missingCat],still_driving: params[:still_driving], gettingMethod: params[:gettingMethod]) if car.present?
     if car_distance.present? && car_distance >  0.01 && excessDistance.present?
       pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
     end
@@ -72,12 +72,14 @@ class QuotesController < ApplicationController
           if bonus[:bonus].present?
             if bonus[:bonus][:type] == "carprice"
               r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
             elsif bonus[:bonus][:type] == "steelprice"
-              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+              r[:steelPrice] = '%.2f' % ( r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  '%.2f' %  (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
             elsif bonus[:bonus][:type] == "flatfee"
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f)
+              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
+            else
+              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' %  (r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
             end
           end
         elsif bonus[:user_flat_fee] == false
@@ -85,20 +87,20 @@ class QuotesController < ApplicationController
             if bonus[:bonus][:type] == "carprice"
               r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
               if isPickup
-                r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+                r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:netPrice].to_f + bonus[:bonus][:value].to_f)
                 r[:dropoffPrice] += bonus[:bonus][:value].to_f
               else
                 (r[:dropoffPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f)
                 r[:pickupPrice] += bonus[:bonus][:value].to_f
               end
             elsif bonus[:bonus][:type] == "steelprice"
-              r[:steelPrice] = r[:steelPrice].to_f + bonus[:bonus][:value].to_f
-              r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+              r[:steelPrice] = '%.2f' % (r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
               if isPickup
-                r[:pickupPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+                r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
                 r[:dropoffPrice] += bonus[:bonus][:value].to_f
               else
-                (r[:dropoffPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+                (r[:dropoffPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f))
                 r[:pickupPrice] += bonus[:bonus][:value].to_f
               end
               # elsif bonus[:bonus][:type] == "flatfee"
@@ -108,6 +110,17 @@ class QuotesController < ApplicationController
         end
       end
     end
+    if car.present?
+      car.missingWheels = params[:missingWheels]
+      car.missingBattery = params[:missingBattery]
+      car.missingCat = params[:missingCat]
+      car.still_driving = params[:still_driving]
+      car.gettingMethod =  params[:gettingMethod]
+      car.weight = (params[:weight].to_f ) if  params[:weight].present?
+      car.by_weight = params[:byWeight]  if params[:byWeight].present?
+      car.save!
+    end
+    r[:weight] = car.weight/1000.0 if params[:byWeight] == "1" && car.weight.present?
     r[:bonus] = bonus
     respond_json(r)
   end
@@ -336,7 +349,7 @@ class QuotesController < ApplicationController
   def price_according_to_grade(customer, net_price)
     price = {type: "no", value: 0}
     if customer.grade == "Custom"
-      price =["custom", customer.customDollarCar]
+      price = {type: "custom", value: customer.customDollarCar}
     else
       if customer.grade == "Bronze"
         settings = Setting.where(grade: 'Bronze')

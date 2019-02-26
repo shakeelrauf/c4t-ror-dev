@@ -135,7 +135,7 @@
                   <label style="top: -15px;">Phone Type<span class="required">*</span></label>
                 </div>
               </div>
-         
+
               <div id="customer_type" class="col-lg-6 md-group-add-on">
                 <span class="md-add-on">
                     <i class="icofont icofont-ui-user"></i>
@@ -156,7 +156,7 @@
                     <option value="Garage">Garage</option>
                     <option value="Dealership">Dealership</option>
                     <option value="Tow Truck">Tow Truck</option>
-                  </select> 
+                  </select>
                   <label style="top: -15px;">Customer Type<span class="required">*</span></label>
                 </div>
               </div>
@@ -317,10 +317,10 @@
       $("#tab-a-"+<%=cars.first.present? ? cars.first.idQuoteCars : " 0" %>).click()
 
   </script>
-  <%= public_js_path 'distance.js' %>
-  <%= public_js_path 'common.js' %>
-  <%= public_js_path 'quote.js' %>
+  <%= public_js_path "distance.js?#{Constants::TS}" %>
+  <%= public_js_path "common.js?#{Constants::TS}" %>
+  <%= public_js_path "quote.js?#{Constants::TS}" %>
   <script async defer type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>'></script>
-  <%= public_js_path 'edit_quote_map.js' %>
+  <%= public_js_path "edit_quote_map.js?#{Constants::TS}" %>
 
 <% end %>

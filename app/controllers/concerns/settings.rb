@@ -16,6 +16,8 @@ module Settings
         setting.value = params[:batteryPrice]
       elsif setting.name == "DealerFlatFee"
         setting.value = params[:DealerFlatFee]
+      elsif setting.name == "weight_year"
+        setting.value = params[:weight_year]
       elsif setting.label == "bonus"
         setting.value = params["--Bronze--bonus"]
       elsif setting.label == "bonus-type"

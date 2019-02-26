@@ -1,16 +1,64 @@
-<div id="tab<%= car.idQuoteCars %>" class="card col-lg-12 tab-pane car-pane active car-<%= car.idQuoteCars %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-weight="<%= (vehicle['weight']).to_f %>">
+<%= public_css_path("/icofont/icofont.min.css") %>
+<div id="tab<%= car.idQuoteCars %>" class="card col-lg-12 tab-pane car-pane active car-<%= car.idQuoteCars %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-byweight="<%= car.weight %>" data-notbyweight="<%= (vehicle['weight']).to_f %>">
   <div class="card-header">
     <h5 class="card-header-text"><%= vehicle.make + " " + vehicle.model + " " + vehicle.year %></h5>
   </div>
   <div class="card-block">
     <div class="row">
+
       <div class="col-lg-1 col-sm-1">
+        <span class="md-add-on sm-screen-card">
+          <i class="icofont-muscle-weight"></i>
+        </span>
+      </div>
+
+      <div class="col-lg-11 col-sm-11">
+        <div class="md-input-wrapper">
+          <div class="row">
+            <div class="col-lg-4 col-sm-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="byweight<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="1"
+
+                       <%
+                         if  (car.by_weight == true) or (car.by_weight.nil? ? (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) : false) %>
+                       checked="checked"
+                       <% end %>
+
+                       <%
+                         if (car.by_weight == true) or (car.by_weight.nil? ? (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) : false) %>
+                       #disabled="true"
+                       <% end %> class="handlingOptionRadio">
+                <label>Yes</label><br>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+              <div class="md-input-wrapper cashradio">
+                <input type="radio" name="byweight<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"
+                       <%
+                         if (car.by_weight == false) or (car.by_weight.nil? ? (vehicle.year.to_f > Setting.where(name: 'weight_year').first.value.to_f) : false ) %>
+                       checked="checked"
+                       <% end %>
+
+                       <%
+                         if (car.by_weight == false) or (car.by_weight.nil? ? (vehicle.year.to_f > Setting.where(name: 'weight_year').first.value.to_f) : false ) %>
+                       #disabled="true"
+                       <% end %> class="handlingOptionRadio">
+                <label>No</label>
+              </div>
+            </div>
+          </div>
+          <label style="top: -15px;font-size: 13px;width: 120%;"><b>By Weight</b><span class="required">*</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-1 col-sm-1 wheels<%= car.idQuoteCars %>">
         <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-disc"></i>
         </span>
       </div>
 
-      <div class="col-lg-5 col-sm-5">
+      <div class="col-lg-5 col-sm-5 wheels<%= car.idQuoteCars %>" id="wheels<%= car.idQuoteCars %>">
         <div class="md-input-wrapper">
           <input type="number" name="wheels<%= car.idQuoteCars %>" min="0" max="4"
                  onkeyup="calcPrice(<%= car.idQuoteCars %>);" onchange="calcPrice(<%= car.idQuoteCars %>);"
@@ -20,12 +68,13 @@
           <label style="top: -15px;">Missing Wheels<span class="required">*</span></label>
         </div>
       </div>
-      <div class="col-lg-1 col-sm-1">
+      <div class="col-lg-1 col-sm-1 cat<%= car.idQuoteCars %>">
         <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-disc"></i>
         </span>
       </div>
-      <div class="col-lg-5 col-sm-5">
+
+      <div class="col-lg-5 col-sm-5 cat<%= car.idQuoteCars %>" id="cat<%= car.idQuoteCars %>">
         <div class="md-input-wrapper">
           <div class="row">
             <div class="col-lg-4 col-sm-4">
@@ -52,12 +101,14 @@
           <label style="top: -15px;font-size: 13px;width: 120%;">Catalytic Converter Missing<span class="required">*</span></label>
         </div>
       </div>
-      <div class="col-lg-1 col-sm-1">
+    </div>
+    <div class="row">
+      <div class="col-lg-1 col-sm-1 pickup<%= car.idQuoteCars %>">
         <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-truck-loaded"></i>
         </span>
       </div>
-      <div class="col-lg-5 col-sm-5">
+      <div class="col-lg-5 col-sm-5 pickup<%= car.idQuoteCars %>" id="pickup<%= car.idQuoteCars %>">
         <div class="md-input-wrapper">
           <div class="row">
             <div class="col-lg-6 col-sm-6">
@@ -86,12 +137,12 @@
           <label style="top: -15px;font-size: 13px">Transport<span class="required">*</span></label>
         </div>
       </div>
-      <div class="col-lg-1 col-sm-1">
+      <div class="col-lg-1 col-sm-1 bat<%= car.idQuoteCars %>">
         <span class="md-add-on sm-screen-card">
           <i class="icofont icofont-truck"></i>
         </span>
       </div>
-      <div class="col-lg-5 col-sm-5">
+      <div class="col-lg-5 col-sm-5 bat<%= car.idQuoteCars %>">
         <div class="md-input-wrapper">
           <div class="row">
             <div class="col-lg-4 col-sm-4">
@@ -108,8 +159,8 @@
             <div class="col-lg-4 col-sm-4">
               <div class="md-input-wrapper cashradio">
                 <input type="radio" name="bat<%= car.idQuoteCars %>" onchange="calcPrice(<%= car.idQuoteCars %>);" value="0"
-                <%
-                  if (car == nil || car.missingBattery == false) %>
+                       <%
+                         if (car == nil || car.missingBattery == false) %>
                        checked="checked"
                        <% end %>
                        class="handlingOptionRadio">
@@ -120,6 +171,9 @@
           <label style="top: -15px;font-size: 13px">Battery Missing<span class="required">*</span></label>
         </div>
       </div>
+    </div>
+    <div class="row">
+
       <div class="col-lg-1 col-sm-1">
         <span class="md-add-on sm-screen-card">
             <i class="icofont icofont-disc"></i>
@@ -261,8 +315,12 @@
         <div class="col-lg-4">
           Weight:
         </div>
-        <div class="col-lg-2">
-          <div class="n" id="weight<%= car.idQuoteCars %>"></div>
+        <div class="col-lg-2 weightWrapper<%=car.idQuoteCars %>"  data-weightValue="<%= car.weight %>" style="padding-right: 0px;padding-left: 0px;">
+          <%  if  (car.by_weight == true) or (car.by_weight.nil? ? (vehicle.year.to_f < Setting.where(name: 'weight_year').first.value.to_f) : false) %>
+            <input type="number" step="0.1"  class="weight<%=car.idQuoteCars %>" name="weight<%=car.idQuoteCars %>" id="weight<%=car.idQuoteCars %>"  value="<%= car.weight %>" onchange="onWeightChange(<%= car.idQuoteCars %>);" style="width: 100%;">
+          <%else %>
+            <div class="n" id="weight<%= car.idQuoteCars %>"></div>
+          <% end %>
         </div>
         <div class="col-lg-4">
         </div>
@@ -378,13 +436,15 @@
         </div>
         <div class="col-lg-3">
         </div>
+        <!--
         <div class="col-lg-4">
           Custom fee:
         </div>
         <div class="col-lg-2">
           <div class="n" id="customFee<%= car.idQuoteCars %>"></div>
         </div>
-
+        -->
+        <div class="col-lg-6"><!-- line break --></div>
         <div class="col-lg-4">
          Door Price:
         </div>
@@ -397,25 +457,29 @@
         <div class="col-lg-2">
           <div class="n" id="flatfee<%= car.idQuoteCars %>"></div>
         </div>
-        <div class="col-lg-4" style="font-weight: bold">
+        <div class="col-lg-4" style="">
           Bonus:
         </div>
-        <div class="col-lg-2" style="font-weight: bold">
+        <div class="col-lg-2" style="">
           <div class="n" id="bonus<%= car.idQuoteCars %>"></div>
         </div>
-
+        <!--
         <div class="col-lg-4">
           CarBonus:
         </div>
         <div class="col-lg-2">
           <div class="n" id="bonuscar<%= car.idQuoteCars %>"></div>
         </div>
+        -->
+        <div class="col-lg-6"><!-- line break --></div>
+        <!--
         <div class="col-lg-4">
           SteelBonus:
         </div>
         <div class="col-lg-2">
           <div class="n" id="bonussteel<%= car.idQuoteCars %>"></div>
         </div>
+        -->
         <div class="col-lg-4">
           Net:
         </div>

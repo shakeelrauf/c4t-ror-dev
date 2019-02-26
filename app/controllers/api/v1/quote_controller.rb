@@ -12,7 +12,7 @@ class Api::V1::QuoteController < ApiController
       gettingMethod: "pickup",
     )
     @car.save!
-	  return render_json_response(@car, :ok)	 	
+	  return render_json_response(@car, :ok)
   end
 
   def get_quotes_by_filters
@@ -26,8 +26,8 @@ class Api::V1::QuoteController < ApiController
       filters =  params[:filter].split(' ')
       length =  filters.length
       filters.each.with_index do |fil,i|
-        query+= "INNER JOIN Status ON Status.idStatus = Quotes.idStatus INNER JOIN Users ON Users.idUser = Quotes.idUser INNER JOIN Clients ON Clients.idClient = Quotes.idClient WHERE" if i == 0
-        query+= " ('note' LIKE '#{fil}' OR 'referNo' LIKE '#{fil}' OR 'Clients.firstName' LIKE '#{fil}' OR 'Clients.lastName' LIKE '#{fil}' OR 'Clients.phone' LIKE '#{fil}' OR 'Clients.cellPhone' LIKE '#{fil}' OR 'Clients.secondaryPhone' LIKE '#{fil}' OR 'Users.firstName' LIKE '#{fil}' OR 'Users.lastName' LIKE '#{fil}' OR 'Status.name' LIKE '#{fil}')"
+        query+= "INNER JOIN Status ON status.idStatus = quotes.idStatus INNER JOIN users ON users.idUser = quotes.idUser INNER JOIN clients ON clients.idClient = quotes.idClient WHERE" if i == 0
+        query+= " ('note' LIKE '#{fil}' OR 'referNo' LIKE '#{fil}' OR 'clients.firstName' LIKE '#{fil}' OR 'clients.lastName' LIKE '#{fil}' OR 'clients.phone' LIKE '#{fil}' OR 'clients.cellPhone' LIKE '#{fil}' OR 'clients.secondaryPhone' LIKE '#{fil}' OR 'users.firstName' LIKE '#{fil}' OR 'users.lastName' LIKE '#{fil}' OR 'status.name' LIKE '#{fil}')"
         query+= " AND" if i < (length -1)
       end
       # query+= " AND 'dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}'" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
@@ -52,7 +52,7 @@ class Api::V1::QuoteController < ApiController
       filters =  params[:filter].split(' ')
       length =  filters.length
       filters.each.with_index do |fil,i|
-        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR Clients.firstName like '#{fil}' OR Clients.lastName like '#{fil}' OR Clients.phone like '#{fil}' OR Clients.cellPhone like '#{fil}' OR Clients.secondaryPhone like '#{fil}' OR Users.firstName like '#{fil}' OR Users.lastName like '#{fil}' OR Status.name like '#{fil}')"
+        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR clients.firstName like '#{fil}' OR clients.lastName like '#{fil}' OR clients.phone like '#{fil}' OR clients.cellPhone like '#{fil}' OR clients.secondaryPhone like '#{fil}' OR users.firstName like '#{fil}' OR users.lastName like '#{fil}' OR status.name like '#{fil}')"
         query+= " AND " if i < (length -1)
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{params[:afterDate]+ ' 00:00:00'}') AND ('dtCreated' >= '#{params[:beforeDate]+ ' 23:59:59'}'))" if params[:afterDate] && params[:afterDate].to_s.length == 10 && DateTime.parse(params[:afterDate], "YYYY-MM-DD")
@@ -133,12 +133,12 @@ class Api::V1::QuoteController < ApiController
 	# Get all possible status.
   def all_status
 	  status = Status.all
-	  return render_json_response(status, :ok)	
+	  return render_json_response(status, :ok)
   end
 
 # .to_json(include: {:customer => {:include => :address}})
   # Get all possible quotes.
-  def all_quotes  
+  def all_quotes
     quotes = Quote.includes(:status, customer: [:address]).all.to_json(include: [:status, :customer => {:include => :address}])
     status = Status.all
     # data = [quotes]
@@ -157,7 +157,7 @@ class Api::V1::QuoteController < ApiController
        "status": status
     }
 
-    return render json: quotez.to_json, status: :ok 
+    return render json: quotez.to_json, status: :ok
   end
 
   def quote

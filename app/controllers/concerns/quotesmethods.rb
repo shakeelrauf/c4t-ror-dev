@@ -5,7 +5,7 @@ module Quotesmethods
   end
 
   def create_default_quote
-    settings = Setting.run_sql_query("SELECT * FROM Settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
+    settings = Setting.run_sql_query("SELECT * FROM settings WHERE dtCreated IN (SELECT MAX(dtCreated) FROM settings GROUP BY name)")
     settings_hash = {}
     settings.each do |setting|
       settings_hash[setting["name"]] = setting["value"]
@@ -40,7 +40,7 @@ module Quotesmethods
     if q.present?
       filter = + q.gsub(/[\s]/, "% %") + "%"
       filters = filter.split(' ')
-      query = "Select * from VehiculesInfo where"
+      query = "Select * from vehicle_infos where"
       filters.each do |fil|
         query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
         query.concat(" AND ") if !fil.eql?(filters.last)
@@ -82,10 +82,10 @@ module Quotesmethods
     if !carList.nil?
       carList.each do |car, val|
         return respond_json({:error => "The type of vehicle was not selected"}) if (!carList[car]["car"].present?)
-        return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingWheels"].present?)
+        return respond_json({:error => "The missing wheels was not selected" , car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false  :  (!carList[car]["missingWheels"].present?)
         return respond_json({:error => "The still driving was not selected" , car:  carList[car]["car"]}) if (!carList[car]["still_driving"].present?)
-        return respond_json({:error => "The catalytic converter missing was not selected" , car:  carList[car]["car"]}) if (!carList[car]["missingCat"].present?)
-        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if (!carList[car]["missingBattery"].present?)
+        return respond_json({:error => "The catalytic converter missing was not selected" , car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false  : (!carList[car]["missingCat"].present?)
+        return respond_json({:error => "The missing battery was not selected ", car:  carList[car]["car"]}) if carList[car]["byWeight"] == "1" ? false : (!carList[car]["missingBattery"].present?)
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
       client = save_customer params, heard_of_us, phone,phoneType, phoneType_1, phoneType_2, customerType
@@ -124,7 +124,7 @@ module Quotesmethods
       filters =  filter.split(' ')
       length =  filters.length
       filters.each.with_index do |fil,i|
-        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR Clients.firstName like '#{fil}' OR Clients.lastName like '#{fil}' OR Clients.phone like '#{fil}' OR Clients.cellPhone like '#{fil}' OR Clients.secondaryPhone like '#{fil}' OR Users.firstName like '#{fil}' OR Users.lastName like '#{fil}' OR Status.name like '#{fil}')"
+        query+= "('note' like '#{fil}' OR referNo like '#{fil}' OR clients.firstName like '#{fil}' OR clients.lastName like '#{fil}' OR clients.phone like '#{fil}' OR clients.cellPhone like '#{fil}' OR clients.secondaryPhone like '#{fil}' OR users.firstName like '#{fil}' OR users.lastName like '#{fil}' OR status.name like '#{fil}')"
         query+= " AND " if i < (length -1)
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{after_date+ ' 00:00:00'}') AND ('dtCreated' >= '#{before_date+ ' 23:59:59'}'))" if after_date && after_date.to_s.length == 10 && DateTime.parse(after_date, "YYYY-MM-DD")

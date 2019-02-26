@@ -1,5 +1,5 @@
 class Quote < ApplicationRecord
-	self.table_name = "Quotes"
+	self.table_name = "quotes"
 	has_many :quote_car, class_name: 'QuoteCar', foreign_key: 'idQuote'
 	belongs_to :dispatcher, class_name: 'User',     foreign_key: 'idUser'
 	belongs_to :customer,   class_name: 'Customer', foreign_key: 'idClient', optional: true

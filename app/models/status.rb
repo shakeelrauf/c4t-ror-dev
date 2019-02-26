@@ -1,4 +1,4 @@
 class Status < ApplicationRecord
-	self.table_name = 'Status'
+	self.table_name = 'status'
 
 end

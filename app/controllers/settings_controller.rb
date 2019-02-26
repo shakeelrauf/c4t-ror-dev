@@ -5,12 +5,12 @@ class SettingsController < ApplicationController
   before_action :login_required
 
   def settings
-    last_settings = Setting.where("dtCreated IN (SELECT MAX(dtCreated) FROM Settings GROUP BY name)")
+    last_settings = Setting.where("dtCreated IN (SELECT MAX(dtCreated) FROM settings GROUP BY name)")
   end
 
   def index
     @edited = false || params[:edited]
-    @settings = Setting.all
+    @settings = Setting.init_settings
   end
 
   def update

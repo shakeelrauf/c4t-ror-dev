@@ -1,5 +1,5 @@
 class Customer < ApplicationRecord
-	self.table_name = "Clients"
+	self.table_name = "clients"
 	self.inheritance_column = :_type_disabled
 	has_many :address, class_name: 'Address', inverse_of: :client, foreign_key: 'idClient', dependent: :destroy
 	has_one :business, class_name: 'Business',inverse_of: :client ,foreign_key: 'idClient'
@@ -7,7 +7,7 @@ class Customer < ApplicationRecord
 	has_many :satisfactions, class_name: 'Satisfication', foreign_key: "idClient"
 	has_many :quotes, class_name: 'Quote', foreign_key: 'idClient'
 
-	GET_HEARD_OF_COUNT = "SELECT heardsofus.type, COUNT(heardsofus.type ) AS count_heardsofus_type, `Clients`.`idHeardOfUs` AS clients_idheardofus FROM `Clients` INNER JOIN `HeardsOfUs` ON `HeardsOfUs`.`idHeardOfUs` = `Clients`.`idHeardOfUs` GROUP BY `Clients`.`idHeardOfUs`"
+	GET_HEARD_OF_COUNT = "SELECT heardsofus.type, COUNT(heardsofus.type ) AS count_heardsofus_type, `clients`.`idHeardOfUs` AS clients_idheardofus FROM `clients` INNER JOIN `heardsofus` ON `heardsofus`.`idHeardOfUs` = `clients`.`idHeardOfUs` GROUP BY `clients`.`idHeardOfUs` ORDER BY COUNT(heardsofus.type ) DESC"
 
 	def self.customers_heardofus
 		self.run_sql_query(GET_HEARD_OF_COUNT)
