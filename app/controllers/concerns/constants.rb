@@ -5,5 +5,4 @@ class Constants
   CSRF_HEADER     = "csrf_header"
 
   TS = Time.now.to_i
-  
 end
