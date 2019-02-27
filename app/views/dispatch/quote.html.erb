@@ -84,8 +84,7 @@
         }
 
         const events = <%= @schedules.to_json.to_s.html_safe %>;
-        const Events = <%= (@unschedule_cars.to_json.to_s.html_safe) %>;
-        const nonEvents = JSON.stringify(Events)
+        const nonEvents = <%= (@unschedule_cars.to_json.to_s.html_safe) %>;
         // Keep the address of the last scheduled car
         var lastAddress = null;
   </script>
