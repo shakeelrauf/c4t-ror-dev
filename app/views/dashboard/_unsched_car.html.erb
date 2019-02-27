@@ -1,7 +1,11 @@
 <%
-  address = car["address"]["address"] + " " + car["address"]["city"] + " " + car["address"]["postal"] + " " + car["address"]["province"]
+  if car['address'].present?
+    address = car["address"]["address"] + " " + car["address"]["city"] + " " + car["address"]["postal"] + " " + car["address"]["province"]
+  else
+    address = "Not specified"
+  end
 %>
-<div style="padding: 5px 5px" class="accordion-panel fc-event panel" data-car-no="<%= car["id"] %>">
+<div style="padding: 5px 5px" class="accordion-panel fc-event panel" data-car-no="<%= car["idQuoteCars"] %>">
   <div class="row">
     <div class="col-xl-1" style="padding:0px">
       <div class="row">
@@ -10,10 +14,10 @@
              data-original-title="<div onclick='closepopup();' class='close-popup'><i class='icofont icofont-close-squared-alt'></i></div><iframe src='https://www.google.com/maps?q=<%= address.gsub("'", "&apos;").gsub('"', "&apos;") %>&output=embed&z=12' width='600' height='400'></iframe>">
       </div>
       <div style="padding-top: 3px" class="row">
-        <p class="tag" style="width:23px;text-align:center"><%= car["address"]["id"] %></p>
+        <p class="tag" style="width:23px;text-align:center"><%= car["address"]["idAddress"] if car["address"].present? %></p>
       </div>
       <div style="padding-top: 3px;" class="row">
-        <% if (car["isTowable"]) %>
+        <% if (car["isTowable"] == 1) %>
           <p class="tag-towable" style="width:23px;text-align:center">T</p>
         <% else %>
           <p class="tag-not-towable" style="width:23px;text-align:center">FB</p>
@@ -21,18 +25,18 @@
       </div>
     </div>
     <div class="col-xl-11" style="padding-left:10px">
-      <h6 style="padding:0px" data-toggle="collapse" href="#collapse<%= car["id"] %>">
+      <h6 style="padding:0px" data-toggle="collapse" href="#collapse<%= car["idQuoteCars"] %>">
         <%= car["information"]["make"] + " " + car["information"]["model"] + " " + car["information"]["year"] %>
       </h6>
-      <h4 id="unsched-address<%= car["id"] %>" class="unsched-address" style="padding:0px; font-size:0.9em" data-toggle="collapse" href="#collapse<%= car["id"] %>">
+      <h4 id="unsched-address<%= car["idQuoteCars"] %>" class="unsched-address" style="padding:0px; font-size:0.9em" data-toggle="collapse" href="#collapse<%= car["idQuoteCars"] %>">
         <%= car["address"]["address"] %> <%= car["address"]["city"] %>
         , <%= car["address"]["postal"] %> <%= car["address"]["province"] %>
       </h4>
-      <h4 style="padding:0px; font-size:0.9em" data-toggle="collapse" href="#collapse<%= car["id"] %>">
+      <h4 style="padding:0px; font-size:0.9em" data-toggle="collapse" href="#collapse<%= car["idQuoteCars"] %>">
         To yard: <%= (car["distance"]).to_i %> km
       </h4>
-      <h4 style="padding:0px; font-size:0.9em" data-toggle="collapse" href="#collapse<%= car["id"] %>">
-        From last car: <span id="unsched-distance<%= car["id"] %>">-</span> km
+      <h4 style="padding:0px; font-size:0.9em" data-toggle="collapse" href="#collapse<%= car["idQuoteCars"] %>">
+        From last car: <span id="unsched-distance<%= car["idQuoteCars"] %>">-</span> km
       </h4>
       <input class="hidden-postal" type="hidden" value="<%= car["address"]["postal"] %>"/>
     </div>

@@ -29,7 +29,11 @@ Rails.application.routes.draw do
 	scope  controller: :dashboard do
 		get 	:dashboard
 		get   :dispatched
-	end
+  end
+
+  resources :dispatch do
+    get :quote
+  end
 
   scope controller: :distance do
 		get  "/distance/:postal",            action: :distance, defaults: { format: 'json' }

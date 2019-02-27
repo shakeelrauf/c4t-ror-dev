@@ -191,6 +191,29 @@ module Customers
     end
   end
 
+  private
+  def list_unscheduled_cars(schedules, cars)
+    un_scheduled_cars = {}
+    return un_scheduled_cars if !(cars.present?)
+    return un_scheduled_cars if !(schedules.present?)
+    if cars && cars.length
+      cars.each do |car|
+        found = false
+        if !(schedules.is_a? Array)
+          schedules.each do |schedule|
+            if car && car.idQuoteCars == schedule.idCar
+              found =  true
+            end
+          end
+        end
+        if !found && car.quote.status.name=="Accepted"
+          un_scheduled_cars[car.id] = car
+        end
+      end
+    end
+    un_scheduled_cars
+  end
+
   def check_params
     !params[:firstName] || !params[:lastName] || !params[:email] || !params[:type] || !params[:phoneNumber] || !params[:grade] || !params[:note] || !params[:heardOfUs]
   end

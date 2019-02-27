@@ -14,6 +14,10 @@
 //= require jquery/js/jquery.min.js
 //= require jquery-ui/js/jquery-ui.min.js
 //= require popper.js/js/popper.min.js
+//= require jquery.steps/js/jquery.steps.js
+//= require datatables.net/js/jquery.dataTables.min.js
+//= require datedropper/datedropper.js
+//= require jquery-confirm/dist/jquery-confirm.min.js
 //= require jquery_ujs
 //= require bootstrap/js/bootstrap.min.js
 //= require jquery-slimscroll/js/jquery.slimscroll.js
@@ -25,15 +29,10 @@
 //= require countdown/js/jquery.counterup.js
 //= require dropify-master/dist/js/dropify.min.js
 //= require cropper/js/cropper.js
-//= require moment/js/moment.min.js
-//= require fullcalendar/js/fullcalendar.min.js
-//= require fullcalendar-scheduler-1.9.0/scheduler.min.js
 //= require charts/flot/js/jquery.flot.js
 //= require charts/flot/js/jquery.flot.categories.js
 //= require charts/flot/js/jquery.flot.pie.js
 //= require menu.js
-//= require pages/calendar.js
-//= require pages/distance.js
 //= require jquery/js/jquery.min.js
 //= require jquery-ui/js/jquery-ui.min.js
 //= require jquery.steps/js/jquery.steps.js
@@ -42,3 +41,6 @@
 //= require jquery-confirm/dist/jquery-confirm.min.js
 //= require jquery.validate-1.17.0.js
 //= require ckeditor/init
+//= require jquery.nicescroll/js/jquery.nicescroll.min.js
+//= require waypoints/js/jquery.waypoints.min.js
+//= require countdown/js/jquery.counterup.js

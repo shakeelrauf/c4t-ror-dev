@@ -194,6 +194,6 @@ function saveBooking(callback) {
 
 function scheduleBooking(quoteId) {
   saveBooking(function() {
-    document.location = "/dispatch/quote/" + quoteId ;
+    document.location = "/dispatch/"+quoteId+"/quote/" ;
   });
 }
