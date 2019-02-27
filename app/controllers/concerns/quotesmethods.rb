@@ -56,7 +56,7 @@ module Quotesmethods
     return respond_json({:error => "Last Name is missing in customer attributes."}) if (!params[:lastName].present?)
     return respond_json({:error => "Postal Code is missing in customer attributes."}) if (!params[:postal].present?)
     return respond_json({:error => "Heard of us is missing in customer attributes."}) if (!params[:heardofus].present?)
-    return respond_json({:error => "Phone Type is missing in customer attributes."}) if (!params[:phone].present?)
+    return respond_json({:error => "Phone Type is missing in customer attributes."}) if (params[:phoneType] == "Select an option")
     return respond_json({:error => "Customer Type is missing in customer attributes."}) if (!params[:customerType].present? )
     postal_code = Validations.postal(params[:postal])
     return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)

@@ -218,7 +218,7 @@ $(document).ready(function() {
 
     $("select[name=phone]").on('select2:select', function (e) {
       if($(".selection").text().trim().includes("New Customer")){
-        $("select[name=customerType]").val("Individual");
+        // $("select[name=customerType]").val("Individual");
         $('select[name=phoneType]').prepend("<option>Select an option</option>");
         $('select[name=phoneType] option:eq(0)').prop('selected', true);
         dup_select_val_remove();
