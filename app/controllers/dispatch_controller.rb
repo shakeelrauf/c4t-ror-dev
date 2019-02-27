@@ -1,12 +1,22 @@
 class DispatchController < ApplicationController
   before_action :login_required
   include Customers
+  include Api::V1::ScheduleMethods
 
   def quote
     cars = JSON.parse QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:dispatch_id]).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
     schedules = Schedule.all
     @schedules = format_schedule_cars(schedules)
     @unschedule_cars = list_quote_cars(cars)
+  end
+
+  def create
+    create_schedule
+  end
+
+  def delete
+    sched = Schedule.where({idCar: params[:no]})
+    sched.destroy_all
   end
 
   def format_schedule_cars(schedules)

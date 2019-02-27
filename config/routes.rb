@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 		get   :dispatched
   end
 
-  resources :dispatch do
+  resources :dispatch, param: :no do
     get :quote
   end
 
