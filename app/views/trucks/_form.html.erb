@@ -1,0 +1,146 @@
+<%= render :partial => 'shared/header' %>
+<%= render :partial => 'shared/menu' %>
+<div class="content-wrapper">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <!-- Row Starts -->
+    <div class="row">
+      <div class="col-sm-12 p-0">
+        <div class="main-header">
+          <h4>Add Trucks</h4>
+          <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+            <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
+            <li class="breadcrumb-item">Administration</li>
+            <li class="breadcrumb-item"><a href="/charities">Trucks</a></li>
+            <li class="breadcrumb-item"><%= link_to 'Add Truck', new_truck_path %></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!-- Row end -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-sm-12">
+          <!-- Shopping cart start -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                Add Truck
+              </h5>
+            </div>
+              <%= form_with(model: truck, local: true) do |form| %>
+                <div class="card-block row">
+                  <% if truck.errors.any? %>
+                    <div class="col-lg-10 md-group-add-on">
+                      <div id="error_explanation">
+                        <h2><%= pluralize(truck.errors.count, "error") %> prohibited this truck from being saved:</h2>
+
+                        <ul>
+                        <% truck.errors.full_messages.each do |message| %>
+                          <li><%= message %></li>
+                        <% end %>
+                        </ul>
+                      </div>
+                    </div>  
+                  <% end %>
+
+                  <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <%= form.text_field :name, class: "md-form-control md-static", required: true %>
+                      <label>Name <span class="required">*</span></label>
+                    </div>
+                  </div>
+                  <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <%= form.text_field :make, class: "md-form-control md-static", required: true %>
+                      <label>Make <span class="required">*</span></label>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <%= form.text_field :model, class: "md-form-control md-static", required: true %>
+                      <label>Model <span class="required">*</span></label>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <%= form.number_field :year, class: "md-form-control md-static" %>
+                      <label>Year</label>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-10 md-group-add-on flat-bed">
+                    <div class="col-lg-4 col-sm-6 col-md-3 md-group-add-on">
+                      <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                      </span>
+                        <div class="md-input-wrapper cashradio">
+                          <label>Flatbed <span class="required">*</span></label>
+                          <br>
+                          <div class="cash-check-filed">
+                           <input type="radio"  value="true" name="truck[flatbed]"  <%= truck.flatbed == true ? 'checked' : '' %> required> Yes
+                           <input type="radio"  value="false" name="truck[flatbed]"  <%= truck.flatbed == false ? 'checked' : '' %>> No
+                          </div> 
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-10 flat-type-div">
+                      <hr>
+                  </div>
+
+                  <div class="col-lg-4 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+
+                      <%= form.select :flatbed_type, [["Steel",0], ["Aluminum",1]], {}, { class: 'md-form-control md-static', required: true } %>
+                      <label>Flatbed Type <span class="required">*</span></label>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <%= form.number_field :car_capacity, class: "md-form-control md-static col-lg-4", required: true %>
+                      <label>Car Capacity <span class="required">*</span></label>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-10 md-group-add-on">
+                    <span class="md-add-on">
+                        <i class="icofont icofont-tow-truck"></i>
+                    </span>
+                    <div class="md-input-wrapper">
+                      <%= form.select :weight_capacity, ["Any cars", "vans or truck", "Small"], {}, { class: 'md-form-control md-static col-lg-4', required: true } %>
+                      <label>Weight Capacity <span class="required">*</span></label>
+                    </div>
+                  </div>                
+
+                  <%= form.submit "Save", class: "col-lg-3 btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block" %>
+                </div>  
+              <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid ends -->
+</div>

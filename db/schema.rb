@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_25_054849) do
+ActiveRecord::Schema.define(version: 2019_02_28_054248) do
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -173,6 +173,19 @@ ActiveRecord::Schema.define(version: 2019_02_25_054849) do
   create_table "status", primary_key: "idStatus", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.text "name", null: false
     t.text "color", null: false
+  end
+
+  create_table "trucks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "make"
+    t.string "model"
+    t.integer "year"
+    t.boolean "flatbed"
+    t.integer "flatbed_type"
+    t.integer "car_capacity"
+    t.string "weight_capacity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "upsell_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

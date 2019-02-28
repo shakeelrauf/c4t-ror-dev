@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :trucks
 	mount Ckeditor::Engine => '/ckeditor'
   root "dashboard#dashboard"
   post "/save_user" => "quotes#save_user"

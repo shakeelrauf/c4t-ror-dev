@@ -1,0 +1,89 @@
+<%= render :partial => 'shared/header' %>
+<%= render :partial => 'shared/menu' %>
+<div class="content-wrapper">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <!-- Main content starts -->
+    <div>
+      <!-- Row Starts -->
+      <div class="row">
+        <div class="col-sm-12 p-0">
+          <div class="main-header">
+            <h4>Trucks</h4>
+            <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+              <li class="breadcrumb-item"><a href="/dashboard"><i class="icofont icofont-home"></i></a></li>
+              <li class="breadcrumb-item">Administration</li>
+              <li class="breadcrumb-item"><%= link_to 'Add Truck', new_truck_path %></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <!-- Row end -->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-header-text d-inline-block m-b-0 f-w-600">
+                Trucks
+              </h5>
+              <%= link_to '<i class="icofont icofont-law-document"></i> Add Truck'.html_safe, new_truck_path, class: "btn btn-primary waves-effect waves-light f-right md-trigger" %>
+            </div>
+            <div class="card-block">
+              <div class="row">
+                <div class="table-content crm-table">
+                  <div class="project-table">
+                    <table id="crm-contact" class="table table-striped nowrap table-responsive">
+                      <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Flatbed</th>
+                        <th>Flatbed type</th>
+                        <th>Car capacity</th>
+                        <th>Weight capacity</th>
+                        <th>Action</th>
+                      </tr>
+                      </thead>
+                      <tbody class="table-quotes">
+                        <% @trucks.each do |truck| %>
+                          <tr>
+                            <td><%= truck.name %></td>
+                            <td><%= truck.make %></td>
+                            <td><%= truck.model %></td>
+                            <td><%= truck.year %></td>
+                            <td><%= truck.flatbed %></td>
+                            <td><%= truck.flatbed_type %></td>
+                            <td><%= truck.car_capacity %></td>
+                            <td><%= truck.weight_capacity %></td>
+                            <td><%= link_to '<i class="icofont icofont-ui-edit"></i>'.html_safe, edit_truck_path(truck), class: "btn btn-primary waves-effect waves-light"  %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                      <tfoot>
+                      <tr>
+                        <th>Name</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Flatbed</th>
+                        <th>Flatbed type</th>
+                        <th>Car capacity</th>
+                        <th>Weight capacity</th>
+                        <th>Action</th>
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid ends -->
+</div>
+
