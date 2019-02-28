@@ -10,6 +10,7 @@ class TrucksController < ApplicationController
   # GET /trucks/1
   # GET /trucks/1.json
   def show
+    redirect_to trucks_path
   end
 
   # GET /trucks/new
