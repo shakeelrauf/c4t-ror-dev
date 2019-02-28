@@ -69,5 +69,17 @@
       // Keep the address of the last scheduled car
       var lastAddress = null;
   </script>
+  <%= public_js_path 'calendar.js' %>
+  <%= public_js_path 'distance.js' %>
+  <%= javascript_include_tag 'moment/js/moment.js' %>
+  <%= javascript_include_tag 'fullcalendar/js/fullcalendar.min.js' %>
+  <%= javascript_include_tag 'fullcalendar-scheduler-1.9.0/scheduler.min.js' %>
 <% end %>
+
+<% content_for :css  do%>
+  <%= public_css_path 'fullcalendar.min.css' %>
+  <%= public_css_path 'fullcalendar.print.min.css','print' %>
+  <%= public_css_path 'scheduler.min.css' %>
+<% end %>
+
 

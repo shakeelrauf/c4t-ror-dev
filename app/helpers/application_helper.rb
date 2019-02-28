@@ -4,8 +4,8 @@ module ApplicationHelper
     return "<script type='text/javascript' src='/js/#{name}?#{Constants::TS}'></script>".html_safe
   end
 
-  def public_css_path(name)
-    return "<link rel='stylesheet' type='text/css' href='/css/pages/#{name}'>".html_safe
+  def public_css_path(name, media='all')
+    return "<link rel='stylesheet' type='text/css' href='/css/pages/#{name}' media='#{media}'>".html_safe
   end
 
   def phone_number_display(val)

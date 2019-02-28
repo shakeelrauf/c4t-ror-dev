@@ -32,7 +32,13 @@ Rails.application.routes.draw do
   end
 
   resources :dispatch, param: :no do
-    get :quote
+    member do
+			get :quote
+    end
+    collection do
+      get 'unsched/:carId', action: :unsched
+      post :remove, action: :destroy
+    end
   end
 
   scope controller: :distance do
