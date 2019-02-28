@@ -40,7 +40,7 @@
          </li>
       </ul>
       <!-- Sidebar Menu-->
-      <ul class="sidebar-menu">
+      <ul class="sidebar-menu sidebar-menu-scroll">
          <li class="nav-level">Navigation</li>
          <li>
             <a class="waves-effect waves-dark" href="/dashboard">
@@ -103,3 +103,8 @@
    </section>
 </aside>
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".sidebar-menu-scroll").css({"overflow": "scroll","height": "500px"});
+  });
+</script>
