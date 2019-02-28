@@ -103,8 +103,6 @@
    </section>
 </aside>
 </div>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $(".sidebar-menu-scroll").css({"overflow": "scroll","height": "500px"});
-  });
-</script>
+<% content_for :js do %>
+    <%= public_js_path('menu-scroll.js') %>
+<% end %>
