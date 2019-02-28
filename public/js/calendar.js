@@ -15,7 +15,7 @@ $(document).ready(function() {
         }
     })
 
-    $('#external-events .fc-event').each(function() {
+    $('#external-events .fc-event').each(function () {
         // store data so the calendar knows to render an event upon drop
         if ($(this).hasClass("canNotRoll")) {
             $(this).data('event', {
@@ -44,11 +44,11 @@ $(document).ready(function() {
             });
         }
         // make the event draggable using jQuery UI
-        // $(this).draggable({
-        //     zIndex: 999,
-        //     revert: true, // will cause the event to go back to its
-        //     revertDuration: 0 //  original position after the drag
-        // });
+        $(this).draggable({
+            zIndex: 999,
+            revert: true, // will cause the event to go back to its
+            revertDuration: 0 //  original position after the drag
+        });
     });
 
     $('#calendar').fullCalendar({
@@ -98,8 +98,8 @@ $(document).ready(function() {
                 title: 'Hino 112'
             },
         ],
-        eventOverlap: function(stillEvent, movingEvent) {
-            if (stillEvent.information.address.id == movingEvent.information.address.id) {
+        eventOverlap: function (stillEvent, movingEvent) {
+            if (stillEvent.information.address.idAdress == movingEvent.information.address.idAdress) {
                 return true;
             } else {
                 return false;
@@ -107,12 +107,12 @@ $(document).ready(function() {
         },
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar
-        dayClick: function(date, jsEvent) {
+        dayClick: function (date, jsEvent) {
             $('#calendar').fullCalendar('gotoDate', date);
             $('#calendar').fullCalendar('changeView', 'agendaDayTrucks');
         },
         // Remove event from calendar
-        eventDragStop: function(event, jsEvent, ui, view) {
+        eventDragStop: function (event, jsEvent, ui, view) {
             var ofs = $("#external-events").offset();
             var x1 = ofs.left;
             var x2 = ofs.left + $("#external-events").outerWidth(true);
@@ -127,9 +127,9 @@ $(document).ready(function() {
                     data: {
                         idCar: event.id
                     }
-                }).fail(function() {
+                }).fail(function () {
                     alert("Error!");
-                }).done(function(response) {
+                }).done(function (response) {
                     if (response.error) {
                         alert(response.error);
                     } else {
@@ -139,28 +139,28 @@ $(document).ready(function() {
                         $.ajax({
                             url: "/dispatch/unsched/" + event.id,
                             method: "GET"
-                        }).fail(function() {
+                        }).fail(function () {
                             alert("Error!");
-                        }).done(function(html) {
+                        }).done(function (html) {
                             $("#external-events").append(html);
 
                             // Make the unsched car draggable
-                            // $("div.fc-event[data-car-no='" + event.id + "']").draggable({
-                            //     zIndex: 999,
-                            //     revert: true, // will cause the event to go back to its
-                            //     revertDuration: 0 //  original position after the drag
-                            // });
+                            $("div.fc-event[data-car-no='" + event.id + "']").draggable({
+                                zIndex: 999,
+                                revert: true, // will cause the event to go back to its
+                                revertDuration: 0 //  original position after the drag
+                            });
                             //Add tooltip map on event.
                             $("div.fc-event[data-car-no='" + event.id + "'] img").data("original-title", event.description);
-                            // $("div.fc-event[data-car-no='" + event.id + "'] img").tooltip({
-                            //     title: event.description,
-                            //     html: true,
-                            //     trigger: "click",
-                            //     placement: "top"
-                            // });
-                            // $(".tooltip").tooltip("hide");
+                            $("div.fc-event[data-car-no='" + event.id + "'] img").tooltip({
+                                title: event.description,
+                                html: true,
+                                trigger: "click",
+                                placement: "top"
+                            });
+                            $(".tooltip").tooltip("hide");
                             // store data so the calendar knows to render an event upon drop
-                            var mmy     = $("div.fc-event[data-car-no='" + event.id + "']").find("h6").html();
+                            var mmy = $("div.fc-event[data-car-no='" + event.id + "']").find("h6").html();
                             var address = $("div.fc-event[data-car-no='" + event.id + "']").find("h4").html();
                             if (!isTowable) {
                                 $("div.fc-event[data-car-no='" + event.id + "']").data('event', {
@@ -188,11 +188,11 @@ $(document).ready(function() {
                                     mmy: mmy
                                 });
                             }
-                            // $("div.fc-event[data-car-no='" + event.id + "']").draggable({
-                            //     zIndex: 999,
-                            //     revert: true,     // will cause the event to go back to its
-                            //     revertDuration: 0 //  original position after the drag
-                            // });
+                            $("div.fc-event[data-car-no='" + event.id + "']").draggable({
+                                zIndex: 999,
+                                revert: true,     // will cause the event to go back to its
+                                revertDuration: 0 //  original position after the drag
+                            });
                             //Add tooltip map on event.
                             $("div.fc-event[data-car-no='" + event.id + "'] img").data("original-title", event.description);
                             $("div.fc-event[data-car-no='" + event.id + "'] img").tooltip({
@@ -201,14 +201,14 @@ $(document).ready(function() {
                                 trigger: "click",
                                 placement: "top"
                             });
-                            // $(".tooltip").tooltip("hide");
+                            $(".tooltip").tooltip("hide");
                         });
                     }
                 });
             }
         },
         // Moving event from calendar to calendar
-        eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
+        eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
             $.ajax({
                 url: "/dispatch",
                 method: "POST",
@@ -218,12 +218,12 @@ $(document).ready(function() {
                     dtStart: event.start.format("YYYY-MM-DD HH:mm:ss"),
                     dtEnd: (event.end == null ? null : event.end.format("YYYY-MM-DD HH:mm:ss"))
                 }
-            }).fail(function() {
+            }).fail(function () {
                 alert("Error!");
             });
         },
         // Add event in calendar
-        drop: function(date, jsEvent, ui, resourceId) {
+        drop: function (date, jsEvent, ui, resourceId) {
             var myCar = $(this);
             var element = ui.helper;
             $.ajax({
@@ -235,19 +235,19 @@ $(document).ready(function() {
                     dtStart: date.format("YYYY-MM-DD HH:mm:ss"),
                     map: $(myCar).find("img").data("original-title")
                 }
-            }).fail(function() {
+            }).fail(function () {
                 alert("Error!");
-            }).done(function() {
+            }).done(function () {
                 //Remove the element from the "Draggable List of Accepted" list
                 $(myCar).remove();
             });
         },
-        eventAfterRender: function(event, element) {
-            debugger
+
+        eventAfterRender: function (event, element, view) {
             $(".tooltip").tooltip("hide");
             element.find('.fc-title').append(`<div class="event-check-info">
                 <i class="fa fa-info-circle fa-2x infoicon" aria-hidden="true"></i>
-                <p class="tag">` + event.information.address.id + `</p>
+                <p class="tag">` + event.information.address.idAddress + `</p>
             </div>`);
             element.append(`<i class="fa fa-map-marker fa-2x calendaricon" aria-hidden="true"></i>`);
             element.find('.calendaricon').tooltip({
@@ -263,13 +263,13 @@ $(document).ready(function() {
                       <div onclick='closepopup();' class='close-popup'>
                           <i class='icofont icofont-close-squared-alt'></i>
                       </div>
-                  </div>` + event.information.quote.reference + "-" + event.information.id + `<br>
+                  </div>` + event.information.quote.reference + "-" + event.information.idSchedule + `<br>
                   ` + event.address + `<br>` +
                     `<hr>` +
                     event.information.quote.customer.firstName + " " + event.information.quote.customer.lastName + ` <br>
                   <a href="tel:` + event.information.quote.customer.phone + `">` + event.information.quote.customer.phone.substr(0, 3) + " " + event.information.quote.customer.phone.substr(3, 3) + "-" + event.information.quote.customer.phone.substr(7) + `</a><br>
                   <b>` + event.mmy + `</b><br>` +
-                    `<a href="/quotes/` + event.information.quote.id + `/edit">View quote</a>
+                    `<a href="/quotes/` + event.information.quote.idQuote + `/edit">View quote</a>
                 </div>`,
                 html: true,
                 trigger: "click",
@@ -282,7 +282,7 @@ $(document).ready(function() {
             analyseAddresses(event.address);
         },
         //Resizing event
-        eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
+        eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
             $.ajax({
                 url: "/dispatch",
                 method: "POST",
@@ -292,12 +292,12 @@ $(document).ready(function() {
                     dtStart: event.start.format("YYYY-MM-DD HH:mm:ss"),
                     dtEnd: (event.end == null ? null : event.end.format("YYYY-MM-DD HH:mm:ss"))
                 }
-            }).fail(function() {
+            }).fail(function () {
                 alert("Error!");
             });
         },
         //escape all html except <br>.
-        eventRender: function(event, element) {
+        eventRender: function (event, element) {
             $(element).find(".fc-title").html(event.mmy + "<br>" + event.address);
         },
         eventSources: [{
@@ -313,9 +313,8 @@ $(document).ready(function() {
     }
     // End doc ready
 });
-
 function closepopup() {
-    // $(".tooltip").tooltip("hide");
+    $(".tooltip").tooltip("hide");
 }
 
 function analyseAddresses(address) {

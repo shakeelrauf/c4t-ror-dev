@@ -10,7 +10,6 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_self
  *= require icofont/css/icofont.css
  *= require simple-line-icons/css/simple-line-icons.css
  *= require select2/css/select2.min.css
@@ -20,9 +19,6 @@
  *= require cropper/css/cropper.css
  *= require chartist/css/chartist.css
  *= require jquery.steps/css/jquery.steps.css
- *= require fullcalendar/css/fullcalendar.min.css
- *= require fullcalendar/css/fullcalendar.print.min.css
- *= require fullcalendar-scheduler-1.9.0/scheduler.min.css
  *= require main.css
  *= require style.css
  *= require responsive.css
@@ -48,5 +44,5 @@
 }
 
 .md-form-control.error{
-	border-color: #ff0000 !important;
+    border-color: #ff0000 !important;
 }

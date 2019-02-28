@@ -18,7 +18,6 @@
 //= require datatables.net/js/jquery.dataTables.min.js
 //= require datedropper/datedropper.js
 //= require jquery-confirm/dist/jquery-confirm.min.js
-//= require jquery_ujs
 //= require bootstrap/js/bootstrap.min.js
 //= require jquery-slimscroll/js/jquery.slimscroll.js
 //= require jquery.nicescroll/js/jquery.nicescroll.min.js

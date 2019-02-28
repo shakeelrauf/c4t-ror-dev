@@ -17,7 +17,7 @@
     </div>
   </div>
   <!-- Row end -->
-  <div class="row">
+    <div class="row">
     <div class="col-md-12">
       <div class="col-sm-12">
       <!-- Shopping cart start -->
@@ -59,46 +59,43 @@
           </div>
         </div>
       </div>
-    </div>
       <!-- Container-fluid ends -->
   </div>
 </div>
-<% content_for :js do %>
+<%content_for :js do %>
   <script>
 
-        function growling(message, type) {
-            $.growl({
-                message: message
-            }, {
-                type: type,
-                allow_dismiss: true,
-                label: 'Cancel',
-                className: 'btn-xs btn-inverse',
-                delay: 0,
-                placement: {
-                    from: 'bottom',
-                    align: 'right'
-                },
-                animate: {enter: 'animated fadeInUp'}
-            });
-        }
+      function growling(message, type) {
+          $.growl({
+              message: message
+          }, {
+              type: type,
+              allow_dismiss: true,
+              label: 'Cancel',
+              className: 'btn-xs btn-inverse',
+              delay: 0,
+              placement: {
+                  from: 'bottom',
+                  align: 'right'
+              },
+              animate: {enter: 'animated fadeInUp'}
+          });
+      }
 
-        const events = <%= @schedules.to_json.to_s.html_safe %>;
-        const nonEvents = <%= (@unschedule_cars.to_json.to_s.html_safe) %>;
-        // Keep the address of the last scheduled car
-        var lastAddress = null;
+      let events = (<%= @schedules.to_json.to_s.html_safe %>);
+      let nonEvents = (<%= (@unschedule_cars.to_json.to_s.html_safe) %>);
+      // Keep the address of the last scheduled car
+      let lastAddress = null;
   </script>
-
-
-
-  <%= public_js_path 'common.js' %>
   <%= public_js_path 'calendar.js' %>
   <%= public_js_path 'distance.js' %>
-<% end %>
-
-<%content_for :head_js do %>
   <%= javascript_include_tag 'moment/js/moment.js' %>
-
   <%= javascript_include_tag 'fullcalendar/js/fullcalendar.min.js' %>
   <%= javascript_include_tag 'fullcalendar-scheduler-1.9.0/scheduler.min.js' %>
+<% end %>
+
+<% content_for :css  do%>
+  <%= public_css_path 'fullcalendar.min.css' %>
+  <%= public_css_path 'fullcalendar.print.min.css','print' %>
+  <%= public_css_path 'scheduler.min.css' %>
 <% end %>
