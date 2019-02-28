@@ -53,8 +53,8 @@
                             <td><%= truck.make %></td>
                             <td><%= truck.model %></td>
                             <td><%= truck.year %></td>
-                            <td><%= truck.flatbed %></td>
-                            <td><%= truck.flatbed_type %></td>
+                            <td><%= flatbed(truck.flatbed) %></td>
+                            <td><%= flatbed_type(truck.flatbed_type) %></td>
                             <td><%= truck.car_capacity %></td>
                             <td><%= truck.weight_capacity %></td>
                             <td><%= link_to '<i class="icofont icofont-ui-edit"></i>'.html_safe, edit_truck_path(truck), class: "btn btn-primary waves-effect waves-light"  %></td>
