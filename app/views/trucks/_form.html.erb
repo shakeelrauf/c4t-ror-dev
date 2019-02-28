@@ -109,7 +109,7 @@
                     </span>
                     <div class="md-input-wrapper">
 
-                      <%= form.select :flatbed_type, [["Steel",0], ["Aluminum",1]], {}, { class: 'md-form-control md-static', required: true } %>
+                      <%= form.select :flatbed_type, [["Steel",0], ["Aluminum",1]], {include_blank: 'Choose Type' }, { class: 'md-form-control md-static', required: true } %>
                       <label>Flatbed Type <span class="required">*</span></label>
                     </div>
                   </div>
@@ -129,7 +129,7 @@
                         <i class="icofont icofont-tow-truck"></i>
                     </span>
                     <div class="md-input-wrapper">
-                      <%= form.select :weight_capacity, ["Any cars", "vans or truck", "Small"], {}, { class: 'md-form-control md-static col-lg-4', required: true } %>
+                      <%= form.select :weight_capacity, [["Any cars, vans or trucks","Any"], ["Cars, small vans, small SUVs and small","Small"]], {include_blank: 'Choose Weight'}, { class: 'md-form-control md-static col-lg-4', required: true } %>
                       <label>Weight Capacity <span class="required">*</span></label>
                     </div>
                   </div>                
