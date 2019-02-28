@@ -29,7 +29,8 @@ class TrucksController < ApplicationController
 
     respond_to do |format|
       if @truck.save
-        format.html { redirect_to trucks_path, notice: 'Truck was successfully created.' }
+        flash[:success] = "Truck was successfully created."
+        format.html { redirect_to trucks_path }
         format.json { render :show, status: :created, location: @truck }
       else
         format.html { render :new }
@@ -41,9 +42,11 @@ class TrucksController < ApplicationController
   # PATCH/PUT /trucks/1
   # PATCH/PUT /trucks/1.json
   def update
+
     respond_to do |format|
       if @truck.update(truck_params)
-        format.html { redirect_to trucks_path, notice: 'Truck was successfully updated.' }
+        flash[:success] = "Truck was successfully updated."
+        format.html { redirect_to trucks_path}
         format.json { render :show, status: :ok, location: @truck }
       else
         format.html { render :edit }
