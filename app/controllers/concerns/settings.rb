@@ -18,6 +18,10 @@ module Settings
         setting.value = params[:DealerFlatFee]
       elsif setting.name == "weight_year"
         setting.value = params[:weight_year]
+      elsif setting.name == "max_purchaser_increase"
+        setting.value = params[:max_purchaser_increase]
+      elsif setting.name == "max_increase_with_admin_approval"
+        setting.value = params[:max_increase_with_admin_approval]
       elsif setting.label == "bonus"
         setting.value = params["--Bronze--bonus"]
       elsif setting.label == "bonus-type"
