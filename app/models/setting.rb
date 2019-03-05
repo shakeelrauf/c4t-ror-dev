@@ -21,6 +21,12 @@ class Setting < ApplicationRecord
 			s6 = Setting.find_or_initialize_by(label: "batteryPrice", name: "batteryPrice")
 			s6.new_record? ? s6.value=0 : ''
 			s6.save!
+		  s7 = Setting.find_or_initialize_by(label: "max_purchaser_increase", name: "max_purchaser_increase")
+			s7.new_record? ? s1.value=20 : ''
+			s7.save!
+		  s8 = Setting.find_or_initialize_by(label: "max_increase_with_admin_approval", name: "max_increase_with_admin_approval")
+			s8.new_record? ? s1.value=40 : ''
+			s8.save!
 			s = Setting.find_or_initialize_by(label: "bonus", name: "bonus", grade: "Bronze")
 			s.new_record?  ? s.save! : ''
 			s = Setting.find_or_initialize_by(label: "bonus-type", name: "bonus-type", grade: "Bronze")
