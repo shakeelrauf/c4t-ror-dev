@@ -14,7 +14,7 @@ class SettingsController < ApplicationController
   end
 
   def update
-    if params[:max_purchaser_increase].to_f > params[:max_increase_with_admin_approval].to_f
+    if params[:max_purchaser_increase].to_f >= params[:max_increase_with_admin_approval].to_f
       flash[:danger] = "Max Increase With Admin Approval must be greater than Max purchaser Increase"
     else
       update_settings
