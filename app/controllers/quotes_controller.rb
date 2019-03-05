@@ -113,6 +113,8 @@ class QuotesController < ApplicationController
     if car.present?
       car.missingWheels = params[:missingWheels]
       car.missingBattery = params[:missingBattery]
+      r[:car_new_price] = '%.2f' % ( r[:netPrice].to_f + Setting.where(label: 'max_increase_with_admin_approval').first.value.to_f)
+      car.new_price =  r[:car_new_price]
       car.missingCat = params[:missingCat]
       car.still_driving = params[:still_driving]
       car.gettingMethod =  params[:gettingMethod]
@@ -120,6 +122,7 @@ class QuotesController < ApplicationController
       car.by_weight = params[:byWeight]  if params[:byWeight].present?
       car.save!
     end
+    r[:increase_in_price] = ('%.2f' %  (((r[:car_new_price].to_f - r[:netPrice].to_f)/r[:netPrice].to_f) * 100)).to_s + '%'
     r[:weight] = car.weight/1000.0 if params[:byWeight] == "1" && car.weight.present?
     r[:bonus] = bonus
     respond_json(r)

@@ -520,6 +520,9 @@ function calcPrice(carId,quote_id) {
 
             // Pricing details
             $("#weight"+carId).html(json.weight);
+            $("#carNewPrice"+carId).html(json.car_new_price);
+            $("#increase_in_price"+carId).html(json.increase_in_price);
+
             $("#steelPrice"+carId).html(json.steelPrice);
             $("#weightPrice"+carId).html(json.weightPrice);
             $("#excessCost"+carId).html(json.excessCost);
@@ -676,6 +679,10 @@ function onWeightChange(carId){
                 }else{
                     $("#weight"+carId).html(json.weight);
                 }
+
+                $("#carNewPrice"+carId).html(json.car_new_price);
+                $("#increase_in_price"+carId).html(json.increase_in_price);
+
                 $("#steelPrice"+carId).html(json.steelPrice);
                 $("#weightPrice"+carId).html(json.weightPrice);
                 $("#excessCost"+carId).html(json.excessCost);
@@ -893,6 +900,9 @@ function calcPrice(carId) {
             $("#excessDistance"+carId).html(parseInt(json.excessDistance));
             $("#excessCost"+carId).html(json.excessCost);
             $("#distanceCost"+carId).html(json.distanceCost);
+
+            $("#carNewPrice"+carId).html(json.car_new_price);
+            $("#increase_in_price"+carId).html(json.increase_in_price);
 
             $("#missingCatCost"+carId).html(json.missingCatCost);
             $("#missingBatCost"+carId).html(json.missingBatCost);
