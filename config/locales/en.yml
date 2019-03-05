@@ -50,5 +50,7 @@ en:
     option_3: "on the steel price"
     bonus: "bonus"
     weight_year: "Weight Year"
+    max_purchaser_increase: "Max Purchaser Increase"
+    max_increase_with_admin_approval: "Max Increase With Admin Approval"
 
 

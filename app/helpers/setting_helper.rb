@@ -18,7 +18,11 @@ module SettingHelper
 			label = t("settings.door_price")
     elsif name == "weight_year"
       label = t('settings.weight_year')
+    elsif name == "max_purchaser_increase"
+      label = t('settings.max_purchaser_increase')
+    elsif name == "max_increase_with_admin_approval"
+      label = t('settings.max_increase_with_admin_approval')
 		end
-    label
+		label
 	end
 end
