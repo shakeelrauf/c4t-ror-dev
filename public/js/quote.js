@@ -496,6 +496,7 @@ function calcPrice(carId,quote_id) {
         missingStil = (missingStilVal == "1") ? 1 : 0;
     }
     // Car price data
+    var newPrice = $("#carNewPrice"+carId).val();
     var data = {
         "car":            carId,
         "quoteId":        quote_id,
@@ -504,6 +505,7 @@ function calcPrice(carId,quote_id) {
         "missingBattery": missingBat,
         "missingCat":     missingCat,
         "byWeight":       byWeight,
+        "new_price":      newPrice,
         "still_driving":  missingStil,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
@@ -520,7 +522,7 @@ function calcPrice(carId,quote_id) {
 
             // Pricing details
             $("#weight"+carId).html(json.weight);
-            $("#carNewPrice"+carId).html(json.car_new_price);
+            $("#carNewPrice"+carId).val(json.car_new_price);
             $("#increase_in_price"+carId).html(json.increase_in_price);
 
             $("#steelPrice"+carId).html(json.steelPrice);
@@ -603,6 +605,8 @@ function onWeightChange(carId){
         if (missingStilVal && missingStilVal != "") {
             missingStil = (missingStilVal == "1") ? 1 : 0;
         }
+        var newPrice = $("#carNewPrice"+carId).val();
+        debugger
         // Car price data
         var data = {
             "car":            carId,
@@ -613,6 +617,7 @@ function onWeightChange(carId){
             "missingBattery": missingBat,
             "byWeight":       byWeight,
             "missingCat":     missingCat,
+            "new_price":      newPrice,
             "still_driving":  missingStil,
             "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
             "distance":       distance
@@ -692,6 +697,7 @@ function onWeightChange(carId){
                 $("#excessDistance"+carId).html(parseInt(json.excessDistance));
                 $("#excessCost"+carId).html(json.excessCost);
                 $("#distanceCost"+carId).html(json.distanceCost);
+                $("#carNewPrice"+carId).val(json.car_new_price);
 
                 $("#missingCatCost"+carId).html(json.missingCatCost);
                 $("#missingBatCost"+carId).html(json.missingBatCost);
@@ -811,6 +817,7 @@ function calcPrice(carId) {
     if (missingStilVal && missingStilVal != "") {
         missingStil = (missingStilVal == "1") ? 1 : 0;
     }
+    var newPrice = $("#carNewPrice"+carId).val();
     // Car price data
     var data = {
         "car":            carId,
@@ -821,6 +828,7 @@ function calcPrice(carId) {
         "byWeight":       byWeight,
         "missingCat":     missingCat,
         "still_driving":  missingStil,
+        "new_price":      newPrice,
         "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
         "distance":       distance
     }
@@ -904,7 +912,7 @@ function calcPrice(carId) {
             $("#excessCost"+carId).html(json.excessCost);
             $("#distanceCost"+carId).html(json.distanceCost);
 
-            $("#carNewPrice"+carId).html(json.car_new_price);
+            $("#carNewPrice"+carId).val(json.car_new_price);
             $("#increase_in_price"+carId).html(json.increase_in_price);
 
             $("#missingCatCost"+carId).html(json.missingCatCost);

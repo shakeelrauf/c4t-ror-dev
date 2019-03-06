@@ -113,7 +113,12 @@ class QuotesController < ApplicationController
     if car.present?
       car.missingWheels = params[:missingWheels]
       car.missingBattery = params[:missingBattery]
-      r[:car_new_price] = '%.2f' % ( r[:netPrice].to_f + Setting.where(label: 'max_increase_with_admin_approval').first.value.to_f)
+      if params[:new_price].present?
+        r[:car_new_price] = '%.2f' % ( params[:new_price].to_f)
+      else
+        r[:car_new_price] = car.new_price
+      end
+      r[:car_new_price] = r[:netPrice] if r[:netPrice].to_f > r[:car_new_price].to_f
       car.new_price =  r[:car_new_price]
       car.missingCat = params[:missingCat]
       car.still_driving = params[:still_driving]
