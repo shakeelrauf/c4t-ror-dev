@@ -8,6 +8,7 @@ class DispatchController < ApplicationController
     schedules = JSON.parse Schedule.includes([:car => [:information, :address, :quote => [:customer,:dispatcher, :status]]]).all.to_json(include: [{car: {include: [:information,:address, {quote: {include: [:customer,:dispatcher,:status]}}]}}])
     @schedules = format_schedule_cars(schedules)
     @unschedule_cars = list_quote_cars(cars)
+    @trucks =  Truck.all.order('name ASC').pluck(:id, :name)
   end
 
   def create

@@ -762,6 +762,9 @@ function calcPrice(carId) {
             $("#excessCost"+carId).html(" ");
             $("#distanceCost"+carId).html("");
 
+            $("#carNewPrice"+carId).html("");
+            $("#increase_in_price"+carId).html("");
+
             $("#tab"+carId).data('price', {});
 
             $("#missingCatCost"+carId).html(" ");

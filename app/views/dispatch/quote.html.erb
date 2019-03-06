@@ -38,7 +38,12 @@
       <a href="javascript:;" class="external-events-toggle" style="font-size:40px;">&utrif;</a>
   -->
                     </div>
-                    <h6 class="m-b-30 m-t-20">Last Scheduled Address</h6>
+                    <h6 style="float: left;width: 48%;">Last Scheduled Address</h6>
+                    <select name="schedule_by" id="schedule_by" class="form-control md-static" style="width: 110px;">
+                      <option value="bydate">By Date</option>
+                      <option value="bytruck">By Truck</option>
+                    </select>
+                    <br>
                     <label id="last-address">-</label>
                     <h6 class="m-b-30 m-t-20">Unscheduled Cars</h6>
                     <div id="external-events" >
@@ -62,7 +67,21 @@
 </div>
 <%content_for :js do %>
   <script>
-
+    var truck_array = <%= @trucks.to_json.html_safe %>,
+        trucks_options = "";
+        truck_array.forEach(function(t){
+          trucks_options += "<option value="+t[0]+">"+t[1]+"</option>";
+        })
+      $("select[name=schedule_by]").on("change", function (e) {
+         var $val = $(this).find("option:selected").val();
+         if($val == "bytruck"){
+             $(".fc-center h2").hide()
+             $(".fc-center").append("<select name='listoftrucks' class='form-control'>"+trucks_options+"</select>")
+         }else{
+             $(".fc-center h2").show()
+             $(".fc-center select").remove()
+         }
+      });
       function growling(message, type) {
           $.growl({
               message: message
