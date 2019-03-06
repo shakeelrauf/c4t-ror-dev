@@ -14,8 +14,12 @@ class SettingsController < ApplicationController
   end
 
   def update
-    update_settings
-    flash[:success] = 'Setting is successfully Updated!'
+    if params[:max_purchaser_increase].to_f >= params[:max_increase_with_admin_approval].to_f
+      flash[:danger] = "Max Increase With Admin Approval must be greater than Max purchaser Increase"
+    else
+      update_settings
+      flash[:success] = 'Setting is successfully Updated!'
+    end
     redirect_to settings_path
   end
 end
