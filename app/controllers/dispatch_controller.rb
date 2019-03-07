@@ -4,15 +4,26 @@ class DispatchController < ApplicationController
   include Api::V1::ScheduleMethods
 
   def quote
+    if params[:truck_id].present?
+      schedules = JSON.parse Schedule.includes([:car => [:information, :address, :quote => [:customer,:dispatcher, :status]]]).where(truck: params[:truck_id]).to_json(include: [{car: {include: [:information,:address, {quote: {include: [:customer,:dispatcher,:status]}}]}}])
+      @schedules = format_schedule_cars(schedules)
+      return render_json_response(@schedules, :ok)
+    end
     cars = JSON.parse QuoteCar.includes([:information, :address, :quote => [:customer, :dispatcher, :status]]).where(idQuote: params[:no]).to_json(include: [:address,:information, {quote: {:include => [:customer, :dispatcher, :status]}}])
     schedules = JSON.parse Schedule.includes([:car => [:information, :address, :quote => [:customer,:dispatcher, :status]]]).all.to_json(include: [{car: {include: [:information,:address, {quote: {include: [:customer,:dispatcher,:status]}}]}}])
     @schedules = format_schedule_cars(schedules)
     @unschedule_cars = list_quote_cars(cars)
-    @trucks =  Truck.all.order('name ASC').pluck(:id, :name)
+    @trucks =  Truck.select("id, name AS title").all.order('name ASC')
   end
 
   def create
     create_schedule
+  end
+
+  def schedules
+    schedules = JSON.parse Schedule.includes([:car => [:information, :address, :quote => [:customer,:dispatcher, :status]]]).all.to_json(include: [{car: {include: [:information,:address, {quote: {include: [:customer,:dispatcher,:status]}}]}}])
+    @schedules = format_schedule_cars(schedules)
+    return render_json_response(@schedules, :ok)
   end
 
   def destroy
