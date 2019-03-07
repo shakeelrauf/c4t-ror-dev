@@ -118,7 +118,7 @@ class QuotesController < ApplicationController
       else
         r[:car_new_price] = car.new_price
       end
-      r[:car_new_price] = r[:netPrice] if r[:netPrice].to_f > r[:car_new_price].to_f
+      r[:car_new_price] = r[:netPrice].to_f+0.1 if r[:netPrice].to_f >= r[:car_new_price].to_f
       car.new_price =  r[:car_new_price]
       car.missingCat = params[:missingCat]
       car.still_driving = params[:still_driving]
