@@ -554,7 +554,7 @@ function calcPrice(carId,quote_id) {
 }
 function onWeightChange(carId){
     var weight = $('#weight'+carId)
-    if(parseFloat(weight.val()) > 0 ){
+    if(parseFloat(weight.val()) >= 0 ){
         var t = $("tab"+carId);
         t.attr("data-weight", parseFloat(weight.val()))
         var t = $("#tab" + carId);
@@ -606,7 +606,172 @@ function onWeightChange(carId){
             missingStil = (missingStilVal == "1") ? 1 : 0;
         }
         var newPrice = $("#carNewPrice"+carId).val();
-        debugger
+        
+        // Car price data
+        var data = {
+            "car":            carId,
+            "customer_id":    customer_id,
+            "quoteId":        quote_id,
+            "weight":         (t.attr("data-weight")),
+            "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
+            "missingBattery": missingBat,
+            "byWeight":       byWeight,
+            "missingCat":     missingCat,
+            "new_price":      newPrice,
+            "still_driving":  missingStil,
+            "gettingMethod":  (t.find("input[name=pickup"+carId+"]").prop("checked") ? "pickup" : "dropoff"),
+            "distance":       distance
+        }
+        $.ajax({
+            method: "POST",
+            url: "/quotes/car_price",
+            data: data
+        }).done(function(json) {
+            if (json.trim && json.trim().startsWith("<!DOCTYPE html>")) {
+                document.location = "/login?redirect=" + document.location;
+            } else if (json.netPrice != null) {
+                if(json.bonus!=undefined){
+                    // if(json.bonus[0]=="custom"){
+                    //
+                    //     $("#flatfee"+carId).html(" ")
+                    //     $("#bonuscar"+carId).html(" ")
+                    //     $("#bonussteel"+carId).html(" ")
+                    //     $("#customFee"+carId).html("Applied")
+                    //     $("#bonus"+carId).html(json.bonus[1])
+                    // }
+
+
+                    if(json.bonus.bonus.type =="carprice"){
+                        $("#bonuscar"+carId).html("Applied")
+                        $("#cusflatfee"+carId).html(" ")
+                        $("#flatfee"+carId).html(" ")
+                        $("#bonussteel"+carId).html(" ")
+                        $("#customFee"+carId).html(" ")
+                        $("#bonus"+carId).html(json.bonus.bonus.value)
+                    }
+                    if(json.bonus.bonus.type=="steelprice"){
+                        $("#cusflatfee"+carId).html(" ")
+                        $("#customFee"+carId).html(" ")
+                        $("#bonuscar"+carId).html(" ")
+                        $("#bonussteel"+carId).html("Applied")
+                        $("#bonus"+carId).html(json.bonus.bonus.value)
+                    }
+                    if(json.bonus.bonus.type == "no"){
+                        $("#bonuscar"+carId).html(" ")
+                        $("#bonussteel"+carId).html(" ")
+
+                    }
+                    if(json.bonus.user_flat_fee== true){
+                        $("#cusflatfee"+carId).html(json.doorPrice)
+                        if(json.bonus.bonus.type == "flatfee"){
+                            $("#flatfee"+carId).html("Applied")
+                            $("#bonuscar"+carId).html(" ")
+                            $("#bonussteel"+carId).html(" ")
+                            $("#customFee"+carId).html(" ")
+                            $("#bonus"+carId).html(json.bonus.bonus.value)
+
+                        }
+                    }else{
+                        $("#cusflatfee"+carId).html(" ")
+                        $("#flatfee"+carId).html(" ")
+                        $("#bonus"+carId).html(" ")
+                    }
+                }
+                $("#tab"+carId).data('price', json);
+                // Pricing details
+                if(byWeight == 1){
+                    $("#weight"+carId).val(json.weight);
+                }else{
+                    $("#weight"+carId).html(json.weight);
+                }
+
+                $("#carNewPrice"+carId).html(json.car_new_price);
+                $("#increase_in_price"+carId).html(json.increase_in_price);
+
+                $("#steelPrice"+carId).html(json.steelPrice);
+                $("#weightPrice"+carId).html(json.weightPrice);
+                $("#excessCost"+carId).html(json.excessCost);
+                $("#distanceCost"+carId).html(json.distanceCost);
+                $("#distance"+carId).html(json.distance);
+                $("#freeDistance"+carId).html(parseInt(json.freeDistance));
+                $("#excessDistance"+carId).html(parseInt(json.excessDistance));
+                $("#excessCost"+carId).html(json.excessCost);
+                $("#distanceCost"+carId).html(json.distanceCost);
+                $("#carNewPrice"+carId).val(json.car_new_price);
+
+                $("#missingCatCost"+carId).html(json.missingCatCost);
+                $("#missingBatCost"+carId).html(json.missingBatCost);
+                $("#missingCat"+carId).html(json.missingCat);
+                $("#missingBat"+carId).html(json.missingBat);
+
+                $("#missingWheelsCost"+carId).html(json.missingWheelsCost);
+                $("#missingWheels"+carId).html(json.missingWheels);
+
+                $("#pickupCost"+carId).html(json.pickupCost);
+                // $("#pickup"+carId).html(json.pickup);
+
+                $("#carPrice"+carId).html(json.carPrice);
+                sumTotal();
+            }
+        });
+    }
+}
+
+function onNewPriceChange(carId){
+    var weight = $('#weight'+carId)
+    if(parseFloat(weight.val()) >= 0 ){
+        var t = $("tab"+carId);
+        t.attr("data-weight", parseFloat(weight.val()))
+        var t = $("#tab" + carId);
+        quote_id = $("#quote").data("id"),
+            customer_id = $("#customer").data("id");
+
+        // Get the distance from the input field
+        var distance = $("#car-distance" + carId).val();
+        if (isNaN(parseInt(distance))) {
+            distance = 0;
+        }
+        // by weight
+
+        var byWeightVal = $("#tab" + carId + " input[name=byweight"+carId+"]:checked").val();
+        var byWeight = "";
+        if (byWeightVal && byWeightVal != "") {
+            if(byWeightVal == "1"){
+                if(t.attr("data-weightold") == undefined){
+                    t.attr("data-weightold",t.attr("data-weight") );
+                }
+                t.attr("data-weight", parseFloat(weight.val())* 1000)
+                byWeight = 1
+            }else{
+                t.attr("data-weight",t.attr("data-weightold") );
+                byWeight=0
+            }
+        }
+
+        var missingCat = "";
+        if (missingCatVal && missingCatVal != "") {
+            missingCat = (missingCatVal == "1") ? 1 : 0;
+        }
+
+        var missingCatVal = $("#tab" + carId + " input[name=cat"+carId+"]:checked").val();
+        var missingCat = "";
+        if (missingCatVal && missingCatVal != "") {
+            missingCat = (missingCatVal == "1") ? 1 : 0;
+        }
+        var missingBatVal = $("#tab" + carId + " input[name=bat"+carId+"]:checked").val();
+        var missingBat = "";
+        if (missingBatVal && missingBatVal != "") {
+            missingBat = (missingBatVal == "1") ? 1 : 0;
+        }
+
+
+        var missingStilVal = $("#tab" + carId + " input[name=still_driving"+carId+"]:checked").val();
+        var missingStil = "";
+        if (missingStilVal && missingStilVal != "") {
+            missingStil = (missingStilVal == "1") ? 1 : 0;
+        }
+        var newPrice = $("#carNewPrice"+carId).val();
+        
         // Car price data
         var data = {
             "car":            carId,
@@ -817,6 +982,7 @@ function calcPrice(carId) {
     if (missingStilVal && missingStilVal != "") {
         missingStil = (missingStilVal == "1") ? 1 : 0;
     }
+
     var newPrice = $("#carNewPrice"+carId).val();
     // Car price data
     var data = {
