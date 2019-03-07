@@ -718,10 +718,7 @@ function onWeightChange(carId){
 }
 
 function onNewPriceChange(carId){
-    var weight = $('#weight'+carId)
-    if(parseFloat(weight.val()) >= 0 ){
         var t = $("tab"+carId);
-        t.attr("data-weight", parseFloat(weight.val()))
         var t = $("#tab" + carId);
         quote_id = $("#quote").data("id"),
             customer_id = $("#customer").data("id");
@@ -771,13 +768,12 @@ function onNewPriceChange(carId){
             missingStil = (missingStilVal == "1") ? 1 : 0;
         }
         var newPrice = $("#carNewPrice"+carId).val();
-        
         // Car price data
         var data = {
             "car":            carId,
             "customer_id":    customer_id,
             "quoteId":        quote_id,
-            "weight":         (t.attr("data-weight")),
+            "weight":         (t.attr("data-byweight")),
             "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
             "missingBattery": missingBat,
             "byWeight":       byWeight,
@@ -879,7 +875,6 @@ function onNewPriceChange(carId){
                 sumTotal();
             }
         });
-    }
 }
 
 

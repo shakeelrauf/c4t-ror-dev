@@ -30,7 +30,7 @@ class QuotesController < ApplicationController
     excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
     distanceCost  = excessDistance * excessCost
     weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f
-    weightPrice   = car.weight.to_f / 1000.0 * quote["steelPrice"].to_f if params[:byWeight] == "1"
+    weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f if params[:byWeight] == "1"
     dropoff = weightPrice
     dropoff -=  params[:missingWheels].to_i * quote["steelPrice"].to_f
     dropoff -=  params[:missingCat].to_i * quote["catPrice"].to_f
@@ -128,7 +128,7 @@ class QuotesController < ApplicationController
       car.save!
     end
     r[:increase_in_price] = ('%.2f' %  (((r[:car_new_price].to_f - r[:netPrice].to_f)/r[:netPrice].to_f) * 100)).to_s + '%'
-    r[:weight] = car.weight/1000.0 if params[:byWeight] == "1" && car.weight.present?
+    r[:weight] = params[:weight].to_f/1000.0 if params[:byWeight] == "1" && car.weight.present?
     r[:bonus] = bonus
     respond_json(r)
   end
