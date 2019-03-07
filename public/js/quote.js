@@ -718,6 +718,8 @@ function onWeightChange(carId){
 }
 
 function onNewPriceChange(carId){
+        var weight = $('#weight'+carId)
+
         var t = $("tab"+carId);
         var t = $("#tab" + carId);
         quote_id = $("#quote").data("id"),
@@ -773,7 +775,7 @@ function onNewPriceChange(carId){
             "car":            carId,
             "customer_id":    customer_id,
             "quoteId":        quote_id,
-            "weight":         (t.attr("data-byweight")),
+            "weight":         (t.attr("data-weight")),
             "missingWheels":  (t.find("input[name=wheels"+carId+"]").val()),
             "missingBattery": missingBat,
             "byWeight":       byWeight,
