@@ -52,5 +52,13 @@ class Setting < ApplicationRecord
 			s.save
 			return Setting.all
 		end
+
+		Setting.all.each do | s|
+			define_method "#{s.label}" do
+				set = where(label: "#{s.label}").first 
+				return set.value if set.present?
+				return nil
+			end
+		end
 	end
 end

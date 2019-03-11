@@ -22,7 +22,7 @@ class QuotesController < ApplicationController
     return respond_json({"netPrice": nil}) if quote.nil?
     car =  QuoteCar.where(idQuoteCars: params[:car]).first
     r = intialize_calculations_and_make_response(car, params, quote)
-    if customer.present? && customer.type != "Individual"
+    if customer.present? && customer.type != "Individual" && params[:byWeight] != "1"
       bonus = calculate_bonus_or_flatfee(customer, r)
       bonus,r = response_according_bonus(bonus, r)
     end
@@ -341,7 +341,7 @@ class QuotesController < ApplicationController
     if car_distance.present? && car_distance >  0.01 && excessDistance.present?
       pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
     end
-    netPrice = (isPickup ? pickupPrice : dropoffPrice)
+    netPrice = (params[:byWeight] == "1" ? weightPrice : isPickup ? pickupPrice : dropoffPrice)
     r = {netPrice: netPrice,
          pickupPrice: pickupPrice,
          dropoffPrice: dropoffPrice
@@ -367,6 +367,8 @@ class QuotesController < ApplicationController
 
   def check_increase_in_new_price(bonus, r,params, car)
     r[:increase_in_price] = ('%.2f' %  (((r[:car_new_price].to_f - r[:netPrice].to_f)/r[:netPrice].to_f) * 100)).to_s + '%'
+    r[:increase_approved] = false
+    r[:increase_approved] = true if r[:increase_in_price].to_f > Setting.max_increase_with_admin_approval.to_f
     r[:weight] = params[:weight].to_f/1000.0 if params[:byWeight] == "1" && car.weight.present?
     r[:bonus] = bonus
     return r
