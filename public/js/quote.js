@@ -1041,6 +1041,7 @@ function saveCar(callback) {
             "lastName": $("input[name=lastName]").val(),
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
+            "extension": $("input[name=extension]").val(),
             "phoneType": $("select[name=phoneType]").val(),
             "customerType": $("select[name=customerType]").val(),
             "new_customer": $("#new_customer").val(),
@@ -1136,6 +1137,7 @@ function saveCarAuto(callback) {
             "heardofus": $("select[name=heardOfUs]").val(),
             "postal": $("input[name=postal]").val(),
             "phoneType": $("select[name=phoneType]").val(),
+            "extension": $("input[name=extension]").val(),
             "customerType": $("select[name=customerType]").val(),
             "new_customer": $("#new_customer").val(),
             "new_customer_id": $("#new_customer_id").val(),
@@ -1204,6 +1206,7 @@ function fillCustomer(data) {
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
     $("input[name=firstName]").val(data.firstName);
     $("input[name=lastName]").val(data.lastName);
+    $("input[name=extension]").val(data.extension)
     $("#cus_customerType").val(capitalize_Words(data.type));
     $("#cus_customerType").attr('disabled',true);
     set_phone_type(data);
@@ -1220,11 +1223,11 @@ function fillCustomer(data) {
       $(".has_quote").attr('disabled',false);
       $("select[name=heardOfUs]").val(data.heardofus.type);
     }
-    if (data.address.length > 0) {
-      $("input[name=postal]").val((data.address[0] && data.address[0].postal) ? data.address[0].postal : "");
-    } else {
-      $("input[name=postal]").val("");
-    }
+    // if (data.address.length > 0) {
+    //   $("input[name=postal]").val((data.address[0] && data.address[0].postal) ? data.address[0].postal : "");
+    // } else {
+    //   $("input[name=postal]").val("");
+    // }
 }
 function resetCustomer(){
     $("input[name=postal]").val("");
