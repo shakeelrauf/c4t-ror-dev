@@ -234,6 +234,30 @@ $(document).ready(function() {
             });
         }
     });
+    $("select[name=phone]").on('select2:close', function(evt) { 
+      var context = $(evt.target); 
+      $(document).on('keydown.select2', function(e) { 
+          if (e.which === 9) { 
+              var highlighted = context 
+                                .data('select2') 
+                                .$dropdown 
+                                .find('.select2-results__option--highlighted'); 
+              if (highlighted) { 
+                  var id = highlighted.data('data').id,
+                      text = highlighted.data('data').text; 
+                  context.data('select2').trigger('select', {
+                                data: {id: id, text: text}
+                            });
+                  context.val(id).trigger('change'); 
+              } 
+          } 
+      }); 
+
+      // unbind the event again to avoid binding multiple times 
+      setTimeout(function() { 
+          $(document).off('keydown.select2'); 
+      }, 1); 
+  }); 
 
     $(".btn-edit-customer").click(function() {
         var clientId = Number($("select[name=phone]").val());
