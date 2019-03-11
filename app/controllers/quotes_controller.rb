@@ -3,7 +3,7 @@ class QuotesController < ApplicationController
   include Quotesmethods
 
   def index
-    @quotes = Quote.includes(:customer, :dispatcher,:status).all
+    @quotes = Quote.includes(:customer, :dispatcher,:status).all.order('dtCreated desc')
     @pages = 0
     if @quotes.count % 15 > 0
       @pages = 1
