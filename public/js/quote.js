@@ -40,23 +40,23 @@ $(document).ready(function() {
                 // $(".car-location-select2").each(function(index) {
                     createPostalSelect2($("#car-location"+car.idQuoteCars));
                 // });
-                if(new_data==true){
-                    var address = {id: 'new', text: $("input[name=postal]").val()}
-                    if(address.text != "") {
-                        if (address.text.trim().replace(/\s/g, '').length == 6){
-                            $("#car-location" + car.idQuoteCars).append("<option data-select2-tag='true' value=" + address.id + " selected>" + address.text + "</option>");
-                            $("#car-location" + car.idQuoteCars).data('select2').trigger('select', {
-                                data: {id: address.id, text: address.text}
-                            });
-                            $("#car-location" + car.idQuoteCars).val(address.id)
-                            getDistanceForCar(address.text, car.idQuoteCars, function (distance, carId) {
-                                $("#car-distance" + carId).val(distance);
-                                updateCarWithDistance(distance, car.idQuoteCars);
-                                showCarNewAddress(address.text, carId);
-                            });
-                        }
-                    }
-                }
+                // if(new_data==true){
+                //     var address = {id: 'new', text: $("input[name=postal]").val()}
+                //     if(address.text != "") {
+                //         if (address.text.trim().replace(/\s/g, '').length == 6){
+                //             $("#car-location" + car.idQuoteCars).append("<option data-select2-tag='true' value=" + address.id + " selected>" + address.text + "</option>");
+                //             $("#car-location" + car.idQuoteCars).data('select2').trigger('select', {
+                //                 data: {id: address.id, text: address.text}
+                //             });
+                //             $("#car-location" + car.idQuoteCars).val(address.id)
+                //             getDistanceForCar(address.text, car.idQuoteCars, function (distance, carId) {
+                //                 $("#car-distance" + carId).val(distance);
+                //                 updateCarWithDistance(distance, car.idQuoteCars);
+                //                 showCarNewAddress(address.text, carId);
+                //             });
+                //         }
+                //     }
+                // }
                 if(($("select[name=phone]").select2('data')[0] != undefined) && Number.isInteger(Number($("select[name=phone]").select2('data')[0].id)) && $(".hiddenaddress").html().trim().length > 0){
                     var addresses = JSON.parse($(".hiddenaddress").html());
                     if(addresses.length >= 1){
