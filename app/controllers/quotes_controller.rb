@@ -176,18 +176,27 @@ class QuotesController < ApplicationController
     if !car_list.nil?
       client = save_customer params, heard_of_us,phone, phone_type, phone_type_1, phone_type_2, params[:customerType]
       Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
+      hash = {}
       car_list.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: car_list[car]["car"]).first
         if car_list[car]["carAddressId"].present?
           address = Address.find_by_id(car_list[car]["carAddressId"])
+          if address.present?
+            address.postal = car_list[car]["carPostal"] if car_list[car]["carPostal"].present?
+            address.address = car_list[car]["carStreet"] if car_list[car]["carStreet"].present?
+            address.province = car_list[car]["carProvince"] if car_list[car]["carProvince"].present?
+            address.city = car_list[car]["carCity"] if car_list[car]["carCity"].present?
+            address.save
+          end
           quote_car.update(idAddress: address.idAddress) if address.present?
+          hash["#{car_list[car]["car"]}"] =  address.idAddress
         else
-          car_postal_code = Validations.postal(car_list[car]["carPostal"])
-          update_quote_car_address car_list[car], quote_car, client if car_list[car]["carPostal"].present?
+          update_quote_car_address car_list[car], quote_car, client, hash if car_list[car]["carPostal"].present?
         end
         quote_car.update(missingBattery: car_list[car]["missingBattery"],missingCat: car_list[car]["missingCat"],gettingMethod: car_list[car]["gettingMethod"],missingWheels: car_list[car]["missingWheels"], still_driving: car_list[car]["still_driving"] ) if quote_car.present?
       end
-      return respond_json({message: "QuickQuote saved", customer_id: client.idClient})
+
+      return respond_json({message: "QuickQuote saved", customer_id: client.idClient, carlist: hash})
     else
       return respond_json({error: "Please select atleast one car"})
     end

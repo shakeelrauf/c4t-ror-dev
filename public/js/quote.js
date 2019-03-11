@@ -324,7 +324,7 @@ function createPostalSelect2(s) {
         getDistanceForCar(postal, carId, function(distance, carId) {
           $("#car-distance" + carId).val(distance);
           updateCarWithDistance(distance, carId);
-          resetAddress(carId)
+          resetAddress(carId, postal)
           showCarNewAddress(postal, carId);
         });
         return {
@@ -440,13 +440,14 @@ function showCarNewAddress(postal, carId) {
     });
 }
 
-function resetAddress(carId) {
+function resetAddress(carId, postal) {
     $(".car-ex-address" + carId).each(function() {
         $("input[name=car-city" + carId +" ]").val("")
         $("input[name=car-province" + carId +" ]").val("")
         $("input[name=car-street" + carId +" ]").val("")
         $("input[name=car-postal" + carId +" ]").val(" ")
     });
+    $("#car-location"+carId).select2('data')[0].id = postal;
 }
 
 function removeCar(quoteCarId) {
@@ -1167,6 +1168,9 @@ function saveCarAuto(callback) {
             "note": CKEDITOR.instances['note_'].getData()
         }
     }).done(function(s) {
+        for(car in s.carlist){
+            $("#car-location"+car).select2('data')[0].id = s.carlist[car]
+        }
         if($(".selection").text().trim().includes("New Customer")){
           if(s != undefined && s.customer_id != undefined){
             $("#new_customer_id").val(s.customer_id);

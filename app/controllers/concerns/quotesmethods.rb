@@ -94,19 +94,30 @@ module Quotesmethods
         return respond_json({:error => "The address was not selected properly", car:  carList[car]["car"]}) if (carList[car]["carAddressId"] == "" && carList[car]["carPostal"] == "")
       end
       client = save_customer params, heard_of_us, phone,phoneType, phoneType_1, phoneType_2, customerType
+      hash = {}
       carList.each do |car, val|
         quote_car = QuoteCar.where(idQuoteCars: carList[car]["car"]).first
         if carList[car]["carAddressId"].present?
           address = Address.find_by_id(carList[car]["carAddressId"])
+          if address.present?
+            car_postal_code = Validations.postal(carList[car]["carPostal"])
+            return respond_json({:error => "Invalid Car Postal Code", car:  carList[car]["car"]}) if  (car_postal_code.length != 7)
+            address.postal = carList[car]["carPostal"] if carList[car]["carPostal"].present?
+            address.province = carList[car]["carProvince"] if carList[car]["carProvince"].present?
+            address.city = carList[car]["carCity"] if carList[car]["carCity"].present?
+            address.address = carList[car]["carStreet"] if carList[car]["carStreet"].present?
+            address.save
+          end
           address.update(idClient: client.idClient) if params[:new_customer] == "true"
           quote_car.update(idAddress: address.idAddress) if address.present?
+          hash["#{carList[car]["car"]}"] =  address.idAddress
         else
           car_postal_code = Validations.postal(carList[car]["carPostal"])
           return respond_json({:error => "Invalid Car Postal Code", car:  carList[car]["car"]}) if  (car_postal_code.length != 7)
           return respond_json({:error => "Missing Car city", car:  carList[car]["car"]}) if  (car_postal_code.present? && !carList[car]["carCity"].present?)
           return respond_json({:error => "Missing Car Street", car:  carList[car]["car"]}) if  ( car_postal_code.present? && !carList[car]["carStreet"].present?)
           return respond_json({:error => "Missing Car Province", car:  carList[car]["car"]}) if  (car_postal_code.present? && !carList[car]["carProvince"].present?)
-          update_quote_car_address carList[car], quote_car, client if carList[car]["carPostal"].present?
+          update_quote_car_address carList[car], quote_car, client, hash if carList[car]["carPostal"].present?
         end
         quote_car.update(missingBattery: carList[car]["missingBattery"],missingCat: carList[car]["missingCat"],gettingMethod: carList[car]["gettingMethod"],missingWheels: carList[car]["missingWheels"], still_driving: carList[car]["still_driving"] ) if quote_car.present?
       end
@@ -150,7 +161,7 @@ module Quotesmethods
     return quotes, all_count
   end
 
-  def update_quote_car_address car, quote_car, client
+  def update_quote_car_address car, quote_car, client, hash
     ad = Address.where(postal: car["carPostal"],city: car["carCity"], province: car["carProvince"], address: car["carStreet"], idClient: client.idClient).first
     ad = Address.new if ad.nil?
     res = car["distance"]
@@ -162,8 +173,10 @@ module Quotesmethods
     ad.distance = res
     ad.save!
     # @add = Address.where(idAddress: quote_car.idAddress).first if quote_car && quote_car.idAddress.present?
-    quote_car.idAddress = ad.idAddress if quote_car && quote_car.idAddress.present?
+    quote_car.idAddress = ad.idAddress
     quote_car.save! #if quote_car && quote_car.idAddress.present?
+    hash["#{car["car"]}"] =  ad.idAddress
+
     # @add.destroy if quote_car && quote_car.idAddress.present? && @add.idAddress != quote_car.idAddress
   end
 
