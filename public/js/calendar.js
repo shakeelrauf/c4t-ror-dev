@@ -72,7 +72,7 @@ $(document).ready(function() {
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
         timezone: 'America/New York',
         titleFormat: 'MMMM Do, YYYY',
-        columnFormat: 'dddd Do',
+        columnFormat: 'M/D',
         nowIndicator: true,
         defaultDate: moment().format('YYYY-MM-DD'),
         eventLimit: true, // allow "more" link when too many events
@@ -81,23 +81,7 @@ $(document).ready(function() {
         slotDuration: '01:00:00',
         snapDuration: '00:10:00',
         unknownResourceTitle: 'Unknown',
-        resources: [{
-            id: 'truck109',
-            title: 'GMC 109'
-        },
-            {
-                id: 'truck110',
-                title: 'Chevy 110'
-            },
-            {
-                id: 'truck111',
-                title: 'FL 111'
-            },
-            {
-                id: 'truck112',
-                title: 'Hino 112'
-            },
-        ],
+        resources: truck_array,
         eventOverlap: function (stillEvent, movingEvent) {
             if (stillEvent.information.address.idAdress == movingEvent.information.address.idAdress) {
                 return true;
@@ -307,6 +291,7 @@ $(document).ready(function() {
         }]
     });
 
+
     var la = $.trim($("#last-address").html());
     if (la != "-") {
         analyseAddresses(la);
@@ -317,6 +302,18 @@ function closepopup() {
     $(".tooltip").tooltip("hide");
 }
 
+function selectListOfTrucks() {
+    $("select[name=listoftrucks]").change(function(e){
+      var truckId = $(this).val();
+      var url = '/dispatch/'+dispatch_id+'/quote/'+ truckId;
+      $("#calendar").fullCalendar( 'removeEvents', [] );
+      $('#calendar').fullCalendar('removeEventSources');
+      $("#calendar").fullCalendar('addEventSource', url );     
+      $('#calendar').fullCalendar( 'changeView', 'agendaWeek');
+
+    })
+
+}
 function analyseAddresses(address) {
     $(".unsched-address").each(function() {
         var fieldId = $(this).prop('id');

@@ -54,12 +54,12 @@ module Quotesmethods
   def save_quotes
     return respond_json({:error => "First Name is missing in customer attributes."}) if (!params[:firstName].present?)
     return respond_json({:error => "Last Name is missing in customer attributes."}) if (!params[:lastName].present?)
-    return respond_json({:error => "Postal Code is missing in customer attributes."}) if (!params[:postal].present?)
+    # return respond_json({:error => "Postal Code is missing in customer attributes."}) if (!params[:postal].present?)
     return respond_json({:error => "Heard of us is missing in customer attributes."}) if (!params[:heardofus].present?)
     return respond_json({:error => "Phone Type is missing in customer attributes."}) if (params[:phoneType] == "Select an option")
     return respond_json({:error => "Customer Type is missing in customer attributes."}) if (!params[:customerType].present? )
-    postal_code = Validations.postal(params[:postal])
-    return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)
+    # postal_code = Validations.postal(params[:postal])
+    # return respond_json({:error => "The postal code seems invalid."}) if (postal_code.length != 7)
     phone = params[:phone].present? ? params[:phone].gsub("-","") : ""
     return respond_json({:error => "phone number length must be at least 10 digits."}) if (phone.to_s.length < 10)
     carList = []
@@ -196,17 +196,19 @@ module Quotesmethods
       customer = phone_settings(params, heard_of_us,phone, phoneType, phoneType1, phoneType2, customerType)
       client = Customer.custom_upsert(customer,{phone: phone})
     end
-    address = client.address.first
-    postal_code = Validations.postal(params[:postal])
-    address =  client.address.build  if (params[:new_customer] == "true" && params[:new_customer_id] != "false") && address.nil?
-    if (!address.nil? && postal_code.length == 7)
-      address.postal = postal_code
-      address.city =  " " if address.new_record?
-      address.address = " " if address.new_record?
-      address.province = " " if address.new_record?
-      address.distance = " " if address.new_record?
-      address.save!
-    end
+    client.extension = params[:extension]
+    client.save!
+    # address = client.address.first
+    # postal_code = Validations.postal(params[:postal])
+    # address =  client.address.build  if (params[:new_customer] == "true" && params[:new_customer_id] != "false") && address.nil?
+    # if (!address.nil? && postal_code.length == 7)
+    #   address.postal = postal_code
+    #   address.city =  " " if address.new_record?
+    #   address.address = " " if address.new_record?
+    #   address.province = " " if address.new_record?
+    #   address.distance = " " if address.new_record?
+    #   address.save!
+    # end
     client
   end
 

@@ -3,7 +3,7 @@ class QuotesController < ApplicationController
   include Quotesmethods
 
   def index
-    @quotes = Quote.includes(:customer, :dispatcher,:status).all
+    @quotes = Quote.includes(:customer, :dispatcher,:status).all.order('dtCreated desc')
     @pages = 0
     if @quotes.count % 15 > 0
       @pages = 1
@@ -21,110 +21,13 @@ class QuotesController < ApplicationController
     customer = Customer.find_by_id(params[:customer_id])
     return respond_json({"netPrice": nil}) if quote.nil?
     car =  QuoteCar.where(idQuoteCars: params[:car]).first
-    car_distance =  params[:distance]
-    car_distance = car_distance.to_i if car_distance.present?
-    excessDistance = 0.0
-    excessDistance = [car_distance- quote["freeDistance"].to_i, 0.0 ].max if car_distance.present? && car_distance != "NOT_FOUND" && car_distance != "ZERO_RESULTS"
-    pickupCost    = quote["pickup"].to_f
-    isPickup      = (params[:gettingMethod] == "pickup")
-    excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
-    distanceCost  = excessDistance * excessCost
-    weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f
-    weightPrice   = car.weight.to_f / 1000.0 * quote["steelPrice"].to_f if params[:byWeight] == "1"
-    dropoff = weightPrice
-    dropoff -=  params[:missingWheels].to_i * quote["steelPrice"].to_f
-    dropoff -=  params[:missingCat].to_i * quote["catPrice"].to_f
-    dropoff -=  params[:missingBattery].to_i * quote["batteryPrice"].to_f
-    dropoffPrice = [dropoff,0.0].max
-    pickupPrice = 0.0
-    if car_distance.present? && car_distance >  0.01 && excessDistance.present?
-      pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
-    end
-    netPrice = (isPickup ? pickupPrice : dropoffPrice)
-    r = {netPrice: netPrice,
-         pickupPrice: pickupPrice,
-         dropoffPrice: dropoffPrice
-    }
-    r[:weight] =  params[:weight].to_f / 1000.0
-    r[:steelPrice] =  quote["steelPrice"].to_f
-    r[:weightPrice] = '%.2f' % weightPrice.to_f
-    r[:distance] = car_distance.to_f
-    r[:freeDistance] = quote["freeDistance"].to_f
-    r[:excessDistance] = excessDistance.to_f
-    r[:excessCost] =  excessCost.to_f
-    r[:distanceCost] = -distanceCost.to_f
-    r[:missingCatCost] = quote["catPrice"].to_f
-    r[:missingBatCost] = quote["batteryPrice"].to_f
-    r[:missingCat] = -(quote["catPrice"].to_f * params[:missingCat].to_f)
-    r[:missingBat] = -(quote["batteryPrice"].to_f * params[:missingBattery].to_f)
-    r[:missingWheelsCost] = quote["wheelPrice"].to_f
-    r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
-    r[:pickupCost] = quote["pickup"].to_f
-    r[:carPrice] = '%.2f' % netPrice.to_f
-    if customer.present? && customer.type != "Individual"
+    r = intialize_calculations_and_make_response(car, params, quote)
+    if customer.present? && customer.type != "Individual" && params[:byWeight] != "1"
       bonus = calculate_bonus_or_flatfee(customer, r)
-      if bonus.is_a? Hash
-        if bonus[:user_flat_fee] == true
-          r[:netPrice] = bonus[:flat_fee].to_f
-          r[:weightPrice] = " "
-          r[:distanceCost] = " "
-          r[:doorPrice] = '%.2f' % bonus[:flat_fee].to_f
-          if bonus[:bonus].present?
-            if bonus[:bonus][:type] == "carprice"
-              r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
-            elsif bonus[:bonus][:type] == "steelprice"
-              r[:steelPrice] = '%.2f' % ( r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
-              r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  '%.2f' %  (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
-            elsif bonus[:bonus][:type] == "flatfee"
-              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
-            else
-              r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' %  (r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
-            end
-          end
-        elsif bonus[:user_flat_fee] == false
-          if bonus[:bonus].present?
-            if bonus[:bonus][:type] == "carprice"
-              r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
-              if isPickup
-                r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:netPrice].to_f + bonus[:bonus][:value].to_f)
-                r[:dropoffPrice] += bonus[:bonus][:value].to_f
-              else
-                (r[:dropoffPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f)
-                r[:pickupPrice] += bonus[:bonus][:value].to_f
-              end
-            elsif bonus[:bonus][:type] == "steelprice"
-              r[:steelPrice] = '%.2f' % (r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
-              r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
-              if isPickup
-                r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
-                r[:dropoffPrice] += bonus[:bonus][:value].to_f
-              else
-                (r[:dropoffPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f))
-                r[:pickupPrice] += bonus[:bonus][:value].to_f
-              end
-              # elsif bonus[:bonus][:type] == "flatfee"
-            #   r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
-            end
-          end
-        end
-      end
+      bonus,r = response_according_bonus(bonus, r)
     end
-    if car.present?
-      car.missingWheels = params[:missingWheels]
-      car.missingBattery = params[:missingBattery]
-      r[:car_new_price] = '%.2f' % ( r[:netPrice].to_f + Setting.where(label: 'max_increase_with_admin_approval').first.value.to_f)
-      car.new_price =  r[:car_new_price]
-      car.missingCat = params[:missingCat]
-      car.still_driving = params[:still_driving]
-      car.gettingMethod =  params[:gettingMethod]
-      car.weight = (params[:weight].to_f ) if  params[:weight].present?
-      car.by_weight = params[:byWeight]  if params[:byWeight].present?
-      car.save!
-    end
-    r[:increase_in_price] = ('%.2f' %  (((r[:car_new_price].to_f - r[:netPrice].to_f)/r[:netPrice].to_f) * 100)).to_s + '%'
-    r[:weight] = car.weight/1000.0 if params[:byWeight] == "1" && car.weight.present?
-    r[:bonus] = bonus
+    r = save_car_return_response(car,r, params) if car.present? 
+    r = check_increase_in_new_price(bonus, r,params, car)
     respond_json(r)
   end
 
@@ -356,6 +259,128 @@ class QuotesController < ApplicationController
       hash = {type: "steelprice", value: '%.2f' % value.first.value.to_f }
     end
     return hash
+  end
+
+  def response_according_bonus(bonus, r)
+    if bonus.is_a? Hash
+      if bonus[:user_flat_fee] == true
+        r[:netPrice] = bonus[:flat_fee].to_f
+        r[:weightPrice] = " "
+        r[:distanceCost] = " "
+        r[:doorPrice] = '%.2f' % bonus[:flat_fee].to_f
+        if bonus[:bonus].present?
+          if bonus[:bonus][:type] == "carprice"
+            r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
+            r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+          elsif bonus[:bonus][:type] == "steelprice"
+            r[:steelPrice] = '%.2f' % ( r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
+            r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] =  '%.2f' %  (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+          elsif bonus[:bonus][:type] == "flatfee"
+            r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
+          else
+            r[:carPrice] = r[:dropoffPrice] = r[:pickupPrice] = r[:netPrice] = '%.2f' %  (r[:weight] * (r[:netPrice] + bonus[:bonus][:value].to_f))
+          end
+        end
+      elsif bonus[:user_flat_fee] == false
+        if bonus[:bonus].present?
+          if bonus[:bonus][:type] == "carprice"
+            r[:carPrice] = '%.2f' % (netPrice.to_f + bonus[:bonus][:value].to_f )
+            if isPickup
+              r[:pickupPrice] = r[:netPrice] = '%.2f' % ( r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:dropoffPrice] += bonus[:bonus][:value].to_f
+            else
+              (r[:dropoffPrice] = r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:pickupPrice] += bonus[:bonus][:value].to_f
+            end
+          elsif bonus[:bonus][:type] == "steelprice"
+            r[:steelPrice] = '%.2f' % (r[:steelPrice].to_f + bonus[:bonus][:value].to_f)
+            r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+            if isPickup
+              r[:pickupPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f)
+              r[:dropoffPrice] += bonus[:bonus][:value].to_f
+            else
+              (r[:dropoffPrice] = r[:netPrice] = '%.2f' % (r[:netPrice].to_f + bonus[:bonus][:value].to_f))
+              r[:pickupPrice] += bonus[:bonus][:value].to_f
+            end
+            # elsif bonus[:bonus][:type] == "flatfee"
+          #   r[:netPrice] =  r[:netPrice].to_f + bonus[:bonus][:value].to_f
+          end
+        end
+      end
+      return [bonus, r]
+    end
+  end
+
+  def save_car_return_response(car,r, params)
+    car.missingWheels = params[:missingWheels]
+    car.missingBattery = params[:missingBattery]
+    if params[:new_price].present?
+      r[:car_new_price] = '%.2f' % ( params[:new_price].to_f)
+    else
+      r[:car_new_price] = car.new_price
+    end
+    r[:car_new_price] = r[:netPrice].to_f+0.1 if r[:netPrice].to_f >= r[:car_new_price].to_f
+    car.new_price =  r[:car_new_price]
+    car.missingCat = params[:missingCat]
+    car.still_driving = params[:still_driving]
+    car.gettingMethod =  params[:gettingMethod]
+    car.weight = (params[:weight].to_f ) if  params[:weight].present?
+    car.by_weight = params[:byWeight]  if params[:byWeight].present?
+    car.save!
+    return r
+  end
+
+  def intialize_calculations_and_make_response(car, params, quote)
+    car_distance =  params[:distance]
+    car_distance = car_distance.to_i if car_distance.present?
+    excessDistance = 0.0
+    excessDistance = [car_distance- quote["freeDistance"].to_i, 0.0 ].max if car_distance.present? && car_distance != "NOT_FOUND" && car_distance != "ZERO_RESULTS"
+    pickupCost    = quote["pickup"].to_f
+    isPickup      = (params[:gettingMethod] == "pickup")
+    excessCost    = isPickup ? quote["excessCost"].to_f : 0.0
+    distanceCost  = excessDistance * excessCost
+    weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f
+    weightPrice   = params[:weight].to_f / 1000.0 * quote["steelPrice"].to_f if params[:byWeight] == "1"
+    dropoff = weightPrice
+    dropoff -=  params[:missingWheels].to_i * quote["steelPrice"].to_f
+    dropoff -=  params[:missingCat].to_i * quote["catPrice"].to_f
+    dropoff -=  params[:missingBattery].to_i * quote["batteryPrice"].to_f
+    dropoffPrice = [dropoff,0.0].max
+    pickupPrice = 0.0
+    if car_distance.present? && car_distance >  0.01 && excessDistance.present?
+      pickupPrice = [(dropoffPrice - (excessDistance * quote["excessCost"].to_f) - pickupCost), 0.0].max
+    end
+    netPrice = (params[:byWeight] == "1" ? weightPrice : isPickup ? pickupPrice : dropoffPrice)
+    r = {netPrice: netPrice,
+         pickupPrice: pickupPrice,
+         dropoffPrice: dropoffPrice
+    }
+    r[:weight] =  params[:weight].to_f / 1000.0
+    r[:steelPrice] =  quote["steelPrice"].to_f
+    r[:weightPrice] = '%.2f' % weightPrice.to_f
+    r[:distance] = car_distance.to_f
+    r[:freeDistance] = quote["freeDistance"].to_f
+    r[:excessDistance] = excessDistance.to_f
+    r[:excessCost] =  excessCost.to_f
+    r[:distanceCost] = -distanceCost.to_f
+    r[:missingCatCost] = quote["catPrice"].to_f
+    r[:missingBatCost] = quote["batteryPrice"].to_f
+    r[:missingCat] = -(quote["catPrice"].to_f * params[:missingCat].to_f)
+    r[:missingBat] = -(quote["batteryPrice"].to_f * params[:missingBattery].to_f)
+    r[:missingWheelsCost] = quote["wheelPrice"].to_f
+    r[:missingWheels] = -(quote["wheelPrice"].to_f * params[:missingWheels].to_f)
+    r[:pickupCost] = quote["pickup"].to_f
+    r[:carPrice] = '%.2f' % netPrice.to_f
+    return r
+  end
+
+  def check_increase_in_new_price(bonus, r,params, car)
+    r[:increase_in_price] = ('%.2f' %  (((r[:car_new_price].to_f - r[:netPrice].to_f)/r[:netPrice].to_f) * 100)).to_s + '%'
+    r[:increase_approved] = false
+    r[:increase_approved] = true if r[:increase_in_price].to_f > Setting.max_increase_with_admin_approval.to_f
+    r[:weight] = params[:weight].to_f/1000.0 if params[:byWeight] == "1" && car.weight.present?
+    r[:bonus] = bonus
+    return r
   end
 
   def price_according_to_grade(customer, net_price)

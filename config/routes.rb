@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   resources :dispatch, param: :no do
     member do
 			get :quote
+			get 'quote/:truck_id', action: :quote
+			get :schedules
     end
     collection do
       get 'unsched/:carId', action: :unsched

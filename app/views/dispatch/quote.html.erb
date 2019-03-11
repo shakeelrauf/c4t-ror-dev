@@ -67,19 +67,24 @@
 </div>
 <%content_for :js do %>
   <script>
+    var dispatch_id = <%= params[:no] %>;
     var truck_array = <%= @trucks.to_json.html_safe %>,
         trucks_options = "";
         truck_array.forEach(function(t){
-          trucks_options += "<option value="+t[0]+">"+t[1]+"</option>";
+          trucks_options += "<option value="+t["id"]+">"+t["title"]+"</option>";
         })
       $("select[name=schedule_by]").on("change", function (e) {
          var $val = $(this).find("option:selected").val();
          if($val == "bytruck"){
              $(".fc-center h2").hide()
              $(".fc-center").append("<select name='listoftrucks' class='form-control'>"+trucks_options+"</select>")
+             selectListOfTrucks()
          }else{
-             $(".fc-center h2").show()
-             $(".fc-center select").remove()
+            $(".fc-center h2").show()
+            $(".fc-center select").remove()
+            var url = "/dispatch/"+dispatch_id+"/schedules";
+            $('#calendar').fullCalendar('removeEventSources');
+            $("#calendar").fullCalendar('addEventSource', url )
          }
       });
       function growling(message, type) {

@@ -1,5 +1,5 @@
 <%= public_css_path("/icofont/icofont.min.css") %>
-<div id="tab<%= car.idQuoteCars %>" class="card col-lg-12 tab-pane car-pane active car-<%= car.idQuoteCars %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-byweight="<%= car.weight %>" data-notbyweight="<%= (vehicle['weight']).to_f %>">
+<div id="tab<%= car.idQuoteCars %>" class="card col-lg-12 tab-pane car-pane active car-<%= car.idQuoteCars %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-weight="<%= (vehicle['weight']).to_f %>" data-byweight="<%= car.weight %>" data-notbyweight="<%= (vehicle['weight']).to_f %>">
   <div class="card-header">
     <h5 class="card-header-text"><%= vehicle.make + " " + vehicle.model + " " + vehicle.year %></h5>
   </div>
@@ -491,7 +491,8 @@
           New Price:
         </div>
         <div class="col-lg-2">
-          <div class="n" id="carNewPrice<%= car.idQuoteCars %>"></div>
+          <input  name="" type='number' step='0.1' onchange="onNewPriceChange(<%= car.idQuoteCars %>)" id="carNewPrice<%= car.idQuoteCars %>" style="width: 100%; text-align: right;">
+          <div id="request_for_approval" style="display: none;">Request to admin for approval </div>
         </div>
         <div class="col-lg-6"></div>
 
