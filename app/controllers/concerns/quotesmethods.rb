@@ -68,7 +68,7 @@ module Quotesmethods
     rescue
       return respond_json({:error => "The cars cannot be parsed"})
     end
-    if params[:phoneType] == "primary" || params[:phoneType] == ""
+    if params[:phoneType] == "home" || params[:phoneType] == ""
       phoneType = phone
       phoneType_1 = " "
       phoneType_2 = " "
@@ -76,7 +76,7 @@ module Quotesmethods
       phoneType = " "
       phoneType_1 = phone
       phoneType_2 = " "
-    elsif params[:phoneType] == "other"
+    elsif params[:phoneType] == "work"
       phoneType = " "
       phoneType_1 = " "
       phoneType_2 = phone

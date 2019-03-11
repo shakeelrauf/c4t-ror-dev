@@ -1182,13 +1182,13 @@ function gotoListOfQuotes() {
 
 function set_phone_type(data){
   if (data.phone == unformatPhone($("select[name=phone] option:selected").text())){
-    $("#cus_phoneType").val("primary");
+    $("#cus_phoneType").val("home");
   }
   else if (data.cellPhone == unformatPhone($("select[name=phone] option:selected").text())){
     $("#cus_phoneType").val("cell");
   }
   else if (data.secondaryPhone == unformatPhone($("select[name=phone] option:selected").text())) {
-    $("#cus_phoneType").val("other");
+    $("#cus_phoneType").val("work");
   }
 }
 

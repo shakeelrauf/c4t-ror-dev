@@ -7,13 +7,13 @@ module QuoteHelper
   def phone_type_for_quote(customer)
     val = ""
     if customer.phone.present?
-    	val = "primary"
+    	val = "home"
     elsif customer.cellPhone.present?
       val = "cell"
     elsif customer.secondaryPhone.present?
-      val = "other"
+      val = "work"
     else
-      val = "primary"
+      val = "home"
     end
     val
   end
