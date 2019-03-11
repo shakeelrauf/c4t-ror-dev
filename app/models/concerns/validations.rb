@@ -78,7 +78,7 @@ class Validations
     expression.length.times do |i|
       phone+=expression[i] if expression[i].to_i.integer?
     end
-    return false if phone.length < 10
+    return phone if phone.length < 10
     return phone[0,3]+"-" + phone[3,3]+ "-" + phone[6,10] if phone.length == 10
     return phone[0,3] + "-" + phone[3,3] + "-" + phone[6,20]
     return phone
