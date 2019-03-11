@@ -36,6 +36,7 @@
 //= require jquery-ui/js/jquery-ui.min.js
 //= require jquery.steps/js/jquery.steps.js
 //= require datatables.net/js/jquery.dataTables.min.js
+//= require moment/js/moment.min.js
 //= require datedropper/datedropper.js
 //= require jquery-confirm/dist/jquery-confirm.min.js
 //= require jquery.validate-1.17.0.js

@@ -7,10 +7,13 @@ class HeardofusController < ApplicationController
     hou = Heardofus.find_by_type(params[:type])
     if hou.nil?
       hou = Heardofus.new(type: params[:type])
+      hou.source = params[:source]
       hou.save!
       flash[:success] = "Created"
       redirect_to "/heardofus"
     else
+      hou.source = params[:source]
+      hou.save!
       flash[:error] = "Name already exist"
       redirect_to "/heardofus/add"
     end
@@ -28,7 +31,7 @@ class HeardofusController < ApplicationController
   end
 
   def update
-    @heardofus.update(type: params[:type])
+    @heardofus.update(type: params[:type], source:  params[:source])
     flash[:success] = "Edited"
     redirect_to "/heardofus"
   end
