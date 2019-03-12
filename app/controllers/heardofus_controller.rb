@@ -12,10 +12,8 @@ class HeardofusController < ApplicationController
       flash[:success] = "Created"
       redirect_to "/heardofus"
     else
-      hou.source = params[:source]
-      hou.save!
       flash[:error] = "Name already exist"
-      redirect_to "/heardofus/add"
+      redirect_to "/heardofus/new"
     end
   end
 
