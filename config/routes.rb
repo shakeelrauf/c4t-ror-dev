@@ -53,6 +53,7 @@ Rails.application.routes.draw do
 	resources :quotes do
 		collection  do
 			get :search
+			get :index2
 			get :status
 			get :car_price
 			get :phone_numbers

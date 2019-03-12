@@ -14,6 +14,13 @@ class QuotesController < ApplicationController
     render :index
   end
 
+  def index2
+    respond_to do |format|
+      format.html
+      format.json { render json: QuotesDatatable.new(view_context) }
+    end
+  end
+
   def car_price
     return respond_json({"netPrice": nil}) if (params[:byWeight] == "1" ? false : (!params[:missingWheels].present? || !params[:missingBattery].present? || !params[:missingCat].present?))
     @quote = Quote.where(idQuote: params[:quoteId]).first

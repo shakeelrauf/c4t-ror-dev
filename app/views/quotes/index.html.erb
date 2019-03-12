@@ -168,6 +168,15 @@
   </div>
   <!-- Container-fluid ends -->
 </div>
+<style type="text/css">
+  .current{
+    background: #0275d8 !important;
+    color: white;
+  }
+  .ellipsis{
+    display: none;
+  }
+</style>
 <% content_for :js do %>
   <%= public_js_path 'quote-list.js' %>
 
@@ -209,13 +218,25 @@
       }
 
       $(document).ready(function () {
+        $.fn.dataTable.ext.classes.sPageButton = 'btn btn-default'; // Change Pagination Button Class
+
           $("#crm-contact").DataTable({
               "paging": false,
               "searching": false,
               "info": false,
               "order": [],
               "fixedHeader": true,
+              "processing": true,
+              "serverSide": true,
+              "info": false,
+              "dom": '<"top"i>rt<"bottom"flp><"clear">',
               "destroy": true,
+              "ajax": {
+                "url": "/quotes/index2",
+                "type": "GET",
+                "data": function (d) {
+                },
+              },
           });
           <% if (params[:isAdded] && params[:isAdded] == "true") %>
           growling("The quote is maked and customer [added/edited]!", "success");
