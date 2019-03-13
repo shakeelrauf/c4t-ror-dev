@@ -8,7 +8,7 @@ class QuotesDatatable < ApplicationTable
     quotes.map do |quote|
       [].tap do |column|
       	customer_number  = quote.customer.present? ? quote.customer.phone.present? ? quote.customer.phone : quote.customer.cellPhone.present? ? quote.customer.cellPhone : "" : "" 
-      	customer_name = quote.customer.present? ? quote.customer.lastName + quote.customer.firstName : ""
+      	customer_name = quote.customer.present? ? "#{quote.customer.firstName} " + quote.customer.lastName.to_s : ""
         dispatcher_name = quote.dispatcher.present? ? quote.dispatcher.firstName.to_s + quote.dispatcher.lastName.to_s : ""
         status = quote.status.present? ? quote.status.id : ""
         no_link = link_to customer_number, "tel:+#{customer_number}"
