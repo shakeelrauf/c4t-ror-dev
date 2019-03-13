@@ -96,14 +96,14 @@
                     <table id="crm-contact" class="table table-striped nowrap table-responsive">
                       <thead>
                       <tr>
-                        <th>Reference number</th>
-                        <th>Client Name</th>
-                        <th>Client Phone</th>
-                        <th>Date Added</th>
-                        <th>Dispatcher</th>
-                        <th>Status</th>
-                        <th>Time from last status</th>
-                        <th>Action</th>
+                        <th class="sorting" data-sortby="referNo">Reference number</th>
+                        <th class="sorting" data-sortby="Clients.firstName">Client Name</th>
+                        <th class="sorting"  data-sortby="Clients.phone">Client Phone</th>
+                        <th class="sorting" data-sortby="dtStatusUpdated">Date Added</th>
+                        <th class="sorting" data-sortby="users.firstName">Dispatcher</th>
+                        <th class="sorting" data-sortby="Status.name">Status</th>
+                        <th class="sorting" data-sortby="dtStatusUpdated">Time from last status</th>
+                        <th  data-sortby="referNo">Action</th>
                       </tr>
                       </thead>
                       <tbody class="table-quotes">
@@ -145,14 +145,14 @@
                       </tbody>
                       <tfoot>
                       <tr>
-                        <th>Reference number</th>
-                        <th>Client Name</th>
-                        <th>Client Phone</th>
-                        <th>Date Added</th>
-                        <th>Dispatcher</th>
-                        <th>Status</th>
-                        <th>Time from last status</th>
-                        <th>Action</th>
+                        <th class="sorting" data-sortby="referNo">Reference number</th>
+                        <th class="sorting" data-sortby="Clients.firstName">Client Name</th>
+                        <th class="sorting"  data-sortby="Clients.phone">Client Phone</th>
+                        <th class="sorting" data-sortby="dtStatusUpdated">Date Added</th>
+                        <th class="sorting" data-sortby="users.firstName">Dispatcher</th>
+                        <th class="sorting" data-sortby="Status.name">Status</th>
+                        <th class="sorting" data-sortby="dtStatusUpdated">Time from last status</th>
+                        <th  data-sortby="referNo">Action</th>
                       </tr>
                       </tfoot>
                     </table>
@@ -179,7 +179,6 @@
 </style>
 <% content_for :js do %>
   <%= public_js_path 'quote-list.js' %>
-
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
   <script>
       var quote_ids = <%= raw @quotes.pluck(:idQuote, :dtStatusUpdated).as_json %>
@@ -220,30 +219,43 @@
       $(document).ready(function () {
         $.fn.dataTable.ext.classes.sPageButton = 'btn btn-default'; // Change Pagination Button Class
 
-          $("#crm-contact").DataTable({
-              "paging": false,
-              "searching": false,
-              "info": false,
-              "order": [],
-              "fixedHeader": true,
-              "processing": true,
-              "serverSide": true,
-              "info": false,
-              "dom": '<"top"i>rt<"bottom"flp><"clear">',
-              "destroy": true,
-              "ajax": {
-                "url": "/quotes/index2",
-                "type": "GET",
-                "data": function (d) {
-                },
-              },
-          });
+          // $("#crm-contact").DataTable({
+          //     "paging": false,
+          //     "searching": false,
+          //     "info": false,
+          //     "order": [],
+          //     "fixedHeader": true,
+          //     // "processing": true,
+          //     // "serverSide": true,
+          //     "info": false,
+          //     "dom": '<"top"i>rt<"bottom"flp><"clear">',
+          //     "destroy": true,
+          //     // "ajax": {
+          //     //   "url": "/quotes/index2",
+          //     //   "type": "GET",
+          //     //   "data": function (d) {
+          //     //   },
+          //     // },
+          // });
           <% if (params[:isAdded] && params[:isAdded] == "true") %>
           growling("The quote is maked and customer [added/edited]!", "success");
           <% elsif (params[:isAdded] && params[:isAdded] == "false" && params[:reason]) %>
           growling("An error occur: " + reason, "danger");
           <% end %>
-
+          $(".sorting").on("click", function(e){
+            e.preventDefault()
+            var $this = $(this);
+            if($(".sorting_asc").length != 0)
+              $('th').not($this).removeClass("sorting_asc sorting_desc")  
+            if($(".sorting_desc").length != 0)
+              $('th').not($this).removeClass("sorting_asc sorting_desc")  
+            if($(this).hasClass("sorting_asc")){
+              $(this).addClass("sorting_desc").removeClass("sorting_asc")
+            }else{
+              $(this).addClass("sorting_asc").removeClass("sorting_desc")
+            }
+            filtingQuotes()
+          })
           function updateTimer(val) {
               var myTime = Number($(val).attr("data-timer")) + 1;
               $(val).attr("data-timer", myTime);

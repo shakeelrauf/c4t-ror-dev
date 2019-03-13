@@ -82,6 +82,17 @@ $(".shortcut-date-quotes").change(function() {
 });
 
 function filtingQuotes() {
+    var ascDesc;
+    var sortColumn;
+    if($(".sorting_asc").length == 1){
+        ascDesc = "asc";
+        sortColumn = $(".sorting_asc").data('sortby')
+    }else{
+        if($(".sorting_desc").length == 1){
+            ascDesc = "desc";
+            sortColumn = $(".sorting_desc").data('sortby')
+        }
+    }
     var filter = $(".filter-quote").val() + " " + $(".search-bar-quote").val();
     filter = $.trim(filter);
     var beforeDate = moment().format("YYYY-MM-DD");
@@ -92,13 +103,16 @@ function filtingQuotes() {
     if(moment($("input[name=dtEnd]").val(), "YYYY-MM-DD").isValid()) {
         beforeDate = $("input[name=dtEnd]").val();
     }
-    var quotesUrl = "/quotes/search?beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=15&offset="+tab+"&filter="+filter;
+    if(sortColumn == undefined){
+        var quotesUrl = "/quotes/search?beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=15&offset="+tab+"&filter="+filter;
+    }else{
+        var quotesUrl = "/quotes/search?orderBy="+sortColumn+"&ascDesc="+ascDesc+"&beforeDate=" + beforeDate + "&afterDate=" + afterDate + "&limit=15&offset="+tab+"&filter="+filter;
+    }
     if($(".table-quotes").first().hasClass("user-profile")) {
         quotesUrl = "/quotes/user/json?limit=15&offset="+tab+"&filter="+filter;
     } else if($(".table-quotes").first().hasClass("client-profile")) {
         quotesUrl = "/quotes/client/json?limit=15&offset="+tab+"&filter="+filter;
     }
-
     $.ajax("/quotes/status").done(function(status) {
         $.ajax(quotesUrl).done(function(res) {
             resizePagination(res.count,res.quotes, false);
@@ -278,6 +292,7 @@ function resizePagination(total, res,type) {
 					remove_active()
 	        tab = page - 1
 	        filtingQuotes();
+            debugger
 	      }
 	      else{
 	          type = true

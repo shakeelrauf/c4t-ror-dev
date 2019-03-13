@@ -39,7 +39,7 @@ class QuotesController < ApplicationController
   end
 
   def search
-    quotes, all_count = search_quotes params[:limit], params[:offset], params[:filter], params[:afterDate], params[:beforeDate]
+    quotes, all_count = search_quotes params[:limit], params[:offset], params[:filter], params[:afterDate], params[:beforeDate], params[:ascDesc], params[:orderBy]
     render json: { quotes: JSON.parse(quotes), count: all_count}
   end
 

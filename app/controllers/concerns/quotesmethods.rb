@@ -128,7 +128,7 @@ module Quotesmethods
     end
   end
 
-  def search_quotes limit_p, offset_p, filter,after_date, before_date
+  def search_quotes limit_p, offset_p, filter,after_date, before_date,order=nil, order_by=nil
     limit = 15
     offset = 0
     all_count = 0
@@ -144,7 +144,7 @@ module Quotesmethods
         query+= " AND " if i < (length -1)
       end
       # query = "(#{query}) AND (('dtCreated' <= '#{after_date+ ' 00:00:00'}') AND ('dtCreated' >= '#{before_date+ ' 23:59:59'}'))" if after_date && after_date.to_s.length == 10 && DateTime.parse(after_date, "YYYY-MM-DD")
-      quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query)
+      quotes =  Quote.eager_load(:status, :customer, :dispatcher).where(query).order("#{order_by} #{order} ")
       if quotes.count % 15 > 0
         all_count = 1
       end
