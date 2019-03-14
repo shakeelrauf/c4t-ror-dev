@@ -4,14 +4,13 @@ namespace :import do
 	desc "Imprting Cars from xml sheet"
   task :cars_from_xlsx => :environment do
   	puts "deleting previous quotes "
-		Quote.destroy_all
+		# Quote.destroy_all
 		puts "deleting previous cars data"
-		VehicleInfo.destroy_all
+		# VehicleInfo.destroy_all
 		xlsx = Roo::Spreadsheet.open(Rails.root.join( 'lib','data','cars.xlsx').to_s)
 		model = ""
 		year = ""
 		xlsx.each_row_streaming do |row|
-			car = VehicleInfo.new
 			if row.first.value != "Model"
 				puts "Found a new car row" 
 				model = row.first.value if row.first.value.present? 
@@ -28,24 +27,30 @@ namespace :import do
 				drive = row[13].value
 				transmission = row[14].value
 				engine_type = row[15].value
-				car.model = model
-				car.year = year
-				car.ref_id = ref_id
-				car.trim = trim
-				car.body = body
-				car.length = length
-				car.width = width
-				car.height = height
-				car.wheelbase = wheelsbase
-				car.weight = weight
-				car.drive = drive
-				car.transmission = transmission
-				car.make = make
-				car.engine_type = engine_type
-				car.save!
-				puts "............................................................................."
-				puts car.inspect
-				puts "#{car.id} ...................................................................."
+				car = VehicleInfo.where(model: model, year: year, ref_id: ref_id, trim: trim, body: body, length: length, 
+					width: width, height: height, wheelbase: wheelsbase, weight: weight, drive: drive, make: make, 
+					transmission: transmission,engine_type: engine_type)
+				if !car.present?
+					car = VehicleInfo.new
+					car.model = model
+					car.year = year
+					car.ref_id = ref_id
+					car.trim = trim
+					car.body = body
+					car.length = length
+					car.width = width
+					car.height = height
+					car.wheelbase = wheelsbase
+					car.weight = weight
+					car.drive = drive
+					car.transmission = transmission
+					car.make = make
+					car.engine_type = engine_type
+					car.save!
+					puts "............................................................................."
+					puts car.inspect
+					puts "#{car.id} ...................................................................."
+				end
 			end
 		end
   end
