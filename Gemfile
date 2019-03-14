@@ -44,6 +44,8 @@ gem 'kaminari'
 gem 'griddler-postmark'
 # gem 'ckeditor', '4.1.3'
 gem 'ckeditor', github: 'galetahub/ckeditor'
+# for reading xls sheet
+gem "roo", "~> 2.8.0"
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
