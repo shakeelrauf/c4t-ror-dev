@@ -125,6 +125,12 @@ $(document).ready(function() {
         });
       });
     });
+$(".map").on("click", function () {
+    var $this  = $(this),
+        id = $this.data("id");
+    $("#modalMap").attr("data-id", id).modal("toggle");
+})  
+
     function updatePhoneNumber(f) {
         var v = f;
         if (v.length == 0)
