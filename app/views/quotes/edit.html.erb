@@ -188,7 +188,7 @@
                   <% cal_car_price car, quote %>
                   <div class="row car<%= car.idQuoteCars %> index<%= index %>" id="car-price<%= car.idQuoteCars %>">
                     <div class="col-lg-6">
-                      <%= car.information.make + " " + car.information.model + " " + car.information.year %>
+                      <%= car.information.make.to_s + " " + car.information.model + " " + car.information.year %>
                     </div>
                     <div id="car-price-pickup-<%= car.idQuoteCars %>" class="col-lg-3 text-right car-price-pickup" style="display: inline-flex;padding: 0 5px;">
                     </div>
@@ -249,7 +249,7 @@
                   <li id="car-tab<%= car.idQuoteCars %>" class="nav-item car<%= car.idQuoteCars %> index<%= index %>" style="display:block">
                     <a class="nav-link" data-toggle="tab" href="#tab<%= car.idQuoteCars %>" role="tab" id="tab-a-<%= car.idQuoteCars %>">
                       <button onclick="removeCar(<%= car.idQuoteCars %>);">x</button>
-                      <%= car.information.make + " " + car.information.year %>
+                      <%= car.information.make.to_s + " " + car.information.year %>
                     </a>
                     <div class="slide"></div>
                   </li>
@@ -291,6 +291,8 @@
   </div>
 </div>
 <% content_for :js do %>
+    
+  </script>
   <script>
       <% if preselected_quotes(@customer, @quote) %>
         $('.has_quote option:eq(1)').prop('selected', true);
@@ -318,6 +320,7 @@
       });
       $(".tab-pane").removeClass("active");
       var quoteNo = (<%= quote.idQuote || "null" %>);
+      var carIds = <%= quote.quote_car.pluck(:idQuoteCars) %>;
 
       $("#tab-a-"+<%=cars.first.present? ? cars.first.idQuoteCars : " 0" %>).click()
 
@@ -325,7 +328,7 @@
   <%= public_js_path "distance.js?#{Constants::TS}" %>
   <%= public_js_path "common.js?#{Constants::TS}" %>
   <%= public_js_path "quote.js?#{Constants::TS}" %>
-  <script async defer type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>'></script>
   <%= public_js_path "edit_quote_map.js?#{Constants::TS}" %>
+  <script async defer type="text/javascript" src='https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_API_KEY'] %>&libraries=places&callback=initAutocomplete'></script>
 
 <% end %>

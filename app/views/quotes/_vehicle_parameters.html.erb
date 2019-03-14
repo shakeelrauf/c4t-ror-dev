@@ -1,7 +1,7 @@
 <%= public_css_path("/icofont/icofont.min.css") %>
 <div id="tab<%= car.idQuoteCars %>" class="card col-lg-12 tab-pane car-pane active car-<%= car.idQuoteCars %> veh-<%= vehicle['idVehiculeInfo'] %>" role="tabpanel" data-weight="<%= (vehicle['weight']).to_f %>" data-byweight="<%= car.weight %>" data-notbyweight="<%= (vehicle['weight']).to_f %>">
   <div class="card-header">
-    <h5 class="card-header-text"><%= vehicle.make + " " + vehicle.model + " " + vehicle.year %></h5>
+    <h5 class="card-header-text"><%= vehicle.make.to_s + " " + vehicle.model + " " + vehicle.year %></h5>
   </div>
   <div class="card-block">
     <div class="row">
@@ -220,18 +220,22 @@
         <div class="md-input-wrapper quote-select">
           <input type="hidden" id="car-distance<%= car.idQuoteCars %>" name="car-distance<%= car.idQuoteCars %>" value="<%= car.distance %>"/>
           <input type="hidden" id="car-excess-distance<%= car.idQuoteCars %>" name="car-excess-distance<%= car.idQuoteCars %>" value=""/>
-          <select class="md-form-control md-static car-location-select2" data-id="<%= car.idQuoteCars %>" name="car-location<%= car.idQuoteCars %>" id="car-location<%= car.id %>">
-            <% if (car.address.present?) %>
-              <%
-                address = car.address
-                t = ""
-                t += address.address + ", " if address.address && address.address.present?
-                t += address.city + ", " if address.city && address.city.present?
-                t += address.province + ", " if address.province && address.province.present?
-              %>
-              <option value="<%= car.address.idAddress %>" data-select2-tag='true'><%= t + car.address.postal %></option>
-            <% end %>
-          </select>
+          <input type="hidden" id="car-postal<%= car.idQuoteCars %>" name="car-postal<%= car.idQuoteCars %>" value="<%= car.address.postal if car.address.present? %>"/>
+          <input type="hidden" id="car-city<%= car.idQuoteCars %>" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.city if car.address.present? %>"/>
+          <input type="hidden" id="car-street<%= car.idQuoteCars %>" name="car-street<%= car.idQuoteCars %>" value=""/>
+          <input type="hidden" id="car-province<%= car.idQuoteCars %>" name="car-province<%= car.idQuoteCars %>" value="<%= car.address.province if car.address.present? %>"/>
+          <input type="text" class="md-form-control md-static  locations" data-id="<%= car.idQuoteCars %>" name="carlocation<%= car.idQuoteCars %>" id="car-location<%= car.id %>" value="<%= car.address.address  if car.address.present? %>" data-addressId="<%= car.address.id  if car.address.present? %>" />
+             <%# if (car.address.present?) %>
+               <%#
+            #     address = car.address
+            #     t = ""
+            #     t += address.address + ", " if address.address && address.address.present?
+            #     t += address.city + ", " if address.city && address.city.present?
+            #     t += address.province + ", " if address.province && address.province.present?
+            #   %>
+            <!-- #   <option value="<%#= car.address.idAddress %>" data-select2-tag='true'><%#= t + car.address.postal %></option> -->
+             <%# end %>
+          <!-- </select> -->
           <%#(@quote['customer']['address'].present? ? @quote['customer']['address']['address'] : ' ') %>
           <label class="addr-top">Select an address or enter a Postal Code for this
             car<span class="required">*</span></label>
@@ -246,8 +250,8 @@
       <%#= !car.address.present? ? "style=display:none;" : '' %>
       <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %> car-street" style="display: none;" >
         <div class="md-input-wrapper">
-          <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/>
-          <input type="hidden" name="car-postal<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.postal : '' %>" class="md-form-control md-static"/>
+          <!-- <input type="text" name="car-street<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.address : '' %>" class="md-form-control md-static"/> -->
+          <!-- <input type="hidden" name="car-postal<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.postal : '' %>" class="md-form-control md-static"/> -->
           <label style="top: -15px;">Street<span class="required">*</span></label>
         </div>
       </div>
@@ -258,7 +262,7 @@
       </div>
       <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
         <div class="md-input-wrapper">
-          <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/>
+          <!-- <input type="text" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.present? ? car.address.city : '' %>" class="md-form-control md-static"/> -->
           <label style="top: -15px;">City<span class="required">*</span></label>
         </div>
       </div>
@@ -269,7 +273,7 @@
       </div>
       <div class="col-lg-5 col-sm-5 car-ex-address<%= car.idQuoteCars %>" style="display: none;">
         <div class="md-input-wrapper">
-          <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
+          <!-- <select class="md-form-control md-static" name="car-province<%= car.idQuoteCars %>" id="car-province<%= car.idQuoteCars %>">
             <option value="ON" <%= car.address.present? ? car.address.province == "ON" ? 'selected' : '' : '' %>>Ontario</option>
             <option value="BC" <%= car.address.present? ? car.address.province == "BC" ? 'selected' : '' : '' %>>British
               Columbia
@@ -291,7 +295,7 @@
               Edward Island
             </option>
           </select>
-          <label style="top: -15px;">Province<span class="required">*</span></label>
+           --><label style="top: -15px;">Province<span class="required">*</span></label>
         </div>
       </div>
 
@@ -504,6 +508,7 @@
         </div>
     </div>
   </div>
+</div>
 </div>
 
 <script !src="">

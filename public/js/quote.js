@@ -1,6 +1,8 @@
 
 $(document).ready(function() {
     var new_data = false;
+    var foundAddress = false;
+
     $('#txtVehicleFilter').select2({
         dataType: 'json',
         ajax: {
@@ -38,7 +40,7 @@ $(document).ready(function() {
                 $(".vehicle-parameters .tab-pane, .tab-details .nav-item .nav-link").removeClass("active");
                 $(".vehicle-parameters").append(html);
                 // $(".car-location-select2").each(function(index) {
-                    createPostalSelect2($("#car-location"+car.idQuoteCars));
+                    singleCarMapPlaces(car.idQuoteCars)
                 // });
                 // if(new_data==true){
                 //     var address = {id: 'new', text: $("input[name=postal]").val()}
@@ -57,35 +59,35 @@ $(document).ready(function() {
                 //         }
                 //     }
                 // }
-                if(($("select[name=phone]").select2('data')[0] != undefined) && Number.isInteger(Number($("select[name=phone]").select2('data')[0].id)) && $(".hiddenaddress").html().trim().length > 0){
-                    var addresses = JSON.parse($(".hiddenaddress").html());
-                    if(addresses.length >= 1){
-                        var address = addresses[0];
-                        var text = " ";
-                        if(address.address != undefined && address.address != "" ){
-                            text += address.address+", "
-                        }
-                        if(address.city != undefined && address.city != "" ){
-                            text += address.city+", "
-                        }
-                        if(address.province != undefined && address.province != "" ){
-                            text += address.province+", "
-                        }
-                        if(address.postal != undefined && address.postal != "" ){
-                            text += address.postal
-                        }
-                        $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+text+"</option>");
-                        $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
-                            data:  {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal }
-                        });
-                        $("#car-location"+car.idQuoteCars).val(address.idAddress)
-                        getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
-                            $("#car-distance" + carId).val(distance);
-                            updateCarWithDistance(distance, car.idQuoteCars);
-                            // showCarExistingAddress(address.idAddress, carId)
-                        });
-                    }
-                }
+                // if(($("select[name=phone]").select2('data')[0] != undefined) && Number.isInteger(Number($("select[name=phone]").select2('data')[0].id)) && $(".hiddenaddress").html().trim().length > 0){
+                //     var addresses = JSON.parse($(".hiddenaddress").html());
+                //     if(addresses.length >= 1){
+                //         var address = addresses[0];
+                //         var text = " ";
+                //         if(address.address != undefined && address.address != "" ){
+                //             text += address.address+", "
+                //         }
+                //         if(address.city != undefined && address.city != "" ){
+                //             text += address.city+", "
+                //         }
+                //         if(address.province != undefined && address.province != "" ){
+                //             text += address.province+", "
+                //         }
+                //         if(address.postal != undefined && address.postal != "" ){
+                //             text += address.postal
+                //         }
+                //         // $("#car-location"+car.idQuoteCars).append("<option data-select2-tag='true' value="+address.idAddress+" selected>"+text+"</option>");
+                //         // $("#car-location"+car.idQuoteCars).data('select2').trigger('select', {
+                //         //     data:  {id: address.idAddress, text: address.address+", "+address.city + ", "+address.province + ", " +address.postal }
+                //         // });
+                //         // $("#car-location"+car.idQuoteCars).val(address.idAddress)
+                //         // getDistanceForCar(address.postal, car.idQuoteCars, function(distance, carId) {
+                //         //     $("#car-distance" + carId).val(distance);
+                //         //     updateCarWithDistance(distance, car.idQuoteCars);
+                //         //     // showCarExistingAddress(address.idAddress, carId)
+                //         // });
+                //     }
+                // }
                 $(".tab-details").append(`
                 <li id="car-tab` + car.idQuoteCars + `" class="nav-item car"` + car.idQuoteCars + ` veh-`+ veh.idVehiculeInfo + `" style="display:block">
                     <a class="nav-link active" data-toggle="tab" href="#tab` + car.idQuoteCars + `" role="tab">
@@ -317,6 +319,12 @@ $(document).ready(function() {
 
     calcPrices();
 });
+
+function googleLocation(){
+    $(".locations").each(function(index) {
+      var carId = $(this).data('id')
+    });
+}
 function customerUrl(){
     var clientId = $("select[name=phone]").select2('data')[0];
     if (!clientId) {
@@ -329,86 +337,203 @@ function customerUrl(){
     return url
 }
 function createPostalSelect2(s) {
-  var clientId = $("select[name=phone]").select2('data')[0];
-  if (!clientId) {
-    // There's no client selected, make a "no results" client
-    clientId = 0;
-  }else{
-    clientId = clientId.id
-  }
-  var carId = s.prop('id').substring("car-location".length, s.prop('id').length);
-  s.select2({
-      tags: true,
-      createTag: function (params) {
-        var postal = params.term.trim().replace(/\s/g, '');
-        if(postal.length != 6) {
-            $("input[name=car-postal" + carId +" ]").text(postal)
-            return null;
-        }
-        getDistanceForCar(postal, carId, function(distance, carId) {
-          $("#car-distance" + carId).val(distance);
-          updateCarWithDistance(distance, carId);
-          resetAddress(carId, postal)
-          showCarNewAddress(postal, carId);
-        });
-        return {
-            id: postal,
-            text: postal,
-            newTag: true
-        }
-      },
-      dataType: 'json',
-      ajax: {
-          url: customerUrl(),
-          data: function (params) {
-              var query = {
-                  search: params.term,
-                  offset: params.page||0,
-                  limit: 10
+  // initAutocomplete(s)
+
+  // var clientId = $("select[name=phone]").select2('data')[0];
+  // if (!clientId) {
+  //   // There's no client selected, make a "no results" client
+  //   clientId = 0;
+  // }else{
+  //   clientId = clientId.id
+  // }
+  // var carId = s.prop('id').substring("car-location".length, s.prop('id').length);
+  // s.select2({
+  //     tags: true,
+  //     createTag: function (params) {
+  //       var postal = params.term.trim().replace(/\s/g, '');
+  //       if(postal.length != 6) {
+  //           $("input[name=car-postal" + carId +" ]").text(postal)
+  //           return null;
+  //       }
+  //       getDistanceForCar(postal, carId, function(distance, carId) {
+  //         $("#car-distance" + carId).val(distance);
+  //         updateCarWithDistance(distance, carId);
+  //         resetAddress(carId, postal)
+  //         showCarNewAddress(postal, carId);
+  //       });
+  //       return {
+  //           id: postal,
+  //           text: postal,
+  //           newTag: true
+  //       }
+  //     },
+  //     dataType: 'json',
+  //     ajax: {
+  //         url: customerUrl(),
+  //         data: function (params) {
+  //             var query = {
+  //                 search: params.term,
+  //                 offset: params.page||0,
+  //                 limit: 10
+  //             }
+  //             return query;
+  //         }
+  //     },
+  //     // processResults: function(data, params) {
+  //     //     var postal = params.term.trim().replace(/\s/g, '');
+  //     //     if(postal.length == 6) {
+  //     //         tag = {
+  //     //             id: postal,
+  //     //             text: postal
+  //     //         }
+  //     //         data.results.push(tag)
+  //     //     }
+  //     //     return {
+  //     //         results: data.results,
+  //     //         pagination:  data.pagination
+  //     //
+  //     //     }
+  //     // }
+  //   })
+
+
+  //   s.on("select2:open", function (e) { console.log("select2:open");
+  //   });
+  //   s.on("select2:close", function (e) { console.log("select2:close"); });
+  //   s.on("select2:select", function (e) {
+  //       console.log("select")
+  //       var addressId = $(this).val();
+  //       if (!isNaN(parseInt(addressId))) {
+  //           getDistanceForAddress(addressId, carId, function(distance, carId) {
+  //               updateCarWithDistance(distance, carId);
+  //               hideCarExistingAddress(addressId, carId)
+  //               showCarExistingAddress(addressId, carId);
+  //           });
+  //       } else {
+  //           var postal = addressId;
+  //           getDistanceForCar(postal, carId, function(distance, carId) {
+  //               updateCarWithDistance(distance, carId);
+  //               resetAddress(carId)
+  //               showCarNewAddress(postal, carId);
+  //           });
+  //       }
+  //       calcPrice(carId)
+  //   });
+}
+
+// This sample uses the Autocomplete widget to help the user select a
+// place, then it retrieves the address components associated with that
+// place, and then it populates the form fields with those details.
+// This sample requires the Places library. Include the libraries=places
+// parameter when you first load the API. For example:
+// <script
+// src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+var autocomplete = {}
+var componentForm = {
+  street_number: 'short_name',
+  route: 'long_name',
+  locality: 'long_name',
+  administrative_area_level_1: 'short_name',
+  country: 'long_name',
+  postal_code: 'short_name'
+};
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search predictions to
+  // geographical location types.
+  $.each(carIds, function(index, carId) {
+    autocomplete[carId] = new google.maps.places.Autocomplete(
+        document.getElementById('car-location'+carId), {types: ['(regions)'],componentRestrictions: {country: "ca"}});
+    autocomplete[carId].addListener('place_changed', function(){
+    // Get the place details from the autocomplete object.
+    var place = autocomplete[carId].getPlace();
+    if(place != undefined){
+      document.getElementById('car-postal'+carId).value = "";
+      document.getElementById('car-province'+carId).value = "";
+      document.getElementById('car-distance'+carId).value = "";
+      document.getElementById('car-city'+carId).value = "";
+      $("#car-street"+carId).val(place.formatted_address);
+      for (var i = 0; i < place.address_components.length; i++) {
+        for (var j = 0; j < place.address_components[i].types.length; j++) {
+          if (place.address_components[i].types[j] == "postal_code") {
+            foundAddress = true;
+            document.getElementById('car-postal'+carId).value = place.address_components[i].long_name;
+              getDistanceForCar(place.address_components[i].short_name, carId, function (distance, carId) {
+                  $("#car-distance" + carId).val(distance);
+                  updateCarWithDistance(distance, carId);
+              });
+          }else{
+            if(place.address_components[i].types[j] == "administrative_area_level_1"){
+              document.getElementById('car-province'+carId).value = place.address_components[i].short_name;
+            }else{
+              if(place.address_components[i].types[j] == "locality"){
+                document.getElementById('car-city'+carId).value = place.address_components[i].long_name;
               }
-              return query;
+            }
           }
-      },
-      // processResults: function(data, params) {
-      //     var postal = params.term.trim().replace(/\s/g, '');
-      //     if(postal.length == 6) {
-      //         tag = {
-      //             id: postal,
-      //             text: postal
-      //         }
-      //         data.results.push(tag)
-      //     }
-      //     return {
-      //         results: data.results,
-      //         pagination:  data.pagination
-      //
-      //     }
-      // }
-    })
 
-
-    s.on("select2:open", function (e) { console.log("select2:open");
-    });
-    s.on("select2:close", function (e) { console.log("select2:close"); });
-    s.on("select2:select", function (e) {
-        console.log("select")
-        var addressId = $(this).val();
-        if (!isNaN(parseInt(addressId))) {
-            getDistanceForAddress(addressId, carId, function(distance, carId) {
-                updateCarWithDistance(distance, carId);
-                hideCarExistingAddress(addressId, carId)
-                showCarExistingAddress(addressId, carId);
-            });
-        } else {
-            var postal = addressId;
-            getDistanceForCar(postal, carId, function(distance, carId) {
-                updateCarWithDistance(distance, carId);
-                resetAddress(carId)
-                showCarNewAddress(postal, carId);
-            });
         }
-        calcPrice(carId)
+      }
+
+      }
+
     });
+  });
+}
+function singleCarMapPlaces(carId){
+  autocomplete[carId] = new google.maps.places.Autocomplete(
+    document.getElementById('car-location'+carId), {types: ['(regions)'],componentRestrictions: {country: "ca"}});
+    autocomplete[carId].addListener('place_changed', function(){
+    // Get the place details from the autocomplete object.
+    var place = autocomplete[carId].getPlace();
+    if(place != undefined){
+      document.getElementById('car-postal'+carId).value = "";
+      document.getElementById('car-province'+carId).value = "";
+      document.getElementById('car-distance'+carId).value = "";
+      document.getElementById('car-city'+carId).value = "";
+      $("#car-street"+carId).val(place.formatted_address);
+      for (var i = 0; i < place.address_components.length; i++) {
+        for (var j = 0; j < place.address_components[i].types.length; j++) {
+          if (place.address_components[i].types[j] == "postal_code") {
+            foundAddress = true;
+            document.getElementById('car-postal'+carId).value = place.address_components[i].long_name;
+              getDistanceForCar(place.address_components[i].short_name, carId, function (distance, carId) {
+                  $("#car-distance" + carId).val(distance);
+                  updateCarWithDistance(distance, carId);
+              });
+          }else{
+            if(place.address_components[i].types[j] == "administrative_area_level_1"){
+              document.getElementById('car-province'+carId).value = place.address_components[i].short_name;
+            }else{
+              if(place.address_components[i].types[j] == "locality"){
+                document.getElementById('car-city'+carId).value = place.address_components[i].long_name;
+              }
+            }
+          }
+
+        }
+      }
+
+      }
+
+    });
+}
+
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocate() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle(
+          {center: geolocation, radius: position.coords.accuracy});
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
 }
 
 function updateCarWithDistance(distance, carId) {
@@ -471,7 +596,7 @@ function resetAddress(carId, postal) {
         $("input[name=car-street" + carId +" ]").val("")
         $("input[name=car-postal" + carId +" ]").val(" ")
     });
-    $("#car-location"+carId).select2('data')[0].id = postal;
+    // $("#car-location"+carId).select2('data')[0].id = postal;
 }
 
 function removeCar(quoteCarId) {
@@ -1013,14 +1138,15 @@ function saveCar(callback) {
         if (price) {
             netPrice = price.netPrice;
         }
-        var carAddressId = "";
-        if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
-            if($("#car-location"+carId).select2('data') != undefined){
-                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id))){
-                    carAddressId = Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id)
-                }
-            }
-        }
+        var carAddressId = $("#car-location"+carId).attr("data-addressid");
+
+        // if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
+        //     if($("#car-location"+carId).select2('data') != undefined){
+        //         if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id))){
+        //             carAddressId = Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id)
+        //         }
+        //     }
+        // }
         var byWeightVal = $("#tab" + carId + " input[name=byweight"+carId+"]:checked").val();
         var byWeight = "";
         if (byWeightVal && byWeightVal != "") {
@@ -1041,7 +1167,7 @@ function saveCar(callback) {
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() == "1") ? "1" : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
-            "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
+            "carProvince":    ($(this).find("input[name=car-province"+carId+"]").val()),
             "carPostal":      ($(this).find("input[name=car-postal"+carId+"]").val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
@@ -1110,14 +1236,14 @@ function saveCarAuto(callback) {
         if (price) {
             netPrice = price.netPrice;
         }
-        var carAddressId = "";
-        if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
-            if($("#car-location"+carId).select2('data') != undefined){
-                if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id))){
-                    carAddressId = Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id)
-                }
-            }
-        }
+        var carAddressId = $("#car-location"+carId).attr("data-addressid");
+        // if($(this).find("select[name=car-location"+carId+"] option").length >= 1){
+        //     if($("#car-location"+carId).select2('data') != undefined){
+        //         if(Number.isInteger(Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id))){
+        //             carAddressId = Number($(this).find("select[name=car-location"+carId+"]").select2('data')[0].id)
+        //         }
+        //     }
+        // }
         var byWeightVal = $("#tab" + carId + " input[name=byweight"+carId+"]:checked").val();
         var byWeight = "";
         if (byWeightVal && byWeightVal != "") {
@@ -1138,7 +1264,7 @@ function saveCarAuto(callback) {
             "carStreet":      ($(this).find("input[name=car-street"+carId+"]").val()),
             "still_driving":  ($(this).find("input[name=still_driving"+carId+"]:checked").val() != undefined) ? $(this).find("input[name=still_driving"+carId+"]:checked").val() : "",
             "carCity":        ($(this).find("input[name=car-city"+carId+"]").val()),
-            "carProvince":    ($(this).find("select[name=car-province"+carId+"]").val()),
+            "carProvince":    ($(this).find("input[name=car-province"+carId+"]").val()),
             "carPostal":      ($($(this).find("input[name=car-postal"+carId+"]")).val()),
             "distance":       ($(this).find("input[name=car-distance"+carId+"]").val()),
             "price":          netPrice
@@ -1170,31 +1296,31 @@ function saveCarAuto(callback) {
         }
     }).done(function(s) {
         for(car in s.carlist){
-            $("#car-location"+car).select2('data')[0].id = s.carlist[car]
+          $("#car-location"+car).attr("data-addressid",s.carlist[car]) 
         }
-        if($(".selection").text().trim().includes("New Customer")){
-          if(s != undefined && s.customer_id != undefined){
-            $("#new_customer_id").val(s.customer_id);
-          }
-        }
-        else{
-          $("#new_customer_id").val("false");
-        }
-        if (callback) {
-            callback(s);
-        } else {
-            if(s.error){
-                if(s.car){
-                    $("#tab-a-"+s.car).click();
-                    doGrowlingDanger(s.error);
-                }else{
-                    doGrowlingDanger(s.error);
-                }
-            }else{
-                $("#customer").data("id", s.customer_id)
-                doGrowlingMessage("Saved");
-            }
-        }
+        // if($(".selection").text().trim().includes("New Customer")){
+        //   if(s != undefined && s.customer_id != undefined){
+        //     $("#new_customer_id").val(s.customer_id);
+        //   }
+        // }
+        // else{
+        //   $("#new_customer_id").val("false");
+        // }
+        // if (callback) {
+        //     callback(s);
+        // } else {
+        //     if(s.error){
+        //         if(s.car){
+        //             $("#tab-a-"+s.car).click();
+        //             doGrowlingDanger(s.error);
+        //         }else{
+        //             doGrowlingDanger(s.error);
+        //         }
+        //     }else{
+        //         $("#customer").data("id", s.customer_id)
+        //         doGrowlingMessage("Saved");
+        //     }
+        // }
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
     });
@@ -1228,6 +1354,7 @@ function capitalize_Words(str)
 function fillCustomer(data) {
     $(".car-location-select2").each(function(index) {
         $(this).select2('destroy');
+
         createPostalSelect2($(this));
     });
     $("#customer").data("id", data.idClient)
