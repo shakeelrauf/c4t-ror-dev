@@ -316,7 +316,7 @@ $(".map").on("click", function () {
       });
     }
 
-    $(".car-location-select2").each(function(index) {
+    $(".locations").each(function(index) {
       createPostalSelect2($(this));
     });
 
@@ -343,6 +343,13 @@ function customerUrl(){
     return url
 }
 function createPostalSelect2(s) {
+  var postal = $("#car-postal"+carId).val()
+  getDistanceForCar(postal, carId, function(distance, carId) {
+    $("#car-distance" + carId).val(distance);
+    updateCarWithDistance(distance, carId);
+    resetAddress(carId, postal)
+    showCarNewAddress(postal, carId);
+  });
   // initAutocomplete(s)
 
   // var clientId = $("select[name=phone]").select2('data')[0];

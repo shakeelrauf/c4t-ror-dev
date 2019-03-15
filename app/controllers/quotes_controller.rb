@@ -378,6 +378,7 @@ class QuotesController < ApplicationController
 
   def check_increase_in_new_price(bonus, r,params, car)
     r[:increase_in_price] = ('%.2f' %  (((r[:car_new_price].to_f - r[:netPrice].to_f)/r[:netPrice].to_f) * 100)).to_s + '%'
+    r[:increase_in_price] = "" if !r[:car_new_price].present?
     r[:increase_approved] = false
     r[:increase_approved] = true if r[:increase_in_price].to_f > Setting.find_by_label("max_increase_with_admin_approval").value.to_f
     r[:weight] = params[:weight].to_f/1000.0 if params[:byWeight] == "1" && car.weight.present?
