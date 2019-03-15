@@ -33,7 +33,7 @@ class QuotesController < ApplicationController
       bonus = calculate_bonus_or_flatfee(customer, r)
       bonus,r = response_according_bonus(bonus, r)
     end
-    r = save_car_return_response(car,r, params) if car.present? 
+    r = save_car_return_response(car,r, params) if car.present?
     r = check_increase_in_new_price(bonus, r,params, car)
     respond_json(r)
   end
@@ -81,10 +81,11 @@ class QuotesController < ApplicationController
       phone_type_1 = " "
       phone_type_2 = phone
     end
-    heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
-    heard_of_us.save! if heard_of_us.new_record?
+    # heard_of_us = Heardofus.find_or_initialize_by(type: params[:heardofus])
+    # heard_of_us.save! if heard_of_us.new_record?
+    heard_of_us = Heardofus.find(params[:heardofus])
     if !car_list.nil?
-      client = save_customer params, heard_of_us,phone, phone_type, phone_type_1, phone_type_2, params[:customerType]
+      client = save_customer params, heard_of_us, phone, phone_type, phone_type_1, phone_type_2, params[:customerType]
       Quote.custom_upsert({note: params[:note],idUser: current_user.present? ? current_user.idUser : nil ,idClient: client.idClient},{idQuote: params[:quote]})
       hash = {}
       car_list.each do |car, val|

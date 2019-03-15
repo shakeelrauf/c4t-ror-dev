@@ -82,7 +82,7 @@
                 </div>
               </div>
               <div id="customer_type" class="col-lg-6 md-group-add-on">
-                
+
                   <!-- <input type="text" class="md-form-control md-static" name="postal" value="<%#= quote.idQuote && quote.customer && quote.customer.address.first ? quote.customer.address.first.postal : "" %>">
                   <label style="top: -15px;">Postal Code<span class="required">*</span></label>
                  -->
@@ -114,22 +114,24 @@
                     <i class="icofont icofont-ui-user"></i>
                 </span>
                 <div class="md-input-wrapper">
-                  <select class="md-form-control md-static has_quote" name="heardOfUs">
+                  <% if (quote.idQuote != nil && quote.customer != nil && quote.customer.quotes.size > 1)
+                      show_text = 'block'
+                      show_sel  = 'none'
+                     else
+                      show_text = 'none'
+                      show_sel  = 'block'
+                     end
+                  %>
+                  <select class="md-form-control md-static" name="heardOfUs" id="heardOfUsSelect" style="display:<%=show_sel%>">
                     <option value="">Select an option</option>
                     <% heardOfUsFound = false %>
-                    <% heardsofus.each do |heardofus| %>
-                      <% if (quote.idQuote != nil && quote.customer != nil) %>
-                        <option<%= heardofus.idHeardOfUs == quote.customer.idHeardOfUs ? " selected" : "" %>><%= heardofus.type %></option>
-                        <% if (heardofus.idHeardOfUs == quote.customer.idHeardOfUs) %>
-                          <% heardOfUsFound = true %>
-                        <% else %>
-                          <option value="<%= heardofus.type %>"><%= heardofus.type %></option>
-                        <% end %>
-                      <% elsif (quote.idQuote != nil && !heardOfUsFound) %>
-                        <option value="<%= heardofus.type %>"><%= heardofus.type %></option>
-                      <% end %>
+                    <% heardsofus.each do |heardofus|
+                      s = (quote.idQuote != nil && quote.customer != nil && heardofus.idHeardOfUs == quote.customer.idHeardOfUs) ? "selected" : ""
+                    %>
+                    <option <%= s %> value="<%= heardofus.idHeardOfUs %>"><%= heardofus.type %></option>
                     <% end %>
                   </select>
+                  <input type="text" class="md-form-control md-static" value="Repeat customer" id="heardOfUsText" style="display:<%=show_text%>" disabled>
                   <label style="top: -15px;">Heard of Us<span class="required">*</span></label>
                 </div>
               </div>
@@ -161,7 +163,7 @@
                 </span>
 
                 <div class="md-input-wrapper" id="customer_extension" data-id="<%= quote.customer.idClient if quote.customer.present? %>">
-                  <input type="text" class="md-form-control md-static" name="extension" value="<%= quote.customer.present?  ? quote.customer.extension : "" %>">
+                  <input type="text" class="md-form-control md-static has_quote" name="extension" value="<%= quote.customer.present?  ? quote.customer.extension : "" %>">
                   <label style="top: -15px;">Extension</label>
                 </div>
               </div>
@@ -291,7 +293,7 @@
   </div>
 </div>
 <% content_for :js do %>
-    
+
   </script>
   <script>
       <% if preselected_quotes(@customer, @quote) %>
