@@ -3,18 +3,18 @@ namespace :import do
 
 	desc "Imprting Cars from xml sheet"
   task :cars_from_xlsx => :environment do
-  	puts "deleting previous quotes "
+  	# puts "deleting previous quotes "
 		# Quote.destroy_all
-		puts "deleting previous cars data"
+		# puts "deleting previous cars data"
 		# VehicleInfo.destroy_all
 		xlsx = Roo::Spreadsheet.open(Rails.root.join( 'lib','data','cars.xlsx').to_s)
 		model = ""
 		year = ""
 		xlsx.each_row_streaming do |row|
 			if row.first.value != "Model"
-				puts "Found a new car row" 
-				model = row.first.value if row.first.value.present? 
-				year = row.second.value if row.second.value.present? 
+				puts "Found a new car row"
+				model = row.first.value if row.first.value.present?
+				year = row.second.value if row.second.value.present?
 				ref_id = row[2].value
 				make = row[3].value
 				trim = row[6].value
@@ -27,8 +27,8 @@ namespace :import do
 				drive = row[13].value
 				transmission = row[14].value
 				engine_type = row[15].value
-				car = VehicleInfo.where(model: model, year: year, ref_id: ref_id, trim: trim, body: body, length: length, 
-					width: width, height: height, wheelbase: wheelsbase, weight: weight, drive: drive, make: make, 
+				car = VehicleInfo.where(model: model, year: year, ref_id: ref_id, trim: trim, body: body, length: length,
+					width: width, height: height, wheelbase: wheelsbase, weight: weight, drive: drive, make: make,
 					transmission: transmission,engine_type: engine_type)
 				if !car.present?
 					car = VehicleInfo.new
