@@ -317,7 +317,9 @@ $(".map").on("click", function () {
     }
 
     $(".locations").each(function(index) {
-      createPostalSelect2($(this));
+      var carId = $(this).data('id')
+
+      createPostalSelect2($(this), carId);
     });
 
     // Select the first tab, if there's one
@@ -342,13 +344,12 @@ function customerUrl(){
     var  url = '/customers/' + clientId + '/postal-select2'
     return url
 }
-function createPostalSelect2(s) {
+function createPostalSelect2(s, carId) {
   var postal = $("#car-postal"+carId).val()
   getDistanceForCar(postal, carId, function(distance, carId) {
     $("#car-distance" + carId).val(distance);
     updateCarWithDistance(distance, carId);
     resetAddress(carId, postal)
-    showCarNewAddress(postal, carId);
   });
   // initAutocomplete(s)
 
