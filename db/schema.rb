@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_28_054248) do
+ActiveRecord::Schema.define(version: 2019_03_15_131525) do
 
   create_table "address", primary_key: "idAddress", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "idClient"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2019_02_28_054248) do
 
   create_table "heardsofus", primary_key: "idHeardOfUs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "type", limit: 60, null: false
+    t.string "source"
     t.index ["type"], name: "type_UNIQUE", unique: true
   end
 
@@ -114,6 +115,7 @@ ActiveRecord::Schema.define(version: 2019_02_28_054248) do
     t.integer "platesOn"
     t.float "weight"
     t.boolean "by_weight"
+    t.float "new_price"
     t.index ["idAddress"], name: "Address_idAddress_idx"
     t.index ["idCar"], name: "VehiclulesInfo_idCar_idx"
     t.index ["idQuote"], name: "Quotes_idQuote_idx"
@@ -233,6 +235,13 @@ ActiveRecord::Schema.define(version: 2019_02_28_054248) do
     t.text "seats"
     t.text "doors"
     t.text "weight"
+    t.string "ref_id"
+    t.string "length"
+    t.string "width"
+    t.string "height"
+    t.string "wheelbase"
+    t.string "engine_type"
+    t.string "searchable"
   end
 
   add_foreign_key "address", "clients", column: "idClient", primary_key: "idClient", name: "Address_idClient"

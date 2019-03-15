@@ -32,20 +32,25 @@ module Quotesmethods
     quote
   end
 
-  def vehicles_search(limit_p, offset_p, q)
-    limit = 30
-    offset = 0
-    limit = (limit_p.present? ? limit_p.to_i : 30)
-    offset = offset_p.present? ? offset_p.to_i : 0
+  def vehicles_search(limit=100, offset=0, q)
+    # limit = 30
+    # offset = 0
+    # limit = (limit_p.present? ? limit_p.to_i : 30)
+    # offset = offset_p.present? ? offset_p.to_i : 0
     if q.present?
-      filter = + q.gsub(/[\s]/, "% %") + "%"
-      filters = filter.split(' ')
-      query = "Select * from vehicle_infos where"
+      # filter = + q.gsub(/[\s]/, "% %") + "%"
+      filters = q.split(' ')
+      # query = "Select * from vehicle_infos where"
+      strings = []
+      query = "idVehiculeInfo is not null"
       filters.each do |fil|
-        query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
-        query.concat(" AND ") if !fil.eql?(filters.last)
+        # query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
+        # query.concat(" AND ") if !fil.eql?(filters.last)
+        query += " and searchable like ?"
+        strings << "%#{fil}%"
       end
-      r_vehicles = VehicleInfo.run_sql_query(query, offset, limit)
+      w = [query] + strings
+      r_vehicles = VehicleInfo.where(w)
     end
     r_vehicles = JSON.parse(VehicleInfo.all.limit(limit).offset(offset).to_json) if !q.present?
     return r_vehicles
