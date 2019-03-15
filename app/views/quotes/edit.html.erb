@@ -48,7 +48,7 @@
                   <%
                     if (quote.idQuote != nil && quote.customer != nil) %>
                     <option value="<%= quote.customer.idClient %>"  selected><%=
-                      phone_number_display(phone_type(quote.customer)) + " " + quote.customer.firstName + " " + quote.customer.lastName
+                      phone_number_display(phone_type(quote.customer)).to_s  + " " + quote.customer.firstName.to_s + " " + quote.customer.lastName.to_s
                     %></option>
                     <% elsif @customer.present? %>
                       <option value="<%= @customer.idClient %>"  selected><%=
