@@ -346,11 +346,14 @@ function customerUrl(){
 }
 function createPostalSelect2(s, carId) {
   var postal = $("#car-postal"+carId).val()
-  getDistanceForCar(postal, carId, function(distance, carId) {
-    $("#car-distance" + carId).val(distance);
-    updateCarWithDistance(distance, carId);
-    resetAddress(carId, postal)
-  });
+  if(postal != ""){
+    getDistanceForCar(postal, carId, function(distance, carId) {
+      $("#car-distance" + carId).val(distance);
+      updateCarWithDistance(distance, carId);
+      resetAddress(carId, postal)
+    });
+  }
+  
   // initAutocomplete(s)
 
   // var clientId = $("select[name=phone]").select2('data')[0];
@@ -453,6 +456,7 @@ var componentForm = {
   postal_code: 'short_name'
 };
 
+/*
 function initAutocomplete() {
   // Create the autocomplete object, restricting the search predictions to
   // geographical location types.
@@ -497,9 +501,19 @@ function initAutocomplete() {
     });
   });
 }
-function singleCarMapPlaces(carId){
+*/
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search predictions to
+  // geographical location types.
+  $.each(carIds, function(index, carId) {
+    singleCarMapPlaces(carId);
+  });
+}
+
+function singleCarMapPlaces(carId) {
   autocomplete[carId] = new google.maps.places.Autocomplete(
-    document.getElementById('car-location'+carId), {types: ['(regions)'],componentRestrictions: {country: "ca"}});
+    document.getElementById('car-location'+carId), {componentRestrictions: {country: "ca"}});
     autocomplete[carId].addListener('place_changed', function(){
     // Get the place details from the autocomplete object.
     var place = autocomplete[carId].getPlace();
@@ -517,22 +531,21 @@ function singleCarMapPlaces(carId){
               getDistanceForCar(place.address_components[i].short_name, carId, function (distance, carId) {
                   $("#car-distance" + carId).val(distance);
                   updateCarWithDistance(distance, carId);
+                  saveCarAuto()
               });
-          }else{
-            if(place.address_components[i].types[j] == "administrative_area_level_1"){
+            } else if(place.address_components[i].types[j] == "street_number"){
+              // document.getElementById('car-street'+carId).value = place.address_components[i].short_name;
+              $("#car-street"+carId).val(place.address_components[i].short_name);
+            } else if(place.address_components[i].types[j] == "route"){
+              $("#car-street"+carId).val($("#car-street"+carId).val() + " " + place.address_components[i].short_name);
+            } else if(place.address_components[i].types[j] == "administrative_area_level_1"){
               document.getElementById('car-province'+carId).value = place.address_components[i].short_name;
-            }else{
-              if(place.address_components[i].types[j] == "locality"){
-                document.getElementById('car-city'+carId).value = place.address_components[i].long_name;
-              }
+            } else if(place.address_components[i].types[j] == "locality"){
+              document.getElementById('car-city'+carId).value = place.address_components[i].long_name;
             }
           }
-
         }
       }
-
-      }
-
     });
 }
 
@@ -1369,9 +1382,8 @@ function capitalize_Words(str)
 }
 function fillCustomer(data) {
     $(".car-location-select2").each(function(index) {
-        $(this).select2('destroy');
-
-        createPostalSelect2($(this));
+        // $(this).select2('destroy');
+        // createPostalSelect2($(this));
     });
     $("#customer").data("id", data.idClient)
     $("#select2-phone-fi-container.select2-selection__rendered").text(data.phone.substr(0,3) + "-" + data.phone.substr(3,3) + "-" + data.phone.substr(6) + " " + data.firstName + " " + data.lastName);
@@ -1383,23 +1395,26 @@ function fillCustomer(data) {
     set_phone_type(data);
     $("select[name=phoneType]").attr('disabled',true);
     $(".hiddenaddress").html(JSON.stringify(data.address))
-    if (data.quotes.length >= 1) {
-      $('.has_quote option:eq(1)').prop('selected', true);
-      $(".has_quote").attr('disabled',true);
-      $("select[name=customerType]").attr('disabled',true);
-      $("select[name=phoneType]").attr('disabled',true);
-        $("select[name=heardOfUs]").val(data.heardofus.type);
-        $("select[name=heardOfUs] option:selected").text("Repeat Customer");
+
+    $(".has_quote").attr('disabled',true);
+    $("select[name=customerType]").attr('disabled',true);
+
+    // The heard of us depends on the number of quotes
+    if (data.quotes.length > 1) {
+      // $('.has_quote option:eq(1)').prop('selected', true);
+      // $("select[name=phoneType]").attr('disabled',true);
+      // $("select[name=heardOfUs]").val(data.heardofus.idHeardOfUs);
+      // $("select[name=heardOfUs] option:selected").text("Repeat Customer");
+      $("#heardOfUsText").show();
+      $("#heardOfUsSelect").hide();
     } else {
-      $(".has_quote").attr('disabled',false);
-      $("select[name=heardOfUs]").val(data.heardofus.type);
+      // $(".has_quote").attr('disabled',false);
+      // $("select[name=heardOfUs]").val(data.heardofus.idHeardOfUs);
+      $("#heardOfUsText").hide();
+      $("#heardOfUsSelect").show();
     }
-    // if (data.address.length > 0) {
-    //   $("input[name=postal]").val((data.address[0] && data.address[0].postal) ? data.address[0].postal : "");
-    // } else {
-    //   $("input[name=postal]").val("");
-    // }
 }
+
 function resetCustomer(){
     $("input[name=postal]").val("");
     $("input[name=firstName]").val("");
