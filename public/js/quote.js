@@ -129,7 +129,7 @@ $(".map").on("click", function () {
     var $this  = $(this),
         id = $this.data("id");
     $("#modalMap").attr("data-id", id).modal("toggle");
-})  
+})
 
     function updatePhoneNumber(f) {
         var v = f;
@@ -220,7 +220,7 @@ $(".map").on("click", function () {
                   usedNames[this.text] = this.value;
               }
           });
-       }); 
+       });
     }
 
 
@@ -242,30 +242,30 @@ $(".map").on("click", function () {
             });
         }
     });
-    $("select[name=phone]").on('select2:close', function(evt) { 
-      var context = $(evt.target); 
-      $(document).on('keydown.select2', function(e) { 
-          if (e.which === 9) { 
-              var highlighted = context 
-                                .data('select2') 
-                                .$dropdown 
-                                .find('.select2-results__option--highlighted'); 
-              if (highlighted) { 
+    $("select[name=phone]").on('select2:close', function(evt) {
+      var context = $(evt.target);
+      $(document).on('keydown.select2', function(e) {
+          if (e.which === 9) {
+              var highlighted = context
+                                .data('select2')
+                                .$dropdown
+                                .find('.select2-results__option--highlighted');
+              if (highlighted) {
                   var id = highlighted.data('data').id,
-                      text = highlighted.data('data').text; 
+                      text = highlighted.data('data').text;
                   context.data('select2').trigger('select', {
                                 data: {id: id, text: text}
                             });
-                  context.val(id).trigger('change'); 
-              } 
-          } 
-      }); 
+                  context.val(id).trigger('change');
+              }
+          }
+      });
 
-      // unbind the event again to avoid binding multiple times 
-      setTimeout(function() { 
-          $(document).off('keydown.select2'); 
-      }, 1); 
-  }); 
+      // unbind the event again to avoid binding multiple times
+      setTimeout(function() {
+          $(document).off('keydown.select2');
+      }, 1);
+  });
 
     $(".btn-edit-customer").click(function() {
         var clientId = Number($("select[name=phone]").val());
@@ -450,37 +450,39 @@ function initAutocomplete() {
   // geographical location types.
   $.each(carIds, function(index, carId) {
     autocomplete[carId] = new google.maps.places.Autocomplete(
-        document.getElementById('car-location'+carId), {types: ['(regions)'],componentRestrictions: {country: "ca"}});
+        document.getElementById('car-location'+carId), {componentRestrictions: {country: "ca"}});
+        // document.getElementById('car-location'+carId), {componentRestrictions: {country: "ca"}});
     autocomplete[carId].addListener('place_changed', function(){
-    // Get the place details from the autocomplete object.
-    var place = autocomplete[carId].getPlace();
-    if(place != undefined){
-      document.getElementById('car-postal'+carId).value = "";
-      document.getElementById('car-province'+carId).value = "";
-      document.getElementById('car-distance'+carId).value = "";
-      document.getElementById('car-city'+carId).value = "";
-      $("#car-street"+carId).val(place.formatted_address);
-      for (var i = 0; i < place.address_components.length; i++) {
-        for (var j = 0; j < place.address_components[i].types.length; j++) {
-          if (place.address_components[i].types[j] == "postal_code") {
-            foundAddress = true;
-            document.getElementById('car-postal'+carId).value = place.address_components[i].long_name;
+      // Get the place details from the autocomplete object.
+      var place = autocomplete[carId].getPlace();
+      if(place != undefined) {
+        document.getElementById('car-postal'+carId).value = "";
+        document.getElementById('car-province'+carId).value = "";
+        document.getElementById('car-distance'+carId).value = "";
+        document.getElementById('car-city'+carId).value = "";
+        // $("#car-street"+carId).val(place.formatted_address);
+        $("#car-location"+carId).val(place.formatted_address);
+        for (var i = 0; i < place.address_components.length; i++) {
+          for (var j = 0; j < place.address_components[i].types.length; j++) {
+            if (place.address_components[i].types[j] == "postal_code") {
+              foundAddress = true;
+              document.getElementById('car-postal'+carId).value = place.address_components[i].long_name;
               getDistanceForCar(place.address_components[i].short_name, carId, function (distance, carId) {
                   $("#car-distance" + carId).val(distance);
                   updateCarWithDistance(distance, carId);
               });
-          }else{
-            if(place.address_components[i].types[j] == "administrative_area_level_1"){
+            } else if(place.address_components[i].types[j] == "street_number"){
+              // document.getElementById('car-street'+carId).value = place.address_components[i].short_name;
+              $("#car-street"+carId).val(place.address_components[i].short_name);
+            } else if(place.address_components[i].types[j] == "route"){
+              $("#car-street"+carId).val($("#car-street"+carId).val() + " " + place.address_components[i].short_name);
+            } else if(place.address_components[i].types[j] == "administrative_area_level_1"){
               document.getElementById('car-province'+carId).value = place.address_components[i].short_name;
-            }else{
-              if(place.address_components[i].types[j] == "locality"){
-                document.getElementById('car-city'+carId).value = place.address_components[i].long_name;
-              }
+            } else if(place.address_components[i].types[j] == "locality"){
+              document.getElementById('car-city'+carId).value = place.address_components[i].long_name;
             }
           }
-
         }
-      }
 
       }
 
@@ -728,7 +730,7 @@ function onWeightChange(carId){
             missingStil = (missingStilVal == "1") ? 1 : 0;
         }
         var newPrice = $("#carNewPrice"+carId).val();
-        
+
         // Car price data
         var data = {
             "car":            carId,
@@ -1302,7 +1304,7 @@ function saveCarAuto(callback) {
         }
     }).done(function(s) {
         for(car in s.carlist){
-          $("#car-location"+car).attr("data-addressid",s.carlist[car]) 
+          $("#car-location"+car).attr("data-addressid",s.carlist[car])
         }
         // if($(".selection").text().trim().includes("New Customer")){
         //   if(s != undefined && s.customer_id != undefined){
@@ -1330,7 +1332,7 @@ function saveCarAuto(callback) {
     }).catch(function(data) {
         doGrowlingDanger(data.responseJSON.error);
     });
-  
+
 }
 
 
