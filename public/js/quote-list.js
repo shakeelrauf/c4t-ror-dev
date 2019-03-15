@@ -292,7 +292,6 @@ function resizePagination(total, res,type) {
 					remove_active()
 	        tab = page - 1
 	        filtingQuotes();
-            debugger
 	      }
 	      else{
 	          type = true

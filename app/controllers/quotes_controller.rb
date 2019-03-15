@@ -321,12 +321,7 @@ class QuotesController < ApplicationController
   def save_car_return_response(car,r, params)
     car.missingWheels = params[:missingWheels]
     car.missingBattery = params[:missingBattery]
-    if params[:new_price].present?
-      r[:car_new_price] = '%.2f' % ( params[:new_price].to_f)
-    else
-      r[:car_new_price] = car.new_price
-    end
-    r[:car_new_price] = r[:netPrice].to_f+0.1 if r[:netPrice].to_f >= r[:car_new_price].to_f
+    r[:car_new_price] = '%.2f' % ( params[:new_price].to_f) if params[:new_price].present?
     car.new_price =  r[:car_new_price]
     car.missingCat = params[:missingCat]
     car.still_driving = params[:still_driving]
