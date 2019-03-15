@@ -38,18 +38,18 @@ module Quotesmethods
     limit = (limit_p.present? ? limit_p.to_i : 30)
     offset = offset_p.present? ? offset_p.to_i : 0
     if q.present?
-      filter = + q.gsub(/[\s]/, "% %") + "%"
-      filters = filter.split(' ')
+      # filter = + q.gsub(/[\s]/, "% %") + "%"
+      filters = q.split(' ')
       # query = "Select * from vehicle_infos where"
       strings = []
-      query = "id is not null"
+      query = "idVehiculeInfo is not null"
       filters.each do |fil|
         # query.concat(" year LIKE '#{fil}' OR make LIKE '#{fil}' OR model LIKE '#{fil}' OR trim LIKE '#{fil}' OR body LIKE '#{fil}' OR drive LIKE '#{fil}' OR transmission LIKE '#{fil}' OR seats LIKE '#{fil}' OR doors LIKE '#{fil}' OR weight LIKE '#{fil}'")
         # query.concat(" AND ") if !fil.eql?(filters.last)
         query += " and searchable like ?"
-        string << "%#{fil}%"
+        strings << "%#{fil}%"
       end
-      w = [query] + string
+      w = [query] + strings
       r_vehicles = VehicleInfo.where(w).limit(limit).offset(offset)
     end
     r_vehicles = JSON.parse(VehicleInfo.all.limit(limit).offset(offset).to_json) if !q.present?
