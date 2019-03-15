@@ -1,7 +1,7 @@
 namespace :import do
 	require 'roo'
 
-	desc "Imprting Cars from xml sheet"
+	desc "Importing Cars from xml sheet"
   task :cars_from_xlsx => :environment do
   	# puts "deleting previous quotes "
 		# Quote.destroy_all
