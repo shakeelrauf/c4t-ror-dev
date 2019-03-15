@@ -224,7 +224,7 @@
           <input type="hidden" id="car-city<%= car.idQuoteCars %>" name="car-city<%= car.idQuoteCars %>" value="<%= car.address.city if car.address.present? %>"/>
           <input type="hidden" id="car-street<%= car.idQuoteCars %>" name="car-street<%= car.idQuoteCars %>" value=""/>
           <input type="hidden" id="car-province<%= car.idQuoteCars %>" name="car-province<%= car.idQuoteCars %>" value="<%= car.address.province if car.address.present? %>"/>
-          <input type="text" class="md-form-control md-static  locations" data-id="<%= car.idQuoteCars %>" name="carlocation<%= car.idQuoteCars %>" id="car-location<%= car.id %>" value="<%= car.address.address  if car.address.present? %>" data-addressId="<%= car.address.id  if car.address.present? %>" />
+          <input type="text" class="md-form-control md-static  locations" data-id="<%= car.idQuoteCars %>" name="carlocation<%= car.idQuoteCars %>" id="car-location<%= car.id %>" value="<%= car.address.format_long  if car.address.present? %>" data-addressId="<%= car.address.id  if car.address.present? %>" />
              <%# if (car.address.present?) %>
                <%#
             #     address = car.address

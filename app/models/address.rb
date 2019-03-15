@@ -5,6 +5,11 @@ class Address < ApplicationRecord
 	has_one    :quotecar ,class_name: 'Quotecar', foreign_key: 'idAddress'
 
 	def format_long
-		return (self.address + " " + self.city + ", " + self.province)
+		address = ""
+		address+= "#{self.address} " if self.address.present?
+		address+= ", #{self.city} " if self.city.present?
+		address+= ", #{self.province}" if self.province.present?
+		address+= " #{self.postal}" if self.postal.present?
+		address
 	end
 end
