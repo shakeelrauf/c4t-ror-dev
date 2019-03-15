@@ -29,6 +29,16 @@ var getLatLang = function (address) {
     });
 }
 
+// function callMap(id) {
+//     if (($("#car-location" + id).children("option") != undefined) && ($("#car-location" + id).children("option").val() != undefined) && ($("#car-location" + id).children("option").val().length > 0)) {
+//         var last = $("#car-location" + id).children("option").length - 1
+//         var option = $("#car-location" + id).children("option")[last]
+//         var postal = $(option).text()
+//         getLatLang(postal);
+//         $("#modalMap").attr("data-id", id).modal("toggle");
+//     }
+// }
+
 function callMap(id) {
     if (($("#car-location" + id).val() != undefined) ) {
         getLatLang($("#car-location" + id).val());
